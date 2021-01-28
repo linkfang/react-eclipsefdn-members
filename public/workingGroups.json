@@ -1,0 +1,89 @@
+{
+    "working_groups": [
+        {
+            "id": "ascii_doc",
+            "name": "AsciiDoc",
+            "participation_levels": ["AsciiDoc_level_a", "AsciiDoc_level_b", "AsciiDoc_level_c"]
+          },
+          {
+            "id": "ecd_tools",
+            "name": "Eclipse Cloud Development Tools",
+            "participation_levels": ["ecd_tools_level_a", "ecd_tools_level_b", "ecd_tools_level_c"]
+          },
+          {
+            "id": "edge_native",
+            "name": "Edge Native",
+            "participation_levels": ["edge_native_level_a", "edge_native_level_b", "edge_native_level_c", "edge_native_level_d"]
+          },
+          {
+            "id": "gemoc_rc",
+            "name": "GEMOC RC",
+            "participation_levels": ["gemoc_rc_level_a", "gemoc_rc_level_b", "gemoc_rc_level_c"]
+          },
+          {
+            "id": "eclipse_iot",
+            "name": "Eclipse IoT",
+            "participation_levels": ["iot_level_a", "iot_level_b", "iot_level_c"]
+          },
+          {
+            "id": "jakarta_ee",
+            "name": "Jakarta EE",
+            "participation_levels": ["jakarta_ee_level_a", "jakarta_ee_level_b", "jakarta_ee_level_c"]
+          },
+          {
+            "id": "openadx",
+            "name": "OpenADx",
+            "participation_levels": ["OpenADx_level_a", "OpenADx_level_b", "OpenADx_level_c"]
+          },
+          {
+            "id": "opengenesis",
+            "name": "OpenGENESIS",
+            "participation_levels": ["OpenGENESIS_level_a", "OpenGENESIS_level_b", "OpenGENESIS_level_c"]
+          },
+          {
+            "id": "openhwgroup",
+            "name": "OpenHW Group",
+            "participation_levels": ["OpenHW_level_a", "OpenHW_level_b", "OpenHW_level_c"]
+          },
+          {
+            "id": "openmdm",
+            "name": "OpenMDM",
+            "participation_levels": ["OpenMDM_level_a", "OpenMDM_level_b", "OpenMDM_level_c"]
+          },
+          {
+            "id": "openmobility",
+            "name": "OpenMobility",
+            "participation_levels": ["OpenMobility_level_a", "OpenMobility_level_b", "OpenMobility_level_c"]
+          },
+          {
+            "id": "openpass",
+            "name": "OpenPass",
+            "participation_levels": ["OpenPass_1", "OpenPass_2", "OpenPass_3"]
+          },
+          {
+            "id": "science",
+            "name": "Science",
+            "participation_levels": ["Science_A", "Science_B", "Science_C"]
+          },
+          {
+            "id": "sparkplug",
+            "name": "Sparkplug",
+            "participation_levels": ["Sparkplug_A", "Sparkplug_B", "Sparkplug_C", "Sparkplug_D"]
+          },
+          {
+            "id": "tangle_ee",
+            "name": "Tangle EE",
+            "participation_levels": ["level_a", "level_b", "level_c"]
+          },
+          {
+            "id": "eclipse_ide",
+            "name": "Eclipse IDE",
+            "participation_levels": ["level_a", "level_b", "level_c"]
+          },
+          {
+            "id": "eclipse_org",
+            "name": "Other",
+            "participation_levels": ["level_a", "level_b", "level_c"]
+          }
+    ]
+}

@@ -17,7 +17,7 @@ export default function AppHeader() {
                     type="button"
                     id="dropdownMenu2"
                     data-toggle="dropdown"
-                    aria-haspopup="true"
+                    // aria-haspopup="true"
                     aria-expanded="false"
                   >
                     Welcome <span className="caret" />

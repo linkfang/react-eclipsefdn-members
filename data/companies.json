@@ -1,0 +1,37 @@
+{
+    "companies": [
+        {
+            "name": "company A",
+            "address": {
+                "street": "111 Abc Street",
+                "city": "Ottawa",
+                "provinceOrState": "Ontario",
+                "country": "Canada",
+                "postalCode": "K1S 6N5"
+            },
+            "twitter": "@companyA"
+        },
+        {
+            "name": "company B",
+            "address": {
+                "street": "222 ZXE Street",
+                "city": "Montreal",
+                "provinceOrState": "Quebec",
+                "country": "Canada",
+                "postalCode": "K1S 6KK"
+            },
+            "twitter": "@companyB"
+        },
+        {
+            "name": "company C",
+            "address": {
+                "street": "666 TGS Street",
+                "city": "New York",
+                "provinceOrState": "New York",
+                "country": "US",
+                "postalCode": "Q12 Y77"
+            },
+            "twitter": "@companyC"
+        }
+    ]
+}
