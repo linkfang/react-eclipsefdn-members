@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+   version: 1.0.0
+   title: Membership portal
+   license:
+      name: Eclipse Public License - 2.0
+      url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+-  url: TBD - Internal
+   description: Production endpoint for the membership portal data
+tags:
+-  name: Membership form
+   description: Definitions related to membership form data in the database
+paths:
+   /membership:
+      get:
+         tags:
+         - Membership form
+         summary: Membership form list
+         description: Returns a list of tracked membership forms
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/MembershipForms'
+            500:
+               description: Error while retrieving data
+      put:
+         tags:
+         - Membership form
+         summary: Membership form update
+         description: Using the passed form object, updates or inserts are made to save the data.
+         requestBody:
+            description: The form to be updated or inserted into the data set.
+            content:
+               application/json:
+                  schema:
+                     $ref: '#/components/schemas/MembershipForm'
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+   /membership/{userId}:
+      parameters:
+      -  name: userId
+         in: path
+         description: Unique ID of the user that authored the form
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
+         - Membership form
+         summary: Membership forms for user
+         description: Returns membership form entries for the user with matching ID
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/MembershipForms'
+            500:
+               description: Error while retrieving data
+   /membership/{userId}/{id}:
+      parameters:
+      -  name: userId
+         in: path
+         description: Unique ID of the user that authored the form
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      -  name: id
+         in: path
+         description: Unique ID of the membership form entry
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
+         - Membership form
+         summary: Membership form
+         description: Returns a membership form entry that has a matching ID
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/MembershipForm'
+            500:
+               description: Error while retrieving data
+      delete:
+         tags:
+         - Membership form
+         summary: Membership form delete
+         description: Remove a membership form entry with the given ID
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+   /contacts:
+      get:
+         tags:
+         - Contacts
+         summary: Contacts list
+         description: Returns a list of tracked contacts
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Contacts'
+            500:
+               description: Error while retrieving data
+      put:
+         tags:
+         - Contacts
+         summary: Contacts update
+         description: Using the passed contact object, updates or inserts are made to save the data.
+         requestBody:
+            description: The contact to be updated or inserted into the data set.
+            content:
+               application/json:
+                  schema:
+                     $ref: '#/components/schemas/Contact'
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+   /contacts/{formId}:
+      parameters:
+      -  name: formId
+         in: path
+         description: Unique ID of the membership form entry
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
+         - Contacts
+         summary: Contacts for form
+         description: Returns contacts for the form given a form ID
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Contacts'
+            500:
+               description: Error while retrieving data
+   /contacts/{formId}/{id}:
+      parameters:
+      -  name: formId
+         in: path
+         description: Unique ID of the membership form entry
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      -  name: id
+         in: path
+         description: Unique ID of the contact for the current form
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
+         - Contacts
+         summary: Contacts
+         description: Returns a contact for the form given a form ID and contact ID
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Contact'
+            500:
+               description: Error while retrieving data
+      delete:
+         tags:
+         - Contacts
+         summary: Contacts delete
+         description: Remove a membership form entry with the given ID
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+   /organizations:
+      get:
+         tags:
+         - Organizations
+         summary: Organizations list
+         description: Returns a list of tracked organizations
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Organizations'
+            500:
+               description: Error while retrieving data
+      put:
+         tags:
+         - Organizations
+         summary: Organizations update
+         description: Using the passed organization object, updates or inserts are made to save the data.
+         requestBody:
+            description: The organization to be updated or inserted into the data set.
+            content:
+               application/json:
+                  schema:
+                     $ref: '#/components/schemas/Organization'
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+   /organizations/{formId}:
+      parameters:
+      -  name: formId
+         in: path
+         description: Unique ID of the membership form entry
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
+         - Organizations
+         summary: Organizations
+         description: Returns an organization for the form given a form ID
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Organization'
+            500:
+               description: Error while retrieving data
+      delete:
+         tags:
+         - Organizations
+         summary: Organizations delete
+         description: Remove an organization for the form given a form ID
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+components:
+   schemas:
+      ObjectID:
+         description: Unique identifier for an addressable object in the API.
+         type: string
+         minimum: 1
+      DateTime:
+         type: string
+         format: datetime
+         description: |
+            Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+            More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+      Contacts:
+         type: array
+         items:
+            $ref: '#/components/schemas/Contact'
+      Contact:
+        type: object
+        properties:
+            id:
+               $ref: '#/components/schemas/ObjectID'
+            form_id:
+               $ref: '#/components/schemas/ObjectID'
+            first_name:
+               type: string
+               description: Placeholder
+            last_name:
+               type: string
+               description: Placeholder
+            email:
+               type: string
+               description: Placeholder
+            job_title:
+               type: string
+               description: Placeholder
+            type:
+               type: string
+               description: Placeholder
+               
+               
+      Organizations:
+         type: array
+         items:
+            $ref: '#/components/schemas/Organization'
+      
+      Organization:
+         type: object
+         properties:
+            form_id:
+               $ref: '#/components/schemas/ObjectID'
+            organization_id:
+               $ref: '#/components/schemas/ObjectID'
+            legal_name:
+               type: string
+               description: Legal Name of the Organization
+            twitter:
+               type: string
+               description: Placeholder
+            address:
+               type: object
+               properties:
+                  street:
+                     type: string
+                     description: Placeholder
+                  city:
+                     type: string
+                     description: Placeholder
+                  province_state:
+                     type: string
+                     description: Placeholder
+                  country:
+                     type: string
+                     description: Placeholder
+                  postal_code:
+                     type: string
+                     description: Placeholder
+      MembershipForms:
+         type: array
+         items:
+            $ref: '#/components/schemas/MembershipForm'
+      MembershipForm:
+         type: object
+         properties:
+            id:
+               $ref: '#/components/schemas/ObjectID'
+            user_id:
+               $ref: '#/components/schemas/ObjectID'
+            working_group:
+               type: string
+               description: Placeholder
+            membership_level:
+               type: string
+               description: Placeholder
+            participation_level:
+               type: string
+               description: Placeholder
+            effective_date:
+               $ref: '#/components/schemas/DateTime'
+            signing_authority:
+               type: boolean
+               description: Placeholder
