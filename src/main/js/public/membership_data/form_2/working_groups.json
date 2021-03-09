@@ -1,0 +1,36 @@
+[
+    {
+        "effective_date": "1970-01-19T14:24:34Z",
+        "id": "gyoshghgs",
+        "form_id": "form_2",
+        "participation_level": "AsciiDoc_level_a",
+        "user_id": "user1",
+        "working_group": "ascii_doc",
+        "contact": {
+            "id": "666",
+            "form_id": "form_2",
+            "first_name": "Lalala",
+            "last_name": "Blabla",
+            "email": "blabla@uottawa.ca",
+            "job_title": "Whatever Developer",
+            "type": "WORKING_GROUP"
+          }
+    },
+    {
+        "effective_date": "1970-01-19T14:20:31Z",
+        "id": "7645677gsfggsfsd",
+        "form_id": "form_2",
+        "participation_level": "OpenGENESIS_level_c",
+        "user_id": "user1",
+        "working_group": "opengenesis",
+        "contact": {
+            "id": "888",
+            "form_id": "form_2",
+            "first_name": "Trutru",
+            "last_name": "DDD",
+            "email": "WWEQDG@uottawa.ca",
+            "job_title": "Sales",
+            "type": "WORKING_GROUP"
+          }
+    }
+]

@@ -1,0 +1,18 @@
+{
+  "name": "eclipsefdn-members",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "swagger-repo": "^2.0.0-rc.15"
+  },
+  "scripts": {
+    "install": "cd src/main/js && npm install",
+    "start": "cd src/main/js && npm run start",
+    "build": "cd src/main/js && npm run build && mkdir -p ../resources/META-INF/resources/ && cp -rf build/* ../resources/META-INF/resources/",
+    "test": "npm run test-spec && cd src/main/js && npm run test",
+    "eject": "cd src/main/js && npm run eject",
+    "test-spec": "swagger-repo validate",
+    "start-spec": "swagger-repo serve",
+    "build-spec": "swagger-repo build -o web_deploy"
+  }
+}

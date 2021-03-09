@@ -1,0 +1,16 @@
+[
+    {
+        "legal_name": "company A",
+        "organization_id": "company-a",
+        "form_id": "form_1",
+        "address": {
+            "id": "402880987648e2ad017648e2e6fb001a",
+            "street": "111 Abc Street",
+            "city": "Ottawa",
+            "province_state": "Ontario",
+            "country": "Canada",
+            "postal_code": "K1S 6N5"
+        },
+        "twitter_handle": "@companyA"
+    }
+]
