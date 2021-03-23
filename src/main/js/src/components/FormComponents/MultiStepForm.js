@@ -15,6 +15,14 @@ import {
   FETCH_HEADER
 } from '../../Constants/Constants';
 
+/**
+ * Wrapper for the FormikStepper and FormikStepper's children steps
+ * 
+ * useEffect() fetch the working group options from `public/workingGroups.json`, and store the option in the session for reusage in WorkingGroup Component; 
+ * Use session storage to help reduce the API calls, and has the ability to update the data once the browser closes
+ * 
+ * **/
+
 const MultiStepForm = () => {
 
   const [step, setStep] = useState(0);
@@ -34,8 +42,7 @@ const MultiStepForm = () => {
       })
     }
 
-    // eslint-disable-next-line
-  }, [])
+  }, [workingGroupsData])
 
   const handleSubmit = (values) => {  // This is for final submit, after preview
       console.log(values)

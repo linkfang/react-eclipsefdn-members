@@ -1,3 +1,4 @@
+// The following constants are placeholders and label strings
 const firstName = 'First Name'
 const lastName = 'Last Name'
 const email = 'Email Address'
@@ -13,9 +14,10 @@ const jobtitle = 'Job Title'
 
 export const requiredErrorMsg = 'is required'
 
+// Initial values passed to Formik, this defines the form fields, names, and nesting relations of the whole form
 export const initialValues = {
 
-  // Step1: company Info
+  // Step1: Orgnaization Info
   organization: {
     id: '',
     legalName: '',
@@ -30,9 +32,9 @@ export const initialValues = {
     twitterHandle: '',
   },
 
-  // Step1: Company Representative
-  companyRepresentative: {
-    representative: {
+  // Step1: Representatives
+  representative: {
+    company: {
       id: '',
       firstName: '',
       lastName: '',
@@ -40,7 +42,7 @@ export const initialValues = {
       email: ''
     },
 
-    marketingRepresentative: {
+    marketing: {
       sameAsCompany: false,
       id: '',
       firstName: '',
@@ -89,6 +91,12 @@ export const initialValues = {
 
 }
 
+// Form fields for me to map / render the Input components, so that I do not need to write each component one by one
+
+// all the `name` is used to be passed to Formik Field Name, so that Formik recognize and match the updating for inputs
+// Using `.` for nested input fields 
+// How the fields are nested, is defined in `initialValues` passed to Formik
+// Please note the nesting or array format of this formField is not the same as  `initialValues` , this formField is only for me to better render the Input and pass the properties
 export const formField = {
   organizationId: {
     name: 'organization.id'
@@ -139,54 +147,54 @@ export const formField = {
     label: twitterLabel,
     placeholder: twitter,
   },
-  companyRepresentative: [
+  company: [
     {
-      name: 'companyRepresentative.representative.firstName',
+      name: 'representative.company.firstName',
       label: firstName,
       placeholder: firstName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.representative.lastName',
+      name: 'representative.company.lastName',
       label: lastName,
       placeholder: lastName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.representative.jobtitle',
+      name: 'representative.company.jobtitle',
       label: jobtitle,
       placeholder: jobtitle,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.representative.email',
+      name: 'representative.company.email',
       label: email,
       placeholder: email,
       requiredErrorMsg: requiredErrorMsg,
       invalidErrorMsg: 'email format is incorrect'
     }
   ],
-  marketingRepresentative: [
+  marketing: [
     {
-      name: 'companyRepresentative.marketingRepresentative.firstName',
+      name: 'representative.marketing.firstName',
       label: firstName,
       placeholder: firstName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.marketingRepresentative.lastName',
+      name: 'representative.marketing.lastName',
       label: lastName,
       placeholder: lastName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.marketingRepresentative.jobtitle',
+      name: 'representative.marketing.jobtitle',
       label: jobtitle,
       placeholder: jobtitle,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.marketingRepresentative.email',
+      name: 'representative.marketing.email',
       label: email,
       placeholder: email,
       requiredErrorMsg: requiredErrorMsg,
@@ -195,25 +203,25 @@ export const formField = {
   ],
   accounting: [
     {
-      name: 'companyRepresentative.accounting.firstName',
+      name: 'representative.accounting.firstName',
       label: firstName,
       placeholder: firstName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.accounting.lastName',
+      name: 'representative.accounting.lastName',
       label: lastName,
       placeholder: lastName,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.accounting.jobtitle',
+      name: 'representative.accounting.jobtitle',
       label: jobtitle,
       placeholder: jobtitle,
       requiredErrorMsg: requiredErrorMsg
     },
     {
-      name: 'companyRepresentative.accounting.email',
+      name: 'representative.accounting.email',
       label: email,
       placeholder: email,
       requiredErrorMsg: requiredErrorMsg,

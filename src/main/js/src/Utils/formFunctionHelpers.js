@@ -42,6 +42,18 @@ export function assignContactData(currentContact, companyContact) {
 //== Transform data from backend to match my form model
 
 /**
+ * Notes:
+ * The match data functions look repeated on the properties, because of the naming convention is somehow different in JS and the data object retrieved from backend. JS uses camelCase. 
+ * Another reason I am making complicated `legalName` and `country` match, is due to the library React-Select. It needs to use the `{label: foo, value: foo}` format to be able shown on the select input fields.
+ * Please refer to: https://github.com/formium/formik/discussions/2954 
+ * and https://github.com/JedWatson/react-select/issues/3761
+ * and https://github.com/JedWatson/react-select/issues/4321
+ * 
+ * https://github.com/JedWatson/react-select/issues/3761 shows how you can use without mapping as a label, but I wanted to use the label to be shown in the preview, thus, still used { label: value: } format.
+ * 
+ * **/
+
+/**
  * @param existingOrganizationData -
  * Existing Organization data, fetched from server
  * **/
@@ -49,27 +61,25 @@ export function matchCompanyFields(existingOrganizationData) {
 
   return {
     // Step1: company Info
-    organization: {
-      id: existingOrganizationData?.id || '',
-      legalName: {
-        value: existingOrganizationData?.legal_name || '',
-        label: existingOrganizationData?.legal_name || '',
-        address: existingOrganizationData?.address || '',
-        twitterHandle: existingOrganizationData?.twitter_handle || ''
+    id: existingOrganizationData?.id || '',
+    legalName: {
+      value: existingOrganizationData?.legal_name || '',
+      label: existingOrganizationData?.legal_name || '',
+      address: existingOrganizationData?.address || '',
+      twitterHandle: existingOrganizationData?.twitter_handle || ''
+    } || '',
+    address: {
+      id: existingOrganizationData?.address.id || '',
+      street: existingOrganizationData?.address.street || '',
+      city: existingOrganizationData?.address.city || '',
+      provinceOrState: existingOrganizationData?.address.province_state || '',
+      country: {
+        label: existingOrganizationData?.address.country,
+        value: existingOrganizationData?.address.country
       } || '',
-      address: {
-        id: existingOrganizationData?.address.id || '',
-        street: existingOrganizationData?.address.street || '',
-        city: existingOrganizationData?.address.city || '',
-        provinceOrState: existingOrganizationData?.address.province_state || '',
-        country: {
-          label: existingOrganizationData?.address.country,
-          value: existingOrganizationData?.address.country
-        } || '',
-        postalCode: existingOrganizationData?.address.postal_code || '',
-      },
-      twitterHandle: existingOrganizationData?.twitter_handle || '',  
-    }
+      postalCode: existingOrganizationData?.address.postal_code || '',
+    },
+    twitterHandle: existingOrganizationData?.twitter_handle || '', 
   }
 
 }
@@ -99,33 +109,32 @@ export function matchContactFields(existingContactData) {
   let existingAccoutingContact = existingContactData.find(el => el.type === contact_type.ACCOUNTING)
 
   return {
-    companyRepresentative: {
-      representative: {
-        id: existingCompanyContact?.id || '',
-        firstName: existingCompanyContact?.first_name || '',
-        lastName: existingCompanyContact?.last_name || '',
-        jobtitle: existingCompanyContact?.job_title || '',
-        email: existingCompanyContact?.email || ''
-      },
-  
-      marketingRepresentative: {
-        id: existingMarketingContact?.id || '',
-        firstName: existingMarketingContact?.first_name || '',
-        lastName: existingMarketingContact?.last_name || '',
-        jobtitle: existingMarketingContact?.job_title || '',
-        email: existingMarketingContact?.email || '',
-        sameAsCompany: checkSameContact(existingCompanyContact, existingMarketingContact)
-      },
-  
-      accounting: {
-        id: existingAccoutingContact?.id || '',
-        firstName: existingAccoutingContact?.first_name || '',
-        lastName: existingAccoutingContact?.last_name || '',
-        jobtitle: existingAccoutingContact?.job_title || '',
-        email: existingAccoutingContact?.email || '',
-        sameAsCompany: checkSameContact(existingCompanyContact, existingAccoutingContact)
-      }
+    company: {
+      id: existingCompanyContact?.id || '',
+      firstName: existingCompanyContact?.first_name || '',
+      lastName: existingCompanyContact?.last_name || '',
+      jobtitle: existingCompanyContact?.job_title || '',
+      email: existingCompanyContact?.email || ''
+    },
+
+    marketing: {
+      id: existingMarketingContact?.id || '',
+      firstName: existingMarketingContact?.first_name || '',
+      lastName: existingMarketingContact?.last_name || '',
+      jobtitle: existingMarketingContact?.job_title || '',
+      email: existingMarketingContact?.email || '',
+      sameAsCompany: checkSameContact(existingCompanyContact, existingMarketingContact)
+    },
+
+    accounting: {
+      id: existingAccoutingContact?.id || '',
+      firstName: existingAccoutingContact?.first_name || '',
+      lastName: existingAccoutingContact?.last_name || '',
+      jobtitle: existingAccoutingContact?.job_title || '',
+      email: existingAccoutingContact?.email || '',
+      sameAsCompany: checkSameContact(existingCompanyContact, existingAccoutingContact)
     }
+    
   }
 
 }
@@ -288,9 +297,9 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
   switch(step) {
     case 0:
       sendData(formId, end_point.organizations, matchCompanyFieldsToBackend(formData.organization, formId))
-      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.companyRepresentative.representative, contact_type.COMPANY, formId))
-      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.companyRepresentative.marketingRepresentative, contact_type.MARKETING, formId))
-      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.companyRepresentative.accounting, contact_type.ACCOUNTING, formId))
+      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.representative.company, contact_type.COMPANY, formId))
+      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.representative.marketing, contact_type.MARKETING, formId))
+      sendData(formId, end_point.contacts, matchContactFieldsToBackend(formData.representative.accounting, contact_type.ACCOUNTING, formId))
       break;
 
     case 1:
@@ -367,6 +376,8 @@ function callSendData(formId, endpoint='', method, dataBody, entityId='') {
  * /form/{id}, /form/{id}/organizations/{id}, /form/{id}/contacts/{id}, /form/{id}/working_groups/{id}
  * @param dataBody -
  * The data body passed to server, normally is the filled form data to be saved
+ * 
+ * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
  * **/
 export function sendData(formId, endpoint, dataBody) {
 
@@ -453,6 +464,11 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  * @param defaultBehaviour -
  * Go to the next step and add this step to complete set, passed from FormikStepper Component
+ * 
+ * The logic:
+ * - POST a new form and returned the new form Id
+ * - Store the returned new form Id in my FormId Context
+ * - Send the API calls to organizations and contacts
  * **/
 export async function handleNewForm(setCurrentFormId, formData, userId, defaultBehaviour) {
 

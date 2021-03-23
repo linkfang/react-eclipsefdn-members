@@ -6,6 +6,8 @@ import './dateInputstyles.css';
 
 const DateInput = (props) => {
   const { label, name, ...rest } = props
+
+  // If use custom input for react-datepicker, ref is needed, please refer to: https://reactdatepicker.com/#example-custom-input
   const ref = React.createRef()
 
   const CustomDateInput = forwardRef((props, ref) => {

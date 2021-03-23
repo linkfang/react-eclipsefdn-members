@@ -1,5 +1,15 @@
 import React from 'react';
 
+/**
+ * Button on each step, conduct "Next" or "Back" or "Submit"
+ * 
+ * props:
+ *     - step: step state
+ *     - setStep: set step state function
+ *     - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
+ *     - isLastStep: boolean, whether it's the final step (preview step) or not
+ * **/
+
 const CustomStepButton = ({step, isSubmitting, setStep, isLastStep}) => {
   
   const handleClick = () => {

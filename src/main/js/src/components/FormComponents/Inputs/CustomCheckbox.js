@@ -1,6 +1,15 @@
 import React from 'react';
 import { Field } from 'formik';
 
+/**
+ * A simple reusable checkbox wrapped with Formik Field
+ * The value is boolean
+ * 
+ * Props: 
+ *    - name: Field Name
+ *    - label: label to be shown with the checkbox
+ * **/
+
 const CustomCheckbox = ({ name, label }) => {
   return (
     <Field name={name}>

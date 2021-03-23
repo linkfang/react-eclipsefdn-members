@@ -1,4 +1,7 @@
 // list all constants here
+
+// The purpose of this file is try to avoid using strings directly everywhere, just hope to use consistant variables for strings
+
 export const api_prefix = 'http://localhost:8090';
 export const api_prefix_form = 'http://localhost:8090/form';
 

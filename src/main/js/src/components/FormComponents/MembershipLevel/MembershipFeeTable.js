@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * This is a pure static html table copied from membership site: https://www.eclipse.org/membership/#tab-fees
+ * **/
+
 const MembershipFeeTable = () => {
 
     return (

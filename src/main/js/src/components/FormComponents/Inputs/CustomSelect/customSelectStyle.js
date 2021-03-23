@@ -1,4 +1,9 @@
 // selectorStyles object
+
+/**
+ * Please refer to https://react-select.com/styles for more details about how to custom react-select style
+ * **/
+
 export const generateCustomStyles = (isCompany, metaErr) => {
   return {
     option: (styles, state) => ({

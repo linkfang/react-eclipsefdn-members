@@ -1,15 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
 import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
 import CustomAsyncSelect from '../Inputs/CustomSelect/CustomAsyncSelect';
-import MembershipContext from '../../../Context/MembershipContext';
 import Input from '../Inputs/Input';
 import { formField } from '../formModels/formFieldModel';
 import { companies } from '../../../Constants/Constants';
 
+/**
+ * - Render Oraganization selector (used React-Select)
+ * - Render Organization twitter, and address inputs, including Country selector (used React-Select and country-list library of updated correct country list names)
+ * **/
+
 const Company = () => {
-    const { isExistingMember } = useContext(MembershipContext);
     const { organizationName, organizationTwitter, organizationAddress } = formField;
+    // get country list library and map as option pass to the React-Select
     const countryList = require('country-list').getNames().map(item => ({ label: item, value: item }));
 
     return (
@@ -19,7 +23,6 @@ const Company = () => {
         name={organizationName.name}
         ariaLabel={organizationName.name}
         srcData={companies}
-        isExistingMember={isExistingMember}
         renderComponent={CustomAsyncSelect}
       />
       <div className="row">

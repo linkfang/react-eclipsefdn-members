@@ -1,6 +1,16 @@
 import React from 'react';
 import Input from '../Inputs/Input';
 
+/**
+ * - Render Working Group Representative input component
+ * 
+ *  - Props:
+ *    - name: fieldName (for Effective Date, an example would be: `workingGroups[i].workingGroupRepresentative`); this is handled by and passed from WorkingGroup component
+ * 
+ *    - formField: the form field in formModels/formFieldModel.js
+ * 
+ * **/
+
 const WorkingGroupRepresentative = ({ name, formField }) => {
 
   const { workingGroupRepresentative } = formField;

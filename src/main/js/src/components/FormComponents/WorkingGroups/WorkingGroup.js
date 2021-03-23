@@ -9,9 +9,19 @@ import { deleteData } from '../../../Utils/formFunctionHelpers';
 import { end_point, WORKING_GROUPS, workingGroups } from '../../../Constants/Constants';
 import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
 
+/**
+ * - Wrapper for Working Group Selector, Participation Level selector, EffectiveDate input, and WorkingGroups Representative inputs components
+ * 
+ *  - Props:
+ *    - workingGroupsData: working group options to choose from; passed from MultiStepForm component to WorkingGroupsWrapper and to here
+ * 
+ *    - arrayHelpers: from Formik library, passed from WorkingGroupsWrapper component, includes all array operations for inputs, please refer to https://formik.org/docs/api/fieldarray#fieldarray-helpers 
+ * 
+ *    - formField: the form field in formModels/formFieldModel.js
+ * **/
+
 const WorkingGroup = ({ formField, workingGroupsData, arrayHelpers }) => {
   const { values } = useFormikContext();
-  const { isExistingMember } = useContext(MembershipContext);
   const { currentFormId } = useContext(MembershipContext);
 
   const each_workingGroupField = {
@@ -46,7 +56,6 @@ const WorkingGroup = ({ formField, workingGroupsData, arrayHelpers }) => {
             participationLevel={`${workingGroups}.${index}.participationLevel`}
             srcData={workingGroups}
             options={workingGroupsData}
-            isExistingMember={isExistingMember}
             renderComponent={DefaultSelect}
             ariaLabel={`${workingGroups}.${index}.workingGroup`}
           />

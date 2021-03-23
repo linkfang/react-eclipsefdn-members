@@ -28,26 +28,26 @@ const Preview = () => {
 
         <h2 className="fw-600 h3">Company Representative Contact</h2>
         <div className="row margin-bottom-30">
-          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.companyRepresentative.representative.firstName}</div></div>
-          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.companyRepresentative.representative.lastName}</div></div>
-          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.companyRepresentative.representative.jobtitle}</div></div>
-          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.companyRepresentative.representative.email}</div></div>
+          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.representative.company.firstName}</div></div>
+          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.representative.company.lastName}</div></div>
+          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.representative.company.jobtitle}</div></div>
+          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.representative.company.email}</div></div>
         </div>
 
         <h2 className="fw-600 h3">Company Marketing Contact</h2>
         <div className="row margin-bottom-30">
-          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.companyRepresentative.marketingRepresentative.firstName}</div></div>
-          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.companyRepresentative.marketingRepresentative.lastName}</div></div>
-          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.companyRepresentative.marketingRepresentative.jobtitle}</div></div>
-          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.companyRepresentative.marketingRepresentative.email}</div></div>
+          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.representative.marketing.firstName}</div></div>
+          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.representative.marketing.lastName}</div></div>
+          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.representative.marketing.jobtitle}</div></div>
+          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.representative.marketing.email}</div></div>
         </div>
 
         <h2 className="fw-600 h3">Company Accounting Contact</h2>
         <div className="row margin-bottom-30">
-          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.companyRepresentative.accounting.firstName}</div></div>
-          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.companyRepresentative.accounting.lastName}</div></div>
-          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.companyRepresentative.accounting.jobtitle}</div></div>
-          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.companyRepresentative.accounting.email}</div></div>
+          <div className="col-md-6"><label>First Name</label><div className="preview-field">{values.representative.accounting.firstName}</div></div>
+          <div className="col-md-6"><label>Last Name</label><div className="preview-field">{values.representative.accounting.lastName}</div></div>
+          <div className="col-md-6"><label>Job Title</label><div className="preview-field">{values.representative.accounting.jobtitle}</div></div>
+          <div className="col-md-6"><label>Email</label><div className="preview-field">{values.representative.accounting.email}</div></div>
         </div>
 
         <h2 className="fw-600 h3">Intended Membership Level</h2>

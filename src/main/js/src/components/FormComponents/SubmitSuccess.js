@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * This is just a pure html component to display after all steps finished and final submitted after preview
+ * **/
+
 const SubmitSuccess = () => {
 
     return (
