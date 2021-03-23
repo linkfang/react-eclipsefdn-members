@@ -1,3 +1,9 @@
 [build]
   command = "npm run build"  
   publish = "src/main/js/build"
+
+[[redirects]]
+  from = "/*"
+  to = " /index.html"
+  status = 200
+  force = true #COMMENT: ensure that we always redirect
