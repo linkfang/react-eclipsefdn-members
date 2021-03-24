@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -18,14 +18,12 @@ export default function AppHeader() {
                     id="dropdownMenu2"
                     data-toggle="dropdown"
                     // aria-haspopup="true"
-                    aria-expanded="false"
-                  >
+                    aria-expanded="false">
                     Welcome <span className="caret" />
                   </a>
                   <ul
                     className="dropdown-menu toolbar-dropdown-menu"
-                    aria-labelledby="dropdownMenu1"
-                  >
+                    aria-labelledby="dropdownMenu1">
                     <li>
                       <a href="https://www.eclipse.org/user">
                         <i className="fa fa-user" /> View Profile
@@ -34,8 +32,7 @@ export default function AppHeader() {
                     <li>
                       <a
                         href="https://accounts.eclipse.org/user/edit"
-                        data-tab-destination="tab-profile"
-                      >
+                        data-tab-destination="tab-profile">
                         <i className="fa fa-edit" /> Edit Profile
                       </a>
                     </li>
@@ -57,7 +54,7 @@ export default function AppHeader() {
             </div>
           </div>
         </div>
-      </div>{' '}
+      </div>{" "}
       <div className="container">
         <div className="row" id="header-row">
           <div className="col-sm-5 col-md-4" id="header-left">
@@ -71,16 +68,15 @@ export default function AppHeader() {
                 />
               </a>
             </div>
-          </div>{' '}
+          </div>{" "}
           <div
             className="col-sm-19 col-md-20 margin-top-10"
-            id="main-menu-wrapper"
-          >
+            id="main-menu-wrapper">
             <div className="float-right hidden-xs" id="btn-call-for-action">
               <a href="/downloads/" className="btn btn-huge btn-warning">
                 <i className="fa fa-download" /> Download
               </a>
-            </div>{' '}
+            </div>{" "}
             <div className="navbar yamm float-sm-right" id="main-menu">
               <div className="navbar-collapse collapse" id="navbar-main-menu">
                 <ul className="nav navbar-nav">
@@ -92,25 +88,22 @@ export default function AppHeader() {
                   <li>
                     <a
                       href="https://www.eclipse.org/org/workinggroups/"
-                      target="_self"
-                    >
+                      target="_self">
                       Working Groups
                     </a>
                   </li>
                   <li>
                     <a
                       href="https://www.eclipse.org/membership/"
-                      target="_self"
-                    >
+                      target="_self">
                       Members
                     </a>
-                  </li>{' '}
+                  </li>{" "}
                   <li className="dropdown visible-xs">
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle"
-                    >
+                      className="dropdown-toggle">
                       Community <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -144,8 +137,7 @@ export default function AppHeader() {
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle"
-                    >
+                      className="dropdown-toggle">
                       Participate <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -179,8 +171,7 @@ export default function AppHeader() {
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle"
-                    >
+                      className="dropdown-toggle">
                       Eclipse IDE <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -214,14 +205,13 @@ export default function AppHeader() {
                         </a>
                       </li>
                     </ul>
-                  </li>{' '}
+                  </li>{" "}
                   {/* More */}
                   <li className="dropdown eclipse-more hidden-xs">
                     <a
                       data-toggle="dropdown"
                       className="dropdown-toggle"
-                      role="button"
-                    >
+                      role="button">
                       More
                       <b className="caret" />
                     </a>
@@ -337,7 +327,7 @@ export default function AppHeader() {
                                   Newcomer Forum
                                 </a>
                               </li>
-                            </ul>{' '}
+                            </ul>{" "}
                           </div>
                         </div>
                       </li>
@@ -350,8 +340,7 @@ export default function AppHeader() {
                   type="button"
                   className="navbar-toggle"
                   data-toggle="collapse"
-                  data-target="#navbar-main-menu"
-                >
+                  data-target="#navbar-main-menu">
                   <span className="sr-only">Toggle navigation</span>
                   <span className="icon-bar" />
                   <span className="icon-bar" />
@@ -361,8 +350,7 @@ export default function AppHeader() {
                 <div className="wrapper-logo-mobile">
                   <a
                     className="navbar-brand visible-xs"
-                    href="https://www.eclipse.org/"
-                  >
+                    href="https://www.eclipse.org/">
                     <img
                       className="logo-eclipse-default-mobile img-responsive"
                       alt="Eclipse.org logo"
@@ -370,7 +358,7 @@ export default function AppHeader() {
                       src="//www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-white-orange.svg"
                     />
                   </a>
-                </div>{' '}
+                </div>{" "}
               </div>
             </div>
           </div>

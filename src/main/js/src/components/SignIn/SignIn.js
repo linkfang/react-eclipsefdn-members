@@ -1,53 +1,60 @@
-import React from 'react';
-import MembershipContext from '../../Context/MembershipContext';
-import FormChooser from '../FormPreprocess/FormChooser';
-import SignInIntroduction from './SignInIntroduction';
-import StepperComponent from '../Steppers/StepperComponent';
-import { FETCH_HEADER, api_prefix, end_point, fakeChildrenArray, getCurrentMode, MODE_REACT_ONLY, MODE_REACT_API } from '../../Constants/Constants';
+import React from "react";
+import MembershipContext from "../../Context/MembershipContext";
+import FormChooser from "../FormPreprocess/FormChooser";
+import SignInIntroduction from "./SignInIntroduction";
+import StepperComponent from "../Steppers/StepperComponent";
+import {
+  FETCH_HEADER,
+  api_prefix,
+  end_point,
+  fakeChildrenArray,
+  getCurrentMode,
+  MODE_REACT_ONLY,
+  MODE_REACT_API,
+} from "../../Constants/Constants";
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
  * - When run with server, call the userInfo end_point
  * - When logged in, `if(currentUser)`, render form chooser
- * 
- * //// eslint-disable-next-line ---> not a best practice to use 
- * 
+ *
+ * //// eslint-disable-next-line ---> not a best practice to use
+ *
  * /// But if passing object or function into the dependency array, it is always considered as changed, and keeps re-run the useEffect which causes neverending re-render
- * 
+ *
  * For functions, the best way to use is useCallback()
- * 
+ *
  * For Object, need to use the sepecific object value or deconstruct it
- * 
- * Please refer to some good explanation about useEffect and dependecies: 
+ *
+ * Please refer to some good explanation about useEffect and dependecies:
  * https://betterprogramming.pub/why-eslint-hates-your-useeffect-dependencies-react-js-560fcac0b1f
- * 
+ *
  * https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
- * 
+ *
  * https://stackoverflow.com/questions/64106594/is-the-useeffect-has-a-missing-dependency-warning-sometimes-wrong
- * 
+ *
  * https://stackoverflow.com/questions/63201445/react-hook-useeffect-missing-dependencies-warning
- * 
- * **/
-
+ *
+*/
 class SignIn extends React.Component {
   static contextType = MembershipContext;
   getFakeUser = () => {
-    fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
-      .then(resp => resp.json())
-      .then(data => {
+    fetch("membership_data/fake_user.json", { headers: FETCH_HEADER })
+      .then((resp) => resp.json())
+      .then((data) => {
         this.context.setCurrentUser(data);
-      })
-  }
+      });
+  };
 
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
       fetch(api_prefix + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)  // {family_name: "User1", given_name: "User1", name: "user1"}
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data); // {family_name: "User1", given_name: "User1", name: "user1"}
           this.context.setCurrentUser(data);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   }
 
@@ -55,31 +62,46 @@ class SignIn extends React.Component {
     if (this.context.currentUser) {
       return (
         <MembershipContext.Consumer>
-          {setCurrentUser =>
+          {(setCurrentUser) => (
             <>
               <SignInIntroduction />
               <StepperComponent step={-1} childrenArray={fakeChildrenArray} />
               <FormChooser />
             </>
-          }
+          )}
         </MembershipContext.Consumer>
-      )
+      );
     }
 
     return (
       <MembershipContext.Consumer>
-        {setCurrentUser =>
+        {(setCurrentUser) => (
           <>
             <SignInIntroduction />
             <StepperComponent step={-1} childrenArray={fakeChildrenArray} />
             <div className="text-center margin-bottom-20">
-              {getCurrentMode() === MODE_REACT_ONLY && <button type="button" onClick={this.getFakeUser} className="btn btn-secondary">React Only Login</button>}
+              {getCurrentMode() === MODE_REACT_ONLY && (
+                <button
+                  type="button"
+                  onClick={this.getFakeUser}
+                  className="btn btn-secondary">
+                  React Only Login
+                </button>
+              )}
 
-              {getCurrentMode() === MODE_REACT_API && <a href="/login" className="btn btn-secondary">Sign In</a>}
-              <a href="https://accounts.eclipse.org/" className="btn btn-secondary">Create an account</a>
+              {getCurrentMode() === MODE_REACT_API && (
+                <a href="/login" className="btn btn-secondary">
+                  Sign In
+                </a>
+              )}
+              <a
+                href="https://accounts.eclipse.org/"
+                className="btn btn-secondary">
+                Create an account
+              </a>
             </div>
           </>
-        }
+        )}
       </MembershipContext.Consumer>
     );
   }
