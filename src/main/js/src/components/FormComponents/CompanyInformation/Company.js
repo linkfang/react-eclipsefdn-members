@@ -1,10 +1,10 @@
-import React from "react";
-import CustomSelectWrapper from "../Inputs/CustomSelect/CustomSelectWrapper";
-import DefaultSelect from "../Inputs/CustomSelect/DefaultSelect";
-import CustomAsyncSelect from "../Inputs/CustomSelect/CustomAsyncSelect";
-import Input from "../Inputs/Input";
-import { formField } from "../formModels/formFieldModel";
-import { companies } from "../../../Constants/Constants";
+import React from 'react';
+import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
+import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
+import CustomAsyncSelect from '../Inputs/CustomSelect/CustomAsyncSelect';
+import Input from '../Inputs/Input';
+import { formField } from '../formModels/formFieldModel';
+import { companies } from '../../../Constants/Constants';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -21,15 +21,15 @@ const Company = () => {
     organizationAddress,
   } = formField;
   // get country list library and map as option pass to the React-Select
-  const countryList = require("country-list")
+  const countryList = require('country-list')
     .getNames()
     .map((item) => ({ label: item, value: item }));
 
   return (
     <>
       <h2 className="fw-600 h4" id={organizationName.name}>
-        {" "}
-        Organization <span className="orange-star">*</span>{" "}
+        {' '}
+        Organization <span className="orange-star">*</span>{' '}
       </h2>
       <CustomSelectWrapper
         name={organizationName.name}

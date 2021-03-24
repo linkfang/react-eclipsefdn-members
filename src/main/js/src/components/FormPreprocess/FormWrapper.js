@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import MultiStepForm from "../FormComponents/MultiStepForm";
-import MembershipContext from "../../Context/MembershipContext";
-import SignIn from "../SignIn/SignIn";
+import React, { useContext } from 'react';
+import MultiStepForm from '../FormComponents/MultiStepForm';
+import MembershipContext from '../../Context/MembershipContext';
+import SignIn from '../SignIn/SignIn';
 
 const FormWrapper = () => {
   const { currentUser, currentFormId } = useContext(MembershipContext);

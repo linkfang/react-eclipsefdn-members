@@ -1,8 +1,8 @@
-import React from "react";
-import MembershipContext from "../../Context/MembershipContext";
-import FormChooser from "../FormPreprocess/FormChooser";
-import SignInIntroduction from "./SignInIntroduction";
-import StepperComponent from "../Steppers/StepperComponent";
+import React from 'react';
+import MembershipContext from '../../Context/MembershipContext';
+import FormChooser from '../FormPreprocess/FormChooser';
+import SignInIntroduction from './SignInIntroduction';
+import StepperComponent from '../Steppers/StepperComponent';
 import {
   FETCH_HEADER,
   api_prefix,
@@ -11,7 +11,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from "../../Constants/Constants";
+} from '../../Constants/Constants';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
@@ -35,11 +35,11 @@ import {
  *
  * https://stackoverflow.com/questions/63201445/react-hook-useeffect-missing-dependencies-warning
  *
-*/
+ */
 class SignIn extends React.Component {
   static contextType = MembershipContext;
   getFakeUser = () => {
-    fetch("membership_data/fake_user.json", { headers: FETCH_HEADER })
+    fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
       .then((data) => {
         this.context.setCurrentUser(data);

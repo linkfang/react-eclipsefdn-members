@@ -8,7 +8,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from "../Constants/Constants";
+} from '../Constants/Constants';
 
 /**
  * checkSameContact
@@ -27,8 +27,8 @@ function checkSameContact(compnayRep, otherContact) {
   // Check contacts' name, email and jobtitle to check if they are the same
   for (let i = 0; i < keyArray.length; i++) {
     if (
-      keyArray[i] !== "id" &&
-      keyArray[i] !== "type" &&
+      keyArray[i] !== 'id' &&
+      keyArray[i] !== 'type' &&
       compnayRep[keyArray[i]] !== otherContact[keyArray[i]]
     ) {
       return false;
@@ -71,27 +71,27 @@ export function assignContactData(currentContact, companyContact) {
 export function matchCompanyFields(existingOrganizationData) {
   return {
     // Step1: company Info
-    id: existingOrganizationData?.id || "",
+    id: existingOrganizationData?.id || '',
     legalName:
       {
-        value: existingOrganizationData?.legal_name || "",
-        label: existingOrganizationData?.legal_name || "",
-        address: existingOrganizationData?.address || "",
-        twitterHandle: existingOrganizationData?.twitter_handle || "",
-      } || "",
+        value: existingOrganizationData?.legal_name || '',
+        label: existingOrganizationData?.legal_name || '',
+        address: existingOrganizationData?.address || '',
+        twitterHandle: existingOrganizationData?.twitter_handle || '',
+      } || '',
     address: {
-      id: existingOrganizationData?.address.id || "",
-      street: existingOrganizationData?.address.street || "",
-      city: existingOrganizationData?.address.city || "",
-      provinceOrState: existingOrganizationData?.address.province_state || "",
+      id: existingOrganizationData?.address.id || '',
+      street: existingOrganizationData?.address.street || '',
+      city: existingOrganizationData?.address.city || '',
+      provinceOrState: existingOrganizationData?.address.province_state || '',
       country:
         {
           label: existingOrganizationData?.address.country,
           value: existingOrganizationData?.address.country,
-        } || "",
-      postalCode: existingOrganizationData?.address.postal_code || "",
+        } || '',
+      postalCode: existingOrganizationData?.address.postal_code || '',
     },
-    twitterHandle: existingOrganizationData?.twitter_handle || "",
+    twitterHandle: existingOrganizationData?.twitter_handle || '',
   };
 }
 
@@ -128,19 +128,19 @@ export function matchContactFields(existingContactData) {
 
   return {
     company: {
-      id: existingCompanyContact?.id || "",
-      firstName: existingCompanyContact?.first_name || "",
-      lastName: existingCompanyContact?.last_name || "",
-      jobtitle: existingCompanyContact?.job_title || "",
-      email: existingCompanyContact?.email || "",
+      id: existingCompanyContact?.id || '',
+      firstName: existingCompanyContact?.first_name || '',
+      lastName: existingCompanyContact?.last_name || '',
+      jobtitle: existingCompanyContact?.job_title || '',
+      email: existingCompanyContact?.email || '',
     },
 
     marketing: {
-      id: existingMarketingContact?.id || "",
-      firstName: existingMarketingContact?.first_name || "",
-      lastName: existingMarketingContact?.last_name || "",
-      jobtitle: existingMarketingContact?.job_title || "",
-      email: existingMarketingContact?.email || "",
+      id: existingMarketingContact?.id || '',
+      firstName: existingMarketingContact?.first_name || '',
+      lastName: existingMarketingContact?.last_name || '',
+      jobtitle: existingMarketingContact?.job_title || '',
+      email: existingMarketingContact?.email || '',
       sameAsCompany: checkSameContact(
         existingCompanyContact,
         existingMarketingContact
@@ -148,11 +148,11 @@ export function matchContactFields(existingContactData) {
     },
 
     accounting: {
-      id: existingAccoutingContact?.id || "",
-      firstName: existingAccoutingContact?.first_name || "",
-      lastName: existingAccoutingContact?.last_name || "",
-      jobtitle: existingAccoutingContact?.job_title || "",
-      email: existingAccoutingContact?.email || "",
+      id: existingAccoutingContact?.id || '',
+      firstName: existingAccoutingContact?.first_name || '',
+      lastName: existingAccoutingContact?.last_name || '',
+      jobtitle: existingAccoutingContact?.job_title || '',
+      email: existingAccoutingContact?.email || '',
       sameAsCompany: checkSameContact(
         existingCompanyContact,
         existingAccoutingContact
@@ -178,25 +178,25 @@ export function matchWorkingGroupFields(
       (el) => el.value === item?.working_group_id
     );
     res.push({
-      id: item?.id || "",
+      id: item?.id || '',
       workingGroup:
         {
           label: wg?.label,
           value: item?.working_group_id,
           participation_levels: wg?.participation_levels,
-        } || "",
+        } || '',
       participationLevel:
         {
           label: item?.participation_level,
           value: item?.participation_level,
-        } || "",
-      effectiveDate: new Date(item?.effective_date) || "",
+        } || '',
+      effectiveDate: new Date(item?.effective_date) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact.first_name || "",
-        lastName: item?.contact.last_name || "",
-        jobtitle: item?.contact.job_title || "",
-        email: item?.contact.email || "",
-        id: item?.contact.id || "",
+        firstName: item?.contact.first_name || '',
+        lastName: item?.contact.last_name || '',
+        jobtitle: item?.contact.job_title || '',
+        email: item?.contact.email || '',
+        id: item?.contact.id || '',
       },
     });
   });
@@ -224,7 +224,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName.label,
-    twitter_handle: organizationData.twitterHandle || "",
+    twitter_handle: organizationData.twitterHandle || '',
   };
 
   if (organizationData.address.id) {
@@ -297,7 +297,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     participation_level: eachWorkingGroupData?.participationLevel.value,
     effective_date: (eachWorkingGroupData?.effectiveDate)
       .toISOString()
-      .replace(/.\d+Z$/g, "Z"),
+      .replace(/.\d+Z$/g, 'Z'),
     contact: {
       ...wg_contact,
     },
@@ -352,7 +352,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
     case 1:
       sendData(
         formId,
-        "",
+        '',
         matchMembershipLevelFieldsToBackend(
           formData.membershipLevel,
           formId,
@@ -389,7 +389,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
  * If empty, is creating a new entity, use POST method;
  * If has value, is fetched from server, use PUT or DELETE;
  */
-function callSendData(formId, endpoint = "", method, dataBody, entityId = "") {
+function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
   let url = api_prefix_form + `/${formId}`;
 
   if (endpoint) {
@@ -420,7 +420,7 @@ function callSendData(formId, endpoint = "", method, dataBody, entityId = "") {
 
 /**
  * PUT or POST function
- * 
+ *
  * @param formId -
  * Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param endpoint -
@@ -430,7 +430,7 @@ function callSendData(formId, endpoint = "", method, dataBody, entityId = "") {
  * The data body passed to server, normally is the filled form data to be saved
  *
  * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
-*/
+ */
 export function sendData(formId, endpoint, dataBody) {
   switch (endpoint) {
     case end_point.organizations:
@@ -454,7 +454,7 @@ export function sendData(formId, endpoint, dataBody) {
 
 /**
  * DELETE
- * 
+ *
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param endpoint - To which endpoint the fetch is calling to backend:
  * /form/{id}, /form/{id}/organizations/{id}, /form/{id}/contacts/{id}, /form/{id}/working_groups/{id}
@@ -464,7 +464,7 @@ export function sendData(formId, endpoint, dataBody) {
  * @param callback - Callback function, called when fetch resolved
  * @param index - Typically for working groups, which one is deleted
  * Typically is used by the callback function from WorkingGroup Component (arrayhelpers.remove())
-*/
+ */
 export function deleteData(formId, endpoint, entityId, callback, index) {
   // If the added field array is not in the server, just remove it from frontend
   if (!entityId) {
@@ -499,7 +499,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
 }
 /**
  * Handle New Form
- * 
+ *
  * @param setCurrentFormId - setCurrentFormId function from membership context
  * @param formData - Filled whole form data stored in formik context
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
@@ -522,7 +522,7 @@ export async function handleNewForm(
 
   if (getCurrentMode() === MODE_REACT_API) {
     var dataBody = {
-      membership_level: "",
+      membership_level: '',
       signing_authority: false,
     };
 

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import DefaultSelect from "../Inputs/CustomSelect/DefaultSelect";
-import CustomSelectWrapper from "../Inputs/CustomSelect/CustomSelectWrapper";
-import MembershipFeeTable from "./MembershipFeeTable";
-import MembershipContext from "../../../Context/MembershipContext";
-import Loading from "../../Loading/Loading";
-import { mapMembershipLevel } from "../../../Utils/formFunctionHelpers";
+import React, { useContext, useEffect, useState } from 'react';
+import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
+import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
+import MembershipFeeTable from './MembershipFeeTable';
+import MembershipContext from '../../../Context/MembershipContext';
+import Loading from '../../Loading/Loading';
+import { mapMembershipLevel } from '../../../Utils/formFunctionHelpers';
 import {
   api_prefix_form,
   FETCH_HEADER,
@@ -13,10 +13,10 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from "../../../Constants/Constants";
+} from '../../../Constants/Constants';
 
 /**
- * - Render membership select component (use React-Select), with fetch and prefill data operation
+ * Render membership select component (use React-Select), with fetch and prefill data operation
  *
  *  - Props:
  *    -  otherProps: any other props passing down from MultiStepForm and FormikStepper components, including formik props of formik library (such as "formik.values", "formik.setFieldValue");
@@ -29,17 +29,17 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch data only once and prefill data, as long as 
-  // currentFormId, membershipLevel.name and setFieldValue 
+  // Fetch data only once and prefill data, as long as
+  // currentFormId, membershipLevel.name and setFieldValue
   // Function does not change, will not cause re-render again
   useEffect(() => {
-    // All pre-process: if running without server, 
+    // All pre-process: if running without server,
     // use fake json data; if running with API, use API
     let url_prefix_local;
-    let url_suffix_local = "";
+    let url_suffix_local = '';
     if (getCurrentMode() === MODE_REACT_ONLY) {
-      url_prefix_local = "membership_data";
-      url_suffix_local = "/form.json";
+      url_prefix_local = 'membership_data';
+      url_suffix_local = '/form.json';
     }
 
     if (getCurrentMode() === MODE_REACT_API) {
@@ -54,9 +54,9 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
         .then((resp) => resp.json())
         .then((data) => {
           if (data) {
-            // mapMembershipLevel(): Call the the function to map 
+            // mapMembershipLevel(): Call the the function to map
             // the retrived membership level backend data to fit frontend, and
-            // setFieldValue(): Prefill Data --> Call the setFieldValue of 
+            // setFieldValue(): Prefill Data --> Call the setFieldValue of
             // Formik, to set membershipLevel field with the mapped data
             setFieldValue(
               membershipLevel.name,

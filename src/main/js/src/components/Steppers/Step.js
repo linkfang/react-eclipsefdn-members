@@ -1,5 +1,5 @@
-import React from "react";
-import { getStyles } from "./stepHelpers";
+import React from 'react';
+import { getStyles } from './stepHelpers';
 
 /**
  * Props:
@@ -65,7 +65,7 @@ const Step = (props) => {
       <div className="step-span">
         <div
           className={
-            active ? "step-title-container-active" : "step-title-container"
+            active ? 'step-title-container-active' : 'step-title-container'
           }>
           <span className="step-title">{title}</span>
         </div>

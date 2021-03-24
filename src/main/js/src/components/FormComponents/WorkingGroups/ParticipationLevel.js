@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import DefaultSelect from "../Inputs/CustomSelect/DefaultSelect";
-import CustomSelectWrapper from "../Inputs/CustomSelect/CustomSelectWrapper";
+import React, { useState, useEffect } from 'react';
+import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
+import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
 
 /**
  * Render Participation level selector component (React-Select)
@@ -12,12 +12,12 @@ import CustomSelectWrapper from "../Inputs/CustomSelect/CustomSelectWrapper";
  */
 const ParticipationLevel = ({ name, workingGroup }) => {
   const workingGroupsData = JSON.parse(
-    sessionStorage.getItem("workingGroupsData")
+    sessionStorage.getItem('workingGroupsData')
   );
   const [participationLevels, setParticipationLevels] = useState([]);
 
   useEffect(() => {
-    // If have selected working group, find this working group's 
+    // If have selected working group, find this working group's
     // participation levels, and pass to the react-select option
     if (workingGroupsData) {
       let temp = workingGroupsData?.find(
@@ -27,7 +27,7 @@ const ParticipationLevel = ({ name, workingGroup }) => {
     }
   }, [workingGroupsData, workingGroup.value]);
 
-  // Need to have {label: foo, value: foo} format for react-select v2 
+  // Need to have {label: foo, value: foo} format for react-select v2
   // to work properly, please refer to: https://react-select.com/home
   const renderOptions = (array) => {
     return array?.map((el) => ({ label: el, value: el }));

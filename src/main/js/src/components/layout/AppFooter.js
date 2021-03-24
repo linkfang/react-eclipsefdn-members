@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -14,12 +14,12 @@ export default function AppFooter() {
       <div
         className="featured-footer featured-footer-newsletter"
         style={{
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
           backgroundImage:
-            "url(https://eclipse.org/home/images/eclipse-ide-2020-03.jpg)",
-          borderBottom: "1px solid #ccc",
-          borderTop: "1px solid #ccc",
-          backgroundPosition: "bottom",
+            'url(https://eclipse.org/home/images/eclipse-ide-2020-03.jpg)',
+          borderBottom: '1px solid #ccc',
+          borderTop: '1px solid #ccc',
+          backgroundPosition: 'bottom',
         }}>
         <div className="container">
           <div className="row">
@@ -82,7 +82,7 @@ export default function AppFooter() {
                     Board of Directors
                   </a>
                 </li>
-              </ul>{" "}
+              </ul>{' '}
             </section>
             <section className="col-sm-6 hidden-print" id="footer-legal">
               <h2 className="section-title">Legal</h2>
@@ -110,7 +110,7 @@ export default function AppFooter() {
                 <li>
                   <a href="https://www.eclipse.org/legal/">Legal Resources</a>
                 </li>
-              </ul>{" "}
+              </ul>{' '}
             </section>
             <section className="col-sm-6 hidden-print" id="footer-useful-links">
               <h2 className="section-title">Useful Links</h2>
@@ -135,7 +135,7 @@ export default function AppFooter() {
                 <li>
                   <a href="//marketplace.eclipse.org">Marketplace</a>
                 </li>
-              </ul>{" "}
+              </ul>{' '}
             </section>
             <section className="col-sm-6 hidden-print" id="footer-other">
               <h2 className="section-title">Other</h2>
@@ -164,7 +164,7 @@ export default function AppFooter() {
                 <li>
                   <a href="https://status.eclipse.org">Service Status</a>
                 </li>
-              </ul>{" "}
+              </ul>{' '}
             </section>
             <div className="col-sm-24 margin-top-20">
               <div className="row">
@@ -210,7 +210,7 @@ export default function AppFooter() {
                   </ul>
                 </div>
               </div>
-            </div>{" "}
+            </div>{' '}
             <a href="#" className="scrollup">
               Back to the top
             </a>

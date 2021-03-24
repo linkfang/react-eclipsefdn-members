@@ -1,9 +1,9 @@
-import React from "react";
-import Input from "../Inputs/Input";
+import React from 'react';
+import Input from '../Inputs/Input';
 
 /**
- * Have not added any API calls here, 
- * simply use the form fields to render 
+ * Have not added any API calls here,
+ * simply use the form fields to render
  * input components for signing Authority Representative
  */
 const SigningAuthority = ({ formField }) => {

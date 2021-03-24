@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import FormikStepper from "./FormikStepper/FormikStepper";
-import CompanyInformation from "./CompanyInformation/CompanyInformation";
-import MembershipLevel from "./MembershipLevel/MembershipLevel";
-import WorkingGroupsWrapper from "./WorkingGroups/WorkingGroupsWrapper";
-import SigningAuthority from "./SigningAuthority/SigningAuthority";
-import Preview from "./Preview/Preview";
-import { formField, initialValues } from "./formModels/formFieldModel";
+import React, { useState, useEffect } from 'react';
+import FormikStepper from './FormikStepper/FormikStepper';
+import CompanyInformation from './CompanyInformation/CompanyInformation';
+import MembershipLevel from './MembershipLevel/MembershipLevel';
+import WorkingGroupsWrapper from './WorkingGroups/WorkingGroupsWrapper';
+import SigningAuthority from './SigningAuthority/SigningAuthority';
+import Preview from './Preview/Preview';
+import { formField, initialValues } from './formModels/formFieldModel';
 import {
   COMPANY_INFORMATION,
   MEMBERSHIP_LEVEL,
@@ -13,7 +13,7 @@ import {
   SIGNING_AUTHORITY,
   REVIEW,
   FETCH_HEADER,
-} from "../../Constants/Constants";
+} from '../../Constants/Constants';
 
 /**
  * Wrapper for the FormikStepper and FormikStepper's children steps
@@ -26,7 +26,7 @@ import {
 const MultiStepForm = () => {
   const [step, setStep] = useState(0);
   const workingGroupsData = JSON.parse(
-    sessionStorage.getItem("workingGroupsData")
+    sessionStorage.getItem('workingGroupsData')
   );
   const [workingGroupsDataState, setWorkingGroupsDataState] = useState(
     workingGroupsData
@@ -36,7 +36,7 @@ const MultiStepForm = () => {
   useEffect(() => {
     // Fetch working groups data
     if (!workingGroupsData) {
-      fetch("workingGroups.json", { headers: FETCH_HEADER })
+      fetch('workingGroups.json', { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
           let options = data.working_groups.map((item) => ({
@@ -44,7 +44,7 @@ const MultiStepForm = () => {
             value: item.id,
             participation_levels: item.participation_levels,
           }));
-          sessionStorage.setItem("workingGroupsData", JSON.stringify(options));
+          sessionStorage.setItem('workingGroupsData', JSON.stringify(options));
           setWorkingGroupsDataState(options);
         });
     }

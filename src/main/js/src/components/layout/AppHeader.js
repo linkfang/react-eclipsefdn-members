@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -54,7 +54,7 @@ export default function AppHeader() {
             </div>
           </div>
         </div>
-      </div>{" "}
+      </div>{' '}
       <div className="container">
         <div className="row" id="header-row">
           <div className="col-sm-5 col-md-4" id="header-left">
@@ -68,7 +68,7 @@ export default function AppHeader() {
                 />
               </a>
             </div>
-          </div>{" "}
+          </div>{' '}
           <div
             className="col-sm-19 col-md-20 margin-top-10"
             id="main-menu-wrapper">
@@ -76,7 +76,7 @@ export default function AppHeader() {
               <a href="/downloads/" className="btn btn-huge btn-warning">
                 <i className="fa fa-download" /> Download
               </a>
-            </div>{" "}
+            </div>{' '}
             <div className="navbar yamm float-sm-right" id="main-menu">
               <div className="navbar-collapse collapse" id="navbar-main-menu">
                 <ul className="nav navbar-nav">
@@ -98,7 +98,7 @@ export default function AppHeader() {
                       target="_self">
                       Members
                     </a>
-                  </li>{" "}
+                  </li>{' '}
                   <li className="dropdown visible-xs">
                     <a
                       href="#"
@@ -205,7 +205,7 @@ export default function AppHeader() {
                         </a>
                       </li>
                     </ul>
-                  </li>{" "}
+                  </li>{' '}
                   {/* More */}
                   <li className="dropdown eclipse-more hidden-xs">
                     <a
@@ -327,7 +327,7 @@ export default function AppHeader() {
                                   Newcomer Forum
                                 </a>
                               </li>
-                            </ul>{" "}
+                            </ul>{' '}
                           </div>
                         </div>
                       </li>
@@ -358,7 +358,7 @@ export default function AppHeader() {
                       src="//www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-white-orange.svg"
                     />
                   </a>
-                </div>{" "}
+                </div>{' '}
               </div>
             </div>
           </div>

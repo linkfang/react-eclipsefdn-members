@@ -1,14 +1,14 @@
-import React, { forwardRef } from "react";
-import { FastField } from "formik";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "./dateInputstyles.css";
+import React, { forwardRef } from 'react';
+import { FastField } from 'formik';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import './dateInputstyles.css';
 
 const DateInput = (props) => {
   const { label, name, ...rest } = props;
 
-  // If use custom input for react-datepicker, 
-  // ref is needed, please refer to: 
+  // If use custom input for react-datepicker,
+  // ref is needed, please refer to:
   // https://reactdatepicker.com/#example-custom-input
   const ref = React.createRef();
 
@@ -26,7 +26,7 @@ const DateInput = (props) => {
           placeholder="Date"
           type="text"
           className={`form-control margin-bottom-10 ${
-            props.meta.touched && props.meta.error ? "form-border-error" : ""
+            props.meta.touched && props.meta.error ? 'form-border-error' : ''
           }`}
           aria-labelledby={props.name}
         />

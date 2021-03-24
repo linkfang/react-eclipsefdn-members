@@ -1,6 +1,6 @@
-import React from "react";
-import Input from "../Inputs/Input";
-import CustomCheckbox from "../Inputs/CustomCheckbox";
+import React from 'react';
+import Input from '../Inputs/Input';
+import CustomCheckbox from '../Inputs/CustomCheckbox';
 
 /**
  * - 
@@ -9,29 +9,29 @@ import CustomCheckbox from "../Inputs/CustomCheckbox";
 
 /**
  * Render three representatives inputs, include checkbox
- * 
+ *
  * Props:
- *  - formValues: current form values; passed from 
+ *  - formValues: current form values; passed from
  *      CompanyInformation component;
  *  - formField: the form field in formModels/formFieldModel.js
- * 
- * @returns 
+ *
+ * @returns
  */
 const Contacts = ({ formValues, formField }) => {
   // the boolean form value of "is marketing Rep. the same as company Rep.?"
-  const mktSame = formValues.representative.marketing.sameAsCompany; 
+  const mktSame = formValues.representative.marketing.sameAsCompany;
   // the boolean form value of "is accounting Rep. the same as company Rep.?"
-  const accSame = formValues.representative.accounting.sameAsCompany; 
+  const accSame = formValues.representative.accounting.sameAsCompany;
   const { company, marketing, accounting } = formField;
 
-/**
- * Generate Representatives Inputs components
- * 
- * @param returns
- * @param representativeFields - company, marketing or accounting
- * @param prefix - simply to add it in the key prop, so that each component has a unique key
- * @param disableInput - if marketing / accounting is the same as company Rep., mark the input disabled and just used the same values from company Rep.
- */
+  /**
+   * Generate Representatives Inputs components
+   *
+   * @param returns
+   * @param representativeFields - company, marketing or accounting
+   * @param prefix - simply to add it in the key prop, so that each component has a unique key
+   * @param disableInput - if marketing / accounting is the same as company Rep., mark the input disabled and just used the same values from company Rep.
+   */
   const generateContacts = (representativeFields, prefix, disableInput) => {
     return (
       <>
@@ -68,7 +68,7 @@ const Contacts = ({ formValues, formField }) => {
         All formal communications from the Eclipse Foundation will be sent to
         the Member Representative.
       </p>
-      <div className="row">{generateContacts(company, "company-", false)}</div>
+      <div className="row">{generateContacts(company, 'company-', false)}</div>
 
       <h4 className="fw-600">Company Marketing Representative</h4>
       <CustomCheckbox
@@ -76,8 +76,8 @@ const Contacts = ({ formValues, formField }) => {
         label="Same as member rep."
       />
       <div className="row">
-        {mktSame && generateContacts(company, "marketing-", mktSame)}
-        {!mktSame && generateContacts(marketing, "marketing-", mktSame)}
+        {mktSame && generateContacts(company, 'marketing-', mktSame)}
+        {!mktSame && generateContacts(marketing, 'marketing-', mktSame)}
       </div>
 
       <h4 className="fw-600">Company Accounting Representative</h4>
@@ -86,8 +86,8 @@ const Contacts = ({ formValues, formField }) => {
         label="Same as member rep."
       />
       <div className="row">
-        {accSame && generateContacts(company, "accounting-", accSame)}
-        {!accSame && generateContacts(accounting, "accounting-", accSame)}
+        {accSame && generateContacts(company, 'accounting-', accSame)}
+        {!accSame && generateContacts(accounting, 'accounting-', accSame)}
       </div>
     </>
   );

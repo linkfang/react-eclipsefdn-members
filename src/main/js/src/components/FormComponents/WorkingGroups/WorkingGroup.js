@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { useFormikContext } from "formik";
-import MembershipContext from "../../../Context/MembershipContext";
-import CustomSelectWrapper from "../Inputs/CustomSelect/CustomSelectWrapper";
-import ParticipationLevel from "./ParticipationLevel";
-import EffectiveDate from "./EffectiveDate";
-import WorkingGroupsRepresentative from "./WorkingGroupRepresentative";
-import { deleteData } from "../../../Utils/formFunctionHelpers";
+import React, { useContext } from 'react';
+import { useFormikContext } from 'formik';
+import MembershipContext from '../../../Context/MembershipContext';
+import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
+import ParticipationLevel from './ParticipationLevel';
+import EffectiveDate from './EffectiveDate';
+import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
+import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
   end_point,
   WORKING_GROUPS,
   workingGroups,
-} from "../../../Constants/Constants";
-import DefaultSelect from "../Inputs/CustomSelect/DefaultSelect";
+} from '../../../Constants/Constants';
+import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
 
 /**
- * Wrapper for Working Group Selector, 
- * Participation Level selector, EffectiveDate input, 
+ * Wrapper for Working Group Selector,
+ * Participation Level selector, EffectiveDate input,
  * and WorkingGroups Representative inputs components
  *
  *  - Props:
@@ -30,22 +30,22 @@ const WorkingGroup = ({ formField, workingGroupsData, arrayHelpers }) => {
   const { currentFormId } = useContext(MembershipContext);
 
   const each_workingGroupField = {
-    id: "",
-    workingGroup: "",
-    participationLevel: "",
-    effectiveDate: "",
+    id: '',
+    workingGroup: '',
+    participationLevel: '',
+    effectiveDate: '',
     workingGroupRepresentative: {
-      firstName: "",
-      lastName: "",
-      jobtitle: "",
-      email: "",
-      id: "",
+      firstName: '',
+      lastName: '',
+      jobtitle: '',
+      email: '',
+      id: '',
     },
   };
 
   const removeWorkingGroupCall = (arrayHelpersRemove, index, id) => {
     // Call API to remove
-    console.log("you called DELETE method with id: " + id);
+    console.log('you called DELETE method with id: ' + id);
     deleteData(
       currentFormId,
       end_point.working_groups,
@@ -64,8 +64,8 @@ const WorkingGroup = ({ formField, workingGroupsData, arrayHelpers }) => {
             <h2
               className="h4 fw-600"
               id={`${workingGroups}.${index}.workingGroup`}>
-              Which working group would you like to join?{" "}
-              <span className="orange-star">*</span>{" "}
+              Which working group would you like to join?{' '}
+              <span className="orange-star">*</span>{' '}
             </h2>
             <CustomSelectWrapper
               label={WORKING_GROUPS}
@@ -78,7 +78,7 @@ const WorkingGroup = ({ formField, workingGroupsData, arrayHelpers }) => {
             />
 
             {workingGroup.workingGroup &&
-            workingGroup.workingGroup.value !== "" ? (
+            workingGroup.workingGroup.value !== '' ? (
               <>
                 <ParticipationLevel
                   name={`${workingGroups}.${index}.participationLevel`}

@@ -1,38 +1,38 @@
-import React, { useState, useRef, useContext } from "react";
-import { Form, Formik } from "formik";
-import { validationSchema } from "../formModels/ValidationSchema";
-import StepperComponent from "../../Steppers/StepperComponent";
-import CustomStepButton from "../CustomStepButton";
+import React, { useState, useRef, useContext } from 'react';
+import { Form, Formik } from 'formik';
+import { validationSchema } from '../formModels/ValidationSchema';
+import StepperComponent from '../../Steppers/StepperComponent';
+import CustomStepButton from '../CustomStepButton';
 import {
   executeSendDataByStep,
   assignContactData,
   handleNewForm,
-} from "../../../Utils/formFunctionHelpers";
-import MembershipContext from "../../../Context/MembershipContext";
-import SubmitSuccess from "../SubmitSuccess";
-import { newForm_tempId } from "../../../Constants/Constants";
+} from '../../../Utils/formFunctionHelpers';
+import MembershipContext from '../../../Context/MembershipContext';
+import SubmitSuccess from '../SubmitSuccess';
+import { newForm_tempId } from '../../../Constants/Constants';
 
 /**
-* A wrapper for each step of form.
-* - Check and mark step completed
-* - Perform "next" / "submit" action
-* - match current Child form component
-* - match current ValidationSchema
-* - -------------------------------
-*
-* - Props:
-*    - step: current step you are in
-*    - setStep: setStep function passed from MultiStepForm
-*    - children: CompanyInformation, MembershipLevel, WorkingGroupsWrapper, SigningAuthority
-*    - props: any other props passed from MultiStepForm component
-*
-* --------------------------------------
-* - Render Formik component,
-*    including each step of form component (currentChild), CustomStepButton (render as prev, next, or final submit)
-* - Render StepperComponent component
-* - Render Submit Success confirmation component once submit after preview
-* - `React.cloneElement(currentChild, { parentState: { formik, ...props } })`, this helps to pass the props to the children component (each current step of form component)
-*/
+ * A wrapper for each step of form.
+ * - Check and mark step completed
+ * - Perform "next" / "submit" action
+ * - match current Child form component
+ * - match current ValidationSchema
+ * - -------------------------------
+ *
+ * - Props:
+ *    - step: current step you are in
+ *    - setStep: setStep function passed from MultiStepForm
+ *    - children: CompanyInformation, MembershipLevel, WorkingGroupsWrapper, SigningAuthority
+ *    - props: any other props passed from MultiStepForm component
+ *
+ * --------------------------------------
+ * - Render Formik component,
+ *    including each step of form component (currentChild), CustomStepButton (render as prev, next, or final submit)
+ * - Render StepperComponent component
+ * - Render Submit Success confirmation component once submit after preview
+ * - `React.cloneElement(currentChild, { parentState: { formik, ...props } })`, this helps to pass the props to the children component (each current step of form component)
+ */
 const FormikStepper = ({ step, setStep, children, ...props }) => {
   const [completed, setCompleted] = useState(new Set());
   const childrenArray = React.Children.toArray(children);
@@ -76,8 +76,8 @@ const FormikStepper = ({ step, setStep, children, ...props }) => {
         defaultBehaviour();
         break;
 
-      // The organization info step, need to check 
-      // if marketing & accounting are the same as company rep., 
+      // The organization info step, need to check
+      // if marketing & accounting are the same as company rep.,
       // if true, assign the company rep. data to the other rep.
       case 0:
         if (values.representative.marketing.sameAsCompany) {

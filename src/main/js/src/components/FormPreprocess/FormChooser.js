@@ -1,5 +1,5 @@
-import React from "react";
-import MembershipContext from "../../Context/MembershipContext";
+import React from 'react';
+import MembershipContext from '../../Context/MembershipContext';
 import {
   FETCH_HEADER,
   api_prefix_form,
@@ -7,18 +7,18 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from "../../Constants/Constants";
+} from '../../Constants/Constants';
 
 const styles = {
-  marginBottom: "20px",
-  textAlign: "center",
+  marginBottom: '20px',
+  textAlign: 'center',
 };
 
 const FormChooser = () => {
   const fetchExistingForm = (callback) => {
     let url_prefix_local;
     if (getCurrentMode() === MODE_REACT_ONLY) {
-      url_prefix_local = "membership_data/form_1/form.json";
+      url_prefix_local = 'membership_data/form_1/form.json';
     }
 
     if (getCurrentMode() === MODE_REACT_API) {
@@ -46,15 +46,15 @@ const FormChooser = () => {
             type="button"
             onClick={fetchExistingForm(setCurrentFormId)}
             className="btn btn-primary">
-            {" "}
-            Continue Existing Application{" "}
+            {' '}
+            Continue Existing Application{' '}
           </button>
           <button
             type="button"
             onClick={setCurrentFormId(newForm_tempId)}
             className="btn btn-primary">
-            {" "}
-            Start New Application{" "}
+            {' '}
+            Start New Application{' '}
           </button>
         </div>
       )}

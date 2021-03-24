@@ -1,5 +1,5 @@
-import React from "react";
-import DateInput from "../Inputs/DateInput";
+import React from 'react';
+import DateInput from '../Inputs/DateInput';
 
 /**
  * Render Effective Date input component (react-datepicker)

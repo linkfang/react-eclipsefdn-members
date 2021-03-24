@@ -3,7 +3,7 @@ export function getStyles(props) {
 
   return {
     index: {
-      cursor: (completed || stepReached) && onClick ? "pointer" : "default",
+      cursor: (completed || stepReached) && onClick ? 'pointer' : 'default',
     },
   };
 }

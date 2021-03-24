@@ -3,7 +3,7 @@ import { Field } from 'formik';
 
 /**
  * Wrapper for Select Field
- * 
+ *
  * - Props:
  *    - name: FieldName
  *    - srcData: to define whether I am using the select for organization, participationLevel, workingGroups, or membershipLevel
@@ -11,11 +11,17 @@ import { Field } from 'formik';
  *    - renderComponent: the real select component passed to Field to render
  *    - options: required, to render options
  *    - ariaLabel: for Accessbilities
- * 
+ *
  *    - All the props above will be passing down to <renderComponent />, the real select component that will be rendered
  */
-const CustomSelectWrapper = ({ name, srcData, participationLevel, renderComponent, options, ariaLabel }) => {
-
+const CustomSelectWrapper = ({
+  name,
+  srcData,
+  participationLevel,
+  renderComponent,
+  options,
+  ariaLabel,
+}) => {
   return (
     <Field
       name={name}
@@ -25,7 +31,7 @@ const CustomSelectWrapper = ({ name, srcData, participationLevel, renderComponen
       participationLevel={participationLevel}
       options={options}
     />
-  )
-}
+  );
+};
 
-export default CustomSelectWrapper
+export default CustomSelectWrapper;

@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
-import MembershipContext from "../../../Context/MembershipContext";
-import { FieldArray } from "formik";
-import WorkingGroup from "./WorkingGroup";
-import { matchWorkingGroupFields } from "../../../Utils/formFunctionHelpers";
-import Loading from "../../Loading/Loading";
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import MembershipContext from '../../../Context/MembershipContext';
+import { FieldArray } from 'formik';
+import WorkingGroup from './WorkingGroup';
+import { matchWorkingGroupFields } from '../../../Utils/formFunctionHelpers';
+import Loading from '../../Loading/Loading';
 import {
   end_point,
   api_prefix_form,
@@ -13,14 +13,14 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from "../../../Constants/Constants";
+} from '../../../Constants/Constants';
 
 /**
- * Wrapper for FieldArray of WorkingGroup component, 
+ * Wrapper for FieldArray of WorkingGroup component,
  * with fetch and prefill data operation
- * 
- * Note: FieldArray is from Formik library that add/remove 
- * easily in an array of same field inputs, 
+ *
+ * Note: FieldArray is from Formik library that add/remove
+ * easily in an array of same field inputs,
  * please refer to https://formik.org/docs/api/fieldarray
  *
  *  - Props:
@@ -42,13 +42,13 @@ const WorkingGroupsWrapper = ({
   // Fetch existing form data
 
   const fetchWorkingGroupsData = useCallback(() => {
-    // All pre-process: if running without server, 
+    // All pre-process: if running without server,
     // use fake json data; if running with API, use API
     let url_prefix_local;
-    let url_suffix_local = "";
+    let url_suffix_local = '';
     if (getCurrentMode() === MODE_REACT_ONLY) {
-      url_prefix_local = "membership_data";
-      url_suffix_local = ".json";
+      url_prefix_local = 'membership_data';
+      url_suffix_local = '.json';
     }
 
     if (getCurrentMode() === MODE_REACT_API) {
@@ -67,9 +67,9 @@ const WorkingGroupsWrapper = ({
         .then((resp) => resp.json())
         .then((data) => {
           if (data.length) {
-            // matchWorkingGroupFields(): Call the the function to map 
+            // matchWorkingGroupFields(): Call the the function to map
             // the retrived working groups backend data to fit frontend, and
-            // setFieldValue(): Prefill Data --> Call the setFieldValue 
+            // setFieldValue(): Prefill Data --> Call the setFieldValue
             // of Formik, to set workingGroups field with the mapped data
             setFieldValue(
               workingGroups,
@@ -83,8 +83,8 @@ const WorkingGroupsWrapper = ({
     }
   }, [setFieldValue, currentFormId, workingGroupsData]);
 
-  // Fetch data only once and prefill data, as long as 
-  // fetchWorkingGroupsData Function does not change, 
+  // Fetch data only once and prefill data, as long as
+  // fetchWorkingGroupsData Function does not change,
   // will not cause re-render again
   useEffect(() => {
     // Fetch existing form data

@@ -1,5 +1,5 @@
-import React from "react";
-import { Field } from "formik";
+import React from 'react';
+import { Field } from 'formik';
 
 /**
  * A simple reusable Input wrapped with Formik Field
@@ -34,7 +34,7 @@ const Input = ({
                 {...field}
                 id={ariaLabel ? ariaLabel : name}
                 className={`form-control margin-bottom-10 ${
-                  meta.touched && meta.error ? "form-border-error" : ""
+                  meta.touched && meta.error ? 'form-border-error' : ''
                 }`}
                 type="text"
                 placeholder={placeholder}

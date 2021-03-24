@@ -1,5 +1,5 @@
-import React from "react";
-import { useFormikContext } from "formik";
+import React from 'react';
+import { useFormikContext } from 'formik';
 
 const Preview = () => {
   const { values } = useFormikContext();

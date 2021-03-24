@@ -1,5 +1,5 @@
-import React from "react";
-import { Field } from "formik";
+import React from 'react';
+import { Field } from 'formik';
 
 /**
  * A simple reusable checkbox wrapped with Formik Field

@@ -50,7 +50,7 @@
 .eclipseFdn-membership-webform .input-group .form-control {
   z-index: unset;
 }
-.eclipseFdn-membership-webform input[type="checkbox"] {
+.eclipseFdn-membership-webform input[type='checkbox'] {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -59,14 +59,14 @@
   margin-top: 0;
   margin-right: 15px;
 }
-.eclipseFdn-membership-webform input[type="checkbox"]:checked {
+.eclipseFdn-membership-webform input[type='checkbox']:checked {
   background-color: orange;
 }
 .eclipseFdn-membership-webform .verical-center {
   display: flex;
   align-items: center;
 }
-.eclipseFdn-membership-webform input[type="checkbox"]:focus {
+.eclipseFdn-membership-webform input[type='checkbox']:focus {
   outline: none !important;
 }
 .eclipseFdn-membership-webform .preview-field {
