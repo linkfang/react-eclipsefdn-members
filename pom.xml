@@ -21,8 +21,14 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>eclipsefdn-releases</id>
-			<url>https://repo.eclipse.org/content/repositories/eclipsefdn-releases/</url>
+			<id>eclipsefdn</id>
+			<url>https://repo.eclipse.org/content/repositories/eclipsefdn/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<dependencyManagement>
