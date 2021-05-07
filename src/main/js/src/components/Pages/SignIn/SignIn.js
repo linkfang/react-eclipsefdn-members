@@ -1,8 +1,8 @@
 import React from 'react';
-import MembershipContext from '../../Context/MembershipContext';
-import FormChooser from '../FormPreprocess/FormChooser';
+import MembershipContext from '../../../Context/MembershipContext';
+import FormChooser from '../../UIComponents/FormPreprocess/FormChooser';
 import SignInIntroduction from './SignInIntroduction';
-import StepperComponent from '../Steppers/StepperComponent';
+import StepperComponent from '../../UIComponents/Steppers/StepperComponent';
 import {
   FETCH_HEADER,
   api_prefix,
@@ -11,7 +11,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from '../../Constants/Constants';
+} from '../../../Constants/Constants';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json

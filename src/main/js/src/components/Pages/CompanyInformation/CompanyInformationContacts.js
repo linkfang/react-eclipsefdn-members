@@ -1,6 +1,6 @@
 import React from 'react';
-import Input from '../Inputs/Input';
-import CustomCheckbox from '../Inputs/CustomCheckbox';
+import Input from '../../UIComponents/Inputs/Input';
+import CustomCheckbox from '../../UIComponents/Inputs/CustomCheckbox';
 
 /**
  * - 

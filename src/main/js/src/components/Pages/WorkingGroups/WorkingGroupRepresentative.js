@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from '../Inputs/Input';
+import Input from '../../UIComponents/Inputs/Input';
 
 /**
  * Render Working Group Representative input component

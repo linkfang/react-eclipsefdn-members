@@ -3,7 +3,7 @@ import AsyncCreatable from 'react-select/async-creatable';
 import { selectTheme, generateCustomStyles } from './customSelectStyle';
 import { useField } from 'formik';
 import { FETCH_HEADER, companies } from '../../../../Constants/Constants';
-import { formField } from '../../formModels/formFieldModel';
+import { formField } from '../../FormComponents/formModels/formFieldModel';
 
 /**
  * Note:

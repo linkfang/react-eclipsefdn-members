@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
-import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
-import MembershipFeeTable from './MembershipFeeTable';
+import DefaultSelect from '../../UIComponents/Inputs/CustomSelect/DefaultSelect';
+import CustomSelectWrapper from '../../UIComponents/Inputs/CustomSelect/CustomSelectWrapper';
+import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import MembershipContext from '../../../Context/MembershipContext';
-import Loading from '../../Loading/Loading';
+import Loading from '../../UIComponents/Loading/Loading';
 import { mapMembershipLevel } from '../../../Utils/formFunctionHelpers';
 import {
   api_prefix_form,
@@ -94,7 +94,7 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
             />
           </div>
         </div>
-        <MembershipFeeTable />
+        <MembershipLevelFeeTable />
       </div>
     </>
   );

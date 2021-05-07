@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-import AppFooter from './components/layout/AppFooter';
-import AppHeader from './components/layout/AppHeader';
-import FormWrapper from './components/FormPreprocess/FormWrapper';
+import AppFooter from './components/UIComponents/layout/AppFooter';
+import AppHeader from './components/UIComponents/layout/AppHeader';
+import FormWrapper from './components/UIComponents/FormPreprocess/FormWrapper';
 import MembershipContext from './Context/MembershipContext';
 
 const App = () => {

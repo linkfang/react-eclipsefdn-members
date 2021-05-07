@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from '../Inputs/Input';
+import Input from '../../UIComponents/Inputs/Input';
 
 /**
  * Have not added any API calls here,

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { useFormikContext } from 'formik';
 import MembershipContext from '../../../Context/MembershipContext';
-import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
-import ParticipationLevel from './ParticipationLevel';
-import EffectiveDate from './EffectiveDate';
+import CustomSelectWrapper from '../../UIComponents/Inputs/CustomSelect/CustomSelectWrapper';
+import ParticipationLevel from './WorkingGroupParticipationLevel';
+import EffectiveDate from './WorkingGroupEffectiveDate';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
@@ -11,7 +11,7 @@ import {
   WORKING_GROUPS,
   workingGroups,
 } from '../../../Constants/Constants';
-import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
+import DefaultSelect from '../../UIComponents/Inputs/CustomSelect/DefaultSelect';
 
 /**
  * Wrapper for Working Group Selector,

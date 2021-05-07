@@ -1,0 +1,59 @@
+version: "3"
+services:
+  drupal:
+    container_name: drupal
+    image: drupal:7
+    ports:
+      - 8085:80
+      - 8086:443
+  postgres:
+    container_name: postgres
+    image: postgres:12.4
+    volumes:
+      - ${HOME}/localdocker/keycloak/postgres:/var/lib/postgresql/data
+      # - ./volumes/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      # - PGDATA=/tmp
+    ports:
+      - 5432:5432
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:11.0.1
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_DATABASE=keycloak
+      - DB_SCHEMA=public
+      - DB_ADDR=postgres
+      - DB_PORT=5432
+      - DB_USER=keycloak
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - ldap
+  ldap:
+    container_name: ldap
+    image: osixia/openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      - LDAP_ADMIN_PASSWORD=my-secret-pw
+    volumes:
+      - ${HOME}/localdocker/keycloak/ldap/var:/var/lib/ldap
+      - ${HOME}/localdocker/lkeycloak/dap/etc:/etc/ldap/slapd.d
+      # - ./volumes/ldap/var:/var/lib/ldap
+      # - ./volumes/ldap/etc:/etc/ldap/slapd.d
+  ldap-admin:
+    container_name: ldap-admin
+    image: osixia/phpldapadmin
+    ports:
+      - 8083:443
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap

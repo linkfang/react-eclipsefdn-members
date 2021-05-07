@@ -1,5 +1,6 @@
 import React from 'react';
-import MembershipContext from '../../Context/MembershipContext';
+import MembershipContext from '../../../Context/MembershipContext';
+
 import {
   FETCH_HEADER,
   api_prefix_form,
@@ -7,7 +8,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-} from '../../Constants/Constants';
+} from '../../../Constants/Constants';
 
 const styles = {
   marginBottom: '20px',

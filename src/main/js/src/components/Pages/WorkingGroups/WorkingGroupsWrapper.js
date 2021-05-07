@@ -3,7 +3,7 @@ import MembershipContext from '../../../Context/MembershipContext';
 import { FieldArray } from 'formik';
 import WorkingGroup from './WorkingGroup';
 import { matchWorkingGroupFields } from '../../../Utils/formFunctionHelpers';
-import Loading from '../../Loading/Loading';
+import Loading from '../../UIComponents/Loading/Loading';
 import {
   end_point,
   api_prefix_form,

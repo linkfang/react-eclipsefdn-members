@@ -4,9 +4,9 @@ import {
   matchCompanyFields,
   matchContactFields,
 } from '../../../Utils/formFunctionHelpers';
-import Company from './Company';
-import Contacts from './Contacts';
-import Loading from '../../Loading/Loading';
+import Company from './CompanyInformationCompany';
+import Contacts from './CompanyInformationContacts';
+import Loading from '../../UIComponents/Loading/Loading';
 import {
   end_point,
   api_prefix_form,

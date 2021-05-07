@@ -2,15 +2,15 @@ import React, { useState, useRef, useContext } from 'react';
 import { Form, Formik } from 'formik';
 import { validationSchema } from '../formModels/ValidationSchema';
 import StepperComponent from '../../Steppers/StepperComponent';
-import CustomStepButton from '../CustomStepButton';
+import CustomStepButton from '../../Button/CustomStepButton';
 import {
   executeSendDataByStep,
   assignContactData,
   handleNewForm,
-} from '../../../Utils/formFunctionHelpers';
-import MembershipContext from '../../../Context/MembershipContext';
+} from '../../../../Utils/formFunctionHelpers';
+import MembershipContext from '../../../../Context/MembershipContext';
 import SubmitSuccess from '../SubmitSuccess';
-import { newForm_tempId } from '../../../Constants/Constants';
+import { newForm_tempId } from '../../../../Constants/Constants';
 
 /**
  * A wrapper for each step of form.

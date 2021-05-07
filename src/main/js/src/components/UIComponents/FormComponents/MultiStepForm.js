@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import FormikStepper from './FormikStepper/FormikStepper';
-import CompanyInformation from './CompanyInformation/CompanyInformation';
-import MembershipLevel from './MembershipLevel/MembershipLevel';
-import WorkingGroupsWrapper from './WorkingGroups/WorkingGroupsWrapper';
-import SigningAuthority from './SigningAuthority/SigningAuthority';
-import Preview from './Preview/Preview';
+import CompanyInformation from '../../Pages/CompanyInformation/CompanyInformation';
+import MembershipLevel from '../../Pages/MembershipLevel/MembershipLevel';
+import WorkingGroupsWrapper from '../../Pages/WorkingGroups/WorkingGroupsWrapper';
+import SigningAuthority from '../../Pages/SigningAuthority/SigningAuthority';
+import Preview from '../../Pages/Review/Review';
 import { formField, initialValues } from './formModels/formFieldModel';
 import {
   COMPANY_INFORMATION,
@@ -13,7 +13,7 @@ import {
   SIGNING_AUTHORITY,
   REVIEW,
   FETCH_HEADER,
-} from '../../Constants/Constants';
+} from '../../../Constants/Constants';
 
 /**
  * Wrapper for the FormikStepper and FormikStepper's children steps

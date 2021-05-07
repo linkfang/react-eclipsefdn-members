@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import DefaultSelect from '../Inputs/CustomSelect/DefaultSelect';
-import CustomSelectWrapper from '../Inputs/CustomSelect/CustomSelectWrapper';
+import DefaultSelect from '../../UIComponents/Inputs/CustomSelect/DefaultSelect';
+import CustomSelectWrapper from '../../UIComponents/Inputs/CustomSelect/CustomSelectWrapper';
 
 /**
  * Render Participation level selector component (React-Select)
