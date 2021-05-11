@@ -16,7 +16,7 @@ const EffectiveDate = ({ name }) => {
         <span className="orange-star margin-left-5">*</span>
       </h3>
       <div className="row">
-        <div className="col-md-10">
+        <div className="col-md-12">
           <DateInput label="EffectiveDate" name={name} />
         </div>
       </div>
