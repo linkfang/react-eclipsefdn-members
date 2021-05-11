@@ -1,3 +1,4 @@
 [build]
-  command = "cd src/main/js/ && npm ci && npm run build"  
-  publish = "src/main/js/build"
+  base = "src/main/www"
+  command = "rm -rf node_modules && yarn --frozen-lockfile && yarn build"
+  publish = "build"

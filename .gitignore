@@ -5,6 +5,9 @@ node_modules
 /.pnp
 .pnp.js
 
+# docker volumes
+volumes/
+
 # testing
 /coverage
 

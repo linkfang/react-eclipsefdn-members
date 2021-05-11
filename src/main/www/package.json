@@ -11,13 +11,16 @@
     "react": "^17.0.0",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.0",
-    "react-scripts": "^4.0.1"
+    "react-scripts": "^4.0.1",
+    "swagger-repo": "^2.0.0-rc.15"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build  && mkdir -p ../resources/META-INF/resources/ && cp -rf build/* ../resources/META-INF/resources/",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test-spec": "swagger-repo validate -b ../../../spec",
+    "start-spec": "swagger-repo serve -b ../../../spec"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,21 +1,14 @@
 version: "3"
 services:
-  drupal:
-    container_name: drupal
-    image: drupal:7
-    ports:
-      - 8085:80
-      - 8086:443
   postgres:
     container_name: postgres
     image: postgres:12.4
     volumes:
-      - ${HOME}/localdocker/keycloak/postgres:/var/lib/postgresql/data
-      # - ./volumes/postgres:/var/lib/postgresql/data
+     - ./volumes/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=keycloak
-      - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${REM_POSTGRES_DB}
+      - POSTGRES_USER=${REM_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${REM_POSTGRES_PASSWORD}
       # - PGDATA=/tmp
     ports:
       - 5432:5432
@@ -24,14 +17,14 @@ services:
     image: jboss/keycloak:11.0.1
     environment:
       - DB_VENDOR=POSTGRES
-      - DB_DATABASE=keycloak
+      - DB_DATABASE=${REM_POSTGRES_DB}
       - DB_SCHEMA=public
       - DB_ADDR=postgres
       - DB_PORT=5432
-      - DB_USER=keycloak
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+      - DB_USER=${REM_POSTGRES_USER}
+      - DB_PASSWORD=${REM_POSTGRES_PASSWORD}
+      - KEYCLOAK_USER=${REM_KEYCLOAK_USER}
+      - KEYCLOAK_PASSWORD=${REM_KEYCLOAK_PASSWORD}
     ports:
       - 8080:8080
     depends_on:
@@ -44,12 +37,10 @@ services:
       - "389:389"
       - "636:636"
     environment:
-      - LDAP_ADMIN_PASSWORD=my-secret-pw
+      - LDAP_ADMIN_PASSWORD=${REM_LDAP_ADMIN_PASSWORD}
     volumes:
-      - ${HOME}/localdocker/keycloak/ldap/var:/var/lib/ldap
-      - ${HOME}/localdocker/lkeycloak/dap/etc:/etc/ldap/slapd.d
-      # - ./volumes/ldap/var:/var/lib/ldap
-      # - ./volumes/ldap/etc:/etc/ldap/slapd.d
+      - ./volumes/ldap/var:/var/lib/ldap
+      - ./volumes/ldap/etc:/etc/ldap/slapd.d
   ldap-admin:
     container_name: ldap-admin
     image: osixia/phpldapadmin
