@@ -43,7 +43,7 @@ quarkus.datasource.jdbc.url = jdbc:mariadb://<host><:port?>/<databaseName>
 
 Once this is set, set the `quarkus.datasource.username` and `quarkus.datasource.password` fields to the user with access to the given database in the `secret.properties` file. 
 
-The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `myrealm` is easiest as it requires no changes to the configuration to work. If the realm is named differently or the Keycloak server is not running locally, the `quarkus.oidc.auth-server-url` property in the `src/main/resources/application.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured.  
+The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work. If the realm is named differently or the Keycloak server is not running locally, the `quarkus.oidc.auth-server-url` property in the `src/main/resources/application.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured.  
 
 Inside that realm, create a client and update the `quarkus.oidc.client-id` property within the `secret.properties` file. Inside that client, open the settings and go to the credentials tab. The secret will need to be copied and set into the `secret.properties` file in the `quarkus.oidc.credentials.client-secret.value` property. For proper reading and usage of development data, 3 users should be created and added to the realm with the usernames `user1`, `user2`, and `user3`.  
 
@@ -57,6 +57,38 @@ As a side note, regeneration of the database on start along with the insertion o
 ### Running
 
 To run the server as a local instance as a stack, first run `yarn --cwd src/main/www`, this will install all the required package for the react app. Then run `yarn --cwd src/main/www build`. This will package the React app and copy it into the static web resources of the server source. To run as a development application, which is the fastest way with the least dependencies, run the following command: `mvn compile quarkus:dev -Dconfig.secret.path=$(pwd)/config/secret.properties` or `mvn compile quarkus:dev "-Dconfig.secret.path=$pwd/config/secret.properties"` when running in a Windows PowerShell.
+
+### Docker
+
+We include a `docker-compose.yml` file with this project to help you get started. This includes:
+
+* [mariadb:latest](https://hub.docker.com/_/mariadb)
+* [postgres:12.4](https://hub.docker.com/_/postgres)
+* [jboss/keycloak:11.0.1](https://hub.docker.com/r/jboss/keycloak/)
+* [osixia/openldap](https://hub.docker.com/r/osixia/openldap)*
+* [osixia/phpldapadmin](https://hub.docker.com/r/osixia/phpldapadmin)*
+
+*OpenLDAP is not required for the moment but we are including for testing purposes with Keycloak.
+
+#### Environment Variables
+
+To use our `docker-compose.yml` file, create a `.env` file in the root of this project and insert your key/value pairs in the following format of KEY=VALUE. You must make sure to update the value of each variable:
+
+```sh
+REM_KEYCLOAK_USER=user_sample
+REM_KEYCLOAK_PASSWORD=password_sample
+REM_LDAP_ADMIN_PASSWORD=password_sample
+REM_MYSQL_PASSWORD=password_sample
+REM_POSTGRES_DB=keycloak_sample
+REM_POSTGRES_USER=keycloak_sample
+REM_POSTGRES_PASSWORD=password_sample
+```
+
+Once this initial setup is done, you can start these services with this command:
+
+```sh
+docker-compose up
+```
 
 ## Contributing
 
