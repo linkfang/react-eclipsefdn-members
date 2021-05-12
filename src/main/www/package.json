@@ -7,8 +7,10 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "concurrently": "^6.1.0",
     "country-list": "^2.2.0",
     "formik": "^2.2.6",
+    "less-watch-compiler": "^1.15.1",
     "react": "^17.0.0",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.0",
@@ -16,8 +18,8 @@
     "swagger-repo": "^2.0.0-rc.15"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build  && mkdir -p ../resources/META-INF/resources/ && cp -rf build/* ../resources/META-INF/resources/",
+    "start": "concurrently --kill-others \"less-watch-compiler\" \"react-scripts start\"",
+    "build": "lessc src/less/App.less src/App.css && react-scripts build  && mkdir -p ../resources/META-INF/resources/ && cp -rf build/* ../resources/META-INF/resources/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test-spec": "swagger-repo validate -b ../../../spec",

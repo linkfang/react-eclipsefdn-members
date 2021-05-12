@@ -1,12 +1,72 @@
-// The Less file used to compiled as App.css
+/*
+ * Copyright (c) 2021 Eclipse Foundation, Inc.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v. 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * Contributors:
+ *   Christopher Guindon <chris.guindon@eclipse-foundation.org>
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+*/
+
+
+//==  Background color for `<body>`.
+@body-bg: #f9f9f9;
+
+//== Colors
+@brand-primary:         #f7941e; // Orange
+@brand-secondary:       #404040; // Gray
+@brand-tertiary:        #3f7b96; // Blue
+@brand-quaternary:      #efefef; // Light Gray 
+@brand-quinary:         @brand-quaternary; // Light Gray (Breadcrumbs)
+
+@brand-info:            @brand-tertiary;
+@brand-info-light:      lighten(@brand-info, 20%);
+@brand-warning:         @brand-primary;
+
+
+//== Links
+//** Global textual link color.
+@link-color: @brand-tertiary;
+//** Link hover color set via `darken()` function.
+@link-hover-color:      darken(@link-color, 10%);
+//** Link hover decoration.
+@link-hover-decoration: underline;
+//** Link visited color
+@link-visited-color: #af6e3d;
+
+//== Static colors
+// Only use when really necessary
+@orange:                #f7941e;
+@purple:                #2c2255;
+@blue:           rgb(0, 0, 255);
+@blue-dark:             #2c2255;
+@blue-light:            #afbbdc;
+@blue-lighter:          #dfe2ed;
+@green-dark:            #5a6700;
+@green-light:           #c0d050;
+@green-lighter:         #faffd4;
+@gray-mid-light:           #ccc;
+@gray:                  #2f2f2f;
+@white:                    #fff;
+@black:                 #000000;
+@red:                   #ff0000;
+
+@eclipse-light-grey: #e8e8e8;
+@eclipse-highlight-grey: #ececec;
 
 .eclipseFdn-membership-webform {
+  .input-group .form-control {
+    z-index: unset;
+  }
   .error {
-    color: red;
+    color:@red;
   }
 
   .orange-star {
-    color: #f78700;
+    color: @brand-primary;
     font-weight: bold;
     font-size: larger;
   }
@@ -28,7 +88,7 @@
   }
 
   .form-border-error {
-    border-color: red;
+    border-color:@red;
   }
 
   .btn {
@@ -67,7 +127,7 @@
   }
 
   input[type='checkbox']:checked {
-    background-color: orange;
+    background-color:@brand-primary;
   }
 
   .verical-center {
@@ -82,7 +142,7 @@
     padding: 5px;
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 5px;
-    background: #fff;
+    background:@white;
     min-height: 32px;
   }
 
@@ -108,7 +168,7 @@
   .step-span {
     width: 50px;
     height: 50px;
-    background: #f7941e;
+    background: @brand-primary;
   }
 
   .step-span-index {
@@ -138,8 +198,8 @@
   .step-title-container-active:extend(.eclipseFdn-membership-webform
       .step-title-container) {
     // &:extend(.step-title-container);
-    background: #404040 50% no-repeat;
-    color: white;
+    background: @brand-secondary 50% no-repeat;
+    color: @white;
   }
 
   // Mobile First

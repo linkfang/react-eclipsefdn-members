@@ -1,13 +1,26 @@
-/* Compiled from App.less */
-
+/*
+ * Copyright (c) 2021 Eclipse Foundation, Inc.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v. 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * Contributors:
+ *   Christopher Guindon <chris.guindon@eclipse-foundation.org>
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+*/
 .eclipseFdn-membership-webform {
   /* Stepper */
 }
+.eclipseFdn-membership-webform .input-group .form-control {
+  z-index: unset;
+}
 .eclipseFdn-membership-webform .error {
-  color: red;
+  color: #ff0000;
 }
 .eclipseFdn-membership-webform .orange-star {
-  color: #f78700;
+  color: #f7941e;
   font-weight: bold;
   font-size: larger;
 }
@@ -25,7 +38,7 @@
   font-weight: unset;
 }
 .eclipseFdn-membership-webform .form-border-error {
-  border-color: red;
+  border-color: #ff0000;
 }
 .eclipseFdn-membership-webform .btn {
   margin: 0 10px;
@@ -47,9 +60,6 @@
   margin-left: auto;
   margin-right: auto;
 }
-.eclipseFdn-membership-webform .input-group .form-control {
-  z-index: unset;
-}
 .eclipseFdn-membership-webform input[type='checkbox'] {
   display: inline-block;
   width: 30px;
@@ -60,7 +70,7 @@
   margin-right: 15px;
 }
 .eclipseFdn-membership-webform input[type='checkbox']:checked {
-  background-color: orange;
+  background-color: #f7941e;
 }
 .eclipseFdn-membership-webform .verical-center {
   display: flex;
@@ -121,7 +131,7 @@
 }
 .eclipseFdn-membership-webform .step-title-container-active {
   background: #404040 50% no-repeat;
-  color: white;
+  color: #fff;
 }
 @media (min-width: 992px) {
   .eclipseFdn-membership-webform .step {
