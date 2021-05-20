@@ -2,6 +2,7 @@ version: "3"
 services:
   mariadb:
     image: mariadb:latest
+    command: --max_allowed_packet=100000000
     ports:
       - 3306:3306
     environment:
