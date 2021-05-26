@@ -47,6 +47,13 @@
 			<groupId>org.eclipsefoundation</groupId>
 			<artifactId>quarkus-core</artifactId>
 			<version>${eclipse-api-version}</version>
+			<!-- Can be removed once dependency is removed from base package https://stackoverflow.com/questions/67510802/logging-in-quarkus-works-in-dev-mode-but-doesnt-output-in-jvm-docker-image -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logmanager</groupId>
+					<artifactId>jboss-logmanager</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipsefoundation</groupId>

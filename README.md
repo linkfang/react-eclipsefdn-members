@@ -26,8 +26,7 @@ You will also see any lint errors in the console.
 
 ### Dependencies to run  
 
-- MariaDB
-- Keycloak
+- Docker-compose
 - Maven
 - Java version 11
 
@@ -35,7 +34,7 @@ You will also see any lint errors in the console.
 
 As part of the set up, you will need to create a `secret.properties` file within the `./config` folder and set up the secrets that are required to run the application. If named `secret.properties`, the file should be ignored by Github automatically, making it less risky that credentials are accidentally uploaded to a branch.  
 
-The fields required to run are the datasource and OIDC properties. The datasource properties should be a set of user credentials that can write to a local mariadb instance. Within that mariadb instance, a database should be created to contain the data used in development. Once created, a JDBC URL can now be formed for the new database. This URL should follow the pattern below, with port not always required (depending on your local setup and proxy settings).  
+The fields required to run are the datasource and OIDC properties. The datasource properties should be a set of user credentials that can write to a local mariadb instance. Within that mariadb instance, a database should be created to contain the data used in development. Once created, a JDBC URL can now be formed for the new database. This URL should follow the pattern below, with port not always required (depending on your local setup and proxy settings).  This will be set in the `secret.properties` file. 
 
 ```  
 quarkus.datasource.jdbc.url = jdbc:mariadb://<host><:port?>/<databaseName>
@@ -43,7 +42,9 @@ quarkus.datasource.jdbc.url = jdbc:mariadb://<host><:port?>/<databaseName>
 
 Once this is set, set the `quarkus.datasource.username` and `quarkus.datasource.password` fields to the user with access to the given database in the `secret.properties` file. 
 
-The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work. If the realm is named differently or the Keycloak server is not running locally, the `quarkus.oidc.auth-server-url` property in the `src/main/resources/application.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured.  
+The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work.  
+
+The `quarkus.oidc.auth-server-url` property in the `secret.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured. For the dockerized service, this should be set to your local IP address (note, not your public address). This can be retrieved from your IP configuration application and added in the format displayed in the `sample.secret.properties` file.
 
 Inside that realm, create a client and update the `quarkus.oidc.client-id` property within the `secret.properties` file. Inside that client, open the settings and go to the credentials tab. The secret will need to be copied and set into the `secret.properties` file in the `quarkus.oidc.credentials.client-secret.value` property. For proper reading and usage of development data, 3 users should be created and added to the realm with the usernames `user1`, `user2`, and `user3`.  
 
@@ -56,7 +57,7 @@ As a side note, regeneration of the database on start along with the insertion o
 
 ### Running
 
-To run the server as a local instance as a stack, first run `yarn --cwd src/main/www`, this will install all the required package for the react app. Then run `yarn --cwd src/main/www build`. This will package the React app and copy it into the static web resources of the server source. To run as a development application, which is the fastest way with the least dependencies, run the following command: `mvn compile quarkus:dev -Dconfig.secret.path=$(pwd)/config/secret.properties` or `mvn compile quarkus:dev "-Dconfig.secret.path=$pwd/config/secret.properties"` when running in a Windows PowerShell.
+To run the server as a local instance as a stack, you will need to compile the application first, which can be done through `make compile`. This takes care of all of the steps needed to cleanly build and rebuild the application from scratch. To run the stack with the packaged application, use `docker-compose up -d`.
 
 ### Docker
 
