@@ -17,18 +17,19 @@ const theme = createMuiTheme({
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentFormId, setCurrentFormId] = useState('');
+
+  const membershipContextValue = {
+    currentUser,
+    setCurrentUser: (val) => setCurrentUser(val),
+    currentFormId,
+    setCurrentFormId: (val) => setCurrentFormId(val),
+  };
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <AppHeader />
-        <MembershipContext.Provider
-          value={{
-            currentUser,
-            setCurrentUser: (val) => setCurrentUser(val),
-            currentFormId,
-            setCurrentFormId: (val) => setCurrentFormId(val),
-          }}
-        >
+        <MembershipContext.Provider value={membershipContextValue}>
           <FormWrapper />
         </MembershipContext.Provider>
         <AppFooter />
