@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test-spec": "swagger-repo validate -b ../../../spec",
-    "start-spec": "swagger-repo serve -b ../../../spec"
+    "start-spec": "swagger-repo serve -b ../../../spec -p 8999"
   },
   "eslintConfig": {
     "extends": "react-app"

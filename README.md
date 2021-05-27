@@ -14,6 +14,7 @@ Once that's done, you can install dependencies, build assets and start a dev ser
 yarn --cwd src/main/www
 yarn --cwd src/main/www build
 yarn --cwd src/main/www start
+yarn --cwd src/main/www start-spec
 ```
 
 The web app will run in the development mode.
@@ -71,6 +72,32 @@ We include a `docker-compose.yml` file with this project to help you get started
 
 *OpenLDAP is not required for the moment but we are including for testing purposes with Keycloak.
 
+#### Generate Certs for HTTPS
+
+, You will need to create a certificate in order to serve the Application on https. Make sure that the Common Name (e.g. server FQDN or YOUR name) is set to `www.rem.docker`.
+
+```sh
+make generate-cert
+```
+
+#### Update your Host file
+
+We use [jwilder/nginx-proxy](https://hub.docker.com/r/jwilder/nginx-proxy) as automated Nginx reverse proxy for our docker containers. So instead of having to lookup the port of a new service, you can simply remember it's internal dev hostname.
+
+Different operating system, different file paths!
+
+Windows: C:\Windows\System32\drivers\etc\hosts
+Linux / MacOS: /etc/hosts
+
+```
+# rem services
+
+127.0.0.1 keycloak
+127.0.0.1 api.rem.docker
+127.0.0.1 www.rem.docker
+127.0.0.1 ldap-admin.rem.docker
+```
+
 #### Environment Variables
 
 To use our `docker-compose.yml` file, create a `.env` file in the root of this project and insert your key/value pairs in the following format of KEY=VALUE. You must make sure to update the value of each variable:
@@ -90,6 +117,24 @@ Once this initial setup is done, you can start these services with this command:
 ```sh
 docker-compose up
 ```
+
+### KeyCloak Setup
+
+#### Create a realm
+
+Realm is a concept in Keycloak that refers to an object managing a set of users along with their credentials, roles and groups. To create a `realm`, visit [Keycloak Admin Console](http://localhost:8080/auth/admin), mouse hover where it says `master` and click on `Add Realm`, set the name to `rem_realm` and click `create`.
+
+#### Create a user
+
+To create a `user`, visit [Keycloak Admin Console](http://localhost:8080/auth/admin) and click on `Users` in the left menu. Then press the `Add User` button and fill up the form with information about the user you wish to create.
+
+To login as the user, you will need to set an initial password. To set a password, click on `Credentials`,  then set a password via the `Set Password` form. You will need to enter it twice to confirm it. You will probably want to disable `Temporary` password by clicking on the `ON` button to turn that feature off.
+
+#### Client Configuration
+
+Clients tab allows you to manage list of allowed applications.
+
+To create a client, click on `Clients` in the left menu. You can set the client_id to `rem_app` and the `Root URL` to `http://localhost:3000`. Make sure that the `Client Protocol` is set to `openid-connect`  and the `Access Type` is set to `confidential`.
 
 ## Contributing
 

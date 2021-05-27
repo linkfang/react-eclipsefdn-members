@@ -11,5 +11,8 @@ install-react:;
 	yarn --cwd src/main/www install --frozen-lockfile
 validate-spec: install-react;
 	yarn --cwd src/main/www test-spec
+generate-cert:;
+	rm -rf certs && mkdir -p certs
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/www.rem.docker.key -out certs/www.rem.docker.crt
 
 

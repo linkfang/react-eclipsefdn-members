@@ -48,7 +48,7 @@ class SignIn extends React.Component {
 
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
-      fetch(api_prefix + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
+      fetch(api_prefix() + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
           console.log(data); // {family_name: "User1", given_name: "User1", name: "user1"}

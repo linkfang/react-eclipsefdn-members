@@ -1,31 +1,44 @@
-version: "3"
+version: '3'
 services:
+  www:
+    build: ./src/main/www
+    image: eclipsefdn/membership-www:latest
+    ports:
+      - 3000
+    volumes:
+      - ./src/main/www:/app
+      - /app/node_modules
+    environment:
+      - VIRTUAL_HOST=www.rem.docker
+      - CHOKIDAR_USEPOLLING=true
+      - VIRTUAL_PORT=3000
   mariadb:
     image: mariadb:latest
     command: --max_allowed_packet=100000000
     ports:
-      - 3306:3306
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: ${REM_MYSQL_PASSWORD}
       MYSQL_DATABASE: rem_quarkus_api
     volumes:
-     - ./volumes/mariadb:/var/lib/mysql
+      - ./volumes/mariadb:/var/lib/mysql
   postgres:
     container_name: postgres
     image: postgres:12.4
     volumes:
-     - ./volumes/postgres:/var/lib/postgresql/data
+      - ./volumes/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${REM_POSTGRES_DB}
       - POSTGRES_USER=${REM_POSTGRES_USER}
       - POSTGRES_PASSWORD=${REM_POSTGRES_PASSWORD}
-      # - PGDATA=/tmp
     ports:
-      - 5432:5432
+      - 5432
   keycloak:
     container_name: keycloak
     image: jboss/keycloak:11.0.1
     environment:
+      - VIRTUAL_HOST=keycloak
+      - VIRTUAL_PORT=8080
       - DB_VENDOR=POSTGRES
       - DB_DATABASE=${REM_POSTGRES_DB}
       - DB_SCHEMA=public
@@ -36,7 +49,7 @@ services:
       - KEYCLOAK_USER=${REM_KEYCLOAK_USER}
       - KEYCLOAK_PASSWORD=${REM_KEYCLOAK_PASSWORD}
     ports:
-      - 8080:8080
+      - '8080:8080'
     depends_on:
       - postgres
       - ldap
@@ -44,8 +57,8 @@ services:
     container_name: ldap
     image: osixia/openldap
     ports:
-      - "389:389"
-      - "636:636"
+      - '389:389'
+      - '636:636'
     environment:
       - LDAP_ADMIN_PASSWORD=${REM_LDAP_ADMIN_PASSWORD}
     volumes:
@@ -55,14 +68,30 @@ services:
     container_name: ldap-admin
     image: osixia/phpldapadmin
     ports:
-      - 8083:443
+      - 80
+      - 443
     environment:
+      - VIRTUAL_HOST=ldap-admin.rem.docker
       - PHPLDAPADMIN_LDAP_HOSTS=ldap
+      - PHPLDAPADMIN_HTTPS=false
   api:
     image: eclipsefdn/membership-rest-api:latest
     ports:
-      - 8090:8090
+      - 8090
     environment:
+      - VIRTUAL_HOST=api.rem.docker
+      - VIRTUAL_PORT=8090
       - CONFIG_SECRET_PATH=/var/run/secrets/secret.properties
     volumes:
-      - ./config:/var/run/secrets
+      - ./config/secret.properties:/var/run/secrets/secret.properties
+    depends_on:
+      - mariadb
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./config/docker/vhost.d:/etc/nginx/vhost.d:ro
