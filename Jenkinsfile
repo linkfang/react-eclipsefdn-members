@@ -42,12 +42,59 @@
     }
 
     stages {
-      stage('Build Java code') {
+      stage('Build project') {
+        agent {
+          kubernetes {
+            label 'buildenv-agent'
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: buildcontainer
+                image: eclipsefdn/eclipsefdn-project-adopters-build-env:latest
+                imagePullPolicy: Always
+                command:
+                - cat
+                tty: true
+                resources:
+                  limits:
+                    cpu: 2
+                    memory: 4Gi
+                env:
+                - name: "MAVEN_OPTS"
+                  value: "-Duser.home=/home/jenkins"
+                volumeMounts:
+                - name: settings-xml
+                  mountPath: /home/jenkins/.m2/settings.xml
+                  subPath: settings.xml
+                  readOnly: true
+                - name: m2-repo
+                  mountPath: /home/jenkins/.m2/repository
+              - name: jnlp
+                resources:
+                  limits:
+                    cpu: 2
+                    memory: 4Gi
+              volumes:
+              - name: settings-xml
+                secret:
+                  secretName: m2-secret-dir
+                  items:
+                  - key: settings.xml
+                    path: settings.xml
+              - name: m2-repo
+                emptyDir: {}
+            '''
+          }
+        }
         steps {
-          sh '''
-            mvn package
-          '''
-          stash includes: 'target/', name: 'target'
+          container('buildcontainer') {
+            sh '''
+              make compile
+            '''
+            stash name: "target", includes: "target/**/*"
+          }
         }
       }
 
