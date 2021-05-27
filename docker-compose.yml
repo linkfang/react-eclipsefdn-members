@@ -12,6 +12,26 @@ services:
       - VIRTUAL_HOST=www.rem.docker
       - CHOKIDAR_USEPOLLING=true
       - VIRTUAL_PORT=3000
+  api:
+    build:
+      context: .
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    image: eclipsefdn/membership-rest-api:latest
+    ports:
+      - 8090
+    environment:
+      - VIRTUAL_HOST=api.rem.docker
+      - VIRTUAL_PORT=8090
+      - CONFIG_SECRET_PATH=/var/run/secrets/secret.properties
+    volumes:
+      - ./config/secret.properties:/var/run/secrets/secret.properties
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+    depends_on:
+      - mariadb
+      - keycloak
   mariadb:
     image: mariadb:latest
     command: --max_allowed_packet=100000000
@@ -74,18 +94,6 @@ services:
       - VIRTUAL_HOST=ldap-admin.rem.docker
       - PHPLDAPADMIN_LDAP_HOSTS=ldap
       - PHPLDAPADMIN_HTTPS=false
-  api:
-    image: eclipsefdn/membership-rest-api:latest
-    ports:
-      - 8090
-    environment:
-      - VIRTUAL_HOST=api.rem.docker
-      - VIRTUAL_PORT=8090
-      - CONFIG_SECRET_PATH=/var/run/secrets/secret.properties
-    volumes:
-      - ./config/secret.properties:/var/run/secrets/secret.properties
-    depends_on:
-      - mariadb
   nginx-proxy:
     image: jwilder/nginx-proxy
     ports:

@@ -115,7 +115,7 @@ REM_POSTGRES_PASSWORD=password_sample
 Once this initial setup is done, you can start these services with this command:
 
 ```sh
-docker-compose up
+make compile-start
 ```
 
 ### KeyCloak Setup

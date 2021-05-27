@@ -9,7 +9,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # add app
 COPY . ./
-RUN npm install
+RUN yarn
 
 # start app
-CMD ["npm", "start"]    
+CMD ["yarn", "start"]    
