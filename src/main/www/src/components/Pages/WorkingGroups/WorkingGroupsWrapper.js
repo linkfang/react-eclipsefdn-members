@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import { matchWorkingGroupFields } from '../../../Utils/formFunctionHelpers';
@@ -33,11 +33,26 @@ import { FormikProvider } from 'formik';
 
 const WorkingGroupsWrapper = ({ formik }) => {
   const { currentFormId } = useContext(MembershipContext);
-  const [loading, setLoading] = useState(false);
-  const [workingGroupsData, setWorkingGroupsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
+  const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
 
-  // Fetch existing form data
-  const fetchWorkingGroupsData = () => {
+  // Fetch the full availabe working group list that user can join
+  const fetchAvailableFullWorkingGroupList = () => {
+    fetch('workingGroups.json', { headers: FETCH_HEADER })
+      .then((res) => res.json())
+      .then((data) => {
+        let options = data.working_groups.map((item) => ({
+          label: item.name,
+          value: item.id,
+          participation_levels: item.participation_levels,
+        }));
+        setFullWorkingGroupList(options);
+      });
+  };
+
+  // Fetch the working groups user has joined
+  const fetchWorkingGroupsUserJoined = () => {
     // All pre-process: if running without server,
     // use fake json data; if running with API, use API
 
@@ -68,14 +83,17 @@ const WorkingGroupsWrapper = ({ formik }) => {
             // the retrived working groups backend data to fit frontend, and
             // setFieldValue(): Prefill Data --> Call the setFieldValue
             // of Formik, to set workingGroups field with the mapped data
-            const theData = matchWorkingGroupFields(data, workingGroupsData);
-            setWorkingGroupsData(theData);
-            formik.setFieldValue('workingGroups', theData);
+            const theGroupsUserJoined = matchWorkingGroupFields(
+              data,
+              fullWorkingGroupList
+            );
+            setWorkingGroupsUserJoined(theGroupsUserJoined);
+            formik.setFieldValue('workingGroups', theGroupsUserJoined);
           }
-          setLoading(false);
+          setIsLoading(false);
         });
     } else {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -83,12 +101,19 @@ const WorkingGroupsWrapper = ({ formik }) => {
   // fetchWorkingGroupsData Function does not change,
   // will not cause re-render again
   useEffect(() => {
-    // Fetch existing form data
-    fetchWorkingGroupsData();
+    // Fetch full availabe working group list
+    fetchAvailableFullWorkingGroupList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
+  useEffect(() => {
+    if (fullWorkingGroupList.length > 0) {
+      fetchWorkingGroupsUserJoined();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fullWorkingGroupList]);
+
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -101,7 +126,12 @@ const WorkingGroupsWrapper = ({ formik }) => {
           id="working-groups-page"
           className="align-center margin-top-50 margin-bottom-30"
         >
-          <WorkingGroup formik={formik} />
+          <WorkingGroup
+            formik={formik}
+            workingGroupsUserJoined={workingGroupsUserJoined}
+            fullWorkingGroupList={fullWorkingGroupList}
+            isLoading={isLoading}
+          />
         </div>
 
         <CustomStepButton

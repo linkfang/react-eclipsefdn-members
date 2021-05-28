@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
 
@@ -21,30 +21,28 @@ const useStyles = makeStyles(() => ({
 
 const ParticipationLevel = ({
   name,
-  workingGroup,
-  workingGroupListData,
+  workingGroupUserJoined,
+  fullWorkingGroupList,
   formik,
   index,
 }) => {
   const classes = useStyles();
+  const [participationLevelOptions, setParticipationLevelOptions] = useState(
+    []
+  );
 
-  const [participationLevels, setParticipationLevels] = useState([]);
   const theIndex = index;
   useEffect(() => {
     // If have selected working group, find this working group's
     // participation levels, and pass to the react-select option
-    if (workingGroupListData) {
-      let temp = workingGroupListData?.find(
-        (item) => workingGroup === item.value
+    if (fullWorkingGroupList) {
+      let temp = fullWorkingGroupList?.find(
+        (item) => workingGroupUserJoined.value === item.value
       );
-      setParticipationLevels(temp?.participation_levels);
-      formik.setFieldValue(
-        `workingGroups.${theIndex}.participationLevel-label`,
-        ''
-      );
+      setParticipationLevelOptions(temp?.participation_levels);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workingGroupListData]);
+  }, [workingGroupUserJoined]);
 
   return (
     <>
@@ -55,21 +53,15 @@ const ParticipationLevel = ({
       <div className="row">
         <div className="col-md-12">
           <Autocomplete
-            options={participationLevels}
+            options={participationLevelOptions}
             getOptionLabel={(option) => (option ? option : '')}
             fullWidth={true}
             onChange={(ev, value) => {
-              // this is only for display
-              formik.setFieldValue(`${name}-label`, value ? value : null);
-
-              // this is the data will be actually used
               formik.setFieldValue(name, value ? value : null);
             }}
             value={
-              formik.values.workingGroups[theIndex]['participationLevel-label']
-                ? formik.values.workingGroups[theIndex][
-                    'participationLevel-label'
-                  ]
+              formik.values.workingGroups[theIndex]['participationLevel']
+                ? formik.values.workingGroups[theIndex]['participationLevel']
                 : null
             }
             renderInput={(params) => {

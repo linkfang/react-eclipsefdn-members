@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import MembershipContext from '../../../Context/MembershipContext';
 import Loading from '../../UIComponents/Loading/Loading';
@@ -48,7 +48,7 @@ const MembershipLevel = ({ formik }) => {
     // use fake json data; if running with API, use API
 
     // just for React only testing.
-    let currentFormId = 'form_1';
+    // let currentFormId = 'form_1';
     let url_prefix_local;
     let url_suffix_local = '';
     if (getCurrentMode() === MODE_REACT_ONLY) {
