@@ -1,11 +1,9 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
+import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 
-const Preview = () => {
-  const { values } = useFormikContext();
-
+const Review = ({ values, submitForm }) => {
   return (
-    <>
+    <form onSubmit={() => submitForm(5, '/submitted')}>
       <h1 className="fw-600 h2">
         Review and Submit your Completed Application
       </h1>
@@ -21,7 +19,7 @@ const Preview = () => {
         <div className="row">
           <div className="col-md-16">
             <div className="margin-top-25 preview-field">
-              {values.organization.legalName.label}
+              {values.organization.legalName}
             </div>
           </div>
           <div className="col-md-8">
@@ -55,7 +53,7 @@ const Preview = () => {
           <div className="col-md-4">
             <label>Country</label>
             <div className="preview-field">
-              {values.organization.address.country.label}
+              {values.organization.address.country}
             </div>
           </div>
           <div className="col-md-4">
@@ -153,7 +151,7 @@ const Preview = () => {
         <h2 className="fw-600 h3">Intended Membership Level</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-10">
-            <div className="preview-field">{values.membershipLevel.label}</div>
+            <div className="preview-field">{values.membershipLevel}</div>
           </div>
         </div>
 
@@ -163,13 +161,11 @@ const Preview = () => {
             <div className="row margin-bottom-30">
               <div className="col-md-8">
                 <label>Working group</label>
-                <div className="preview-field">{el.workingGroup.label}</div>
+                <div className="preview-field">{el.workingGroup}</div>
               </div>
               <div className="col-md-8">
                 <label>Intended Participation Level</label>
-                <div className="preview-field">
-                  {el.participationLevel.label}
-                </div>
+                <div className="preview-field">{el.participationLevel}</div>
               </div>
               <div className="col-md-8">
                 <label>Effective Date</label>
@@ -202,7 +198,7 @@ const Preview = () => {
                 </div>
               </div>
               <div className="col-md-6">
-                <label>Job Title</label>
+                <label>Email</label>
                 <div className="preview-field">
                   {el.workingGroupRepresentative.email}
                 </div>
@@ -226,7 +222,13 @@ const Preview = () => {
               {values.signingAuthorityRepresentative.lastName}
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
+            <label>Job Title</label>
+            <div className="preview-field">
+              {values.signingAuthorityRepresentative.jobtitle}
+            </div>
+          </div>
+          <div className="col-md-6">
             <label>Email</label>
             <div className="preview-field">
               {values.signingAuthorityRepresentative.email}
@@ -234,8 +236,14 @@ const Preview = () => {
           </div>
         </div>
       </div>
-    </>
+
+      <CustomStepButton
+        previousPage="/signing-authority"
+        nextPage="/submitted"
+        pageIndex={5}
+      />
+    </form>
   );
 };
 
-export default Preview;
+export default Review;

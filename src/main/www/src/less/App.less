@@ -11,27 +11,25 @@
  * SPDX-License-Identifier: EPL-2.0
 */
 
-
 //==  Background color for `<body>`.
 @body-bg: #f9f9f9;
 
 //== Colors
-@brand-primary:         #f7941e; // Orange
-@brand-secondary:       #404040; // Gray
-@brand-tertiary:        #3f7b96; // Blue
-@brand-quaternary:      #efefef; // Light Gray 
-@brand-quinary:         @brand-quaternary; // Light Gray (Breadcrumbs)
+@brand-primary: #f7941e; // Orange
+@brand-secondary: #404040; // Gray
+@brand-tertiary: #3f7b96; // Blue
+@brand-quaternary: #efefef; // Light Gray
+@brand-quinary: @brand-quaternary; // Light Gray (Breadcrumbs)
 
-@brand-info:            @brand-tertiary;
-@brand-info-light:      lighten(@brand-info, 20%);
-@brand-warning:         @brand-primary;
-
+@brand-info: @brand-tertiary;
+@brand-info-light: lighten(@brand-info, 20%);
+@brand-warning: @brand-primary;
 
 //== Links
 //** Global textual link color.
 @link-color: @brand-tertiary;
 //** Link hover color set via `darken()` function.
-@link-hover-color:      darken(@link-color, 10%);
+@link-hover-color: darken(@link-color, 10%);
 //** Link hover decoration.
 @link-hover-decoration: underline;
 //** Link visited color
@@ -39,30 +37,34 @@
 
 //== Static colors
 // Only use when really necessary
-@orange:                #f7941e;
-@purple:                #2c2255;
-@blue:           rgb(0, 0, 255);
-@blue-dark:             #2c2255;
-@blue-light:            #afbbdc;
-@blue-lighter:          #dfe2ed;
-@green-dark:            #5a6700;
-@green-light:           #c0d050;
-@green-lighter:         #faffd4;
-@gray-mid-light:           #ccc;
-@gray:                  #2f2f2f;
-@white:                    #fff;
-@black:                 #000000;
-@red:                   #ff0000;
+@orange: #f7941e;
+@purple: #2c2255;
+@blue: rgb(0, 0, 255);
+@blue-dark: #2c2255;
+@blue-light: #afbbdc;
+@blue-lighter: #dfe2ed;
+@green-dark: #5a6700;
+@green-light: #c0d050;
+@green-lighter: #faffd4;
+@gray-mid-light: #ccc;
+@gray: #2f2f2f;
+@white: #fff;
+@black: #000000;
+@red: #ff0000;
 
 @eclipse-light-grey: #e8e8e8;
 @eclipse-highlight-grey: #ececec;
+
+html {
+  font-size: 14px;
+}
 
 .eclipseFdn-membership-webform {
   .input-group .form-control {
     z-index: unset;
   }
   .error {
-    color:@red;
+    color: @red;
   }
 
   .orange-star {
@@ -88,7 +90,7 @@
   }
 
   .form-border-error {
-    border-color:@red;
+    border-color: @red;
   }
 
   .btn {
@@ -127,7 +129,7 @@
   }
 
   input[type='checkbox']:checked {
-    background-color:@brand-primary;
+    background-color: @brand-primary;
   }
 
   .verical-center {
@@ -142,7 +144,7 @@
     padding: 5px;
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 5px;
-    background:@white;
+    background: @white;
     min-height: 32px;
   }
 
@@ -157,12 +159,31 @@
   }
 
   .step {
-    width: calc(100% / 3);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    padding-top: 30px;
+    & {
+      width: calc(100% / 3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding-top: 30px;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    a:visited {
+      color: inherit;
+    }
+  }
+
+  .btn {
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    a:visited {
+      color: inherit;
+    }
   }
 
   .step-span {
@@ -200,6 +221,16 @@
     // &:extend(.step-title-container);
     background: @brand-secondary 50% no-repeat;
     color: @white;
+  }
+
+  .button-container {
+    a {
+      text-decoration: none;
+    }
+    button {
+      width: 80px;
+      margin: 0 14px;
+    }
   }
 
   // Mobile First

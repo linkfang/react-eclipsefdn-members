@@ -1,6 +1,5 @@
-import React from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
-
+import { NavLink } from 'react-router-dom';
 import {
   FETCH_HEADER,
   api_prefix_form,
@@ -15,8 +14,8 @@ const styles = {
   textAlign: 'center',
 };
 
-const FormChooser = () => {
-  const fetchExistingForm = (callback) => {
+const FormChooser = ({ setFurthestPage }) => {
+  const fetchExistingForm = (setCurrentFormId) => {
     let url_prefix_local;
     if (getCurrentMode() === MODE_REACT_ONLY) {
       url_prefix_local = 'membership_data/form_1/form.json';
@@ -29,7 +28,7 @@ const FormChooser = () => {
     fetch(url_prefix_local, { headers: FETCH_HEADER })
       .then((res) => res.json())
       .then((data) => {
-        callback(data[0]?.id);
+        setCurrentFormId(data[0]?.id);
         console.log(data[0]?.id);
       })
       .catch((err) => console.log(err));
@@ -45,17 +44,23 @@ const FormChooser = () => {
           </h1>
           <button
             type="button"
-            onClick={fetchExistingForm(setCurrentFormId)}
-            className="btn btn-primary">
-            {' '}
-            Continue Existing Application{' '}
+            onClick={() => {
+              setFurthestPage({ index: 1, pathName: '/company-info' });
+              fetchExistingForm(setCurrentFormId);
+            }}
+            className="btn btn-primary"
+          >
+            <NavLink to="/company-info">Continue Existing Application</NavLink>
           </button>
           <button
             type="button"
-            onClick={setCurrentFormId(newForm_tempId)}
-            className="btn btn-primary">
-            {' '}
-            Start New Application{' '}
+            onClick={() => {
+              setFurthestPage({ index: 1, pathName: '/company-info' });
+              setCurrentFormId(newForm_tempId);
+            }}
+            className="btn btn-primary"
+          >
+            <NavLink to="/company-info">Start New Application</NavLink>
           </button>
         </div>
       )}

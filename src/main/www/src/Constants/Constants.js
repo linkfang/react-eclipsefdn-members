@@ -29,7 +29,6 @@ export const FETCH_HEADER = {
 };
 
 export const membership_levels = [
-  { label: 'Select a level', value: '' },
   { label: 'Strategic Member', value: 'strategic' },
   {
     label: 'Contributing Member (formerly referred to as Solutions Members)',
@@ -38,12 +37,12 @@ export const membership_levels = [
   { label: 'Associate Member', value: 'associate' },
 ];
 
-export const fakeChildrenArray = [
-  { props: { label: COMPANY_INFORMATION } },
-  { props: { label: MEMBERSHIP_LEVEL } },
-  { props: { label: WORKING_GROUPS } },
-  { props: { label: SIGNING_AUTHORITY } },
-  { props: { label: REVIEW } },
+export const PAGE_STEP = [
+  { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
+  { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
+  { props: { label: WORKING_GROUPS, pathName: '/working-groups' } },
+  { props: { label: SIGNING_AUTHORITY, pathName: '/signing-authority' } },
+  { props: { label: REVIEW, pathName: '/review' } },
 ];
 
 export const contact_type = {

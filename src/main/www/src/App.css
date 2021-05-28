@@ -10,6 +10,9 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
 */
+html {
+  font-size: 14px;
+}
 .eclipseFdn-membership-webform {
   /* Stepper */
 }
@@ -102,6 +105,20 @@
   position: relative;
   padding-top: 30px;
 }
+.eclipseFdn-membership-webform .step a {
+  text-decoration: none;
+  color: inherit;
+}
+.eclipseFdn-membership-webform .step a:visited {
+  color: inherit;
+}
+.eclipseFdn-membership-webform .btn a {
+  text-decoration: none;
+  color: inherit;
+}
+.eclipseFdn-membership-webform .btn a:visited {
+  color: inherit;
+}
 .eclipseFdn-membership-webform .step-span {
   width: 50px;
   height: 50px;
@@ -132,6 +149,13 @@
 .eclipseFdn-membership-webform .step-title-container-active {
   background: #404040 50% no-repeat;
   color: #fff;
+}
+.eclipseFdn-membership-webform .button-container a {
+  text-decoration: none;
+}
+.eclipseFdn-membership-webform .button-container button {
+  width: 80px;
+  margin: 0 14px;
 }
 @media (min-width: 992px) {
   .eclipseFdn-membership-webform .step {

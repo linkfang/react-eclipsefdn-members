@@ -5,15 +5,10 @@ import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    '& div.MuiInputBase-root': {
-      fontSize: 14,
-    },
   },
 }));
 
-const today = new Date().toISOString().substring(0, 10);
-
-const DateInput = (props) => {
+const DateInput = ({ ariaLabel, onChange, name, value }) => {
   const classes = useStyles();
 
   return (
@@ -21,8 +16,16 @@ const DateInput = (props) => {
       <TextField
         id="date"
         type="date"
-        defaultValue={today}
+        name={name}
+        required={true}
         className={classes.root}
+        onChange={onChange}
+        value={value}
+        InputProps={{
+          inputProps: {
+            'aria-labelledby': ariaLabel,
+          },
+        }}
       />
     </div>
   );

@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import DefaultSelect from '../../UIComponents/Inputs/CustomSelect/DefaultSelect';
-import CustomSelectWrapper from '../../UIComponents/Inputs/CustomSelect/CustomSelectWrapper';
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import MembershipContext from '../../../Context/MembershipContext';
 import Loading from '../../UIComponents/Loading/Loading';
@@ -14,18 +12,31 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
 } from '../../../Constants/Constants';
+import { makeStyles, TextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
+import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
  *
  *  - Props:
- *    -  otherProps: any other props passing down from MultiStepForm and FormikStepper components, including formik props of formik library (such as "formik.values", "formik.setFieldValue");
+ *    -  otherProps: any other props passing down from FormikStepper components, including formik props of formik library (such as "formik.values", "formik.setFieldValue");
  *    - formField: the form field in formModels/formFieldModel.js;
  */
-const MembershipLevel = ({ formField, ...otherProps }) => {
+
+const useStyles = makeStyles(() => ({
+  textField: {
+    marginBottom: 14,
+    marginTop: 6,
+    backgroundColor: 'white',
+  },
+}));
+
+const MembershipLevel = ({ formik }) => {
   const { currentFormId } = useContext(MembershipContext);
-  const { setFieldValue } = otherProps.parentState.formik;
   const { membershipLevel } = formField;
+  const classes = useStyles();
 
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +46,9 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
   useEffect(() => {
     // All pre-process: if running without server,
     // use fake json data; if running with API, use API
+
+    // just for React only testing.
+    let currentFormId = 'form_1';
     let url_prefix_local;
     let url_suffix_local = '';
     if (getCurrentMode() === MODE_REACT_ONLY) {
@@ -58,24 +72,27 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
             // the retrived membership level backend data to fit frontend, and
             // setFieldValue(): Prefill Data --> Call the setFieldValue of
             // Formik, to set membershipLevel field with the mapped data
-            setFieldValue(
-              membershipLevel.name,
-              mapMembershipLevel(data[0]?.membership_level, membership_levels)
+            const tempMembershipLevel = mapMembershipLevel(
+              data[0]?.membership_level,
+              membership_levels
             );
+            formik.setFieldValue('membershipLevel', tempMembershipLevel.label);
+            formik.setFieldValue('membershipLevel-label', tempMembershipLevel);
           }
           setLoading(false);
         });
     } else {
       setLoading(false);
     }
-  }, [currentFormId, setFieldValue, membershipLevel.name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentFormId]);
 
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <>
+    <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
@@ -86,17 +103,58 @@ const MembershipLevel = ({ formField, ...otherProps }) => {
         </h2>
         <div className="row">
           <div className="col-md-12">
-            <CustomSelectWrapper
-              name={membershipLevel.name}
-              renderComponent={DefaultSelect}
+            <Autocomplete
+              id={membershipLevel.name}
               options={membership_levels}
-              ariaLabel={membershipLevel.name}
+              fullWidth={true}
+              getOptionLabel={(option) => (option?.label ? option.label : '')}
+              onChange={(ev, value) => {
+                // this is only for display
+                formik.setFieldValue(
+                  `${membershipLevel.name}-label`,
+                  value ? value : null
+                );
+
+                // this is the data will be actually used
+                formik.setFieldValue(
+                  membershipLevel.name,
+                  value ? value.value : null
+                );
+              }}
+              value={
+                formik.values['membershipLevel-label']
+                  ? formik.values['membershipLevel-label']
+                  : null
+              }
+              renderInput={(params) => {
+                params.inputProps = {
+                  ...params.inputProps,
+                  'aria-labelledby': membershipLevel.name,
+                };
+                return (
+                  <TextField
+                    {...params}
+                    label="Select a level"
+                    placeholder="Select a level"
+                    variant="outlined"
+                    size="small"
+                    required={true}
+                    className={classes.textField}
+                  />
+                );
+              }}
             />
           </div>
         </div>
         <MembershipLevelFeeTable />
       </div>
-    </>
+
+      <CustomStepButton
+        previousPage="/company-info"
+        nextPage="/working-groups"
+        pageIndex={2}
+      />
+    </form>
   );
 };
 

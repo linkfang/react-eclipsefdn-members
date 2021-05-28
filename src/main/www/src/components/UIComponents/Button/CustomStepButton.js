@@ -1,4 +1,7 @@
+import { Button } from '@material-ui/core';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Button on each step, conduct "Next" or "Back" or "Submit"
@@ -9,31 +12,30 @@ import React from 'react';
  *   - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
  *   - isLastStep: boolean, whether it's the final step (preview step) or not
  */
-const CustomStepButton = ({ step, isSubmitting, setStep, isLastStep }) => {
-  const handleClick = () => {
-    setStep((s) => s - 1);
-  };
-
+const CustomStepButton = ({ previousPage, nextPage, pageIndex }) => {
   return (
-    <>
-      <div className="button-container margin-top-20 margin-bottom-20">
-        {step > 0 ? (
-          <button
-            disabled={isSubmitting}
-            className="btn btn-primary"
-            type="button"
-            onClick={handleClick}>
+    <div className="button-container margin-top-20 margin-bottom-20">
+      {previousPage ? (
+        <NavLink to={previousPage}>
+          <Button variant="contained" color="primary" size="large">
             Back
-          </button>
-        ) : null}
-        <button
-          disabled={isSubmitting}
-          className={`btn ${isLastStep() ? 'btn-secondary' : 'btn-primary'}`}
-          type="submit">
-          {isSubmitting ? 'Submitting' : isLastStep() ? 'Submit' : 'Next'}
-        </button>
-      </div>
-    </>
+          </Button>
+        </NavLink>
+      ) : null}
+
+      <MembershipContext.Consumer>
+        {() => (
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            type="submit"
+          >
+            {nextPage === '/submitted' ? 'Submit' : 'Next'}
+          </Button>
+        )}
+      </MembershipContext.Consumer>
+    </div>
   );
 };
 

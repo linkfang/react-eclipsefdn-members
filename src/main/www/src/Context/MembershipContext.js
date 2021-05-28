@@ -8,11 +8,14 @@ import React from 'react';
  * It is simliar to state, but you can export and import anywhere,
  * no need to pass all the way down to the child component
  */
+
 const MembershipContext = React.createContext({
   currentUser: {},
   setCurrentUser: () => {},
   currentFormId: '',
   setCurrentFormId: () => {},
+  furthestPage: '',
+  setFurthestPage: '',
 });
 
 export default MembershipContext;

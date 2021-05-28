@@ -1,17 +1,15 @@
 import React from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import FormChooser from '../../UIComponents/FormPreprocess/FormChooser';
-import SignInIntroduction from './SignInIntroduction';
-import StepperComponent from '../../UIComponents/Steppers/StepperComponent';
 import {
   FETCH_HEADER,
   api_prefix,
   end_point,
-  fakeChildrenArray,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
 } from '../../../Constants/Constants';
+import { NavLink } from 'react-router-dom';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
@@ -38,7 +36,8 @@ import {
  */
 class SignIn extends React.Component {
   static contextType = MembershipContext;
-  getFakeUser = () => {
+  getFakeUser = (setFurthestPage) => {
+    setFurthestPage({ index: 1, pathName: '/company-info' });
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
       .then((data) => {
@@ -46,12 +45,37 @@ class SignIn extends React.Component {
       });
   };
 
+  renderButtons = (setFurthestPage) => (
+    <div className="text-center margin-bottom-20">
+      {getCurrentMode() === MODE_REACT_ONLY && (
+        <NavLink to="/company-info">
+          <button
+            type="button"
+            onClick={() => this.getFakeUser(setFurthestPage)}
+            className="btn btn-secondary"
+          >
+            React Only Login
+          </button>
+        </NavLink>
+      )}
+
+      {getCurrentMode() === MODE_REACT_API && (
+        <a href="/login" className="btn btn-secondary">
+          Sign In
+        </a>
+      )}
+      <a href="https://accounts.eclipse.org/" className="btn btn-secondary">
+        Create an account
+      </a>
+    </div>
+  );
+
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
       fetch(api_prefix() + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data); // {family_name: "User1", given_name: "User1", name: "user1"}
+          console.log('data: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
           this.context.setCurrentUser(data);
         })
         .catch((err) => console.log(err));
@@ -59,47 +83,15 @@ class SignIn extends React.Component {
   }
 
   render() {
-    if (this.context.currentUser) {
-      return (
-        <MembershipContext.Consumer>
-          {(setCurrentUser) => (
-            <>
-              <SignInIntroduction />
-              <StepperComponent step={-1} childrenArray={fakeChildrenArray} />
-              <FormChooser />
-            </>
-          )}
-        </MembershipContext.Consumer>
-      );
-    }
-
     return (
       <MembershipContext.Consumer>
-        {(setCurrentUser) => (
+        {({ setFurthestPage }) => (
           <>
-            <SignInIntroduction />
-            <StepperComponent step={-1} childrenArray={fakeChildrenArray} />
-            <div className="text-center margin-bottom-20">
-              {getCurrentMode() === MODE_REACT_ONLY && (
-                <button
-                  type="button"
-                  onClick={this.getFakeUser}
-                  className="btn btn-secondary">
-                  React Only Login
-                </button>
-              )}
-
-              {getCurrentMode() === MODE_REACT_API && (
-                <a href="/login" className="btn btn-secondary">
-                  Sign In
-                </a>
-              )}
-              <a
-                href="https://accounts.eclipse.org/"
-                className="btn btn-secondary">
-                Create an account
-              </a>
-            </div>
+            {this.context.currentUser ? (
+              <FormChooser setFurthestPage={setFurthestPage} />
+            ) : (
+              this.renderButtons(setFurthestPage)
+            )}
           </>
         )}
       </MembershipContext.Consumer>

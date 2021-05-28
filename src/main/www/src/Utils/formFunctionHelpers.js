@@ -72,23 +72,17 @@ export function matchCompanyFields(existingOrganizationData) {
   return {
     // Step1: company Info
     id: existingOrganizationData?.id || '',
-    legalName:
-      {
-        value: existingOrganizationData?.legal_name || '',
-        label: existingOrganizationData?.legal_name || '',
-        address: existingOrganizationData?.address || '',
-        twitterHandle: existingOrganizationData?.twitter_handle || '',
-      } || '',
+    legalName: existingOrganizationData?.legal_name || '',
     address: {
       id: existingOrganizationData?.address.id || '',
       street: existingOrganizationData?.address.street || '',
       city: existingOrganizationData?.address.city || '',
       provinceOrState: existingOrganizationData?.address.province_state || '',
-      country:
-        {
-          label: existingOrganizationData?.address.country,
-          value: existingOrganizationData?.address.country,
-        } || '',
+      country: {
+        label: existingOrganizationData?.address.country || '',
+        value: existingOrganizationData?.address.country || '',
+      },
+      'country-label': existingOrganizationData?.address.country || '',
       postalCode: existingOrganizationData?.address.postal_code || '',
     },
     twitterHandle: existingOrganizationData?.twitter_handle || '',
