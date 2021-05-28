@@ -33,7 +33,7 @@ import { FormikProvider } from 'formik';
 
 const WorkingGroupsWrapper = ({ formik }) => {
   const { currentFormId } = useContext(MembershipContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
 
