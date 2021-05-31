@@ -58,7 +58,7 @@ As a side note, regeneration of the database on start along with the insertion o
 
 ### Running
 
-To run the server as a local instance as a stack, you will need to compile the application first, which can be done through `make compile`. This takes care of all of the steps needed to cleanly build and rebuild the application from scratch. To run the stack with the packaged application, use `docker-compose up -d`.
+To run the server as a local instance as a stack, you will need to compile the application first, which can be done through `make compile-start`. This takes care of all of the steps needed to cleanly build and rebuild the application from scratch. This will also run the stack with the packaged application.
 
 ### Docker
 
