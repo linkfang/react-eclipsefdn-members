@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 /**
@@ -24,8 +24,10 @@ const Step = (props) => {
       <NavLink
         to={pathName}
         isActive={(match) => {
-          if (match) setIsActive(true);
-          else setIsActive(false);
+          setTimeout(() => {
+            if (match) setIsActive(true);
+            else setIsActive(false);
+          }, 0);
         }}
       >
         <span className="step-span-index">{index + 2}</span>
