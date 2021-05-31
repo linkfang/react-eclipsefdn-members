@@ -5,18 +5,18 @@ metadata:
   namespace: foundation-internal-webdev-apps
   labels:
     app: eclipsefdn-react-membership
-    environment: production
+    environment: staging
 spec:
   selector:
     matchLabels:
       app: eclipsefdn-react-membership
-      environment: production
+      environment: staging
   replicas: 2
   template:
     metadata:
       labels:
         app: eclipsefdn-react-membership
-        environment: production
+        environment: staging
     spec:
       affinity:
         nodeAffinity:
@@ -51,7 +51,7 @@ spec:
       volumes:
       - name: secret-properties
         secret:
-          secretName: react-membership-app
+          secretName: react-membership-app-staging
 ---
 apiVersion: "v1"
 kind: "Service"
@@ -66,7 +66,7 @@ spec:
     targetPort: 8080
   selector:
     app: eclipsefdn-react-membership
-    environment: production
+    environment: staging
 ---
 apiVersion: "route.openshift.io/v1"
 kind: "Route"
@@ -78,7 +78,7 @@ metadata:
     haproxy.router.openshift.io/disable_cookies: "true"
     haproxy.router.openshift.io/balance: roundrobin
 spec:
-  host: "membership.eclipse.org"
+  host: "membership-staging.eclipse.org"
   path: "/"
   port:
     targetPort: "http"
