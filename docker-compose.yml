@@ -73,27 +73,6 @@ services:
     depends_on:
       - postgres
       - ldap
-  ldap:
-    container_name: ldap
-    image: osixia/openldap
-    ports:
-      - '389:389'
-      - '636:636'
-    environment:
-      - LDAP_ADMIN_PASSWORD=${REM_LDAP_ADMIN_PASSWORD}
-    volumes:
-      - ./volumes/ldap/var:/var/lib/ldap
-      - ./volumes/ldap/etc:/etc/ldap/slapd.d
-  ldap-admin:
-    container_name: ldap-admin
-    image: osixia/phpldapadmin
-    ports:
-      - 80
-      - 443
-    environment:
-      - VIRTUAL_HOST=ldap-admin.rem.docker
-      - PHPLDAPADMIN_LDAP_HOSTS=ldap
-      - PHPLDAPADMIN_HTTPS=false
   nginx-proxy:
     image: jwilder/nginx-proxy
     ports:

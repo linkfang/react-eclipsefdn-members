@@ -67,10 +67,6 @@ We include a `docker-compose.yml` file with this project to help you get started
 * [mariadb:latest](https://hub.docker.com/_/mariadb)
 * [postgres:12.4](https://hub.docker.com/_/postgres)
 * [jboss/keycloak:11.0.1](https://hub.docker.com/r/jboss/keycloak/)
-* [osixia/openldap](https://hub.docker.com/r/osixia/openldap)*
-* [osixia/phpldapadmin](https://hub.docker.com/r/osixia/phpldapadmin)*
-
-*OpenLDAP is not required for the moment but we are including for testing purposes with Keycloak.
 
 #### Generate Certs for HTTPS
 
@@ -95,7 +91,6 @@ Linux / MacOS: /etc/hosts
 127.0.0.1 keycloak
 127.0.0.1 api.rem.docker
 127.0.0.1 www.rem.docker
-127.0.0.1 ldap-admin.rem.docker
 ```
 
 #### Environment Variables
@@ -105,7 +100,6 @@ To use our `docker-compose.yml` file, create a `.env` file in the root of this p
 ```sh
 REM_KEYCLOAK_USER=user_sample
 REM_KEYCLOAK_PASSWORD=password_sample
-REM_LDAP_ADMIN_PASSWORD=password_sample
 REM_MYSQL_PASSWORD=password_sample
 REM_POSTGRES_DB=keycloak_sample
 REM_POSTGRES_USER=keycloak_sample
@@ -129,6 +123,33 @@ Realm is a concept in Keycloak that refers to an object managing a set of users 
 To create a `user`, visit [Keycloak Admin Console](http://localhost:8080/auth/admin) and click on `Users` in the left menu. Then press the `Add User` button and fill up the form with information about the user you wish to create.
 
 To login as the user, you will need to set an initial password. To set a password, click on `Credentials`,  then set a password via the `Set Password` form. You will need to enter it twice to confirm it. You will probably want to disable `Temporary` password by clicking on the `ON` button to turn that feature off.
+
+#### Eclipse Foundation as an Identity Provider
+
+It's possible to delegate authentication to third party identity providers with Keycloak. With this App, we want to leverage [Eclipse Foundation OpenID Connect](https://wiki.eclipse.org/OpenID) since we want our users to login with our standard login page. In order to do so, you will need a client_id/secret from us.
+
+Assuming you have access to that already, please follow these steps to add the Eclipse Foundation as an `Identity Provider`.
+
+1. Click on `Identity Providers` in the left menu then click on `Add provider...`. Select `OpenID Connect v1.0` from the dropdown menu.
+
+2. Populate the form with the following information:
+
+```
+Alias : eclipsefdn
+Display Name: Eclipse Foundation
+Sync Mode : Force (To make sure the user is updated each time they login)
+Authorization URL: https://accounts.eclipse.org/oauth2/authorize
+Token URL: https://accounts.eclipse.org/oauth2/token
+Logout URL: https://accounts.eclipse.org/oauth2/revoke
+User Info URL: https://accounts.eclipse.org/oauth2/UserInfo
+Client Authentication: Client secret sent as post
+Client ID: <CLIENT_ID>
+Client Secret: <CLIENT_SECRET>
+Default Scopes: openid profile email offline_access
+```
+
+1. Finally, we want to configure Eclipse Foundation has the only authentication option. Click on `Authentication` in the left menu. Set `Identity Provider Redirector` to `required` and `Forms` to `disabled`. Finally, click on Actions and set `eclipsefdn` has the `Default Identity Provider`.
+
 
 #### Client Configuration
 
