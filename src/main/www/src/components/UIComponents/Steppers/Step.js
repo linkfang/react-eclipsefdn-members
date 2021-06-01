@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteMatch } from 'react-router-dom';
 
 /**
  * Props:
@@ -18,18 +17,11 @@ import { NavLink } from 'react-router-dom';
 
 const Step = (props) => {
   const { index, title, pathName } = props;
-  const [isActive, setIsActive] = useState(false);
+  const isActive = useRouteMatch(pathName);
+
   return (
     <div className="step">
-      <NavLink
-        to={pathName}
-        isActive={(match) => {
-          setTimeout(() => {
-            if (match) setIsActive(true);
-            else setIsActive(false);
-          }, 0);
-        }}
-      >
+      <NavLink to={pathName}>
         <span className="step-span-index">{index + 2}</span>
         <div className="step-span">
           <div
