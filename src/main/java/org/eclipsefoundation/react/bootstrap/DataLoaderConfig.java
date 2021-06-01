@@ -18,7 +18,7 @@ public class DataLoaderConfig {
     private boolean enabled = false;
     private List<String> dataLoaderProfiles = Arrays.asList("dev", "staging");
     private Integer formCount = 25;
-    private List<String> userIDs = Arrays.asList("user1", "user2", "user3");
+    private List<String> userIDs = Arrays.asList("malowe", "cguindon", "epoirier", "zhoufang");
     private List<String> workingGroups = Arrays.asList("internet-things-iot", "jakarta-ee", "cloud-tools-development");
     private List<String> membershipLevels = Arrays.asList("strategic", "contributing", "associate", "committer");
     private List<String> participationLevels = Arrays.asList("platinum", "gold", "silver", "associate");
