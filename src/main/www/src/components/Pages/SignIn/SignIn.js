@@ -84,17 +84,16 @@ class SignIn extends React.Component {
 
   render() {
     return (
-      <MembershipContext.Consumer>
-        {({ setFurthestPage }) => (
-          <>
-            {this.context.currentUser ? (
-              <FormChooser setFurthestPage={setFurthestPage} />
-            ) : (
-              this.renderButtons(setFurthestPage)
-            )}
-          </>
+      <>
+        {this.context.currentUser ? (
+          <FormChooser
+            setFurthestPage={this.props.setFurthestPage}
+            history={this.props.history}
+          />
+        ) : (
+          this.renderButtons(this.props.setFurthestPage)
         )}
-      </MembershipContext.Consumer>
+      </>
     );
   }
 }

@@ -504,12 +504,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * - Store the returned new form Id in my FormId Context
  * - Send the API calls to organizations and contacts
  * **/
-export async function handleNewForm(
-  setCurrentFormId,
-  formData,
-  userId,
-  defaultBehaviour
-) {
+export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   if (getCurrentMode() === MODE_REACT_ONLY) {
     defaultBehaviour();
   }
@@ -527,8 +522,8 @@ export async function handleNewForm(
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('Start with a new one:', data);
         setCurrentFormId(data[0]?.id);
-        executeSendDataByStep(0, formData, data[0]?.id, userId);
         defaultBehaviour();
       });
   }

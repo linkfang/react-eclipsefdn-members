@@ -133,6 +133,7 @@ export default function Main({ furthestPage, setFurthestPage }) {
               formField={formField}
               label={COMPANY_INFORMATION}
               setFurthestPage={setFurthestPage}
+              history={history}
             />
           </Route>
 
