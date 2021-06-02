@@ -547,7 +547,8 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
         console.log('Start with a new one:', data);
         setCurrentFormId(data[0]?.id);
         defaultBehaviour();
-      });
+      })
+      .catch((err) => console.log(err));
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days

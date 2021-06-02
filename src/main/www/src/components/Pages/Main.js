@@ -5,7 +5,6 @@ import SignIn from './SignIn/SignIn';
 import {
   COMPANY_INFORMATION,
   SIGNING_AUTHORITY,
-  WORKING_GROUPS,
   PAGE_STEP,
 } from '../../Constants/Constants';
 import {
@@ -82,6 +81,7 @@ export default function Main() {
       // update the membershipLevel values
       const membershipLevel = values.membershipLevel;
       setUpdatedFormValues({ ...updatedFormValues, membershipLevel });
+      console.log('updated membership level: ', values);
 
       // fetch method for submitting membership level will always be PUT
       // because we have to create one first to get the form_id
@@ -105,6 +105,17 @@ export default function Main() {
       // update the workingGroups values
       const workingGroups = values.workingGroups;
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
+      console.log('updated working groups: ', values);
+
+      const fetchMethod = furthestPage.index > 3 ? 'PUT' : 'POST';
+      executeSendDataByStep(
+        3,
+        values,
+        currentFormId,
+        currentUser.name,
+        fetchMethod
+      );
+
       goToNextStep(3, '/signing-authority');
     },
   });
@@ -198,9 +209,8 @@ export default function Main() {
           <Route path="/working-groups">
             {furthestPage.index >= 3 ? (
               <WorkingGroupsWrapper
-                formField={formField}
-                label={WORKING_GROUPS}
                 formik={formikWorkingGroups}
+                isStartNewForm={isStartNewForm}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />

@@ -50,7 +50,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
           } else {
             setHasExistingForm(false);
             setCurrentFormId(data[0]?.id);
-            goToCompanyInfoStep();
+            handleNewForm(setCurrentFormId, goToCompanyInfoStep);
           }
         })
         .catch((err) => console.log(err));

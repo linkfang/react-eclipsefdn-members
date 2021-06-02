@@ -113,7 +113,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
   // as long as currentFormId and setFieldValue
   // Function does not change, will not cause re-render again
   useEffect(() => {
-    console.log(furthestPage.index);
     setLoading(true);
     if (isStartNewForm) {
       if (furthestPage.index > 1 && !formik.values.organizations.id) {
