@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
 import {
   COMPANY_INFORMATION,
-  MEMBERSHIP_LEVEL,
   SIGNING_AUTHORITY,
   WORKING_GROUPS,
   PAGE_STEP,
@@ -83,6 +82,18 @@ export default function Main() {
       // update the membershipLevel values
       const membershipLevel = values.membershipLevel;
       setUpdatedFormValues({ ...updatedFormValues, membershipLevel });
+
+      // fetch method for submitting membership level will always be PUT
+      // because we have to create one first to get the form_id
+      const fetchMethod = 'PUT';
+      executeSendDataByStep(
+        2,
+        values,
+        currentFormId,
+        currentUser.name,
+        fetchMethod
+      );
+
       goToNextStep(2, '/working-groups');
     },
   });
@@ -177,7 +188,7 @@ export default function Main() {
             {furthestPage.index >= 2 ? (
               <MembershipLevel
                 formik={formikMembershipLevel}
-                label={MEMBERSHIP_LEVEL}
+                isStartNewForm={isStartNewForm}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />

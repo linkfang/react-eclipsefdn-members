@@ -240,7 +240,7 @@ export function matchMembershipLevelFieldsToBackend(
   return {
     id: formId,
     user_id: userId,
-    membership_level: membershipLevel.value,
+    membership_level: membershipLevel,
     signing_authority: true,
   };
 }
@@ -441,6 +441,15 @@ export function sendData(formId, endpoint, dataBody, fetchMethod) {
   console.log('dataBody: ', dataBody);
   switch (endpoint) {
     case end_point.organizations:
+      if (fetchMethod === FETCH_METHOD.POST) {
+        delete dataBody.id;
+        callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
+      } else {
+        callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
+      }
+      break;
+
+    case '':
       if (fetchMethod === FETCH_METHOD.POST) {
         delete dataBody.id;
         callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
