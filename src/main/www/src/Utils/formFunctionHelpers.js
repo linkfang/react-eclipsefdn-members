@@ -77,11 +77,11 @@ export function matchCompanyFields(existingOrganizationData) {
       street: existingOrganizationData?.address.street || '',
       city: existingOrganizationData?.address.city || '',
       provinceOrState: existingOrganizationData?.address.province_state || '',
-      country: {
+      country: existingOrganizationData?.address.country || '',
+      'country-label': {
         label: existingOrganizationData?.address.country || '',
         value: existingOrganizationData?.address.country || '',
       },
-      'country-label': existingOrganizationData?.address.country || '',
       postalCode: existingOrganizationData?.address.postal_code || '',
     },
     twitterHandle: existingOrganizationData?.twitter_handle || '',

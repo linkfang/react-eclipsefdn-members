@@ -120,10 +120,12 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
         setLoading(false);
-      } else { // This means this is the 1st time the user see this page, no need to do any API call.
+      } else {
+        // This means this is the 1st time the user see this page, no need to do any API call.
         setLoading(false);
       }
-    } else { // continue with an existing one
+    } else {
+      // continue with an existing one
       detectModeAndFetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

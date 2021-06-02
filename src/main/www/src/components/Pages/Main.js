@@ -61,7 +61,11 @@ export default function Main() {
       // check if the furthest page index is greater than current page index
       // if so, means user comes back from a further page so we need do PUT
       // if not, means this is the first time the user submits the info, we need do PUT
-      const fetchMethod = furthestPage.index > 1 ? 'PUT' : 'POST';
+      let fetchMethod = 'PUT';
+      if (isStartNewForm) {
+        fetchMethod = furthestPage.index > 1 ? 'PUT' : 'POST';
+      }
+
       executeSendDataByStep(
         1,
         values,
