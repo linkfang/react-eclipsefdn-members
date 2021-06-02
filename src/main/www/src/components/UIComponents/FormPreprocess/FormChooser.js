@@ -15,13 +15,18 @@ const styles = {
   textAlign: 'center',
 };
 
-const FormChooser = ({ setFurthestPage, history }) => {
+const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
   const { setCurrentFormId } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = () => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
     history.push('/company-info');
+  };
+
+  const handleContinueExistingForm = () => {
+    setIsStartNewForm(false);
+    goToCompanyInfoStep();
   };
 
   useEffect(() => {
@@ -70,7 +75,7 @@ const FormChooser = ({ setFurthestPage, history }) => {
             {!!hasExistingForm && (
               <button
                 type="button"
-                onClick={goToCompanyInfoStep}
+                onClick={handleContinueExistingForm}
                 className="btn btn-primary"
               >
                 Continue Existing Application

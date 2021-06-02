@@ -39,10 +39,7 @@ const App = () => {
         <AppHeader />
         <MembershipContext.Provider value={membershipContextValue}>
           <Router>
-            <Main
-              furthestPage={furthestPage}
-              setFurthestPage={setFurthestPage}
-            />
+            <Main />
           </Router>
         </MembershipContext.Provider>
         <AppFooter />

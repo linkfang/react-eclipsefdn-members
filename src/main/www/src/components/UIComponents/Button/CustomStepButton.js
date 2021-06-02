@@ -12,7 +12,7 @@ import MembershipContext from '../../../Context/MembershipContext';
  *   - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
  *   - isLastStep: boolean, whether it's the final step (preview step) or not
  */
-const CustomStepButton = ({ previousPage, nextPage, pageIndex }) => {
+const CustomStepButton = ({ previousPage, nextPage }) => {
   return (
     <div className="button-container margin-top-20 margin-bottom-20">
       {previousPage ? (

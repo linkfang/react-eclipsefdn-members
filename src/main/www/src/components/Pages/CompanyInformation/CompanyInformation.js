@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
   matchCompanyFields,
@@ -11,13 +11,11 @@ import {
   end_point,
   api_prefix_form,
   FETCH_HEADER,
-  newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
-import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Wrapper for Contacts and Company components
@@ -31,8 +29,8 @@ import { initialValues } from '../../UIComponents/FormComponents/formFieldModel'
  *      library (such as "formik.values", "formik.setFieldValue");
  *  - formField: the form field in formModels/formFieldModel.js
  */
-const CompanyInformation = ({ formik }) => {
-  const { currentFormId } = useContext(MembershipContext); // current chosen form id
+const CompanyInformation = ({ formik, isStartNewForm }) => {
+  const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
 
   const detectModeAndFetch = () => {
@@ -58,7 +56,7 @@ const CompanyInformation = ({ formik }) => {
       url_prefix_local = api_prefix_form;
     }
     // If the current form exsits, and it is not creating a new form
-    if (currentFormId && currentFormId !== newForm_tempId) {
+    if (currentFormId) {
       // Using promise pool, because in first step,
       // need to get company data, and contacts data
       let pool = [
@@ -92,7 +90,6 @@ const CompanyInformation = ({ formik }) => {
             // organization field with the mapped data,
             // if nested, it will automatically map the
             // properties and values
-            console.log(tempOrg);
             formik.setFieldValue('organization', tempOrg);
           }
           if (contacts.length) {
@@ -107,10 +104,6 @@ const CompanyInformation = ({ formik }) => {
           }
           setLoading(false);
         });
-    } else if (currentFormId === newForm_tempId) {
-      formik.setFieldValue('representative', initialValues.representative);
-      formik.setFieldValue('organization', initialValues.organization);
-      setLoading(false);
     } else {
       setLoading(false);
     }
@@ -120,8 +113,20 @@ const CompanyInformation = ({ formik }) => {
   // as long as currentFormId and setFieldValue
   // Function does not change, will not cause re-render again
   useEffect(() => {
+    console.log(furthestPage.index);
     setLoading(true);
-    detectModeAndFetch();
+    if (isStartNewForm) {
+      if (furthestPage.index > 1 && !formik.values.organizations.id) {
+        // This means user already submitted/finished this page, and comes back from a further page/step
+        // so, we need to GET the info user submitted and if user changes anything,
+        // we will use the organization_id from the GET to do the PUT to update the info.
+        setLoading(false);
+      } else { // This means this is the 1st time the user see this page, no need to do any API call.
+        setLoading(false);
+      }
+    } else { // continue with an existing one
+      detectModeAndFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentFormId]);
 

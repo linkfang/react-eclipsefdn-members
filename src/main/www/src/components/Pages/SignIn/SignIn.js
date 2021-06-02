@@ -10,6 +10,7 @@ import {
   MODE_REACT_API,
 } from '../../../Constants/Constants';
 import { NavLink } from 'react-router-dom';
+import Loading from '../../UIComponents/Loading/Loading';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
@@ -36,6 +37,9 @@ import { NavLink } from 'react-router-dom';
  */
 class SignIn extends React.Component {
   static contextType = MembershipContext;
+  state = {
+    needLoading: true,
+  };
   getFakeUser = (setFurthestPage) => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
@@ -45,30 +49,37 @@ class SignIn extends React.Component {
       });
   };
 
-  renderButtons = (setFurthestPage) => (
-    <div className="text-center margin-bottom-20">
-      {getCurrentMode() === MODE_REACT_ONLY && (
-        <NavLink to="/company-info">
-          <button
-            type="button"
-            onClick={() => this.getFakeUser(setFurthestPage)}
-            className="btn btn-secondary"
-          >
-            React Only Login
-          </button>
-        </NavLink>
-      )}
+  renderButtons = (setFurthestPage) =>
+    this.state.needLoading ? (
+      <Loading />
+    ) : (
+      <div className="text-center margin-bottom-20">
+        {getCurrentMode() === MODE_REACT_ONLY && (
+          <NavLink to="/company-info">
+            <button
+              type="button"
+              onClick={() => this.getFakeUser(setFurthestPage)}
+              className="btn btn-secondary"
+            >
+              React Only Login
+            </button>
+          </NavLink>
+        )}
 
-      {getCurrentMode() === MODE_REACT_API && (
-        <a href="/login" className="btn btn-secondary">
-          Sign In
+        {getCurrentMode() === MODE_REACT_API && (
+          <a
+            href="/login"
+            className="btn btn-secondary"
+            onClick={() => this.setState({ needLoading: true })}
+          >
+            Sign In
+          </a>
+        )}
+        <a href="https://accounts.eclipse.org/" className="btn btn-secondary">
+          Create an account
         </a>
-      )}
-      <a href="https://accounts.eclipse.org/" className="btn btn-secondary">
-        Create an account
-      </a>
-    </div>
-  );
+      </div>
+    );
 
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
@@ -77,8 +88,12 @@ class SignIn extends React.Component {
         .then((data) => {
           console.log('data: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
           this.context.setCurrentUser(data);
+          this.setState({ needLoading: false });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          this.setState({ needLoading: false });
+        });
     }
   }
 
@@ -89,6 +104,7 @@ class SignIn extends React.Component {
           <FormChooser
             setFurthestPage={this.props.setFurthestPage}
             history={this.props.history}
+            setIsStartNewForm={this.props.setIsStartNewForm}
           />
         ) : (
           this.renderButtons(this.props.setFurthestPage)

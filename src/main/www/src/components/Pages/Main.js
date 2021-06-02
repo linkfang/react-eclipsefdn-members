@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
@@ -23,10 +23,15 @@ import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
 import { useHistory } from 'react-router-dom';
+import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
+import MembershipContext from '../../Context/MembershipContext';
 
-export default function Main({ furthestPage, setFurthestPage }) {
+export default function Main() {
   const history = useHistory();
+  const { currentFormId, furthestPage, setFurthestPage, currentUser } =
+    useContext(MembershipContext);
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
+  const [isStartNewForm, setIsStartNewForm] = useState(true);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -53,6 +58,20 @@ export default function Main({ furthestPage, setFurthestPage }) {
         organization,
         representative,
       });
+      console.log('updated company info: ', values);
+
+      // check if the furthest page index is greater than current page index
+      // if so, means user comes back from a further page so we need do PUT
+      // if not, means this is the first time the user submits the info, we need do PUT
+      const fetchMethod = furthestPage.index > 1 ? 'PUT' : 'POST';
+      executeSendDataByStep(
+        1,
+        values,
+        currentFormId,
+        currentUser.name,
+        fetchMethod
+      );
+
       goToNextStep(1, '/membership-level');
     },
   });
@@ -134,6 +153,7 @@ export default function Main({ furthestPage, setFurthestPage }) {
               label={COMPANY_INFORMATION}
               setFurthestPage={setFurthestPage}
               history={history}
+              setIsStartNewForm={setIsStartNewForm}
             />
           </Route>
 
@@ -142,8 +162,8 @@ export default function Main({ furthestPage, setFurthestPage }) {
               // stop users visiting steps/pages that are not able to edit yet
               furthestPage.index >= 1 ? (
                 <CompanyInformation
-                  label={COMPANY_INFORMATION}
                   formik={formikCompanyInfo}
+                  isStartNewForm={isStartNewForm}
                 />
               ) : (
                 // if uses are not allowed to visit this page,

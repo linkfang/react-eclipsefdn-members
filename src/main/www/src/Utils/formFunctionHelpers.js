@@ -4,7 +4,6 @@ import {
   end_point,
   api_prefix_form,
   FETCH_HEADER,
-  newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
@@ -210,14 +209,14 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
   var org = {
     address: {
       city: organizationData.address.city,
-      country: organizationData.address.country.value,
+      country: organizationData.address.country,
       postal_code: organizationData.address.postalCode,
       province_state: organizationData.address.provinceOrState,
       street: organizationData.address.street,
     },
     form_id: formId,
     id: organizationData.id,
-    legal_name: organizationData.legalName.label,
+    legal_name: organizationData.legalName,
     twitter_handle: organizationData.twitterHandle || '',
   };
 
@@ -306,13 +305,20 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(step, formData, formId, userId) {
+export async function executeSendDataByStep(
+  step,
+  formData,
+  formId,
+  userId,
+  fetchMethod
+) {
   switch (step) {
-    case 0:
+    case 1:
       sendData(
         formId,
         end_point.organizations,
-        matchCompanyFieldsToBackend(formData.organization, formId)
+        matchCompanyFieldsToBackend(formData.organization, formId),
+        fetchMethod
       );
       sendData(
         formId,
@@ -321,7 +327,8 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.company,
           contact_type.COMPANY,
           formId
-        )
+        ),
+        fetchMethod
       );
       sendData(
         formId,
@@ -330,7 +337,8 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.marketing,
           contact_type.MARKETING,
           formId
-        )
+        ),
+        fetchMethod
       );
       sendData(
         formId,
@@ -339,11 +347,12 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.accounting,
           contact_type.ACCOUNTING,
           formId
-        )
+        ),
+        fetchMethod
       );
       break;
 
-    case 1:
+    case 2:
       sendData(
         formId,
         '',
@@ -351,21 +360,23 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.membershipLevel,
           formId,
           userId
-        )
+        ),
+        fetchMethod
       );
       break;
 
-    case 2:
+    case 3:
       formData.workingGroups.forEach((item) => {
         sendData(
           formId,
           end_point.working_groups,
-          matchWGFieldsToBackend(item, formId)
+          matchWGFieldsToBackend(item, formId),
+          fetchMethod
         );
       });
       break;
 
-    case 3:
+    case 4:
       return;
 
     default:
@@ -425,10 +436,12 @@ function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
  *
  * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
  */
-export function sendData(formId, endpoint, dataBody) {
+export function sendData(formId, endpoint, dataBody, fetchMethod) {
+  console.log('endpoint: ', endpoint);
+  console.log('dataBody: ', dataBody);
   switch (endpoint) {
     case end_point.organizations:
-      if (!dataBody.id || formId === newForm_tempId) {
+      if (fetchMethod === FETCH_METHOD.POST) {
         delete dataBody.id;
         callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
       } else {
