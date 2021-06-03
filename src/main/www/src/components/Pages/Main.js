@@ -174,6 +174,7 @@ export default function Main() {
               <MembershipLevel
                 formik={formikMembershipLevel}
                 isStartNewForm={isStartNewForm}
+                furthestPage={furthestPage}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -185,6 +186,7 @@ export default function Main() {
               <WorkingGroupsWrapper
                 formik={formikWorkingGroups}
                 isStartNewForm={isStartNewForm}
+                furthestPage={furthestPage}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -193,11 +195,7 @@ export default function Main() {
 
           <Route path="/signing-authority">
             {furthestPage.index >= 4 ? (
-              <SigningAuthority
-                formField={formField}
-                label={SIGNING_AUTHORITY}
-                formik={formikSigningAuthority}
-              />
+              <SigningAuthority formik={formikSigningAuthority} />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}

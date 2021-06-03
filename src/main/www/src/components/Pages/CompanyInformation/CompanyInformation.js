@@ -33,90 +33,91 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
   const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
 
-  const detectModeAndFetch = () => {
-    // Once we have API set up ready, we don't need the
-    // fake data anymore, and can remove these pre-process.
-    // it is mainly for if running the application
-    // only react without server.
-
-    // just for React only testing.
-    // let currentFormId = 'form_1';
-
-    let url_prefix_local;
-    let url_suffix_local = '';
-    // If running on localhost:3000
-    if (getCurrentMode() === MODE_REACT_ONLY) {
-      url_prefix_local = 'membership_data'; // --> public/membership_data/
-      url_suffix_local = '.json'; // --> it is the fake json file
-    }
-    // If running on localhost:8090 or any other not on localhost:3000
-    // Once we have the API ready running on production,
-    // will use the correct domain name rather than localhost:8090
-    if (getCurrentMode() === MODE_REACT_API) {
-      url_prefix_local = api_prefix_form;
-    }
-    // If the current form exsits, and it is not creating a new form
-    if (currentFormId) {
-      // Using promise pool, because in first step,
-      // need to get company data, and contacts data
-      let pool = [
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            end_point.organizations +
-            url_suffix_local,
-          { headers: FETCH_HEADER }
-        ),
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            end_point.contacts +
-            url_suffix_local,
-          { headers: FETCH_HEADER }
-        ),
-      ];
-      Promise.all(pool)
-        .then((res) => Promise.all(res.map((r) => r.json())))
-        .then(([organizations, contacts]) => {
-          // Matching the field data
-          if (organizations[0]) {
-            // the organization data returned is always an
-            // array of one object, that is why using [0]
-            // Call the the function to map the retrived
-            // organization backend data to fit frontend
-            let tempOrg = matchCompanyFields(organizations[0]);
-            // Call the setFieldValue of Formik, to set
-            // organization field with the mapped data,
-            // if nested, it will automatically map the
-            // properties and values
-            formik.setFieldValue('organization', tempOrg);
-          }
-          if (contacts.length) {
-            // Call the the function to map the retrived contacts
-            // (company representative, marketing rep, accounting rep)
-            // backend data to fit frontend
-            let tempContacts = matchContactFields(contacts);
-            // Prefill Data --> Call the setFieldValue of Formik,
-            // to set representative field with the mapped data,
-            // if nested, it will automatically map the properties and values
-            formik.setFieldValue('representative', tempContacts);
-          }
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  };
-
   // Fetch data only once and prefill data,
   // as long as currentFormId and setFieldValue
   // Function does not change, will not cause re-render again
   useEffect(() => {
+    const detectModeAndFetch = () => {
+      // Once we have API set up ready, we don't need the
+      // fake data anymore, and can remove these pre-process.
+      // it is mainly for if running the application
+      // only react without server.
+
+      // just for React only testing.
+      // let currentFormId = 'form_1';
+
+      let url_prefix_local;
+      let url_suffix_local = '';
+      // If running on localhost:3000
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data'; // --> public/membership_data/
+        url_suffix_local = '.json'; // --> it is the fake json file
+      }
+      // If running on localhost:8090 or any other not on localhost:3000
+      // Once we have the API ready running on production,
+      // will use the correct domain name rather than localhost:8090
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = api_prefix_form;
+      }
+      // If the current form exsits, and it is not creating a new form
+      if (currentFormId) {
+        // Using promise pool, because in first step,
+        // need to get company data, and contacts data
+        let pool = [
+          fetch(
+            url_prefix_local +
+              `/${currentFormId}/` +
+              end_point.organizations +
+              url_suffix_local,
+            { headers: FETCH_HEADER }
+          ),
+          fetch(
+            url_prefix_local +
+              `/${currentFormId}/` +
+              end_point.contacts +
+              url_suffix_local,
+            { headers: FETCH_HEADER }
+          ),
+        ];
+        Promise.all(pool)
+          .then((res) => Promise.all(res.map((r) => r.json())))
+          .then(([organizations, contacts]) => {
+            // Matching the field data
+            if (organizations[0]) {
+              // the organization data returned is always an
+              // array of one object, that is why using [0]
+              // Call the the function to map the retrived
+              // organization backend data to fit frontend
+              let tempOrg = matchCompanyFields(organizations[0]);
+              // Call the setFieldValue of Formik, to set
+              // organization field with the mapped data,
+              // if nested, it will automatically map the
+              // properties and values
+              formik.setFieldValue('organization', tempOrg);
+            }
+            if (contacts.length) {
+              // Call the the function to map the retrived contacts
+              // (company representative, marketing rep, accounting rep)
+              // backend data to fit frontend
+              let tempContacts = matchContactFields(contacts);
+              // Prefill Data --> Call the setFieldValue of Formik,
+              // to set representative field with the mapped data,
+              // if nested, it will automatically map the properties and values
+              formik.setFieldValue('representative', tempContacts);
+            }
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    };
+
     if (isStartNewForm) {
-      if (furthestPage.index > 1 && !formik.values.organizations.id) {
+      if (furthestPage.index > 1 && !formik.values.organization?.id) {
         // This means user already submitted/finished this page, and comes back from a further page/step
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
+        detectModeAndFetch();
         setLoading(false);
       } else {
         // This means this is the 1st time the user see this page,
@@ -124,12 +125,17 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         // no need to do any API call
         setLoading(false);
       }
-    } else {
-      // continue with an existing one
+    } else if (!formik.values.organization?.id) {
+      // continue with an existing one, if there is no id saved locally
+      // then it means this is the 1st time the user see this page
+      // need to GET the data
       detectModeAndFetch();
+    } else {
+      // user already has the data, no need to do any API call
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentFormId]);
+  }, []);
 
   // If it is in loading status,
   // only return a loading spinning

@@ -31,8 +31,8 @@ import { FormikProvider } from 'formik';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
-  const { currentFormId, furthestPage } = useContext(MembershipContext);
+const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
+  const { currentFormId } = useContext(MembershipContext);
   const [isLoading, setIsLoading] = useState(true);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
@@ -107,11 +107,16 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   }, []);
 
   useEffect(() => {
+    // console.log('use effect....', formik.values);
+
     if (isStartNewForm) {
-      if (furthestPage.index > 1 && !formik.values.workingGroups[0]?.id) {
+      if (furthestPage.index > 3 && !formik.values.workingGroups[0]?.id) {
         // This means user already submitted/finished this page, and comes back from a further page/step
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
+        if (fullWorkingGroupList.length > 0) {
+          fetchWorkingGroupsUserJoined();
+        }
         setIsLoading(false);
       } else {
         // This means this is the 1st time the user see this page,
@@ -119,11 +124,13 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
         // no need to do any API call
         setIsLoading(false);
       }
-    } else {
+    } else if (!formik.values.workingGroups[0]?.id) {
       // continue with an existing one
       if (fullWorkingGroupList.length > 0) {
         fetchWorkingGroupsUserJoined();
       }
+    } else {
+      setIsLoading(false);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -49,7 +49,6 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
 
     // just for React only testing.
     // let currentFormId = 'form_1';
-
     const detectModeAndFetch = () => {
       let url_prefix_local;
       let url_suffix_local = '';
@@ -96,9 +95,12 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
 
     if (isStartNewForm) {
       setLoading(false);
-    } else {
-      // continue with an existing one
+    } else if (formik.values.membershipLevel === '') {
+      // continue with an existing one, if the value is empty
+      // it means this is the first time the user see this page, need to do GET API call
       detectModeAndFetch();
+    } else {
+      setLoading(false);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
