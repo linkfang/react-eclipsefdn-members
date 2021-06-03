@@ -423,8 +423,6 @@ function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
  * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
  */
 export function sendData(formId, endpoint, dataBody) {
-  console.log('endpoint: ', endpoint);
-  console.log('dataBody: ', dataBody);
   switch (endpoint) {
     case end_point.organizations:
       if (!dataBody.id) {
@@ -535,7 +533,7 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('Start with a new one:', data);
+        console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
         defaultBehaviour();
       })

@@ -46,8 +46,8 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
           console.log('existing forms:  ', data);
 
           if (data.length > 0) {
-            setHasExistingForm(data[0]?.id);
-            setCurrentFormId(data[0]?.id);
+            setHasExistingForm(data[data.length - 1]?.id);
+            setCurrentFormId(data[data.length - 1]?.id);
           } else {
             setHasExistingForm(false);
             handleNewForm(setCurrentFormId, goToCompanyInfoStep);

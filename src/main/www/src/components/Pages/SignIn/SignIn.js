@@ -86,7 +86,7 @@ class SignIn extends React.Component {
       fetch(api_prefix() + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
-          console.log('data: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
+          console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
           this.context.setCurrentUser(data);
           this.setState({ needLoading: false });
         })

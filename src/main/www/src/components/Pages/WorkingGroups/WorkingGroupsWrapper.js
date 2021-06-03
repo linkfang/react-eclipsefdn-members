@@ -108,7 +108,6 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
 
   useEffect(() => {
     if (isStartNewForm) {
-      console.log('formik.values: ', formik.values);
       if (furthestPage.index > 1 && !formik.values.workingGroups[0]?.id) {
         // This means user already submitted/finished this page, and comes back from a further page/step
         // so, we need to GET the info user submitted and if user changes anything,
