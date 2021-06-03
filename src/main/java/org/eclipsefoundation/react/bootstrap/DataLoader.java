@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.bootstrap;
 
 import java.time.Instant;
@@ -21,8 +32,8 @@ import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.model.Address;
 import org.eclipsefoundation.react.model.Contact;
 import org.eclipsefoundation.react.model.MembershipForm;
-import org.eclipsefoundation.react.model.Organization;
-import org.eclipsefoundation.react.model.WorkingGroup;
+import org.eclipsefoundation.react.model.FormOrganization;
+import org.eclipsefoundation.react.model.FormWorkingGroup;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,11 +91,11 @@ public class DataLoader {
             // batch add the entities
             forms = dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), forms);
             LOGGER.debug("Created {} forms", forms.size());
-            List<Organization> organizations = new ArrayList<>(forms.size());
+            List<FormOrganization> organizations = new ArrayList<>(forms.size());
             List<Contact> contacts = new ArrayList<>(forms.size() * ContactTypes.values().length);
-            List<WorkingGroup> wgs = new ArrayList<>();
+            List<FormWorkingGroup> wgs = new ArrayList<>();
             for (MembershipForm mf : forms) {
-                Organization o = new Organization();
+                FormOrganization o = new FormOrganization();
                 o.setForm(mf);
                 o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
                 o.setTwitterHandle(RandomStringUtils.randomAlphabetic(4, 10));
@@ -94,7 +105,7 @@ public class DataLoader {
                 a.setPostalCode(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setProvinceState(RandomStringUtils.randomAlphabetic(2));
                 a.setStreet(RandomStringUtils.randomAlphabetic(4, 10));
-                a.setOrganizationID(o.getId());
+                a.setOrganization(o);
                 o.setAddress(a);
                 organizations.add(o);
                 for (int j = 0; j < ContactTypes.values().length; j++) {
@@ -113,7 +124,7 @@ public class DataLoader {
                 }
                 // randomly create WG entries
                 while (Math.random() > 0.5) {
-                    WorkingGroup wg = new WorkingGroup();
+                    FormWorkingGroup wg = new FormWorkingGroup();
                     wg.setWorkingGroupID(config.getWorkingGroups().get(r.nextInt(config.getWorkingGroups().size())));
                     wg.setParticipationLevel(
                             config.getParticipationLevels().get(r.nextInt(config.getParticipationLevels().size())));
@@ -125,9 +136,9 @@ public class DataLoader {
                     wgs.add(wg);
                 }
             }
-            organizations = dao.add(new RDBMSQuery<>(wrap, filters.get(Organization.class)), organizations);
+            organizations = dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), organizations);
             contacts = dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), contacts);
-            wgs = dao.add(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class)), wgs);
+            wgs = dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), wgs);
             LOGGER.debug("Created {} contacts", contacts.size());
             LOGGER.debug("Created {} organizations", organizations.size());
             LOGGER.debug("Created {} working groups", wgs.size());

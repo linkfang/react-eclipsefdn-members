@@ -1,245 +1,93 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.model;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
-import org.eclipsefoundation.persistence.dto.BareNode;
-import org.eclipsefoundation.persistence.dto.filter.DtoFilter;
-import org.eclipsefoundation.persistence.model.DtoTable;
-import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
-import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
-import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
-import org.hibernate.annotations.GenericGenerator;
+public class WorkingGroup {
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+    private String documentID;
+    private String name;
+    private List<WorkingGroupParticipationLevel> levels;
 
-/**
- * Represents a prospective Working Group relationship with the current organization (based on the form)
- * 
- * @author Martin Lowe
- */
-@Table
-@Entity
-public class WorkingGroup extends BareNode implements TargetedClone<WorkingGroup> {
-    public static final DtoTable TABLE = new DtoTable(WorkingGroup.class, "wg");
-
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String id;
-    @JsonProperty("working_group")
-    private String workingGroupID;
-    private String participationLevel;
-    private Date effectiveDate;
-
-    // form entity
-    @JsonbTransient
-    @ManyToOne
-    @JoinColumn(name = "form_id", referencedColumnName = "id")
-    private MembershipForm form;
-    @Column(name = "form_id", updatable = false, insertable = false)
-    private String formID;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id")
-    private Contact contact;
-
-    /**
-     * @return the id
-     */
-    @Override
-    public String getId() {
-        return id;
+    public WorkingGroup(String documentID, String name, List<WorkingGroupParticipationLevel> levels) {
+        this.documentID = documentID;
+        this.name = name;
+        this.levels = levels;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
+
+    public WorkingGroup() {
     }
 
-    /**
-     * @return the form
-     */
-    public MembershipForm getForm() {
-        return form;
+    public WorkingGroup(String documentID, String name) {
+        this.documentID = documentID;
+        this.name = name;
     }
 
-    /**
-     * @param form the form to set
-     */
-    public void setForm(MembershipForm form) {
-        this.form = form;
+    public String getDocumentID() {
+        return this.documentID;
     }
 
-    /**
-     * @return the formID
-     */
-    public String getFormID() {
-        return formID;
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
     }
 
-    /**
-     * @param formID the formID to set
-     */
-    public void setFormID(String formID) {
-        this.formID = formID;
+    public String getName() {
+        return this.name;
     }
 
-    /**
-     * @return the workingGroupID
-     */
-    public String getWorkingGroupID() {
-        return workingGroupID;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    /**
-     * @param workingGroupID the workingGroupID to set
-     */
-    public void setWorkingGroupID(String workingGroupID) {
-        this.workingGroupID = workingGroupID;
+    public List<WorkingGroupParticipationLevel> getLevels() {
+        return this.levels;
     }
 
-    /**
-     * @return the participationLevel
-     */
-    public String getParticipationLevel() {
-        return participationLevel;
+    public void setLevels(List<WorkingGroupParticipationLevel> levels) {
+        this.levels = levels;
     }
 
-    /**
-     * @param participationLevel the participationLevel to set
-     */
-    public void setParticipationLevel(String participationLevel) {
-        this.participationLevel = participationLevel;
+    public WorkingGroup documentID(String documentID) {
+        setDocumentID(documentID);
+        return this;
     }
 
-    /**
-     * @return the effectiveDate
-     */
-    public Date getEffectiveDate() {
-        return effectiveDate;
+    public WorkingGroup name(String name) {
+        setName(name);
+        return this;
     }
 
-    /**
-     * @param effectiveDate the effectiveDate to set
-     */
-    public void setEffectiveDate(Date effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    /**
-     * @return the contact
-     */
-    public Contact getContact() {
-        return contact;
-    }
-
-    /**
-     * @param contact the contact to set
-     */
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public WorkingGroup levels(List<WorkingGroupParticipationLevel> levels) {
+        setLevels(levels);
+        return this;
     }
 
     @Override
-    public WorkingGroup cloneTo(WorkingGroup target) {
-        target.setContact(getContact());
-        target.setEffectiveDate(getEffectiveDate());
-        target.setParticipationLevel(getParticipationLevel());
-        target.setWorkingGroupID(getWorkingGroupID());
-        return target;
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof WorkingGroup)) {
+            return false;
+        }
+        WorkingGroup workingGroup = (WorkingGroup) o;
+        return Objects.equals(documentID, workingGroup.documentID) && Objects.equals(name, workingGroup.name);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result
-                + Objects.hash(contact, effectiveDate, form, formID, id, participationLevel, workingGroupID);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        WorkingGroup other = (WorkingGroup) obj;
-        return Objects.equals(contact, other.contact) && Objects.equals(effectiveDate, other.effectiveDate)
-                && Objects.equals(form, other.form) && Objects.equals(formID, other.formID)
-                && Objects.equals(id, other.id) && Objects.equals(participationLevel, other.participationLevel)
-                && Objects.equals(workingGroupID, other.workingGroupID);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("WorkingGroup [id=");
-        builder.append(id);
-        builder.append(", workingGroupID=");
-        builder.append(workingGroupID);
-        builder.append(", participationLevel=");
-        builder.append(participationLevel);
-        builder.append(", effectiveDate=");
-        builder.append(effectiveDate);
-        builder.append(", form=");
-        builder.append(form);
-        builder.append(", formID=");
-        builder.append(formID);
-        builder.append(", contact=");
-        builder.append(contact);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    @Singleton
-    public static class WorkingGroupFilter implements DtoFilter<WorkingGroup> {
-        @Inject
-        ParameterizedSQLStatementBuilder builder;
-
-        @Override
-        public ParameterizedSQLStatement getFilters(MultivaluedMap<String, String> params, boolean isRoot) {
-            ParameterizedSQLStatement stmt = builder.build(TABLE);
-            if (isRoot) {
-                // ID check
-                String id = params.getFirst(DefaultUrlParameterNames.ID.getName());
-                if (id != null) {
-                    stmt.addClause(
-                            new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".id = ?", new Object[] { id }));
-                }
-            }
-            // user ID check
-            String formId = params.getFirst(MembershipFormAPIParameterNames.FORM_ID.getName());
-            if (formId != null) {
-                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".form.id = ?",
-                        new Object[] { formId }));
-            }
-            return stmt;
-        }
-
-        @Override
-        public Class<WorkingGroup> getType() {
-            return WorkingGroup.class;
-        }
+        return Objects.hash(documentID, name);
     }
 }

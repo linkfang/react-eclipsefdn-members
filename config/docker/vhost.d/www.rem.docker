@@ -13,3 +13,11 @@ location /userinfo {
 location /logout {
   proxy_pass http://api:8090/logout;
 }
+
+location /working_groups {
+  proxy_pass http://api:8090/working_groups;
+}
+
+location /organizations {
+  proxy_pass http://api:8090/organizations;
+}
