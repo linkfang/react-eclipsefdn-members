@@ -280,13 +280,15 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
+  const theDate = eachWorkingGroupData?.effectiveDate
+    ? new Date(eachWorkingGroupData?.effectiveDate)
+    : new Date();
+
   return {
     id: eachWorkingGroupData?.id,
     working_group_id: eachWorkingGroupData?.workingGroup.value,
-    participation_level: eachWorkingGroupData?.participationLevel.value,
-    effective_date: (eachWorkingGroupData?.effectiveDate)
-      .toISOString()
-      .replace(/.\d+Z$/g, 'Z'),
+    participation_level: eachWorkingGroupData?.participationLevel,
+    effective_date: theDate.toISOString().replace(/.\d+Z$/g, 'Z'),
     contact: {
       ...wg_contact,
     },
@@ -306,7 +308,6 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
-  fetchMethod
 ) {
   switch (step) {
     case 1:
@@ -314,7 +315,6 @@ export async function executeSendDataByStep(
         formId,
         end_point.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        fetchMethod
       );
       sendData(
         formId,
@@ -324,7 +324,6 @@ export async function executeSendDataByStep(
           contact_type.COMPANY,
           formId
         ),
-        fetchMethod
       );
       sendData(
         formId,
@@ -334,7 +333,6 @@ export async function executeSendDataByStep(
           contact_type.MARKETING,
           formId
         ),
-        fetchMethod
       );
       sendData(
         formId,
@@ -344,7 +342,6 @@ export async function executeSendDataByStep(
           contact_type.ACCOUNTING,
           formId
         ),
-        fetchMethod
       );
       break;
 
@@ -357,7 +354,6 @@ export async function executeSendDataByStep(
           formId,
           userId
         ),
-        fetchMethod
       );
       break;
 
@@ -367,7 +363,6 @@ export async function executeSendDataByStep(
           formId,
           end_point.working_groups,
           matchWGFieldsToBackend(item, formId),
-          fetchMethod
         );
       });
       break;
@@ -432,13 +427,12 @@ function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
  *
  * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
  */
-export function sendData(formId, endpoint, dataBody, fetchMethod) {
+export function sendData(formId, endpoint, dataBody) {
   console.log('endpoint: ', endpoint);
   console.log('dataBody: ', dataBody);
   switch (endpoint) {
     case end_point.organizations:
-      if (fetchMethod === FETCH_METHOD.POST) {
-        delete dataBody.id;
+      if (!dataBody.id) {
         callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
       } else {
         callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
@@ -446,8 +440,15 @@ export function sendData(formId, endpoint, dataBody, fetchMethod) {
       break;
 
     case '':
-      if (fetchMethod === FETCH_METHOD.POST) {
-        delete dataBody.id;
+      if (!dataBody.id) {
+        callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
+      } else {
+        callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
+      }
+      break;
+
+    case end_point.working_groups:
+      if (!dataBody.id) {
         callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
       } else {
         callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
@@ -456,7 +457,6 @@ export function sendData(formId, endpoint, dataBody, fetchMethod) {
 
     default:
       if (!dataBody.id) {
-        delete dataBody.id;
         callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
       } else {
         callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);

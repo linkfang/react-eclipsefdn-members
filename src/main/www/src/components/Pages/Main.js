@@ -58,21 +58,7 @@ export default function Main() {
       });
       console.log('updated company info: ', values);
 
-      // check if the furthest page index is greater than current page index
-      // if so, means user comes back from a further page so we need do PUT
-      // if not, means this is the first time the user submits the info, we need do PUT
-      let fetchMethod = 'PUT';
-      if (isStartNewForm) {
-        fetchMethod = furthestPage.index > 1 ? 'PUT' : 'POST';
-      }
-
-      executeSendDataByStep(
-        1,
-        values,
-        currentFormId,
-        currentUser.name,
-        fetchMethod
-      );
+      executeSendDataByStep(1, values, currentFormId, currentUser.name);
 
       goToNextStep(1, '/membership-level');
     },
@@ -87,16 +73,7 @@ export default function Main() {
       setUpdatedFormValues({ ...updatedFormValues, membershipLevel });
       console.log('updated membership level: ', values);
 
-      // fetch method for submitting membership level will always be PUT
-      // because we have to create one first to get the form_id
-      const fetchMethod = 'PUT';
-      executeSendDataByStep(
-        2,
-        values,
-        currentFormId,
-        currentUser.name,
-        fetchMethod
-      );
+      executeSendDataByStep(2, values, currentFormId, currentUser.name);
 
       goToNextStep(2, '/working-groups');
     },
@@ -111,14 +88,7 @@ export default function Main() {
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
       console.log('updated working groups: ', values);
 
-      const fetchMethod = furthestPage.index > 3 ? 'PUT' : 'POST';
-      executeSendDataByStep(
-        3,
-        values,
-        currentFormId,
-        currentUser.name,
-        fetchMethod
-      );
+      executeSendDataByStep(3, values, currentFormId, currentUser.name);
 
       goToNextStep(3, '/signing-authority');
     },

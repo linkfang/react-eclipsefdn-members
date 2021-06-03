@@ -55,7 +55,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
 
   const removeWorkingGroupCall = (arrayHelpersRemove, index, id) => {
     // Call API to remove
-    console.log('you called DELETE method with id: ' + id);
+    console.log('you called DELETE method with id: ', id);
     deleteData(
       currentFormId,
       end_point.working_groups,
@@ -89,9 +89,12 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                   getOptionLabel={(option) =>
                     option?.label ? option.label : ''
                   }
+                  getOptionSelected={(option, value) =>
+                    option.value === value.value
+                  }
                   fullWidth={true}
                   onChange={(ev, value) => {
-                    // need to clear the participation level when user selects another working group
+                    // this to clear the participation level when user selects another working group
                     formik.setFieldValue(
                       `workingGroups.${index}.participationLevel`,
                       ''
@@ -167,7 +170,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                         removeWorkingGroupCall(
                           arrayHelpers.remove,
                           index,
-                          workingGroupsLabel[index].id
+                          formik.values.workingGroups[index].id
                         )
                       }
                     >

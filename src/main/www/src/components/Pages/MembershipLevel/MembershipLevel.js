@@ -50,8 +50,6 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
     // just for React only testing.
     // let currentFormId = 'form_1';
 
-    setLoading(true);
-
     const detectModeAndFetch = () => {
       let url_prefix_local;
       let url_suffix_local = '';
@@ -127,6 +125,9 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
               options={membership_levels}
               fullWidth={true}
               getOptionLabel={(option) => (option?.label ? option.label : '')}
+              getOptionSelected={(option, value) =>
+                option.value === value.value
+              }
               onChange={(ev, value) => {
                 // this is only for display
                 formik.setFieldValue(

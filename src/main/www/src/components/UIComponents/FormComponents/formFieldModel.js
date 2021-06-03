@@ -63,7 +63,7 @@ export const initialValues = {
   },
 
   // Step 2
-  'membershipLevel-label': '',
+  'membershipLevel-label': { label: '', value: '' },
   membershipLevel: '',
 
   // Step 3: working groups

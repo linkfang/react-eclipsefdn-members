@@ -29,12 +29,12 @@ export const FETCH_HEADER = {
 };
 
 export const membership_levels = [
-  { label: 'Strategic Member', value: 'strategic' },
+  { label: 'Strategic Member', value: 'Strategic Member' },
   {
     label: 'Contributing Member (formerly referred to as Solutions Members)',
-    value: 'contributing',
+    value: 'Contributing Member',
   },
-  { label: 'Associate Member', value: 'associate' },
+  { label: 'Associate Member', value: 'Associate Member' },
 ];
 
 export const PAGE_STEP = [

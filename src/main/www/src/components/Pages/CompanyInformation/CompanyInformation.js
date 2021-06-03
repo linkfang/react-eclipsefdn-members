@@ -112,7 +112,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
   // as long as currentFormId and setFieldValue
   // Function does not change, will not cause re-render again
   useEffect(() => {
-    setLoading(true);
     if (isStartNewForm) {
       if (furthestPage.index > 1 && !formik.values.organizations.id) {
         // This means user already submitted/finished this page, and comes back from a further page/step
@@ -120,7 +119,9 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         // we will use the organization_id from the GET to do the PUT to update the info.
         setLoading(false);
       } else {
-        // This means this is the 1st time the user see this page, no need to do any API call.
+        // This means this is the 1st time the user see this page,
+        // or the user already got the organizations.id
+        // no need to do any API call
         setLoading(false);
       }
     } else {
