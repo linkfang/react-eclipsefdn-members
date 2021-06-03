@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * This is just a pure html component to
  * display after all steps finished and

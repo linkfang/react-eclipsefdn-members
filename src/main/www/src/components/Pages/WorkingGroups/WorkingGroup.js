@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
 import WorkingGroupEffectiveDate from './WorkingGroupEffectiveDate';
@@ -6,13 +6,13 @@ import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
   end_point,
-  FETCH_HEADER,
   WORKING_GROUPS,
   workingGroups as workingGroupsLabel,
 } from '../../../Constants/Constants';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
 import { FieldArray } from 'formik';
+import Loading from '../../UIComponents/Loading/Loading';
 
 /**
  * Wrapper for Working Group Selector,
@@ -49,10 +49,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
-  const [workingGroupListData, setWorkingGroupListData] = useState([]); // the working groups data, all available ones
 
   const removeWorkingGroupCall = (arrayHelpersRemove, index, id) => {
     // Call API to remove
@@ -66,24 +65,9 @@ const WorkingGroup = ({ formik }) => {
     );
   };
 
-  const fetchAvailableWorkingGroups = () => {
-    fetch('workingGroups.json', { headers: FETCH_HEADER })
-      .then((res) => res.json())
-      .then((data) => {
-        let options = data.working_groups.map((item) => ({
-          label: item.name,
-          value: item.id,
-          participation_levels: item.participation_levels,
-        }));
-        setWorkingGroupListData(options);
-      });
-  };
-
-  useEffect(() => {
-    fetchAvailableWorkingGroups();
-  }, []);
-
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <FieldArray
       name={workingGroupsLabel}
       render={(arrayHelpers) => (
@@ -95,32 +79,38 @@ const WorkingGroup = ({ formik }) => {
                   className="h4 fw-600"
                   id={`${formik.values.workingGroups}.${index}.workingGroup`}
                 >
-                  Which working group would you like to join?{' '}
-                  <span className="orange-star">*</span>{' '}
+                  Which working group would you like to join?
+                  <span className="orange-star">*</span>
                 </h2>
+
                 <Autocomplete
                   id={`${workingGroupsLabel}.${index}.workingGroup`}
-                  options={workingGroupListData}
+                  options={fullWorkingGroupList}
                   getOptionLabel={(option) =>
                     option?.label ? option.label : ''
                   }
                   fullWidth={true}
                   onChange={(ev, value) => {
+                    // need to clear the participation level when user selects another working group
+                    formik.setFieldValue(
+                      `workingGroups.${index}.participationLevel`,
+                      ''
+                    );
                     // this is only for display
                     formik.setFieldValue(
                       `${workingGroupsLabel}.${index}.workingGroup-label`,
-                      value ? value : null
+                      value ? value.label : null
                     );
 
                     // this is the data will be actually used
                     formik.setFieldValue(
                       `${workingGroupsLabel}.${index}.workingGroup`,
-                      value ? value.value : null
+                      value ? value : null
                     );
                   }}
                   value={
-                    formik.values.workingGroups[index]['workingGroup-label']
-                      ? formik.values.workingGroups[index]['workingGroup-label']
+                    formik.values.workingGroups[index]['workingGroup']
+                      ? formik.values.workingGroups[index]['workingGroup']
                       : null
                   }
                   renderInput={(params) => {
@@ -147,9 +137,10 @@ const WorkingGroup = ({ formik }) => {
                   <>
                     <WorkingGroupParticipationLevel
                       name={`${workingGroupsLabel}.${index}.participationLevel`}
+                      workingGroupsLabel={workingGroupsLabel}
                       index={index}
-                      workingGroup={workingGroup.workingGroup}
-                      workingGroupListData={workingGroupListData}
+                      workingGroupUserJoined={workingGroup.workingGroup}
+                      fullWorkingGroupList={fullWorkingGroupList}
                       formik={formik}
                     />
                     <WorkingGroupEffectiveDate

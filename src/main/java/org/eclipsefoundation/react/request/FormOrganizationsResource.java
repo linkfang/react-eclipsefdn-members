@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.request;
 
 import java.util.Arrays;
@@ -21,7 +32,7 @@ import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.react.model.Address;
 import org.eclipsefoundation.react.model.MembershipForm;
-import org.eclipsefoundation.react.model.Organization;
+import org.eclipsefoundation.react.model.FormOrganization;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 
@@ -36,7 +47,7 @@ import io.quarkus.security.Authenticated;
 @Path("form/{id}/organizations")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class OrganizationsResource extends AbstractRESTResource {
+public class FormOrganizationsResource extends AbstractRESTResource {
 
     @GET
     public Response getAll(@PathParam("id") String formID,
@@ -47,7 +58,7 @@ public class OrganizationsResource extends AbstractRESTResource {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
         // retrieve the possible cached object
-        List<Organization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(Organization.class), params));
+        List<FormOrganization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), params));
         if (results == null) {
             return Response.serverError().build();
         }
@@ -56,10 +67,10 @@ public class OrganizationsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<Organization> create(@PathParam("id") String formID, Organization org) {
+    public List<FormOrganization> create(@PathParam("id") String formID, FormOrganization org) {
         org.setForm(dao.getReference(formID, MembershipForm.class));
         org.setFormID(formID);
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(Organization.class)), Arrays.asList(org));
+        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org));
     }
 
     @GET
@@ -74,7 +85,7 @@ public class OrganizationsResource extends AbstractRESTResource {
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
 
         // retrieve the possible cached object
-        List<Organization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(Organization.class), params));
+        List<FormOrganization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), params));
         if (results == null) {
             return Response.serverError().build();
         }
@@ -84,19 +95,22 @@ public class OrganizationsResource extends AbstractRESTResource {
 
     @PUT
     @Path("{orgID}")
-    public List<Organization> update(@PathParam("id") String formID, @PathParam("orgID") String id, Organization org) {
+    public List<FormOrganization> update(@PathParam("id") String formID, @PathParam("orgID") String id,
+            FormOrganization org) {
         // need to fetch ref to use attached entity
-        Organization ref = dao.getReference(id, Organization.class);
+        FormOrganization ref = dao.getReference(id, FormOrganization.class);
         ref.setFormID(formID);
         ref.setForm(dao.getReference(formID, MembershipForm.class));
-        ref.setLegalName(org.getLegalName());
-        ref.setTwitterHandle(org.getTwitterHandle());
-        // update the nested contact
-        if (ref.getAddress().getId() != null) {
-            // update the address object to get entity ref if set
-            ref.setAddress(org.getAddress().cloneTo(dao.getReference(org.getAddress().getId(), Address.class)));
+        org.cloneTo(ref);
+        // update the nested address
+        if (org.getAddress() != null) {
+            org.getAddress().setOrganization(ref);
+            if (ref.getAddress().getId() != null) {
+                // update the address object to get entity ref if set
+                ref.setAddress(org.getAddress().cloneTo(dao.getReference(org.getAddress().getId(), Address.class)));
+            }
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(Organization.class)), Arrays.asList(ref));
+        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref));
     }
 
     @DELETE
@@ -106,7 +120,7 @@ public class OrganizationsResource extends AbstractRESTResource {
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
 
-        dao.delete(new RDBMSQuery<>(wrap, filters.get(Organization.class), params));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), params));
         return Response.ok().build();
     }
 }

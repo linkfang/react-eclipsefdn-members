@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.request;
 
 import java.util.Arrays;
@@ -21,7 +32,7 @@ import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.react.model.Contact;
 import org.eclipsefoundation.react.model.MembershipForm;
-import org.eclipsefoundation.react.model.WorkingGroup;
+import org.eclipsefoundation.react.model.FormWorkingGroup;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 
@@ -47,7 +58,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
         // retrieve the possible object
-        List<WorkingGroup> results = dao.get(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class), params));
+        List<FormWorkingGroup> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), params));
         if (results == null) {
             return Response.serverError().build();
         }
@@ -56,7 +67,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<WorkingGroup> createWorkingGroup(@PathParam("id") String formID, WorkingGroup wg) {
+    public List<FormWorkingGroup> createWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg) {
         wg.setForm(dao.getReference(formID, MembershipForm.class));
         wg.setFormID(formID);
         // update the nested contact
@@ -70,7 +81,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             wg.getContact().setForm(wg.getForm());
             wg.getContact().setFormID(formID);
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class)), Arrays.asList(wg));
+        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(wg));
     }
 
     @GET
@@ -84,7 +95,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
         params.add(DefaultUrlParameterNames.ID.getName(), wgID);
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
         // retrieve the possible object
-        List<WorkingGroup> results = dao.get(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class), params));
+        List<FormWorkingGroup> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), params));
         if (results == null) {
             return Response.serverError().build();
         }
@@ -94,10 +105,10 @@ public class WorkingGroupsResource extends AbstractRESTResource {
 
     @PUT
     @Path("{wgID}")
-    public List<WorkingGroup> updateWorkingGroup(@PathParam("id") String formID, WorkingGroup wg,
+    public List<FormWorkingGroup> updateWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg,
             @PathParam("wgID") String wgID) {
         // need to fetch ref to use attached entity
-        WorkingGroup ref = wg.cloneTo(dao.getReference(wgID, WorkingGroup.class));
+        FormWorkingGroup ref = wg.cloneTo(dao.getReference(wgID, FormWorkingGroup.class));
         ref.setFormID(formID);
         ref.setForm(dao.getReference(formID, MembershipForm.class));
         // update the nested contact
@@ -111,7 +122,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             ref.getContact().setForm(ref.getForm());
             ref.getContact().setFormID(formID);
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class)), Arrays.asList(ref));
+        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(ref));
     }
 
     @DELETE
@@ -121,7 +132,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
 
-        dao.delete(new RDBMSQuery<>(wrap, filters.get(WorkingGroup.class), params));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), params));
         return Response.ok().build();
     }
 }

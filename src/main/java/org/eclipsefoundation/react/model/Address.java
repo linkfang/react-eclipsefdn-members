@@ -1,13 +1,26 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.model;
 
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -35,8 +48,10 @@ public class Address extends BareNode implements TargetedClone<Address> {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @JoinColumn(table = "Organization", referencedColumnName = "id")
-    private String organizationID;
+    @JsonbTransient
+    @OneToOne
+    @JoinColumn(name = "organizationID", referencedColumnName = "id")
+    private FormOrganization organization;
 
     private String street;
     private String city;
@@ -55,14 +70,14 @@ public class Address extends BareNode implements TargetedClone<Address> {
         this.id = id;
     }
 
-    /** @return the organizationID */
-    public String getOrganizationID() {
-        return organizationID;
+    /** @return the organization */
+    public FormOrganization getOrganization() {
+        return this.organization;
     }
 
-    /** @param organizationID the organizationID to set */
-    public void setOrganizationID(String organizationID) {
-        this.organizationID = organizationID;
+    /** @param org the organization to set */
+    public void setOrganization(FormOrganization org) {
+        this.organization = org;
     }
 
     /** @return the steet */
@@ -119,7 +134,6 @@ public class Address extends BareNode implements TargetedClone<Address> {
     public Address cloneTo(Address target) {
         target.setCity(getCity());
         target.setCountry(getCountry());
-        target.setOrganizationID(getOrganizationID());
         target.setPostalCode(getPostalCode());
         target.setProvinceState(getProvinceState());
         target.setStreet(getStreet());
@@ -128,7 +142,7 @@ public class Address extends BareNode implements TargetedClone<Address> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(city, country, id, organizationID, postalCode, provinceState, street);
+        return Objects.hash(city, country, id, postalCode, provinceState, street);
     }
 
     @Override
@@ -141,9 +155,8 @@ public class Address extends BareNode implements TargetedClone<Address> {
             return false;
         Address other = (Address) obj;
         return Objects.equals(city, other.city) && Objects.equals(country, other.country)
-                && Objects.equals(id, other.id) && Objects.equals(organizationID, other.organizationID)
-                && Objects.equals(postalCode, other.postalCode) && Objects.equals(provinceState, other.provinceState)
-                && Objects.equals(street, other.street);
+                && Objects.equals(id, other.id) && Objects.equals(postalCode, other.postalCode)
+                && Objects.equals(provinceState, other.provinceState) && Objects.equals(street, other.street);
     }
 
     /**

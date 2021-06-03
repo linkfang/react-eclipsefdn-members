@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: '3.0.0'
 info:
    version: 1.0.0
    title: Membership portal
@@ -13,6 +13,10 @@ tags:
    description: Definitions related to membership form data in the database
 -  name: Contacts
    description: Definitions related to membership form designated contacts
+-  name: Form Organizations
+   description: Definitions related to membership form organizations
+-  name: Form Working Groups
+   description: Definitions related to membership form working group targets
 -  name: Organizations
    description: Definitions related to membership form organizations
 -  name: Working Groups
@@ -219,36 +223,36 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       get:
          tags:
-         - Organizations
-         summary: Organizations list
+         - Form Organizations
+         summary: Form Organizations list
          description: Returns a list of tracked organizationsfor the form
          responses:
             200:
-               description: Success
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Organizations'
+              description: Success
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/FormOrganizations'
             500:
                description: Error while retrieving data
       post:
          tags:
-         - Organizations
-         summary: Organizations create
+         - Form Organizations
+         summary: Form Organizations create
          description: Using the passed organization object, a new organization object is saved to the dataset.
          requestBody:
             description: The organization to be updated or inserted into the data set.
             content:
                application/json:
                   schema:
-                     $ref: '#/components/schemas/OrganizationPush'
+                     $ref: '#/components/schemas/FormOrganizationPush'
          responses:
             200:
                description: Success
                content:
                   application/json:
                      schema:
-                        $ref: '#/components/schemas/Organization'
+                        $ref: '#/components/schemas/FormOrganization'
                
             403:
                description: Unauthorized
@@ -268,28 +272,28 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       put:
          tags:
-         - Organizations
-         summary: Organizations update
+         - Form Organizations
+         summary: Form Organizations update
          description: Using the passed organization object, updates or inserts are made to save the data.
          requestBody:
             description: The organization to be updated or inserted into the data set.
             content:
                application/json:
                   schema:
-                     $ref: '#/components/schemas/OrganizationPush'
+                     $ref: '#/components/schemas/FormOrganizationPush'
          responses:
             200:
                description: Success
                content:
                   application/json:
                      schema:
-                        $ref: '#/components/schemas/Organization'
+                        $ref: '#/components/schemas/FormOrganization'
             403:
                description: Unauthorized
       delete:
          tags:
-         - Organizations
-         summary: Organizations delete
+         - Form Organizations
+         summary: Form Organizations delete
          description: Remove an organization for the form given a form ID
          responses:
             204:
@@ -306,38 +310,38 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       get:
          tags:
-         - Working Groups
-         summary: Working Groups list
-         description: Returns a list of tracked Working Groups for membership form
+         - Form Working Groups
+         summary: Form Working Groups list
+         description: Returns a list of tracked Form Working Groups for membership form
          responses:
             200:
                description: Success
                content:
                   application/json:
                      schema:
-                        $ref: '#/components/schemas/WorkingGroups'
+                        $ref: '#/components/schemas/FormWorkingGroups'
             403:
                description: Unauthorized
             500:
                description: Error while retrieving data
       post:
          tags:
-         - Working Groups
-         summary: Working Groups create
-         description: Using the passed Working Groups object, creates a new object in the dataset.
+         - Form Working Groups
+         summary: Form Working Groups create
+         description: Using the passed Form Working Groups object, creates a new object in the dataset.
          requestBody:
             description: The working group to be updated or inserted into the data set.
             content:
                application/json:
                   schema:
-                     $ref: '#/components/schemas/WorkingGroupPush'
+                     $ref: '#/components/schemas/FormWorkingGroupPush'
          responses:
             200:
                description: Success
                content:
                   application/json:
                      schema:
-                        $ref: '#/components/schemas/WorkingGroup'
+                        $ref: '#/components/schemas/FormWorkingGroup'
             403:
                description: Unauthorized
    /form/{id}/working_groups/{workingGroupID}:
@@ -356,6 +360,112 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       get:
          tags:
+         - Form Working Groups
+         summary: Form Working Group
+         description: Returns a working group entry that has a matching ID 
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/FormWorkingGroup'
+            403:
+               description: Unauthorized
+            500:
+               description: Error while retrieving data
+      put:
+         tags:
+         - Form Working Groups
+         summary: Form Working Groups update
+         description: Using the passed Form Working Groups object, updates or inserts are made to save the data.
+         requestBody:
+            description: The working group to be updated or inserted into the data set.
+            content:
+               application/json:
+                  schema:
+                     $ref: '#/components/schemas/FormWorkingGroupPush'
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/FormWorkingGroup'
+            403:
+               description: Unauthorized
+      delete:
+         tags:
+         - Form Working Groups
+         summary: Form Working Groups delete
+         description: Remove a working group form entry with the given ID
+         responses:
+            204:
+               description: Success
+            403:
+               description: Unauthorized
+   /organizations:
+      get:
+         tags:
+         - Organizations
+         summary: Organizations List
+         description: Returns a list of organizations from the Eclipse API
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Organizations'
+            500:
+               description: Error while retrieving data
+   /organizations/{organizationID}:
+      parameters:
+      -  name: organizationID
+         in: path
+         description: The organization ID for the organization to retrieve
+         required: true
+         schema:
+            type: number
+      get:
+         tags:
+         - Organizations
+         summary: Organization
+         description: Returns a working group entry that has a matching ID 
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Organization'
+            500:
+               description: Error while retrieving data
+   /working_groups:
+      get:
+         tags:
+         - Working Groups
+         summary: Working Group List
+         description: Returns a working group entry that has a matching ID 
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/WorkingGroups'
+            500:
+               description: Error while retrieving data
+   /working_groups/{documentID}:
+      parameters:
+      -  name: documentID
+         in: path
+         description: The document ID for the working group to retrieve
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      get:
+         tags:
          - Working Groups
          summary: Working Group
          description: Returns a working group entry that has a matching ID 
@@ -366,41 +476,8 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/WorkingGroup'
-            403:
-               description: Unauthorized
             500:
                description: Error while retrieving data
-      put:
-         tags:
-         - Working Groups
-         summary: Working Groups update
-         description: Using the passed Working Groups object, updates or inserts are made to save the data.
-         requestBody:
-            description: The working group to be updated or inserted into the data set.
-            content:
-               application/json:
-                  schema:
-                     $ref: '#/components/schemas/WorkingGroupPush'
-         responses:
-            200:
-               description: Success
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/WorkingGroup'
-            403:
-               description: Unauthorized
-      delete:
-         tags:
-         - Working Groups
-         summary: Working Groups delete
-         description: Remove a working group form entry with the given ID
-         responses:
-            204:
-               description: Success
-            403:
-               description: Unauthorized
-
 components:
    schemas:
       ObjectID:
@@ -438,10 +515,7 @@ components:
                type: string
                description: Job title of the contact
             type:
-               type: array
-               items:
-                  type: string
-                  description: The type of contact that is being stored
+               $ref: '#/components/schemas/ContactType'
       ContactPush:
         type: object
         properties:
@@ -458,17 +532,20 @@ components:
                type: string
                description: Job title of the contact
             type:
-               type: array
-               items:
-                  type: string
-                  description: The type of contact that is being stored
+               $ref: '#/components/schemas/ContactType'
 
-      Organizations:
+      ContactType:
+         type: string
+         description: The type of contact that is being stored
+         enum: [COMPANY, WORKING_GROUP, MARKETING, ACCOUNTING]
+
+
+      FormOrganizations:
          type: array
          items:
-            $ref: '#/components/schemas/Organization'
+            $ref: '#/components/schemas/FormOrganization'
       
-      Organization:
+      FormOrganization:
          type: object
          properties:
             id:
@@ -499,7 +576,7 @@ components:
                   postal_code:
                      type: string
                      description: The postal code of the physical address of the organization
-      OrganizationPush:
+      FormOrganizationPush:
          type: object
          properties:
             legal_name:
@@ -554,12 +631,11 @@ components:
             signing_authority:
                type: boolean
                description: Whether the currently submitting user has signing authority for membership contracts.
-
-      WorkingGroups:
+      FormWorkingGroups:
          type: array
          items:
-            $ref: '#/components/schemas/WorkingGroup'
-      WorkingGroup:
+            $ref: '#/components/schemas/FormWorkingGroup'
+      FormWorkingGroup:
          type: object
          properties:
             id:
@@ -574,7 +650,7 @@ components:
                $ref: '#/components/schemas/DateTime'
             contact:
                $ref: '#/components/schemas/Contact'
-      WorkingGroupPush:
+      FormWorkingGroupPush:
          type: object
          properties:
             working_group:
@@ -587,4 +663,81 @@ components:
                $ref: '#/components/schemas/DateTime'
             contact:
                $ref: '#/components/schemas/Contact'
-         
+      Organizations:
+         type: array
+         items:
+            $ref: '#/components/schemas/Organization'
+      Organization:
+         type: object
+         properties:
+            id:
+               $ref: '#/components/schemas/ObjectID'
+            name:
+               type: string
+            member_level:
+               type: object
+               properties:
+                  level:
+                     type: string
+                  description:
+                     type: string
+            description:
+               type: object
+               properties:
+                  short:
+                     type: string
+                  full:
+                     type: string
+            website:
+               type: string
+            logos:
+               type: object
+               properties:
+                  small:
+                     type: string
+                     description: URL of compressed for web logo 
+                  full:
+                     type: string
+                     description: URL of full resolution logo
+            wgpa:
+               type: array
+               items:
+                  type: object
+                  properties:
+                     document_id:
+                        $ref: '#/components/schemas/ObjectID'
+                     level:
+                        type: string
+                     working_group:
+                        type: string
+                     description:
+                        type: string
+      WorkingGroups:
+         type: array
+         items:
+            $ref: '#/components/schemas/WorkingGroup'
+      WorkingGroup:
+         type: object
+         properties:
+            documentID:
+               $ref: '#/components/schemas/ObjectID'
+            name:
+               type: string
+            levels:
+               type: object
+               description: The ID of the working group relationship to be formed
+               properties:
+                  document_id:
+                     $ref: '#/components/schemas/ObjectID'
+                  level:
+                     type: string
+                  price:
+                     type: string
+                  revenue_top:
+                     type: number
+                  revenue_bottom:
+                     type: number
+                  company_size:
+                     type: number
+
+

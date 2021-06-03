@@ -85,7 +85,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
             // Call the the function to map the retrived
             // organization backend data to fit frontend
             let tempOrg = matchCompanyFields(organizations[0]);
-            console.log(tempOrg);
             // Call the setFieldValue of Formik, to set
             // organization field with the mapped data,
             // if nested, it will automatically map the

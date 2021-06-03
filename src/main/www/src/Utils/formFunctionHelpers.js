@@ -178,12 +178,8 @@ export function matchWorkingGroupFields(
           value: item?.working_group_id,
           participation_levels: wg?.participation_levels,
         } || '',
-      participationLevel:
-        {
-          label: item?.participation_level,
-          value: item?.participation_level,
-        } || '',
-      effectiveDate: new Date(item?.effective_date) || '',
+      participationLevel: item?.participation_level || '',
+      effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
         firstName: item?.contact.first_name || '',
         lastName: item?.contact.last_name || '',

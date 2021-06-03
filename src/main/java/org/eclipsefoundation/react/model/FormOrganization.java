@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.model;
 
 import java.util.Objects;
@@ -27,8 +38,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Table
 @Entity
-public class Organization extends BareNode implements TargetedClone<Organization> {
-    public static final DtoTable TABLE = new DtoTable(Organization.class, "o");
+public class FormOrganization extends BareNode implements TargetedClone<FormOrganization> {
+    public static final DtoTable TABLE = new DtoTable(FormOrganization.class, "o");
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -119,7 +130,7 @@ public class Organization extends BareNode implements TargetedClone<Organization
     }
 
     @Override
-    public Organization cloneTo(Organization target) {
+    public FormOrganization cloneTo(FormOrganization target) {
         target.setAddress(getAddress());
         target.setLegalName(getLegalName());
         target.setTwitterHandle(getTwitterHandle());
@@ -142,7 +153,7 @@ public class Organization extends BareNode implements TargetedClone<Organization
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Organization other = (Organization) obj;
+        FormOrganization other = (FormOrganization) obj;
         return Objects.equals(address, other.address) && Objects.equals(form, other.form)
                 && Objects.equals(formID, other.formID) && Objects.equals(id, other.id)
                 && Objects.equals(legalName, other.legalName) && Objects.equals(twitterHandle, other.twitterHandle);
@@ -168,7 +179,7 @@ public class Organization extends BareNode implements TargetedClone<Organization
     }
 
     @Singleton
-    public static class OrganizationFilter implements DtoFilter<Organization> {
+    public static class FormOrganizationFilter implements DtoFilter<FormOrganization> {
         @Inject
         ParameterizedSQLStatementBuilder builder;
 
@@ -193,8 +204,8 @@ public class Organization extends BareNode implements TargetedClone<Organization
         }
 
         @Override
-        public Class<Organization> getType() {
-            return Organization.class;
+        public Class<FormOrganization> getType() {
+            return FormOrganization.class;
         }
     }
 }

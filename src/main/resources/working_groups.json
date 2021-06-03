@@ -1,0 +1,75 @@
+{
+    "workingGroups": [
+        {
+            "documentID": "1",
+            "name": "Internet of Things - IoT",
+            "levels": [
+                {
+                    "documentID": "1",
+                    "level": "Strategic Member",
+                    "price": "$50,000",
+                    "revenue": "1000000000"
+                },
+                {
+                    "documentID": "1",
+                    "level": "Participant Member",
+                    "price": "0"
+                },
+                {
+                    "documentID": "1",
+                    "level": "Guest Member",
+                    "price": "0"
+                }
+            ]
+        },
+        {
+            "documentID": "2",
+            "name": "AsciiDoc",
+            "levels": [
+                {
+                    "documentID": "2",
+                    "level": "Partner members",
+                    "price": "$10,000",
+                    "revenueBottom": "1000000001"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Partner members",
+                    "price": "$8,000",
+                    "revenueTop": "1000000000",
+                    "revenueBottom": "100000001"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Partner members",
+                    "price": "$6,000",
+                    "revenueTop": "100000000",
+                    "revenueBottom": "10000001"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Partner members",
+                    "price": "$4,000",
+                    "revenueTop": "9999999"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Partner members",
+                    "price": "$1,500",
+                    "revenueTop": "999999",
+                    "companySize": "10"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Committer members",
+                    "price": "0"
+                },
+                {
+                    "documentID": "2",
+                    "level": "Guest members",
+                    "price": "0"
+                }
+            ]
+        }
+    ]
+}
