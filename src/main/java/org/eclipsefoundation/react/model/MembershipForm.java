@@ -43,6 +43,10 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     private String membershipLevel;
     private boolean signingAuthority;
+    private String purchaseOrderRequired;
+    private String vatNumber;
+    private String registrationCountry;
+
 
     /** @return the id */
     @Override
@@ -87,11 +91,38 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         this.signingAuthority = signingAuthority;
     }
 
+    public String getPurchaseOrderRequired() {
+        return this.purchaseOrderRequired;
+    }
+
+    public void setPurchaseOrderRequired(String purchaseOrderRequired) {
+        this.purchaseOrderRequired = purchaseOrderRequired;
+    }
+
+    public String getVatNumber() {
+        return this.vatNumber;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
+    public String getRegistrationCountry() {
+        return this.registrationCountry;
+    }
+
+    public void setRegistrationCountry(String registrationCountry) {
+        this.registrationCountry = registrationCountry;
+    }
+
     @Override
     public MembershipForm cloneTo(MembershipForm target) {
         target.setUserID(getUserID());
         target.setMembershipLevel(getMembershipLevel());
         target.setSigningAuthority(isSigningAuthority());
+        target.setPurchaseOrderRequired(getPurchaseOrderRequired());
+        target.setRegistrationCountry(getRegistrationCountry());
+        target.setVatNumber(getVatNumber());
         return target;
     }
 
@@ -99,7 +130,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID);
+        result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber, 
+            registrationCountry, purchaseOrderRequired);
         return result;
     }
 
@@ -113,7 +145,9 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
             return false;
         MembershipForm other = (MembershipForm) obj;
         return Objects.equals(id, other.id) && Objects.equals(membershipLevel, other.membershipLevel)
-                && signingAuthority == other.signingAuthority && Objects.equals(userID, other.userID);
+                && signingAuthority == other.signingAuthority && Objects.equals(userID, other.userID)
+                && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(registrationCountry, 
+                other.registrationCountry) && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired);
     }
 
     @Override
@@ -127,6 +161,12 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         builder.append(membershipLevel);
         builder.append(", signingAuthority=");
         builder.append(signingAuthority);
+        builder.append(", purchaseOrderRequired=");
+        builder.append(purchaseOrderRequired);
+        builder.append(", registrationCountry=");
+        builder.append(registrationCountry);
+        builder.append(", vatNumber=");
+        builder.append(vatNumber);
         builder.append("]");
         return builder.toString();
     }

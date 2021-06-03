@@ -620,6 +620,16 @@ components:
             signing_authority:
                type: boolean
                description: Whether the currently submitting user has signing authority for membership contracts.
+            purchase_order_required:
+               type: string
+               description: Indicator for whether a purchase order is required, either yes, no, or not applicable.
+               enum: [yes, no, na]
+            vat_number:
+               type: string
+               description: The EU VAT registration number, if applicable
+            registration_country:
+               type: string
+               description: The EU country the organization is registered under for VAT.
             updated_date:
                $ref: '#/components/schemas/DateTime'
       MembershipFormPush:
@@ -631,6 +641,18 @@ components:
             signing_authority:
                type: boolean
                description: Whether the currently submitting user has signing authority for membership contracts.
+            purchase_order_required:
+               type: string
+               description: Indicator for whether a purchase order is required, either yes, no, or not applicable.
+               enum: [yes, no, na]
+            vat_number:
+               type: string
+               description: The EU VAT registration number, if applicable
+            registration_country:
+               type: string
+               description: The EU country the organization is registered under for VAT.
+
+
       FormWorkingGroups:
          type: array
          items:
