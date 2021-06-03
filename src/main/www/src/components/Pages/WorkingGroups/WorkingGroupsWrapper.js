@@ -37,77 +37,74 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
 
-  // Fetch the full availabe working group list that user can join
-  const fetchAvailableFullWorkingGroupList = () => {
-    fetch('workingGroups.json', { headers: FETCH_HEADER })
-      .then((res) => res.json())
-      .then((data) => {
-        let options = data.working_groups.map((item) => ({
-          label: item.name,
-          value: item.id,
-          participation_levels: item.participation_levels,
-        }));
-        setFullWorkingGroupList(options);
-      });
-  };
-
-  // Fetch the working groups user has joined
-  const fetchWorkingGroupsUserJoined = () => {
-    // All pre-process: if running without server,
-    // use fake json data; if running with API, use API
-
-    let url_prefix_local;
-    let url_suffix_local = '';
-    if (getCurrentMode() === MODE_REACT_ONLY) {
-      url_prefix_local = 'membership_data';
-      url_suffix_local = '.json';
-    }
-
-    if (getCurrentMode() === MODE_REACT_API) {
-      url_prefix_local = api_prefix_form;
-    }
-
-    // If the current form exsits, and it is not creating a new form
-    if (currentFormId && currentFormId !== newForm_tempId) {
-      fetch(
-        url_prefix_local +
-          `/${currentFormId}/` +
-          end_point.working_groups +
-          url_suffix_local,
-        { headers: FETCH_HEADER }
-      )
-        .then((resp) => resp.json())
-        .then((data) => {
-          if (data.length) {
-            // matchWorkingGroupFields(): Call the the function to map
-            // the retrived working groups backend data to fit frontend, and
-            // setFieldValue(): Prefill Data --> Call the setFieldValue
-            // of Formik, to set workingGroups field with the mapped data
-            const theGroupsUserJoined = matchWorkingGroupFields(
-              data,
-              fullWorkingGroupList
-            );
-            setWorkingGroupsUserJoined(theGroupsUserJoined);
-            formik.setFieldValue('workingGroups', theGroupsUserJoined);
-          }
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
-  };
-
   // Fetch data only once and prefill data, as long as
   // fetchWorkingGroupsData Function does not change,
   // will not cause re-render again
   useEffect(() => {
-    // Fetch full availabe working group list
+    // Fetch the full availabe working group list that user can join
+    const fetchAvailableFullWorkingGroupList = () => {
+      fetch('workingGroups.json', { headers: FETCH_HEADER })
+        .then((res) => res.json())
+        .then((data) => {
+          let options = data.working_groups.map((item) => ({
+            label: item.name,
+            value: item.id,
+            participation_levels: item.participation_levels,
+          }));
+          setFullWorkingGroupList(options);
+        });
+    };
+
     fetchAvailableFullWorkingGroupList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // console.log('use effect....', formik.values);
+    // Fetch the working groups user has joined
+    const fetchWorkingGroupsUserJoined = () => {
+      // All pre-process: if running without server,
+      // use fake json data; if running with API, use API
+
+      let url_prefix_local;
+      let url_suffix_local = '';
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        url_suffix_local = '.json';
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = api_prefix_form;
+      }
+
+      // If the current form exsits, and it is not creating a new form
+      if (currentFormId && currentFormId !== newForm_tempId) {
+        fetch(
+          url_prefix_local +
+            `/${currentFormId}/` +
+            end_point.working_groups +
+            url_suffix_local,
+          { headers: FETCH_HEADER }
+        )
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data.length) {
+              // matchWorkingGroupFields(): Call the the function to map
+              // the retrived working groups backend data to fit frontend, and
+              // setFieldValue(): Prefill Data --> Call the setFieldValue
+              // of Formik, to set workingGroups field with the mapped data
+              const theGroupsUserJoined = matchWorkingGroupFields(
+                data,
+                fullWorkingGroupList
+              );
+              setWorkingGroupsUserJoined(theGroupsUserJoined);
+              formik.setFieldValue('workingGroups', theGroupsUserJoined);
+            }
+            setIsLoading(false);
+          });
+      } else {
+        setIsLoading(false);
+      }
+    };
 
     if (isStartNewForm) {
       if (furthestPage.index > 3 && !formik.values.workingGroups[0]?.id) {

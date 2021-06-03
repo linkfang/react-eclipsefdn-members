@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
 import {
   COMPANY_INFORMATION,
-  SIGNING_AUTHORITY,
   PAGE_STEP,
 } from '../../Constants/Constants';
 import {
