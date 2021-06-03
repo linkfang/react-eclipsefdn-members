@@ -303,18 +303,13 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(
-  step,
-  formData,
-  formId,
-  userId,
-) {
+export async function executeSendDataByStep(step, formData, formId, userId) {
   switch (step) {
     case 1:
       sendData(
         formId,
         end_point.organizations,
-        matchCompanyFieldsToBackend(formData.organization, formId),
+        matchCompanyFieldsToBackend(formData.organization, formId)
       );
       sendData(
         formId,
@@ -323,7 +318,7 @@ export async function executeSendDataByStep(
           formData.representative.company,
           contact_type.COMPANY,
           formId
-        ),
+        )
       );
       sendData(
         formId,
@@ -332,7 +327,7 @@ export async function executeSendDataByStep(
           formData.representative.marketing,
           contact_type.MARKETING,
           formId
-        ),
+        )
       );
       sendData(
         formId,
@@ -341,7 +336,7 @@ export async function executeSendDataByStep(
           formData.representative.accounting,
           contact_type.ACCOUNTING,
           formId
-        ),
+        )
       );
       break;
 
@@ -353,7 +348,7 @@ export async function executeSendDataByStep(
           formData.membershipLevel,
           formId,
           userId
-        ),
+        )
       );
       break;
 
@@ -362,7 +357,7 @@ export async function executeSendDataByStep(
         sendData(
           formId,
           end_point.working_groups,
-          matchWGFieldsToBackend(item, formId),
+          matchWGFieldsToBackend(item, formId)
         );
       });
       break;

@@ -80,7 +80,7 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
               );
               formik.setFieldValue(
                 'membershipLevel',
-                tempMembershipLevel.label
+                tempMembershipLevel.value
               );
               formik.setFieldValue(
                 'membershipLevel-label',
