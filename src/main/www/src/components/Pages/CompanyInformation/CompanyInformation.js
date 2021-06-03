@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
   matchCompanyFields,
@@ -87,7 +87,6 @@ const CompanyInformation = ({ formik }) => {
             // Call the the function to map the retrived
             // organization backend data to fit frontend
             let tempOrg = matchCompanyFields(organizations[0]);
-            console.log(tempOrg);
             // Call the setFieldValue of Formik, to set
             // organization field with the mapped data,
             // if nested, it will automatically map the

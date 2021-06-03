@@ -1,4 +1,3 @@
-import React from 'react';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';

@@ -1,4 +1,3 @@
-import React from 'react';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 
@@ -35,17 +34,17 @@ const WorkingGroupRepresentative = ({ name, index, formik }) => {
               }
               error={
                 formik.touched.workingGroups?.[theIndex]
-                  .workingGroupRepresentative[`${el.name}`] &&
+                  ?.workingGroupRepresentative?.[`${el.name}`] &&
                 Boolean(
                   formik.errors.workingGroups?.[theIndex]
-                    .workingGroupRepresentative[`${el.name}`]
+                    ?.workingGroupRepresentative?.[`${el.name}`]
                 )
               }
               helperText={
                 formik.touched.workingGroups?.[theIndex]
-                  .workingGroupRepresentative[`${el.name}`] &&
+                  ?.workingGroupRepresentative?.[`${el.name}`] &&
                 formik.errors.workingGroups?.[theIndex]
-                  .workingGroupRepresentative[`${el.name}`]
+                  ?.workingGroupRepresentative?.[`${el.name}`]
               }
             />
           </div>

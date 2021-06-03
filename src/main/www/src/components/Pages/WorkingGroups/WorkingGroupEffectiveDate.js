@@ -1,11 +1,10 @@
-import React from 'react';
 import DateInput from '../../UIComponents/Inputs/DateInput';
 
 /**
  * Render Effective Date input component (react-datepicker)
  *
  *  - Props:
- *    - name: fieldName (for Effective Date, an example would be: `workingGroups[i].effectiveDate`); 
+ *    - name: fieldName (for Effective Date, an example would be: `workingGroups[i].effectiveDate`);
  *            this is handled by and passed from WorkingGroup component
  */
 const EffectiveDate = ({ name, index, formik }) => {
