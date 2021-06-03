@@ -94,6 +94,8 @@ class SignIn extends React.Component {
           console.log(err);
           this.setState({ needLoading: false });
         });
+    } else {
+      this.setState({ needLoading: false });
     }
   }
 
