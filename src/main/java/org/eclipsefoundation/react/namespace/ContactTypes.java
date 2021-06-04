@@ -7,5 +7,5 @@ package org.eclipsefoundation.react.namespace;
  *
  */
 public enum ContactTypes {
-    WORKING_GROUP, COMPANY, MARKETING, ACCOUNTING;
+    WORKING_GROUP, COMPANY, MARKETING, ACCOUNTING, SIGNING;
 }
