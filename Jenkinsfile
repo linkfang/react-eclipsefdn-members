@@ -52,7 +52,7 @@
             spec:
               containers:
               - name: buildcontainer
-                image: eclipsefdn/eclipsefdn-project-adopters-build-env:latest
+                image: eclipsefdn/stack-build-agent:latest
                 imagePullPolicy: Always
                 command:
                 - cat
