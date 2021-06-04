@@ -1,9 +1,8 @@
 compile-java: validate-spec;
-	mvn clean compile package
+	mvn compile package
 compile-react: install-react;
 	yarn --cwd src/main/www build
 compile: clean compile-react compile-java;
-	docker-compose build
 clean:;
 	mvn clean
 	rm -rf src/main/resources/META-INF/*
@@ -16,4 +15,5 @@ generate-cert:;
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/www.rem.docker.key -out certs/www.rem.docker.crt
 compile-start: compile;
 	docker-compose down
+	docker-compose build
 	docker-compose up
