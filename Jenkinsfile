@@ -31,12 +31,6 @@
       )
     }
 
-    tools {
-        maven 'apache-maven-latest'
-        jdk 'adoptopenjdk-hotspot-jdk11-latest'
-    }
-
-
     options {
       buildDiscarder(logRotator(numToKeepStr: '10'))
     }
