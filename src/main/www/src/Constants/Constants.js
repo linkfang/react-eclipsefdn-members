@@ -5,10 +5,11 @@
  * just hope to use consistent variables for strings.
  */
 export const api_prefix = () => {
-  return  '//' + window.location.host;
-}
+  return '//' + window.location.host;
+};
 
 export const api_prefix_form = api_prefix() + '/form';
+export const api_prefix_wg = api_prefix() + '/';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';

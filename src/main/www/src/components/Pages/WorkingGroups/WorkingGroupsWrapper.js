@@ -7,10 +7,10 @@ import {
   end_point,
   api_prefix_form,
   FETCH_HEADER,
-  newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  api_prefix_wg,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
@@ -43,6 +43,27 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
   useEffect(() => {
     // Fetch the full availabe working group list that user can join
     const fetchAvailableFullWorkingGroupList = () => {
+      let url_prefix_local;
+      let url_suffix_local = '';
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        url_suffix_local = '.json';
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = api_prefix_wg;
+      }
+
+      console.log('url: ', url_prefix_local + end_point.working_groups);
+
+      fetch(url_prefix_local + end_point.working_groups, {
+        headers: FETCH_HEADER,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
+
       fetch('workingGroups.json', { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
@@ -77,7 +98,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
       }
 
       // If the current form exsits, and it is not creating a new form
-      if (currentFormId && currentFormId !== newForm_tempId) {
+      if (currentFormId) {
         fetch(
           url_prefix_local +
             `/${currentFormId}/` +
