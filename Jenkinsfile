@@ -81,7 +81,7 @@ pipeline {
     ENVIRONMENT = sh(
       script: """
         if [ "${env.BRANCH_NAME}" = "master" ]; then
-          printf "production"
+          printf "staging"
         else
           printf "${env.BRANCH_NAME}"
         fi
