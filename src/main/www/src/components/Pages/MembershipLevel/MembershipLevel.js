@@ -1,17 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
-import MembershipContext from '../../../Context/MembershipContext';
-import Loading from '../../UIComponents/Loading/Loading';
-import { mapMembershipLevel } from '../../../Utils/formFunctionHelpers';
-import {
-  api_prefix_form,
-  FETCH_HEADER,
-  membership_levels,
-  newForm_tempId,
-  getCurrentMode,
-  MODE_REACT_ONLY,
-  MODE_REACT_API,
-} from '../../../Constants/Constants';
+import { membership_levels } from '../../../Constants/Constants';
 import { makeStyles, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
@@ -33,82 +22,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MembershipLevel = ({ formik, isStartNewForm }) => {
-  const { currentFormId } = useContext(MembershipContext);
+const MembershipLevel = ({ formik, updatedFormValues }) => {
   const { membershipLevel } = formField;
   const classes = useStyles();
-
-  const [loading, setLoading] = useState(true);
 
   // Fetch data only once and prefill data, as long as
   // currentFormId, membershipLevel.name and setFieldValue
   // Function does not change, will not cause re-render again
+
   useEffect(() => {
-    // All pre-process: if running without server,
-    // use fake json data; if running with API, use API
-
-    // just for React only testing.
-    // let currentFormId = 'form_1';
-    const detectModeAndFetch = () => {
-      let url_prefix_local;
-      let url_suffix_local = '';
-      if (getCurrentMode() === MODE_REACT_ONLY) {
-        url_prefix_local = 'membership_data';
-        url_suffix_local = '/form.json';
-      }
-
-      if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
-      }
-
-      // If the current form exsits, and it is not creating a new form
-      if (currentFormId && currentFormId !== newForm_tempId) {
-        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
-          headers: FETCH_HEADER,
-        })
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data) {
-              // mapMembershipLevel(): Call the the function to map
-              // the retrived membership level backend data to fit frontend, and
-              // setFieldValue(): Prefill Data --> Call the setFieldValue of
-              // Formik, to set membershipLevel field with the mapped data
-              const tempMembershipLevel = mapMembershipLevel(
-                data[0]?.membership_level,
-                membership_levels
-              );
-              formik.setFieldValue(
-                'membershipLevel',
-                tempMembershipLevel.value
-              );
-              formik.setFieldValue(
-                'membershipLevel-label',
-                tempMembershipLevel
-              );
-            }
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
-    };
-
-    if (isStartNewForm) {
-      setLoading(false);
-    } else if (formik.values.membershipLevel === '') {
-      // continue with an existing one, if the value is empty
-      // it means this is the first time the user see this page, need to do GET API call
-      detectModeAndFetch();
-    } else {
-      setLoading(false);
-    }
+    formik.setFieldValue('membershipLevel', updatedFormValues.membershipLevel);
+    formik.setFieldValue(
+      'membershipLevel-label',
+      updatedFormValues['membershipLevel-label']
+    );
+    formik.setFieldValue('purchasingAndVAT', updatedFormValues.purchasingAndVAT);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentFormId]);
-
-  if (loading) {
-    return <Loading />;
-  }
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>

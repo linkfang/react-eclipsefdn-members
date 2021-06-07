@@ -229,15 +229,18 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
 export function matchMembershipLevelFieldsToBackend(
-  membershipLevel,
+  membershipLevelFromData,
   formId,
   userId
 ) {
   return {
     id: formId,
     user_id: userId,
-    membership_level: membershipLevel,
-    signing_authority: true,
+    membership_level: membershipLevelFromData.membershipLevel,
+    signing_authority: true, //what does this do?
+    purchase_order_required: membershipLevelFromData.purchasingAndVAT.purchasingProcess,
+    vat_number: membershipLevelFromData.purchasingAndVAT.vatNumber,
+    registration_country: membershipLevelFromData.purchasingAndVAT.countryOfRegistration,
   };
 }
 
@@ -338,17 +341,18 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formId
         )
       );
+      callSendData(
+        formId,
+        '',
+        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+      );
       break;
 
     case 2:
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(
-          formData.membershipLevel,
-          formId,
-          userId
-        )
+        matchMembershipLevelFieldsToBackend(formData, formId, userId)
       );
       break;
 
@@ -477,6 +481,9 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
+      // purchase_order_required: '',
+      // vat_number: '',
+      // registration_country: '',
     };
 
     fetch(api_prefix_form, {

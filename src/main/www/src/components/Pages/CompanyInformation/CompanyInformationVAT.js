@@ -7,7 +7,7 @@ const { purchasingProcess, vatRegistration } = formField;
 const optionsForpurchasingProcess = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
-  { label: 'Not Applicabele', value: 'na' },
+  { label: 'Not Applicable', value: 'na' },
 ];
 
 export default function CompanyInformationVAT({ formik, useStyles }) {

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
+  mapMembershipLevel,
   matchCompanyFields,
   matchContactFields,
 } from '../../../Utils/formFunctionHelpers';
@@ -14,6 +15,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  membership_levels,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -123,6 +125,58 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       }
     };
 
+    const detectModeAndFetchMembershipLevel = () => {
+      let url_prefix_local;
+      let url_suffix_local = '';
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        url_suffix_local = '/form.json';
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = api_prefix_form;
+      }
+
+      // If the current form exsits, and it is not creating a new form
+      if (currentFormId) {
+        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
+          headers: FETCH_HEADER,
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data) {
+              // mapMembershipLevel(): Call the the function to map
+              // the retrived membership level backend data to fit frontend, and
+              // setFieldValue(): Prefill Data --> Call the setFieldValue of
+              // Formik, to set membershipLevel field with the mapped data
+              const tempMembershipLevel = mapMembershipLevel(
+                data[0]?.membership_level,
+                membership_levels
+              );
+              formik.setFieldValue(
+                'membershipLevel',
+                tempMembershipLevel.value
+              );
+              formik.setFieldValue(
+                'membershipLevel-label',
+                tempMembershipLevel
+              );
+              // TBD 
+              // need to set 
+              // purchasingAndVAT: {
+              //   purchasingProcess: '',
+              //   'purchasingProcess-label': '',
+              //   vatNumber: '',
+              //   countryOfRegistration: '',
+              // }
+            }
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    };
+
     if (isStartNewForm) {
       if (furthestPage.index > 1 && !formik.values.organization?.id) {
         // This means user already submitted/finished this page, and comes back from a further page/step
@@ -141,6 +195,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // then it means this is the 1st time the user see this page
       // need to GET the data
       detectModeAndFetch();
+      detectModeAndFetchMembershipLevel();
     } else {
       // user already has the data, no need to do any API call
       setLoading(false);

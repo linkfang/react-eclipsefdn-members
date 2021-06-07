@@ -173,6 +173,7 @@ export default function Main() {
                 formik={formikMembershipLevel}
                 isStartNewForm={isStartNewForm}
                 furthestPage={furthestPage}
+                updatedFormValues={updatedFormValues}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
