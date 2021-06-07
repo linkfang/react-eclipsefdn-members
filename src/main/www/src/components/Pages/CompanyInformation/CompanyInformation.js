@@ -16,6 +16,8 @@ import {
   MODE_REACT_API,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
+import CompanyInformationVAT from './CompanyInformationVAT';
+import { makeStyles } from '@material-ui/core';
 
 /**
  * Wrapper for Contacts and Company components
@@ -29,6 +31,15 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
  *      library (such as "formik.values", "formik.setFieldValue");
  *  - formField: the form field in formModels/formFieldModel.js
  */
+
+const useStyles = makeStyles(() => ({
+  textField: {
+    marginBottom: 14,
+    marginTop: 6,
+    backgroundColor: 'white',
+  },
+}));
+
 const CompanyInformation = ({ formik, isStartNewForm }) => {
   const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
@@ -151,8 +162,9 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         name and address of your organization.
       </p>
       <div className="align-center">
-        <CompanyInformationCompany formik={formik} />
+        <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
+        <CompanyInformationVAT formik={formik} useStyles={useStyles} />
       </div>
 
       <CustomStepButton

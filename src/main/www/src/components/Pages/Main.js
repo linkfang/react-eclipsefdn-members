@@ -2,10 +2,7 @@ import { useContext, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import {
-  COMPANY_INFORMATION,
-  PAGE_STEP,
-} from '../../Constants/Constants';
+import { COMPANY_INFORMATION, PAGE_STEP } from '../../Constants/Constants';
 import {
   formField,
   initialValues,
@@ -50,10 +47,12 @@ export default function Main() {
       // update the organization values
       const organization = values.organization;
       const representative = values.representative;
+      const purchasingAndVAT = values.purchasingAndVAT;
       setUpdatedFormValues({
         ...updatedFormValues,
         organization,
         representative,
+        purchasingAndVAT,
       });
       console.log('updated company info: ', values);
 
