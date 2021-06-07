@@ -161,7 +161,9 @@ const Review = ({ values, submitForm }) => {
             <div className="row margin-bottom-30">
               <div className="col-md-8">
                 <label>Working group</label>
-                <div className="preview-field">{el['workingGroup-label']}</div>
+                <div className="preview-field">
+                  {el['workingGroup']['label']}
+                </div>
               </div>
               <div className="col-md-8">
                 <label>Intended Participation Level</label>

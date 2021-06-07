@@ -4,7 +4,6 @@ import {
   end_point,
   api_prefix_form,
   FETCH_HEADER,
-  newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
@@ -78,11 +77,11 @@ export function matchCompanyFields(existingOrganizationData) {
       street: existingOrganizationData?.address.street || '',
       city: existingOrganizationData?.address.city || '',
       provinceOrState: existingOrganizationData?.address.province_state || '',
+      country: existingOrganizationData?.address.country || '',
       'country-label': {
         label: existingOrganizationData?.address.country || '',
         value: existingOrganizationData?.address.country || '',
       },
-      country: existingOrganizationData?.address.country || '',
       postalCode: existingOrganizationData?.address.postal_code || '',
     },
     twitterHandle: existingOrganizationData?.twitter_handle || '',
@@ -206,14 +205,14 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
   var org = {
     address: {
       city: organizationData.address.city,
-      country: organizationData.address.country.value,
+      country: organizationData.address.country,
       postal_code: organizationData.address.postalCode,
       province_state: organizationData.address.provinceOrState,
       street: organizationData.address.street,
     },
     form_id: formId,
     id: organizationData.id,
-    legal_name: organizationData.legalName.label,
+    legal_name: organizationData.legalName,
     twitter_handle: organizationData.twitterHandle || '',
   };
 
@@ -237,7 +236,7 @@ export function matchMembershipLevelFieldsToBackend(
   return {
     id: formId,
     user_id: userId,
-    membership_level: membershipLevel.value,
+    membership_level: membershipLevel,
     signing_authority: true,
   };
 }
@@ -281,13 +280,15 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
+  const theDate = eachWorkingGroupData?.effectiveDate
+    ? new Date(eachWorkingGroupData?.effectiveDate)
+    : new Date();
+
   return {
     id: eachWorkingGroupData?.id,
     working_group_id: eachWorkingGroupData?.workingGroup.value,
-    participation_level: eachWorkingGroupData?.participationLevel.value,
-    effective_date: (eachWorkingGroupData?.effectiveDate)
-      .toISOString()
-      .replace(/.\d+Z$/g, 'Z'),
+    participation_level: eachWorkingGroupData?.participationLevel,
+    effective_date: theDate.toISOString().replace(/.\d+Z$/g, 'Z'),
     contact: {
       ...wg_contact,
     },
@@ -304,13 +305,13 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  */
 export async function executeSendDataByStep(step, formData, formId, userId) {
   switch (step) {
-    case 0:
-      sendData(
+    case 1:
+      callSendData(
         formId,
         end_point.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId)
       );
-      sendData(
+      callSendData(
         formId,
         end_point.contacts,
         matchContactFieldsToBackend(
@@ -319,7 +320,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formId
         )
       );
-      sendData(
+      callSendData(
         formId,
         end_point.contacts,
         matchContactFieldsToBackend(
@@ -328,7 +329,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formId
         )
       );
-      sendData(
+      callSendData(
         formId,
         end_point.contacts,
         matchContactFieldsToBackend(
@@ -339,8 +340,8 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       );
       break;
 
-    case 1:
-      sendData(
+    case 2:
+      callSendData(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(
@@ -351,9 +352,9 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       );
       break;
 
-    case 2:
+    case 3:
       formData.workingGroups.forEach((item) => {
-        sendData(
+        callSendData(
           formId,
           end_point.working_groups,
           matchWGFieldsToBackend(item, formId)
@@ -361,7 +362,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       });
       break;
 
-    case 3:
+    case 4:
       return;
 
     default:
@@ -373,13 +374,14 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param endpoint - To which endpoint the fetch is calling to backend:
  * /form/{id}, /form/{id}/organizations/{id}, /form/{id}/contacts/{id}, /form/{id}/working_groups/{id}
- * @param method - Fetch methods: POST, GET, PUT, DELETE
  * @param dataBody - The data body passed to server, normally is the filled form data to be saved
- * @param entityId - The Id of organizations, or contacts, or working groups entry;
  * If empty, is creating a new entity, use POST method;
  * If has value, is fetched from server, use PUT or DELETE;
  */
-function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
+function callSendData(formId, endpoint = '', dataBody) {
+  const entityId = dataBody.id ? dataBody.id : '';
+  const method = dataBody.id ? FETCH_METHOD.PUT : FETCH_METHOD.POST;
+
   let url = api_prefix_form + `/${formId}`;
 
   if (endpoint) {
@@ -405,40 +407,6 @@ function callSendData(formId, endpoint = '', method, dataBody, entityId = '') {
     }).then((res) => {
       console.log(res.status);
     });
-  }
-}
-
-/**
- * PUT or POST function
- *
- * @param formId -
- * Form Id fetched from the server, sotored in membership context, used for calling APIs
- * @param endpoint -
- * To which endpoint the fetch is calling to backend:
- * /form/{id}, /form/{id}/organizations/{id}, /form/{id}/contacts/{id}, /form/{id}/working_groups/{id}
- * @param dataBody -
- * The data body passed to server, normally is the filled form data to be saved
- *
- * If no data.id, means it's a new data entry, we should use POST. otherwise, use PUT
- */
-export function sendData(formId, endpoint, dataBody) {
-  switch (endpoint) {
-    case end_point.organizations:
-      if (!dataBody.id || formId === newForm_tempId) {
-        delete dataBody.id;
-        callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
-      } else {
-        callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
-      }
-      break;
-
-    default:
-      if (!dataBody.id) {
-        delete dataBody.id;
-        callSendData(formId, endpoint, FETCH_METHOD.POST, dataBody);
-      } else {
-        callSendData(formId, endpoint, FETCH_METHOD.PUT, dataBody, dataBody.id);
-      }
   }
 }
 
@@ -500,12 +468,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * - Store the returned new form Id in my FormId Context
  * - Send the API calls to organizations and contacts
  * **/
-export async function handleNewForm(
-  setCurrentFormId,
-  formData,
-  userId,
-  defaultBehaviour
-) {
+export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   if (getCurrentMode() === MODE_REACT_ONLY) {
     defaultBehaviour();
   }
@@ -523,10 +486,11 @@ export async function handleNewForm(
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
-        executeSendDataByStep(0, formData, data[0]?.id, userId);
         defaultBehaviour();
-      });
+      })
+      .catch((err) => console.log(err));
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days

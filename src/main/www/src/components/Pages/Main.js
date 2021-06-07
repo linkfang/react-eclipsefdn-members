@@ -1,12 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
 import {
   COMPANY_INFORMATION,
-  MEMBERSHIP_LEVEL,
-  SIGNING_AUTHORITY,
-  WORKING_GROUPS,
   PAGE_STEP,
 } from '../../Constants/Constants';
 import {
@@ -23,10 +20,15 @@ import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
 import { useHistory } from 'react-router-dom';
+import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
+import MembershipContext from '../../Context/MembershipContext';
 
-export default function Main({ furthestPage, setFurthestPage }) {
+export default function Main() {
   const history = useHistory();
+  const { currentFormId, furthestPage, setFurthestPage, currentUser } =
+    useContext(MembershipContext);
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
+  const [isStartNewForm, setIsStartNewForm] = useState(true);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -53,6 +55,10 @@ export default function Main({ furthestPage, setFurthestPage }) {
         organization,
         representative,
       });
+      console.log('updated company info: ', values);
+
+      executeSendDataByStep(1, values, currentFormId, currentUser.name);
+
       goToNextStep(1, '/membership-level');
     },
   });
@@ -64,6 +70,10 @@ export default function Main({ furthestPage, setFurthestPage }) {
       // update the membershipLevel values
       const membershipLevel = values.membershipLevel;
       setUpdatedFormValues({ ...updatedFormValues, membershipLevel });
+      console.log('updated membership level: ', values);
+
+      executeSendDataByStep(2, values, currentFormId, currentUser.name);
+
       goToNextStep(2, '/working-groups');
     },
   });
@@ -75,6 +85,10 @@ export default function Main({ furthestPage, setFurthestPage }) {
       // update the workingGroups values
       const workingGroups = values.workingGroups;
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
+      console.log('updated working groups: ', values);
+
+      executeSendDataByStep(3, values, currentFormId, currentUser.name);
+
       goToNextStep(3, '/signing-authority');
     },
   });
@@ -133,6 +147,8 @@ export default function Main({ furthestPage, setFurthestPage }) {
               formField={formField}
               label={COMPANY_INFORMATION}
               setFurthestPage={setFurthestPage}
+              history={history}
+              setIsStartNewForm={setIsStartNewForm}
             />
           </Route>
 
@@ -141,8 +157,8 @@ export default function Main({ furthestPage, setFurthestPage }) {
               // stop users visiting steps/pages that are not able to edit yet
               furthestPage.index >= 1 ? (
                 <CompanyInformation
-                  label={COMPANY_INFORMATION}
                   formik={formikCompanyInfo}
+                  isStartNewForm={isStartNewForm}
                 />
               ) : (
                 // if uses are not allowed to visit this page,
@@ -156,7 +172,8 @@ export default function Main({ furthestPage, setFurthestPage }) {
             {furthestPage.index >= 2 ? (
               <MembershipLevel
                 formik={formikMembershipLevel}
-                label={MEMBERSHIP_LEVEL}
+                isStartNewForm={isStartNewForm}
+                furthestPage={furthestPage}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -166,9 +183,9 @@ export default function Main({ furthestPage, setFurthestPage }) {
           <Route path="/working-groups">
             {furthestPage.index >= 3 ? (
               <WorkingGroupsWrapper
-                formField={formField}
-                label={WORKING_GROUPS}
                 formik={formikWorkingGroups}
+                isStartNewForm={isStartNewForm}
+                furthestPage={furthestPage}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -177,11 +194,7 @@ export default function Main({ furthestPage, setFurthestPage }) {
 
           <Route path="/signing-authority">
             {furthestPage.index >= 4 ? (
-              <SigningAuthority
-                formField={formField}
-                label={SIGNING_AUTHORITY}
-                formik={formikSigningAuthority}
-              />
+              <SigningAuthority formik={formikSigningAuthority} />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}

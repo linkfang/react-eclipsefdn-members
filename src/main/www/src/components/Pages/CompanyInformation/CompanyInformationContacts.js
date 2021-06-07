@@ -48,7 +48,7 @@ const Contacts = ({ formik }) => {
       formik.setFieldValue('representative.marketing', newValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMarketingSameAsCompany]);
+  }, [isMarketingSameAsCompany, formik.values.representative.company]);
 
   // update representative.accounting values based on related checkbox
   useEffect(() => {
@@ -61,7 +61,7 @@ const Contacts = ({ formik }) => {
       formik.setFieldValue('representative.accounting', newValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAccountingSameAsCompany]);
+  }, [isAccountingSameAsCompany, formik.values.representative.company]);
 
   const generateContacts = (
     representativeFields,

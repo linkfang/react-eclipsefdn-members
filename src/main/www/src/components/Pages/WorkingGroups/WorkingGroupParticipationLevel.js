@@ -42,7 +42,7 @@ const ParticipationLevel = ({
       setParticipationLevelOptions(temp?.participation_levels);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workingGroupUserJoined]);
+  }, [workingGroupUserJoined, fullWorkingGroupList]);
 
   return (
     <>
@@ -53,7 +53,7 @@ const ParticipationLevel = ({
       <div className="row">
         <div className="col-md-12">
           <Autocomplete
-            options={participationLevelOptions}
+            options={participationLevelOptions || []}
             getOptionLabel={(option) => (option ? option : '')}
             fullWidth={true}
             onChange={(ev, value) => {
