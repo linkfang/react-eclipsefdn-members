@@ -7,6 +7,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  optionsForpurchasingProcess,
 } from '../Constants/Constants';
 
 /**
@@ -89,6 +90,27 @@ export function matchCompanyFields(existingOrganizationData) {
 }
 
 /**
+ * @param existingPurchasingAndVATData -
+ * Existing purchasing process and VAT data, fetched from server
+ */
+export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
+  const currentOption = optionsForpurchasingProcess.find(
+    (item) =>
+      item.value === existingPurchasingAndVATData.purchase_order_required
+  );
+  return {
+    // Step1: purchasing process and VAT Info
+    id: existingPurchasingAndVATData?.id || '',
+    legalName: existingPurchasingAndVATData?.legal_name || '',
+
+    purchasingProcess: existingPurchasingAndVATData.purchase_order_required,
+    'purchasingProcess-label': currentOption,
+    vatNumber: existingPurchasingAndVATData.vat_number,
+    countryOfRegistration: existingPurchasingAndVATData.registration_country,
+  };
+}
+
+/**
  * @param membershipLevel -
  * Existing membershipLevel data, fetched from server
  * @param membership_levels
@@ -119,37 +141,51 @@ export function matchContactFields(existingContactData) {
     (el) => el.type === contact_type.ACCOUNTING
   );
 
+  let existingSigningContact = existingContactData.find(
+    (el) => el.type === contact_type.SIGNING
+  );
+
   return {
-    company: {
-      id: existingCompanyContact?.id || '',
-      firstName: existingCompanyContact?.first_name || '',
-      lastName: existingCompanyContact?.last_name || '',
-      jobtitle: existingCompanyContact?.job_title || '',
-      email: existingCompanyContact?.email || '',
+    organizationContacts: {
+      company: {
+        id: existingCompanyContact?.id || '',
+        firstName: existingCompanyContact?.first_name || '',
+        lastName: existingCompanyContact?.last_name || '',
+        jobtitle: existingCompanyContact?.job_title || '',
+        email: existingCompanyContact?.email || '',
+      },
+
+      marketing: {
+        id: existingMarketingContact?.id || '',
+        firstName: existingMarketingContact?.first_name || '',
+        lastName: existingMarketingContact?.last_name || '',
+        jobtitle: existingMarketingContact?.job_title || '',
+        email: existingMarketingContact?.email || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          existingMarketingContact
+        ),
+      },
+
+      accounting: {
+        id: existingAccoutingContact?.id || '',
+        firstName: existingAccoutingContact?.first_name || '',
+        lastName: existingAccoutingContact?.last_name || '',
+        jobtitle: existingAccoutingContact?.job_title || '',
+        email: existingAccoutingContact?.email || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          existingAccoutingContact
+        ),
+      },
     },
 
-    marketing: {
-      id: existingMarketingContact?.id || '',
-      firstName: existingMarketingContact?.first_name || '',
-      lastName: existingMarketingContact?.last_name || '',
-      jobtitle: existingMarketingContact?.job_title || '',
-      email: existingMarketingContact?.email || '',
-      sameAsCompany: checkSameContact(
-        existingCompanyContact,
-        existingMarketingContact
-      ),
-    },
-
-    accounting: {
-      id: existingAccoutingContact?.id || '',
-      firstName: existingAccoutingContact?.first_name || '',
-      lastName: existingAccoutingContact?.last_name || '',
-      jobtitle: existingAccoutingContact?.job_title || '',
-      email: existingAccoutingContact?.email || '',
-      sameAsCompany: checkSameContact(
-        existingCompanyContact,
-        existingAccoutingContact
-      ),
+    signingAuthorityRepresentative: {
+      id: existingSigningContact?.id || '',
+      firstName: existingSigningContact?.first_name || '',
+      lastName: existingSigningContact?.last_name || '',
+      jobtitle: existingSigningContact?.job_title || '',
+      email: existingSigningContact?.email || '',
     },
   };
 }
@@ -238,9 +274,11 @@ export function matchMembershipLevelFieldsToBackend(
     user_id: userId,
     membership_level: membershipLevelFromData.membershipLevel,
     signing_authority: true, //what does this do?
-    purchase_order_required: membershipLevelFromData.purchasingAndVAT.purchasingProcess,
+    purchase_order_required:
+      membershipLevelFromData.purchasingAndVAT.purchasingProcess,
     vat_number: membershipLevelFromData.purchasingAndVAT.vatNumber,
-    registration_country: membershipLevelFromData.purchasingAndVAT.countryOfRegistration,
+    registration_country:
+      membershipLevelFromData.purchasingAndVAT.countryOfRegistration,
   };
 }
 
@@ -367,6 +405,15 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       break;
 
     case 4:
+      callSendData(
+        formId,
+        end_point.contacts,
+        matchContactFieldsToBackend(
+          formData.signingAuthorityRepresentative,
+          contact_type.SIGNING,
+          formId
+        )
+      );
       return;
 
     default:

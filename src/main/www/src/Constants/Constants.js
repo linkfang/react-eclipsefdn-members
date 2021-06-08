@@ -5,8 +5,8 @@
  * just hope to use consistent variables for strings.
  */
 export const api_prefix = () => {
-  return  '//' + window.location.host;
-}
+  return '//' + window.location.host;
+};
 
 export const api_prefix_form = api_prefix() + '/form';
 
@@ -50,7 +50,14 @@ export const contact_type = {
   MARKETING: 'MARKETING',
   ACCOUNTING: 'ACCOUNTING',
   WORKING_GROUP: 'WORKING_GROUP',
+  SIGNING: 'SIGNING',
 };
+
+export const optionsForpurchasingProcess = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+  { label: 'Not Applicable', value: 'na' },
+];
 
 export const end_point = {
   organizations: 'organizations',

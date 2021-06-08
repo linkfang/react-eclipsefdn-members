@@ -2,20 +2,16 @@ import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { optionsForpurchasingProcess } from '../../../Constants/Constants';
 
 const { purchasingProcess, vatRegistration } = formField;
-const optionsForpurchasingProcess = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'No', value: 'no' },
-  { label: 'Not Applicable', value: 'na' },
-];
+
 
 export default function CompanyInformationVAT({ formik, useStyles }) {
   const classes = useStyles();
 
   return (
     <>
-      {console.log(formik.values.purchasingAndVAT)}
       <h4
         className="fw-600 section-header"
         id={`${purchasingProcess.name}-ctn`}

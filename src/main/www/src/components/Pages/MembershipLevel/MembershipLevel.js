@@ -36,7 +36,10 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
       'membershipLevel-label',
       updatedFormValues['membershipLevel-label']
     );
-    formik.setFieldValue('purchasingAndVAT', updatedFormValues.purchasingAndVAT);
+    formik.setFieldValue(
+      'purchasingAndVAT',
+      updatedFormValues.purchasingAndVAT
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

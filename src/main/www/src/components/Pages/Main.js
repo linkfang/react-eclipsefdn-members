@@ -48,11 +48,18 @@ export default function Main() {
       const organization = values.organization;
       const representative = values.representative;
       const purchasingAndVAT = values.purchasingAndVAT;
+      const membershipLevel = values.membershipLevel;
+      const membershipLevelLabel = values['membershipLevel-label'];
+      const signingAuthorityRepresentative =
+        values.signingAuthorityRepresentative;
       setUpdatedFormValues({
         ...updatedFormValues,
         organization,
         representative,
         purchasingAndVAT,
+        membershipLevel,
+        'membershipLevel-label': membershipLevelLabel,
+        signingAuthorityRepresentative,
       });
       console.log('updated company info: ', values);
 
@@ -103,6 +110,10 @@ export default function Main() {
         ...updatedFormValues,
         signingAuthorityRepresentative,
       });
+      console.log('updated SigningAuthority: ', values);
+
+      executeSendDataByStep(4, values, currentFormId, currentUser.name);
+
       goToNextStep(4, '/review');
     },
   });
@@ -194,7 +205,10 @@ export default function Main() {
 
           <Route path="/signing-authority">
             {furthestPage.index >= 4 ? (
-              <SigningAuthority formik={formikSigningAuthority} />
+              <SigningAuthority
+                formik={formikSigningAuthority}
+                updatedFormValues={updatedFormValues}
+              />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}

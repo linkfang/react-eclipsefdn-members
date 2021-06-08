@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
   mapMembershipLevel,
+  mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
 } from '../../../Utils/formFunctionHelpers';
@@ -116,7 +117,15 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
               // Prefill Data --> Call the setFieldValue of Formik,
               // to set representative field with the mapped data,
               // if nested, it will automatically map the properties and values
-              formik.setFieldValue('representative', tempContacts);
+              formik.setFieldValue(
+                'representative',
+                tempContacts.organizationContacts
+              );
+
+              formik.setFieldValue(
+                'signingAuthorityRepresentative',
+                tempContacts.signingAuthorityRepresentative
+              );
             }
             setLoading(false);
           });
@@ -161,14 +170,9 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
                 'membershipLevel-label',
                 tempMembershipLevel
               );
-              // TBD 
-              // need to set 
-              // purchasingAndVAT: {
-              //   purchasingProcess: '',
-              //   'purchasingProcess-label': '',
-              //   vatNumber: '',
-              //   countryOfRegistration: '',
-              // }
+
+              const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
+              formik.setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
             }
             setLoading(false);
           });
