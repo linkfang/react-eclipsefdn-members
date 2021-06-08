@@ -11,6 +11,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   api_prefix_wg,
+  fullWorkingGroupListForReactOnly,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
@@ -44,33 +45,25 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     // Fetch the full availabe working group list that user can join
     const fetchAvailableFullWorkingGroupList = () => {
       let url_prefix_local;
-      let url_suffix_local = '';
       if (getCurrentMode() === MODE_REACT_ONLY) {
         url_prefix_local = 'membership_data';
-        url_suffix_local = '.json';
+        setFullWorkingGroupList(fullWorkingGroupListForReactOnly);
+        return;
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
         url_prefix_local = api_prefix_wg;
       }
 
-      console.log('url: ', url_prefix_local + end_point.working_groups);
-
       fetch(url_prefix_local + end_point.working_groups, {
         headers: FETCH_HEADER,
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-        });
-
-      fetch('workingGroups.json', { headers: FETCH_HEADER })
-        .then((res) => res.json())
-        .then((data) => {
-          let options = data.working_groups.map((item) => ({
+          let options = data.map((item) => ({
             label: item.name,
-            value: item.id,
-            participation_levels: item.participation_levels,
+            value: item.name,
+            participation_levels: item.levels,
           }));
           setFullWorkingGroupList(options);
         });

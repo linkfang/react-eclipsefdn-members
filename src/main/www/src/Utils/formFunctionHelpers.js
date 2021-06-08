@@ -168,7 +168,7 @@ export function matchWorkingGroupFields(
   // Array
   existingworkingGroupData.forEach((item, index) => {
     let wg = workingGroupsOptions?.find(
-      (el) => el.value === item?.working_group_id
+      (el) => el.label === item?.working_group_id
     );
     res.push({
       id: item?.id || '',

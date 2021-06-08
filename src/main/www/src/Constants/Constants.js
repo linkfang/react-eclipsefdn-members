@@ -76,3 +76,43 @@ export function getCurrentMode() {
   }
   return MODE_REACT_ONLY;
 }
+
+export const fullWorkingGroupListForReactOnly = [
+  {
+    label: 'AsciiDoc',
+    value: 'AsciiDoc',
+    participation_levels: [
+      {
+        company_size: 10,
+        document_id: '2',
+        level: 'Partner members',
+      },
+      {
+        document_id: '2',
+        level: 'Committer members',
+      },
+      {
+        document_id: '2',
+        level: 'Guest members',
+      },
+    ],
+  },
+  {
+    label: 'Internet of Things - IoT',
+    value: 'Internet of Things - IoT',
+    participation_levels: [
+      {
+        document_id: '1',
+        level: 'Strategic Member',
+      },
+      {
+        document_id: '1',
+        level: 'Participant Member',
+      },
+      {
+        document_id: '1',
+        level: 'Guest Member',
+      },
+    ],
+  },
+];
