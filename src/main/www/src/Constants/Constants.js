@@ -8,8 +8,7 @@ export const api_prefix = () => {
   return '//' + window.location.host;
 };
 
-export const api_prefix_form = api_prefix() + '/form';
-export const api_prefix_wg = api_prefix() + '/';
+export const API_PREFIX_FORM = api_prefix() + '/form';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
@@ -29,7 +28,7 @@ export const FETCH_HEADER = {
   Accept: 'application/json',
 };
 
-export const membership_levels = [
+export const MEMBERSHIP_LEVELS = [
   { label: 'Strategic Member', value: 'Strategic Member' },
   {
     label: 'Contributing Member (formerly referred to as Solutions Members)',
@@ -46,14 +45,14 @@ export const PAGE_STEP = [
   { props: { label: REVIEW, pathName: '/review' } },
 ];
 
-export const contact_type = {
+export const CONTACT_TYPE = {
   COMPANY: 'COMPANY',
   MARKETING: 'MARKETING',
   ACCOUNTING: 'ACCOUNTING',
   WORKING_GROUP: 'WORKING_GROUP',
 };
 
-export const end_point = {
+export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
   working_groups: 'working_groups',
@@ -77,7 +76,7 @@ export function getCurrentMode() {
   return MODE_REACT_ONLY;
 }
 
-export const fullWorkingGroupListForReactOnly = [
+export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
   {
     label: 'AsciiDoc',
     value: 'AsciiDoc',

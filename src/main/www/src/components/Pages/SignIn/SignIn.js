@@ -4,7 +4,7 @@ import FormChooser from '../../UIComponents/FormPreprocess/FormChooser';
 import {
   FETCH_HEADER,
   api_prefix,
-  end_point,
+  END_POINT,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
@@ -14,7 +14,7 @@ import Loading from '../../UIComponents/Loading/Loading';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
- * - When run with server, call the userInfo end_point
+ * - When run with server, call the userInfo END_POINT
  * - When logged in, `if(currentUser)`, render form chooser
  *
  * //// eslint-disable-next-line ---> not a best practice to use
@@ -83,7 +83,7 @@ class SignIn extends React.Component {
 
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
-      fetch(api_prefix() + `/${end_point.userinfo}`, { headers: FETCH_HEADER })
+      fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
           console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}

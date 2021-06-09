@@ -41,16 +41,12 @@ const ParticipationLevel = ({
       );
 
       // extract all the participation_levels
-      let optionsForParticipationLevels = temp?.participation_levels
+      const optionsForParticipationLevels = temp?.participation_levels
         ? temp?.participation_levels.map((item) => item.level)
         : [];
 
-      // delete duplicated participation_levels
-      optionsForParticipationLevels = [
-        ...new Set(optionsForParticipationLevels),
-      ];
-
-      setParticipationLevelOptions(optionsForParticipationLevels);
+      // the Set will deduplicate participation_levels options
+      setParticipationLevelOptions([...new Set(optionsForParticipationLevels)]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workingGroupUserJoined, fullWorkingGroupList]);

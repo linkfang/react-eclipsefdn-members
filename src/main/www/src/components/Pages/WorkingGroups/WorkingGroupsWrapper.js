@@ -4,14 +4,14 @@ import WorkingGroup from './WorkingGroup';
 import { matchWorkingGroupFields } from '../../../Utils/formFunctionHelpers';
 import Loading from '../../UIComponents/Loading/Loading';
 import {
-  end_point,
-  api_prefix_form,
+  END_POINT,
+  API_PREFIX_FORM,
   FETCH_HEADER,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  api_prefix_wg,
-  fullWorkingGroupListForReactOnly,
+  FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY,
+  api_prefix,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
@@ -47,15 +47,15 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
       let url_prefix_local;
       if (getCurrentMode() === MODE_REACT_ONLY) {
         url_prefix_local = 'membership_data';
-        setFullWorkingGroupList(fullWorkingGroupListForReactOnly);
+        setFullWorkingGroupList(FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY);
         return;
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_wg;
+        url_prefix_local = api_prefix() + '/';
       }
 
-      fetch(url_prefix_local + end_point.working_groups, {
+      fetch(url_prefix_local + END_POINT.working_groups, {
         headers: FETCH_HEADER,
       })
         .then((res) => res.json())
@@ -87,7 +87,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
+        url_prefix_local = API_PREFIX_FORM;
       }
 
       // If the current form exsits, and it is not creating a new form
@@ -95,7 +95,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
         fetch(
           url_prefix_local +
             `/${currentFormId}/` +
-            end_point.working_groups +
+            END_POINT.working_groups +
             url_suffix_local,
           { headers: FETCH_HEADER }
         )

@@ -5,7 +5,7 @@ import WorkingGroupEffectiveDate from './WorkingGroupEffectiveDate';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
-  end_point,
+  END_POINT,
   WORKING_GROUPS,
   workingGroups as workingGroupsLabel,
 } from '../../../Constants/Constants';
@@ -58,7 +58,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
     console.log('you called DELETE method with id: ', id);
     deleteData(
       currentFormId,
-      end_point.working_groups,
+      END_POINT.working_groups,
       id,
       arrayHelpersRemove,
       index
