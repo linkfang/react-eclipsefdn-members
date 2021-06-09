@@ -5,8 +5,8 @@
  * just hope to use consistent variables for strings.
  */
 export const api_prefix = () => {
-  return  '//' + window.location.host;
-}
+  return '//' + window.location.host;
+};
 
 export const api_prefix_form = api_prefix() + '/form';
 
@@ -70,8 +70,17 @@ export const MODE_REACT_ONLY = 'MODE_REACT_ONLY';
 export const MODE_REACT_API = 'MODE_REACT_API';
 
 export function getCurrentMode() {
-  if (window.location.href.includes('//www.rem.docker/')) {
+  const validApiDomain = [
+    '//membership-staging.eclipse.org',
+    '//membership.eclipse.org/',
+    '//www.rem.docker/',
+  ].some(value => {
+    return window.location.href.indexOf(value) !== -1;
+  });
+
+  if (validApiDomain) {
     return MODE_REACT_API;
   }
+
   return MODE_REACT_ONLY;
 }
