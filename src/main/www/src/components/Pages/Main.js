@@ -121,7 +121,7 @@ export default function Main() {
   // generate the step options above the form
   const renderStepper = () => (
     <div className="stepper">
-      <Step title="Sign In" index={-1} currentStep={-1} pathName="/signIn" />
+      <Step title="Sign In" index={-1} currentStep={-1} pathName="/sign-in" />
 
       {PAGE_STEP.map((pageStep, index) => {
         return (
@@ -141,7 +141,7 @@ export default function Main() {
     <div className="container eclipseFdn-membership-webform">
       <>
         {window.location.pathname === '/' ||
-        window.location.pathname === '/signIn' ? (
+        window.location.pathname === '/sign-in' ? (
           <SignInIntroduction />
         ) : null}
 
@@ -149,10 +149,10 @@ export default function Main() {
 
         <Switch>
           <Route exact path="/">
-            <Redirect to="/signIn" />
+            <Redirect to="/sign-in" />
           </Route>
 
-          <Route exact path="/signIn">
+          <Route exact path="/sign-in">
             <SignIn
               formField={formField}
               label={COMPANY_INFORMATION}

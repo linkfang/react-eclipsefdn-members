@@ -41,27 +41,27 @@ const Contacts = ({ formik }) => {
   useEffect(() => {
     if (isMarketingSameAsCompany) {
       const newValues = {
-        ...formik.values.representative.company,
+        ...formik.values.representative.member,
         id: formik.values.representative.marketing.id || '',
         sameAsCompany: formik.values.representative.marketing.sameAsCompany,
       };
       formik.setFieldValue('representative.marketing', newValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMarketingSameAsCompany, formik.values.representative.company]);
+  }, [isMarketingSameAsCompany, formik.values.representative.member]);
 
   // update representative.accounting values based on related checkbox
   useEffect(() => {
     if (isAccountingSameAsCompany) {
       const newValues = {
-        ...formik.values.representative.company,
+        ...formik.values.representative.member,
         id: formik.values.representative.accounting.id || '',
         sameAsCompany: formik.values.representative.accounting.sameAsCompany,
       };
       formik.setFieldValue('representative.accounting', newValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAccountingSameAsCompany, formik.values.representative.company]);
+  }, [isAccountingSameAsCompany, formik.values.representative.member]);
 
   const generateContacts = (
     representativeFields,
@@ -114,7 +114,7 @@ const Contacts = ({ formik }) => {
         the Member Representative.
       </p>
       <div className="row">
-        {generateContacts(companyRep, 'company-rep', 'company', false)}
+        {generateContacts(companyRep, 'company-rep', 'member', false)}
       </div>
 
       <h4 className="fw-600" id="marketing-rep">

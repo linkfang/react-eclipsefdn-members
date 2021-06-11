@@ -77,8 +77,17 @@ export const MODE_REACT_ONLY = 'MODE_REACT_ONLY';
 export const MODE_REACT_API = 'MODE_REACT_API';
 
 export function getCurrentMode() {
-  if (window.location.href.includes('//www.rem.docker/')) {
+  const validApiDomain = [
+    '//membership-staging.eclipse.org',
+    '//membership.eclipse.org/',
+    '//www.rem.docker/',
+  ].some(value => {
+    return window.location.href.indexOf(value) !== -1;
+  });
+
+  if (validApiDomain) {
     return MODE_REACT_API;
   }
+
   return MODE_REACT_ONLY;
 }

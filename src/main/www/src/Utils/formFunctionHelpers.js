@@ -147,7 +147,7 @@ export function matchContactFields(existingContactData) {
 
   return {
     organizationContacts: {
-      company: {
+      member: {
         id: existingCompanyContact?.id || '',
         firstName: existingCompanyContact?.first_name || '',
         lastName: existingCompanyContact?.last_name || '',
@@ -356,7 +356,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
         formId,
         end_point.contacts,
         matchContactFieldsToBackend(
-          formData.representative.company,
+          formData.representative.member,
           contact_type.COMPANY,
           formId
         )
