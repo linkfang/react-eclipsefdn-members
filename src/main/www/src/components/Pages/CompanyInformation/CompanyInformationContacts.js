@@ -38,7 +38,7 @@ const Contacts = ({ formik }) => {
 
   const handleCheckboxChange = (isChecked, fieldName) => {
     const repInfo = isChecked
-      ? formik.values.representative.company
+      ? formik.values.representative.member
       : formik.values.representative[fieldName];
 
     const newValues = {
@@ -50,10 +50,10 @@ const Contacts = ({ formik }) => {
 
   const handleMemberInputChange = (value, name) => {
     const memberRepInfo = {
-      ...formik.values.representative.company,
+      ...formik.values.representative.member,
       [name]: value,
     };
-    formik.setFieldValue('representative.company', memberRepInfo);
+    formik.setFieldValue('representative.member', memberRepInfo);
 
     // update representative.marketing values based on related checkbox
     if (isMarketingSameAsCompany) {
@@ -131,9 +131,9 @@ const Contacts = ({ formik }) => {
         the Member Representative.
       </p>
       <div className="row">
-        {generateContacts(companyRep, 'company-rep', 'company', false)}
+        {generateContacts(companyRep, 'company-rep', 'member', false)}
       </div>
-      
+
       <h4 className="fw-600" id="marketing-rep">
         Company Marketing Representative
       </h4>

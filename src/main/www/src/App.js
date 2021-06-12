@@ -4,7 +4,7 @@ import AppFooter from './components/UIComponents/layout/AppFooter';
 import AppHeader from './components/UIComponents/layout/AppHeader';
 import MembershipContext from './Context/MembershipContext';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import Main from './components/Pages/Main';
 
 const theme = createMuiTheme({
@@ -21,7 +21,7 @@ const App = () => {
   const [currentFormId, setCurrentFormId] = useState('');
   const [furthestPage, setFurthestPage] = useState({
     index: 0,
-    pathName: '/signIn',
+    pathName: '/sign-in',
   });
 
   const membershipContextValue = {
@@ -38,7 +38,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <AppHeader />
         <MembershipContext.Provider value={membershipContextValue}>
-          <Router>
+          <Router hashType="noslash">
             <Main />
           </Router>
         </MembershipContext.Provider>

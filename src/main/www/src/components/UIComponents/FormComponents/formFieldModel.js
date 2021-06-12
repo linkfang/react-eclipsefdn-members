@@ -35,7 +35,7 @@ export const initialValues = {
 
   // Step1: Representatives
   representative: {
-    company: {
+    member: {
       id: '',
       firstName: '',
       lastName: '',

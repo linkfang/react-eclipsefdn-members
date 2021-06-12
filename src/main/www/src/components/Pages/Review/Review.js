@@ -69,25 +69,25 @@ const Review = ({ values, submitForm }) => {
           <div className="col-md-6">
             <label>First Name</label>
             <div className="preview-field">
-              {values.representative.company.firstName}
+              {values.representative.member.firstName}
             </div>
           </div>
           <div className="col-md-6">
             <label>Last Name</label>
             <div className="preview-field">
-              {values.representative.company.lastName}
+              {values.representative.member.lastName}
             </div>
           </div>
           <div className="col-md-6">
             <label>Job Title</label>
             <div className="preview-field">
-              {values.representative.company.jobtitle}
+              {values.representative.member.jobtitle}
             </div>
           </div>
           <div className="col-md-6">
             <label>Email</label>
             <div className="preview-field">
-              {values.representative.company.email}
+              {values.representative.member.email}
             </div>
           </div>
         </div>
