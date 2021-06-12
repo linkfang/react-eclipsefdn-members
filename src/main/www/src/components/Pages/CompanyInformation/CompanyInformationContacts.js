@@ -93,7 +93,7 @@ const Contacts = ({ formik }) => {
             requiredMark={true}
             disableInput={disableInput}
             onChange={
-              type === 'company'
+              type === 'member'
                 ? (ev) => handleMemberInputChange(ev.target.value, el.name)
                 : formik.handleChange
             }

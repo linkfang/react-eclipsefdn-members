@@ -43,7 +43,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
         .then((res) => res.json())
         .then((data) => {
           console.log('existing forms:  ', data);
-          
+
           if (data.length > 0) {
             setHasExistingForm(data[data.length - 1]?.id);
             setCurrentFormId(data[data.length - 1]?.id);
@@ -55,7 +55,9 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
         .catch((err) => console.log(err));
     };
 
-    fetchExistingForms();
+    if (hasExistingForm === '') {
+      fetchExistingForms();
+    }
   }, [goToCompanyInfoStep, setCurrentFormId]);
 
   return (
