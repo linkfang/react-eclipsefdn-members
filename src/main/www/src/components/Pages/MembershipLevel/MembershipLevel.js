@@ -7,7 +7,6 @@ import {
   api_prefix_form,
   FETCH_HEADER,
   membership_levels,
-  newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
@@ -40,9 +39,6 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch data only once and prefill data, as long as
-  // currentFormId, membershipLevel.name and setFieldValue
-  // Function does not change, will not cause re-render again
   useEffect(() => {
     // All pre-process: if running without server,
     // use fake json data; if running with API, use API
@@ -61,8 +57,8 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
         url_prefix_local = api_prefix_form;
       }
 
-      // If the current form exsits, and it is not creating a new form
-      if (currentFormId && currentFormId !== newForm_tempId) {
+      // If the current form id exsits
+      if (currentFormId) {
         fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
           headers: FETCH_HEADER,
         })
@@ -102,9 +98,7 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
     } else {
       setLoading(false);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentFormId]);
+  }, [isStartNewForm, formik, currentFormId]);
 
   if (loading) {
     return <Loading />;

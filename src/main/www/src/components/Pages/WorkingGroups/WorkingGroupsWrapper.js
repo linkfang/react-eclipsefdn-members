@@ -56,7 +56,6 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     };
 
     fetchAvailableFullWorkingGroupList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -107,7 +106,12 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     };
 
     if (isStartNewForm) {
-      if (furthestPage.index > 3 && !formik.values.workingGroups[0]?.id) {
+      if (
+        furthestPage.index > 3 &&
+        !formik.values.workingGroups[0]?.id &&
+        window.location.pathname === '/working-groups'
+        // the last condition is to avoid "can't perform a React state update on unmounted component" error
+      ) {
         // This means user already submitted/finished this page, and comes back from a further page/step
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
@@ -129,9 +133,13 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     } else {
       setIsLoading(false);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fullWorkingGroupList]);
+  }, [
+    isStartNewForm,
+    formik,
+    currentFormId,
+    furthestPage.index,
+    fullWorkingGroupList,
+  ]);
 
   if (isLoading) {
     return <Loading />;

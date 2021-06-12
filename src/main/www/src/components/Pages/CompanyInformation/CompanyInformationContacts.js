@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
@@ -37,31 +36,45 @@ const Contacts = ({ formik }) => {
    * @param disableInput - if marketing / accounting is the same as company Rep., mark the input disabled and just used the same values from company Rep.
    */
 
-  // update representative.marketing values based on related checkbox
-  useEffect(() => {
+  const handleCheckboxChange = (isChecked, fieldName) => {
+    const repInfo = isChecked
+      ? formik.values.representative.company
+      : formik.values.representative[fieldName];
+
+    const newValues = {
+      ...repInfo,
+      sameAsCompany: isChecked,
+    };
+    formik.setFieldValue(`representative.${fieldName}`, newValues);
+  };
+
+  const handleMemberInputChange = (value, name) => {
+    const memberRepInfo = {
+      ...formik.values.representative.company,
+      [name]: value,
+    };
+    formik.setFieldValue('representative.company', memberRepInfo);
+
+    // update representative.marketing values based on related checkbox
     if (isMarketingSameAsCompany) {
       const newValues = {
-        ...formik.values.representative.company,
+        ...memberRepInfo,
         id: formik.values.representative.marketing.id || '',
-        sameAsCompany: formik.values.representative.marketing.sameAsCompany,
+        sameAsCompany: isMarketingSameAsCompany,
       };
       formik.setFieldValue('representative.marketing', newValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMarketingSameAsCompany, formik.values.representative.company]);
 
-  // update representative.accounting values based on related checkbox
-  useEffect(() => {
+    // update representative.accounting values based on related checkbox
     if (isAccountingSameAsCompany) {
       const newValues = {
-        ...formik.values.representative.company,
+        ...memberRepInfo,
         id: formik.values.representative.accounting.id || '',
-        sameAsCompany: formik.values.representative.accounting.sameAsCompany,
+        sameAsCompany: isAccountingSameAsCompany,
       };
       formik.setFieldValue('representative.accounting', newValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAccountingSameAsCompany, formik.values.representative.company]);
+  };
 
   const generateContacts = (
     representativeFields,
@@ -79,7 +92,11 @@ const Contacts = ({ formik }) => {
             placeholder={el.placeholder}
             requiredMark={true}
             disableInput={disableInput}
-            onChange={formik.handleChange}
+            onChange={
+              type === 'company'
+                ? (ev) => handleMemberInputChange(ev.target.value, el.name)
+                : formik.handleChange
+            }
             value={formik.values.representative[`${type}`][`${el.name}`]}
             error={
               formik.touched.representative?.[`${type}`]?.[`${el.name}`] &&
@@ -116,7 +133,7 @@ const Contacts = ({ formik }) => {
       <div className="row">
         {generateContacts(companyRep, 'company-rep', 'company', false)}
       </div>
-
+      
       <h4 className="fw-600" id="marketing-rep">
         Company Marketing Representative
       </h4>
@@ -126,7 +143,9 @@ const Contacts = ({ formik }) => {
             name="representative.marketing.sameAsCompany"
             color="primary"
             checked={formik.values.representative.marketing.sameAsCompany}
-            onChange={formik.handleChange}
+            onChange={(ev) =>
+              handleCheckboxChange(ev.target.checked, 'marketing')
+            }
           />
         }
         label="Same as member rep."
@@ -150,7 +169,9 @@ const Contacts = ({ formik }) => {
             name="representative.accounting.sameAsCompany"
             color="primary"
             checked={isAccountingSameAsCompany}
-            onChange={formik.handleChange}
+            onChange={(ev) =>
+              handleCheckboxChange(ev.target.checked, 'accounting')
+            }
           />
         }
         label="Same as member rep."

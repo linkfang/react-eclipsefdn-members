@@ -41,7 +41,6 @@ const ParticipationLevel = ({
       );
       setParticipationLevelOptions(temp?.participation_levels);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workingGroupUserJoined, fullWorkingGroupList]);
 
   return (

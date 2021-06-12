@@ -2,10 +2,7 @@ import { useContext, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import {
-  COMPANY_INFORMATION,
-  PAGE_STEP,
-} from '../../Constants/Constants';
+import { COMPANY_INFORMATION, PAGE_STEP } from '../../Constants/Constants';
 import {
   formField,
   initialValues,

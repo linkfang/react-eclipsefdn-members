@@ -469,9 +469,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * - Send the API calls to organizations and contacts
  * **/
 export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
-  if (getCurrentMode() === MODE_REACT_ONLY) {
-    defaultBehaviour();
-  }
+  defaultBehaviour();
 
   if (getCurrentMode() === MODE_REACT_API) {
     var dataBody = {
@@ -488,7 +486,6 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
       .then((data) => {
         console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
-        defaultBehaviour();
       })
       .catch((err) => console.log(err));
   }

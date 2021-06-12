@@ -33,9 +33,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
   const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
 
-  // Fetch data only once and prefill data,
-  // as long as currentFormId and setFieldValue
-  // Function does not change, will not cause re-render again
   useEffect(() => {
     const detectModeAndFetch = () => {
       // Once we have API set up ready, we don't need the
@@ -59,7 +56,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       if (getCurrentMode() === MODE_REACT_API) {
         url_prefix_local = api_prefix_form;
       }
-      // If the current form exsits, and it is not creating a new form
+      // If the current form id exsits
       if (currentFormId) {
         // Using promise pool, because in first step,
         // need to get company data, and contacts data
@@ -113,7 +110,12 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
     };
 
     if (isStartNewForm) {
-      if (furthestPage.index > 1 && !formik.values.organization?.id) {
+      if (
+        furthestPage.index > 1 &&
+        !formik.values.organization?.id &&
+        window.location.pathname === '/company-info'
+        // the last condition is to avoid "can't perform a React state update on unmounted component" error
+      ) {
         // This means user already submitted/finished this page, and comes back from a further page/step
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
@@ -134,8 +136,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // user already has the data, no need to do any API call
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isStartNewForm, formik, currentFormId, furthestPage.index]);
 
   // If it is in loading status,
   // only return a loading spinning
