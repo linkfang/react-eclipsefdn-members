@@ -113,7 +113,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       if (
         furthestPage.index > 1 &&
         !formik.values.organization?.id &&
-        window.location.pathname === '/company-info'
+        window.location.hash === '#company-info'
         // the last condition is to avoid "can't perform a React state update on unmounted component" error
       ) {
         // This means user already submitted/finished this page, and comes back from a further page/step

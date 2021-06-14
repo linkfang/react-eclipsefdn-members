@@ -127,12 +127,12 @@ export default function Main() {
   return (
     <div className="container eclipseFdn-membership-webform">
       <>
-        {window.location.pathname === '/' ||
-        window.location.pathname === '/sign-in' ? (
+        {window.location.hash === '/' ||
+        window.location.hash === '#sign-in' ? (
           <SignInIntroduction />
         ) : null}
 
-        {window.location.pathname !== '/submitted' && renderStepper()}
+        {window.location.hash !== '#submitted' && renderStepper()}
 
         <Switch>
           <Route exact path="/">
@@ -204,6 +204,7 @@ export default function Main() {
               <Redirect to={furthestPage.pathName} />
             )}
           </Route>
+
           <Route path="/submitted">
             {furthestPage.index >= 6 ? (
               <SubmitSuccess />

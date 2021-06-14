@@ -109,7 +109,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
       if (
         furthestPage.index > 3 &&
         !formik.values.workingGroups[0]?.id &&
-        window.location.pathname === '/working-groups'
+        window.location.hash === '#working-groups'
         // the last condition is to avoid "can't perform a React state update on unmounted component" error
       ) {
         // This means user already submitted/finished this page, and comes back from a further page/step
