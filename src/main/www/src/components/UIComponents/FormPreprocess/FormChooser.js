@@ -58,7 +58,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
     if (hasExistingForm === '') {
       fetchExistingForms();
     }
-  }, [goToCompanyInfoStep, setCurrentFormId]);
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm]);
 
   return (
     <>
