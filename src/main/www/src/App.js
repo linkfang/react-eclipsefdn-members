@@ -39,11 +39,11 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
-            <Route path="/portal">
+            <Route exact path="/portal">
               <MainPortal />
             </Route>
 
-            <Route path="/">
+            <Route exact path="/">
               <AppHeader />
               <MembershipContext.Provider value={membershipContextValue}>
                 <HashRouter hashType="noslash">
