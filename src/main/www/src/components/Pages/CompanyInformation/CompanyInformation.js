@@ -10,13 +10,13 @@ import CompanyInformationCompany from './CompanyInformationCompany';
 import CompanyInformationContacts from './CompanyInformationContacts';
 import Loading from '../../UIComponents/Loading/Loading';
 import {
-  end_point,
-  api_prefix_form,
+  END_POINT,
+  API_PREFIX_FORM,
   FETCH_HEADER,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  membership_levels,
+  MEMBERSHIP_LEVELS,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -71,7 +71,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // Once we have the API ready running on production,
       // will use the correct domain name rather than localhost:8090
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
+        url_prefix_local = API_PREFIX_FORM;
       }
       // If the current form exsits, and it is not creating a new form
       if (currentFormId) {
@@ -81,14 +81,14 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
           fetch(
             url_prefix_local +
               `/${currentFormId}/` +
-              end_point.organizations +
+              END_POINT.organizations +
               url_suffix_local,
             { headers: FETCH_HEADER }
           ),
           fetch(
             url_prefix_local +
               `/${currentFormId}/` +
-              end_point.contacts +
+              END_POINT.contacts +
               url_suffix_local,
             { headers: FETCH_HEADER }
           ),
@@ -143,7 +143,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
+        url_prefix_local = API_PREFIX_FORM;
       }
 
       // If the current form exsits, and it is not creating a new form
@@ -160,7 +160,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
               // Formik, to set membershipLevel field with the mapped data
               const tempMembershipLevel = mapMembershipLevel(
                 data[0]?.membership_level,
-                membership_levels
+                MEMBERSHIP_LEVELS
               );
               formik.setFieldValue(
                 'membershipLevel',

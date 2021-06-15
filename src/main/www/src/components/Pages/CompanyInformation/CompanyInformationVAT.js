@@ -2,7 +2,7 @@ import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { optionsForpurchasingProcess } from '../../../Constants/Constants';
+import { OPTIONS_FOR_PURCHASING_PROCES } from '../../../Constants/Constants';
 
 const { purchasingProcess, vatRegistration } = formField;
 
@@ -27,7 +27,7 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
         <div className="col-md-12 margin-bottom-40">
           <Autocomplete
             id={purchasingProcess.name}
-            options={optionsForpurchasingProcess}
+            options={OPTIONS_FOR_PURCHASING_PROCES}
             getOptionLabel={(option) => (option?.label ? option.label : '')}
             getOptionSelected={(option, value) => option.value === value.value}
             fullWidth={true}

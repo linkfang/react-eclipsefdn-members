@@ -1,13 +1,13 @@
 import {
   FETCH_METHOD,
-  contact_type,
-  end_point,
-  api_prefix_form,
+  CONTACT_TYPE,
+  END_POINT,
+  API_PREFIX_FORM,
   FETCH_HEADER,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  optionsForpurchasingProcess,
+  OPTIONS_FOR_PURCHASING_PROCES,
 } from '../Constants/Constants';
 
 /**
@@ -94,7 +94,7 @@ export function matchCompanyFields(existingOrganizationData) {
  * Existing purchasing process and VAT data, fetched from server
  */
 export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
-  const currentOption = optionsForpurchasingProcess.find(
+  const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
     (item) =>
       item.value === existingPurchasingAndVATData.purchase_order_required
   );
@@ -132,17 +132,17 @@ export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
  * **/
 export function matchContactFields(existingContactData) {
   let existingCompanyContact = existingContactData.find(
-    (el) => el.type === contact_type.COMPANY
+    (el) => el.type === CONTACT_TYPE.COMPANY
   );
   let existingMarketingContact = existingContactData.find(
-    (el) => el.type === contact_type.MARKETING
+    (el) => el.type === CONTACT_TYPE.MARKETING
   );
   let existingAccoutingContact = existingContactData.find(
-    (el) => el.type === contact_type.ACCOUNTING
+    (el) => el.type === CONTACT_TYPE.ACCOUNTING
   );
 
   let existingSigningContact = existingContactData.find(
-    (el) => el.type === contact_type.SIGNING
+    (el) => el.type === CONTACT_TYPE.SIGNING
   );
 
   return {
@@ -204,7 +204,7 @@ export function matchWorkingGroupFields(
   // Array
   existingworkingGroupData.forEach((item, index) => {
     let wg = workingGroupsOptions?.find(
-      (el) => el.value === item?.working_group_id
+      (el) => el.label === item?.working_group_id
     );
     res.push({
       id: item?.id || '',
@@ -288,7 +288,7 @@ export function matchMembershipLevelFieldsToBackend(
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  */
 export function matchContactFieldsToBackend(contactData, contactType, formId) {
-  if (contactType === contact_type.WORKING_GROUP && !contactData.id) {
+  if (contactType === CONTACT_TYPE.WORKING_GROUP && !contactData.id) {
     return {
       form_id: formId,
       first_name: contactData.firstName,
@@ -317,7 +317,7 @@ export function matchContactFieldsToBackend(contactData, contactType, formId) {
 export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
   var wg_contact = matchContactFieldsToBackend(
     eachWorkingGroupData.workingGroupRepresentative,
-    contact_type.WORKING_GROUP,
+    CONTACT_TYPE.WORKING_GROUP,
     formId
   );
 
@@ -349,33 +349,33 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
     case 1:
       callSendData(
         formId,
-        end_point.organizations,
+        END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId)
       );
       callSendData(
         formId,
-        end_point.contacts,
+        END_POINT.contacts,
         matchContactFieldsToBackend(
           formData.representative.member,
-          contact_type.COMPANY,
+          CONTACT_TYPE.COMPANY,
           formId
         )
       );
       callSendData(
         formId,
-        end_point.contacts,
+        END_POINT.contacts,
         matchContactFieldsToBackend(
           formData.representative.marketing,
-          contact_type.MARKETING,
+          CONTACT_TYPE.MARKETING,
           formId
         )
       );
       callSendData(
         formId,
-        end_point.contacts,
+        END_POINT.contacts,
         matchContactFieldsToBackend(
           formData.representative.accounting,
-          contact_type.ACCOUNTING,
+          CONTACT_TYPE.ACCOUNTING,
           formId
         )
       );
@@ -398,7 +398,7 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       formData.workingGroups.forEach((item) => {
         callSendData(
           formId,
-          end_point.working_groups,
+          END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId)
         );
       });
@@ -407,10 +407,10 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
     case 4:
       callSendData(
         formId,
-        end_point.contacts,
+        END_POINT.contacts,
         matchContactFieldsToBackend(
           formData.signingAuthorityRepresentative,
-          contact_type.SIGNING,
+          CONTACT_TYPE.SIGNING,
           formId
         )
       );
@@ -433,14 +433,14 @@ function callSendData(formId, endpoint = '', dataBody) {
   const entityId = dataBody.id ? dataBody.id : '';
   const method = dataBody.id ? FETCH_METHOD.PUT : FETCH_METHOD.POST;
 
-  let url = api_prefix_form + `/${formId}`;
+  let url = API_PREFIX_FORM + `/${formId}`;
 
   if (endpoint) {
-    url = api_prefix_form + `/${formId}/${endpoint}`;
+    url = API_PREFIX_FORM + `/${formId}/${endpoint}`;
   }
 
   if (entityId && entityId !== formId) {
-    url = api_prefix_form + `/${formId}/${endpoint}/${entityId}`;
+    url = API_PREFIX_FORM + `/${formId}/${endpoint}/${entityId}`;
   }
 
   delete dataBody.id;
@@ -487,12 +487,12 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
 
   // If removing existing working_group
   if (entityId) {
-    let url = api_prefix_form + `/${formId}`;
+    let url = API_PREFIX_FORM + `/${formId}`;
     if (endpoint) {
-      url = api_prefix_form + `/${formId}/${endpoint}`;
+      url = API_PREFIX_FORM + `/${formId}/${endpoint}`;
     }
     if (entityId && entityId !== formId) {
-      url = api_prefix_form + `/${formId}/${endpoint}/${entityId}`;
+      url = API_PREFIX_FORM + `/${formId}/${endpoint}/${entityId}`;
     }
     fetch(url, {
       method: FETCH_METHOD.DELETE,
@@ -530,7 +530,7 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
       signing_authority: false,
     };
 
-    fetch(api_prefix_form, {
+    fetch(API_PREFIX_FORM, {
       method: FETCH_METHOD.POST,
       headers: FETCH_HEADER,
       body: JSON.stringify(dataBody),
