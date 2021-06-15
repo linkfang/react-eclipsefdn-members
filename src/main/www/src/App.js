@@ -4,8 +4,9 @@ import AppFooter from './components/UIComponents/layout/AppFooter';
 import AppHeader from './components/UIComponents/layout/AppHeader';
 import MembershipContext from './Context/MembershipContext';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import { HashRouter as Router } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Switch, Route } from 'react-router-dom';
 import Main from './components/Pages/Main';
+import MainPortal from './components/PagesPortal/MainPortal';
 
 const theme = createMuiTheme({
   palette: {
@@ -36,13 +37,23 @@ const App = () => {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <AppHeader />
-        <MembershipContext.Provider value={membershipContextValue}>
-          <Router hashType="noslash">
-            <Main />
-          </Router>
-        </MembershipContext.Provider>
-        <AppFooter />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/portal">
+              <MainPortal />
+            </Route>
+
+            <Route path="/">
+              <AppHeader />
+              <MembershipContext.Provider value={membershipContextValue}>
+                <HashRouter hashType="noslash">
+                  <Main />
+                </HashRouter>
+              </MembershipContext.Provider>
+              <AppFooter />
+            </Route>
+          </Switch>
+        </BrowserRouter>
       </ThemeProvider>
     </div>
   );
