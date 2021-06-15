@@ -120,7 +120,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         // so, we need to GET the info user submitted and if user changes anything,
         // we will use the organization_id from the GET to do the PUT to update the info.
         detectModeAndFetch();
-        setLoading(false);
       } else {
         // This means this is the 1st time the user see this page,
         // or the user already got the organizations.id

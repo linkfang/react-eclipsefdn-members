@@ -53,5 +53,9 @@
     "react-datepicker": "^3.2.2",
     "react-select": "^4.1.0",
     "yup": "^0.32.8"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 80
   }
 }

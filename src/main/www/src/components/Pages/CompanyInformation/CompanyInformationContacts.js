@@ -97,14 +97,14 @@ const Contacts = ({ formik }) => {
                 ? (ev) => handleMemberInputChange(ev.target.value, el.name)
                 : formik.handleChange
             }
-            value={formik.values.representative[`${type}`][`${el.name}`]}
+            value={formik.values.representative?.[type]?.[el.name]}
             error={
-              formik.touched.representative?.[`${type}`]?.[`${el.name}`] &&
-              Boolean(formik.errors.representative?.[`${type}`]?.[`${el.name}`])
+              formik.touched.representative?.[type]?.[el.name] &&
+              Boolean(formik.errors.representative?.[type]?.[el.name])
             }
             helperText={
-              formik.touched.representative?.[`${type}`]?.[`${el.name}`] &&
-              formik.errors.representative?.[`${type}`]?.[`${el.name}`]
+              formik.touched.representative?.[type]?.[el.name] &&
+              formik.errors.representative?.[type]?.[el.name]
             }
           />
         </div>
