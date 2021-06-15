@@ -8,7 +8,7 @@ export const api_prefix = () => {
   return '//' + window.location.host;
 };
 
-export const api_prefix_form = api_prefix() + '/form';
+export const API_PREFIX_FORM = api_prefix() + '/form';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
@@ -28,7 +28,7 @@ export const FETCH_HEADER = {
   Accept: 'application/json',
 };
 
-export const membership_levels = [
+export const MEMBERSHIP_LEVELS = [
   { label: 'Strategic Member', value: 'Strategic Member' },
   {
     label: 'Contributing Member (formerly referred to as Solutions Members)',
@@ -45,14 +45,14 @@ export const PAGE_STEP = [
   { props: { label: REVIEW, pathName: '/review' } },
 ];
 
-export const contact_type = {
+export const CONTACT_TYPE = {
   COMPANY: 'COMPANY',
   MARKETING: 'MARKETING',
   ACCOUNTING: 'ACCOUNTING',
   WORKING_GROUP: 'WORKING_GROUP',
 };
 
-export const end_point = {
+export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
   working_groups: 'working_groups',
@@ -84,3 +84,43 @@ export function getCurrentMode() {
 
   return MODE_REACT_ONLY;
 }
+
+export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
+  {
+    label: 'AsciiDoc',
+    value: 'AsciiDoc',
+    participation_levels: [
+      {
+        company_size: 10,
+        document_id: '2',
+        level: 'Partner members',
+      },
+      {
+        document_id: '2',
+        level: 'Committer members',
+      },
+      {
+        document_id: '2',
+        level: 'Guest members',
+      },
+    ],
+  },
+  {
+    label: 'Internet of Things - IoT',
+    value: 'Internet of Things - IoT',
+    participation_levels: [
+      {
+        document_id: '1',
+        level: 'Strategic Member',
+      },
+      {
+        document_id: '1',
+        level: 'Participant Member',
+      },
+      {
+        document_id: '1',
+        level: 'Guest Member',
+      },
+    ],
+  },
+];

@@ -4,9 +4,9 @@ import MembershipContext from '../../../Context/MembershipContext';
 import Loading from '../../UIComponents/Loading/Loading';
 import { mapMembershipLevel } from '../../../Utils/formFunctionHelpers';
 import {
-  api_prefix_form,
+  API_PREFIX_FORM,
   FETCH_HEADER,
-  membership_levels,
+  MEMBERSHIP_LEVELS,
   newForm_tempId,
   getCurrentMode,
   MODE_REACT_ONLY,
@@ -58,7 +58,7 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
+        url_prefix_local = API_PREFIX_FORM;
       }
 
       // If the current form exsits, and it is not creating a new form
@@ -75,7 +75,7 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
               // Formik, to set membershipLevel field with the mapped data
               const tempMembershipLevel = mapMembershipLevel(
                 data[0]?.membership_level,
-                membership_levels
+                MEMBERSHIP_LEVELS
               );
               formik.setFieldValue(
                 'membershipLevel',
@@ -124,7 +124,7 @@ const MembershipLevel = ({ formik, isStartNewForm }) => {
           <div className="col-md-12">
             <Autocomplete
               id={membershipLevel.name}
-              options={membership_levels}
+              options={MEMBERSHIP_LEVELS}
               fullWidth={true}
               getOptionLabel={(option) => (option?.label ? option.label : '')}
               getOptionSelected={(option, value) =>
