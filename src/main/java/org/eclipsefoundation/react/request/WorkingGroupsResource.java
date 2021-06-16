@@ -68,8 +68,8 @@ public class WorkingGroupsResource extends AbstractRESTResource {
 
     @POST
     public List<FormWorkingGroup> createWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg) {
+        MembershipForm form = dao.getReference(formID, MembershipForm.class);
         wg.setForm(dao.getReference(formID, MembershipForm.class));
-        wg.setFormID(formID);
         // update the nested contact
         if (wg.getContact() != null) {
             if (wg.getContact().getId() != null) {
@@ -78,8 +78,7 @@ public class WorkingGroupsResource extends AbstractRESTResource {
                 wg.setContact(wg.getContact().cloneTo(c));
             }
             // set the form back for wgerences
-            wg.getContact().setForm(wg.getForm());
-            wg.getContact().setFormID(formID);
+            wg.getContact().setForm(form);
         }
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(wg));
     }
@@ -109,7 +108,6 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             @PathParam("wgID") String wgID) {
         // need to fetch ref to use attached entity
         FormWorkingGroup ref = wg.cloneTo(dao.getReference(wgID, FormWorkingGroup.class));
-        ref.setFormID(formID);
         ref.setForm(dao.getReference(formID, MembershipForm.class));
         // update the nested contact
         if (ref.getContact() != null) {
@@ -120,7 +118,6 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             }
             // set the form back for references
             ref.getContact().setForm(ref.getForm());
-            ref.getContact().setFormID(formID);
         }
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(ref));
     }

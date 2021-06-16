@@ -35,6 +35,8 @@ public abstract class AbstractRESTResource {
     PersistenceDao dao;
     @Inject
     FilterService filters;
+    @Inject
+    CachingService cache;
 
     @Inject
     RequestWrapper wrap;

@@ -18,15 +18,15 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.ws.rs.core.MultivaluedMap;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.dto.BareNode;
@@ -37,10 +37,9 @@ import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
- * Represents a prospective Working Group relationship with the current organization (based on the form)
+ * Represents a prospective Working Group relationship with the current
+ * organization (based on the form)
  * 
  * @author Martin Lowe
  */
@@ -59,12 +58,9 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
     private Date effectiveDate;
 
     // form entity
-    @JsonbTransient
-    @ManyToOne
-    @JoinColumn(name = "form_id", referencedColumnName = "id")
+    @OneToOne(targetEntity = MembershipForm.class)
+    @JoinColumn(name = "form_id")
     private MembershipForm form;
-    @Column(name = "form_id", updatable = false, insertable = false)
-    private String formID;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
@@ -88,6 +84,7 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
     /**
      * @return the form
      */
+    @JsonbTransient
     public MembershipForm getForm() {
         return form;
     }
@@ -97,20 +94,6 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
      */
     public void setForm(MembershipForm form) {
         this.form = form;
-    }
-
-    /**
-     * @return the formID
-     */
-    public String getFormID() {
-        return formID;
-    }
-
-    /**
-     * @param formID the formID to set
-     */
-    public void setFormID(String formID) {
-        this.formID = formID;
     }
 
     /**
@@ -182,8 +165,7 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result
-                + Objects.hash(contact, effectiveDate, form, formID, id, participationLevel, workingGroupID);
+        result = prime * result + Objects.hash(contact, effectiveDate, form, id, participationLevel, workingGroupID);
         return result;
     }
 
@@ -197,8 +179,8 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
             return false;
         FormWorkingGroup other = (FormWorkingGroup) obj;
         return Objects.equals(contact, other.contact) && Objects.equals(effectiveDate, other.effectiveDate)
-                && Objects.equals(form, other.form) && Objects.equals(formID, other.formID)
-                && Objects.equals(id, other.id) && Objects.equals(participationLevel, other.participationLevel)
+                && Objects.equals(form, other.form) && Objects.equals(id, other.id)
+                && Objects.equals(participationLevel, other.participationLevel)
                 && Objects.equals(workingGroupID, other.workingGroupID);
     }
 
@@ -215,8 +197,6 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
         builder.append(effectiveDate);
         builder.append(", form=");
         builder.append(form);
-        builder.append(", formID=");
-        builder.append(formID);
         builder.append(", contact=");
         builder.append(contact);
         builder.append("]");

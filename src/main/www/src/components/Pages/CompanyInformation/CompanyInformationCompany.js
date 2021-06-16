@@ -1,7 +1,7 @@
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -12,15 +12,7 @@ import { makeStyles, TextField } from '@material-ui/core';
  * correct country list names)
  */
 
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginBottom: 14,
-    marginTop: 6,
-    backgroundColor: 'white',
-  },
-}));
-
-const CompanyInformationCompany = ({ formik }) => {
+const CompanyInformationCompany = ({ formik, useStyles }) => {
   const classes = useStyles();
   const { organizationName, organizationTwitter, organizationAddress } =
     formField;
