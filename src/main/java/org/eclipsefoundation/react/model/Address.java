@@ -50,7 +50,7 @@ public class Address extends BareNode implements TargetedClone<Address> {
 
     @JsonbTransient
     @OneToOne
-    @JoinColumn(name = "organizationID", referencedColumnName = "id")
+    @JoinColumn(name = "organization_id")
     private FormOrganization organization;
 
     private String street;

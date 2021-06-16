@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,7 +38,8 @@ import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * A contact entity, representing a contact for an organization or working group.
+ * A contact entity, representing a contact for an organization or working
+ * group.
  * 
  * @author Martin Lowe
  */
@@ -54,12 +54,9 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
     private String id;
 
     // form entity for FK relation
-    @JsonbTransient
-    @ManyToOne
-    @JoinColumn(name = "form_id", referencedColumnName = "id")
+    @ManyToOne(targetEntity = MembershipForm.class)
+    @JoinColumn(name = "form_id")
     private MembershipForm form;
-    @Column(name = "form_id", updatable = false, insertable = false)
-    private String formID;
 
     @JsonbProperty(value = "first_name")
     private String fName;
@@ -81,26 +78,13 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
         this.id = id;
     }
 
-    /** @return the formID */
-    public String getFormID() {
-        return formID;
-    }
-
-    /** @param formID the formID to set */
-    public void setFormID(String formID) {
-        this.formID = formID;
-    }
-
-    /**
-     * @return the form
-     */
+    /** @return the form */
+    @JsonbTransient
     public MembershipForm getForm() {
         return form;
     }
 
-    /**
-     * @param form the form to set
-     */
+    /** @param form the form to set */
     public void setForm(MembershipForm form) {
         this.form = form;
     }
@@ -162,7 +146,6 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
         target.setlName(getlName());
         target.setTitle(getTitle());
         target.setType(getType());
-        target.setForm(getForm());
         return target;
     }
 
@@ -170,7 +153,7 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(email, fName, form, formID, id, lName, title, type);
+        result = prime * result + Objects.hash(email, fName, form, id, lName, title, type);
         return result;
     }
 
@@ -184,9 +167,8 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
             return false;
         Contact other = (Contact) obj;
         return Objects.equals(email, other.email) && Objects.equals(fName, other.fName)
-                && Objects.equals(form, other.form) && Objects.equals(formID, other.formID)
-                && Objects.equals(id, other.id) && Objects.equals(lName, other.lName)
-                && Objects.equals(title, other.title) && type == other.type;
+                && Objects.equals(form, other.form) && Objects.equals(id, other.id)
+                && Objects.equals(lName, other.lName) && Objects.equals(title, other.title) && type == other.type;
     }
 
     @Singleton
@@ -220,5 +202,3 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
         }
     }
 }
-
-

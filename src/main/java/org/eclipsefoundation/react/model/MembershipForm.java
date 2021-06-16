@@ -11,14 +11,19 @@
  */
 package org.eclipsefoundation.react.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -47,6 +52,14 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String vatNumber;
     private String registrationCountry;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "form_id")
+    private List<Contact> contacts;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "form_id")
+    private List<FormWorkingGroup> workingGroups;
+    @OneToOne(mappedBy = "form", orphanRemoval=true)
+    private FormOrganization organization;
 
     /** @return the id */
     @Override
@@ -130,8 +143,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber, 
-            registrationCountry, purchaseOrderRequired);
+        result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber,
+                registrationCountry, purchaseOrderRequired);
         return result;
     }
 
@@ -146,8 +159,9 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         MembershipForm other = (MembershipForm) obj;
         return Objects.equals(id, other.id) && Objects.equals(membershipLevel, other.membershipLevel)
                 && signingAuthority == other.signingAuthority && Objects.equals(userID, other.userID)
-                && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(registrationCountry, 
-                other.registrationCountry) && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired);
+                && Objects.equals(vatNumber, other.vatNumber)
+                && Objects.equals(registrationCountry, other.registrationCountry)
+                && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired);
     }
 
     @Override

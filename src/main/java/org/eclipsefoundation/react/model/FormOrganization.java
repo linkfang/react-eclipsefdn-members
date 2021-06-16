@@ -17,12 +17,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.ws.rs.core.MultivaluedMap;
@@ -49,14 +47,11 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     private String twitterHandle;
 
     // form entity
-    @JsonbTransient
-    @ManyToOne
-    @JoinColumn(name = "form_id", referencedColumnName = "id")
+    @OneToOne(targetEntity = MembershipForm.class)
+    @JoinColumn(name = "form_id")
     private MembershipForm form;
-    @Column(name = "form_id", updatable = false, insertable = false)
-    private String formID;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = { CascadeType.ALL },mappedBy = "organization")
     private Address address;
 
     @Override
@@ -71,26 +66,13 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     }
 
     /** @return the formID */
-    public String getFormID() {
-        return formID;
-    }
-
-    /** @param formID the formID to set */
     @JsonbTransient
-    public void setFormID(String formID) {
-        this.formID = formID;
-    }
-
-    /**
-     * @return the form
-     */
     public MembershipForm getForm() {
         return form;
     }
 
-    /**
-     * @param form the form to set
-     */
+    /** @param form the form to set */
+    @JsonbTransient
     public void setForm(MembershipForm form) {
         this.form = form;
     }
@@ -141,7 +123,7 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(address, form, formID, id, legalName, twitterHandle);
+        result = prime * result + Objects.hash(address, form, id, legalName, twitterHandle);
         return result;
     }
 
@@ -154,8 +136,8 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         if (getClass() != obj.getClass())
             return false;
         FormOrganization other = (FormOrganization) obj;
-        return Objects.equals(address, other.address) && Objects.equals(form, other.form)
-                && Objects.equals(formID, other.formID) && Objects.equals(id, other.id)
+        return Objects.equals(address, other.address)
+                && Objects.equals(form, other.form) && Objects.equals(id, other.id)
                 && Objects.equals(legalName, other.legalName) && Objects.equals(twitterHandle, other.twitterHandle);
     }
 
@@ -170,8 +152,6 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         builder.append(twitterHandle);
         builder.append(", form=");
         builder.append(form);
-        builder.append(", formID=");
-        builder.append(formID);
         builder.append(", address=");
         builder.append(address);
         builder.append("]");
