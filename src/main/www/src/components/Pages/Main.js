@@ -14,7 +14,7 @@ import CompanyInformation from './CompanyInformation/CompanyInformation';
 import MembershipLevel from './MembershipLevel/MembershipLevel';
 import WorkingGroupsWrapper from './WorkingGroups/WorkingGroupsWrapper';
 import SigningAuthority from './SigningAuthority/SigningAuthority';
-import Review from './Review/Review';
+import Review from './Review/Review.tsx';
 import Step from '../UIComponents/Steppers/Step';
 import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';

@@ -1,7 +1,14 @@
 import React from 'react';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
+import { FormValue } from '../../../Constants/Interface';
 
-const Review = ({ values, submitForm }) => {
+interface Props {
+  values: FormValue;
+  submitForm: (pageIndex: number, nextPage: string) => void;
+}
+
+const Review: React.FC<Props> = ({ values, submitForm }) => {
+  console.log('hello????');
   return (
     <form onSubmit={() => submitForm(5, '/submitted')}>
       <h1 className="fw-600 h2">
@@ -242,7 +249,6 @@ const Review = ({ values, submitForm }) => {
       <CustomStepButton
         previousPage="/signing-authority"
         nextPage="/submitted"
-        pageIndex={5}
       />
     </form>
   );
