@@ -8,7 +8,6 @@ interface Props {
 }
 
 const Review: React.FC<Props> = ({ values, submitForm }) => {
-  console.log('hello????');
   return (
     <form onSubmit={() => submitForm(5, '/submitted')}>
       <h1 className="fw-600 h2">

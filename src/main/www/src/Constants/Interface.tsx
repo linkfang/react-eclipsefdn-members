@@ -38,6 +38,12 @@ export interface FormValue {
       email: string;
     };
   };
+  purchasingAndVAT: {
+    purchasingProcess: string;
+    'purchasingProcess-label': { label: string; value: string };
+    vatNumber: number | string;
+    countryOfRegistration: string;
+  };
   'membershipLevel-label': { label: string; value: string };
   membershipLevel: string;
   workingGroups: [workingGroups];
