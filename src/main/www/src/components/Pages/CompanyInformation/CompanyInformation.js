@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
+  mapMembershipLevel,
+  mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
 } from '../../../Utils/formFunctionHelpers';
@@ -14,8 +16,11 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  MEMBERSHIP_LEVELS,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
+import CompanyInformationVAT from './CompanyInformationVAT';
+import { makeStyles } from '@material-ui/core';
 
 /**
  * Wrapper for Contacts and Company components
@@ -29,6 +34,15 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
  *      library (such as "formik.values", "formik.setFieldValue");
  *  - formField: the form field in formModels/formFieldModel.js
  */
+
+const useStyles = makeStyles(() => ({
+  textField: {
+    marginBottom: 14,
+    marginTop: 6,
+    backgroundColor: 'white',
+  },
+}));
+
 const CompanyInformation = ({ formik, isStartNewForm }) => {
   const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
@@ -103,7 +117,62 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
               // Prefill Data --> Call the setFieldValue of Formik,
               // to set representative field with the mapped data,
               // if nested, it will automatically map the properties and values
-              formik.setFieldValue('representative', tempContacts);
+              formik.setFieldValue(
+                'representative',
+                tempContacts.organizationContacts
+              );
+
+              formik.setFieldValue(
+                'signingAuthorityRepresentative',
+                tempContacts.signingAuthorityRepresentative
+              );
+            }
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    };
+
+    const detectModeAndFetchMembershipLevel = () => {
+      let url_prefix_local;
+      let url_suffix_local = '';
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        url_suffix_local = '/form.json';
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = API_PREFIX_FORM;
+      }
+
+      // If the current form exsits, and it is not creating a new form
+      if (currentFormId) {
+        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
+          headers: FETCH_HEADER,
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data) {
+              // mapMembershipLevel(): Call the the function to map
+              // the retrived membership level backend data to fit frontend, and
+              // setFieldValue(): Prefill Data --> Call the setFieldValue of
+              // Formik, to set membershipLevel field with the mapped data
+              const tempMembershipLevel = mapMembershipLevel(
+                data[0]?.membership_level,
+                MEMBERSHIP_LEVELS
+              );
+              formik.setFieldValue(
+                'membershipLevel',
+                tempMembershipLevel.value
+              );
+              formik.setFieldValue(
+                'membershipLevel-label',
+                tempMembershipLevel
+              );
+
+              const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
+              formik.setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
             }
             setLoading(false);
           });
@@ -130,6 +199,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // then it means this is the 1st time the user see this page
       // need to GET the data
       detectModeAndFetch();
+      detectModeAndFetchMembershipLevel();
     } else {
       // user already has the data, no need to do any API call
       setLoading(false);
@@ -151,8 +221,9 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         name and address of your organization.
       </p>
       <div className="align-center">
-        <CompanyInformationCompany formik={formik} />
+        <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
+        <CompanyInformationVAT formik={formik} useStyles={useStyles} />
       </div>
 
       <CustomStepButton

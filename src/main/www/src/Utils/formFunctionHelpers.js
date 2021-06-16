@@ -7,6 +7,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  OPTIONS_FOR_PURCHASING_PROCES,
 } from '../Constants/Constants';
 
 /**
@@ -89,6 +90,27 @@ export function matchCompanyFields(existingOrganizationData) {
 }
 
 /**
+ * @param existingPurchasingAndVATData -
+ * Existing purchasing process and VAT data, fetched from server
+ */
+export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
+  const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
+    (item) =>
+      item.value === existingPurchasingAndVATData.purchase_order_required
+  );
+  return {
+    // Step1: purchasing process and VAT Info
+    id: existingPurchasingAndVATData?.id || '',
+    legalName: existingPurchasingAndVATData?.legal_name || '',
+
+    purchasingProcess: existingPurchasingAndVATData.purchase_order_required,
+    'purchasingProcess-label': currentOption,
+    vatNumber: existingPurchasingAndVATData.vat_number,
+    countryOfRegistration: existingPurchasingAndVATData.registration_country,
+  };
+}
+
+/**
  * @param membershipLevel -
  * Existing membershipLevel data, fetched from server
  * @param membership_levels
@@ -118,38 +140,51 @@ export function matchContactFields(existingContactData) {
   let existingAccoutingContact = existingContactData.find(
     (el) => el.type === CONTACT_TYPE.ACCOUNTING
   );
+  let existingSigningContact = existingContactData.find(
+    (el) => el.type === CONTACT_TYPE.SIGNING
+  );
 
   return {
-    member: {
-      id: existingCompanyContact?.id || '',
-      firstName: existingCompanyContact?.first_name || '',
-      lastName: existingCompanyContact?.last_name || '',
-      jobtitle: existingCompanyContact?.job_title || '',
-      email: existingCompanyContact?.email || '',
+    organizationContacts: {
+      member: {
+        id: existingCompanyContact?.id || '',
+        firstName: existingCompanyContact?.first_name || '',
+        lastName: existingCompanyContact?.last_name || '',
+        jobtitle: existingCompanyContact?.job_title || '',
+        email: existingCompanyContact?.email || '',
+      },
+
+      marketing: {
+        id: existingMarketingContact?.id || '',
+        firstName: existingMarketingContact?.first_name || '',
+        lastName: existingMarketingContact?.last_name || '',
+        jobtitle: existingMarketingContact?.job_title || '',
+        email: existingMarketingContact?.email || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          existingMarketingContact
+        ),
+      },
+
+      accounting: {
+        id: existingAccoutingContact?.id || '',
+        firstName: existingAccoutingContact?.first_name || '',
+        lastName: existingAccoutingContact?.last_name || '',
+        jobtitle: existingAccoutingContact?.job_title || '',
+        email: existingAccoutingContact?.email || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          existingAccoutingContact
+        ),
+      },
     },
 
-    marketing: {
-      id: existingMarketingContact?.id || '',
-      firstName: existingMarketingContact?.first_name || '',
-      lastName: existingMarketingContact?.last_name || '',
-      jobtitle: existingMarketingContact?.job_title || '',
-      email: existingMarketingContact?.email || '',
-      sameAsCompany: checkSameContact(
-        existingCompanyContact,
-        existingMarketingContact
-      ),
-    },
-
-    accounting: {
-      id: existingAccoutingContact?.id || '',
-      firstName: existingAccoutingContact?.first_name || '',
-      lastName: existingAccoutingContact?.last_name || '',
-      jobtitle: existingAccoutingContact?.job_title || '',
-      email: existingAccoutingContact?.email || '',
-      sameAsCompany: checkSameContact(
-        existingCompanyContact,
-        existingAccoutingContact
-      ),
+    signingAuthorityRepresentative: {
+      id: existingSigningContact?.id || '',
+      firstName: existingSigningContact?.first_name || '',
+      lastName: existingSigningContact?.last_name || '',
+      jobtitle: existingSigningContact?.job_title || '',
+      email: existingSigningContact?.email || '',
     },
   };
 }
@@ -229,15 +264,20 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
 export function matchMembershipLevelFieldsToBackend(
-  membershipLevel,
+  membershipLevelFormData,
   formId,
   userId
 ) {
   return {
     id: formId,
     user_id: userId,
-    membership_level: membershipLevel,
-    signing_authority: true,
+    membership_level: membershipLevelFormData.membershipLevel,
+    signing_authority: true, //what does this do?
+    purchase_order_required:
+      membershipLevelFormData.purchasingAndVAT.purchasingProcess,
+    vat_number: membershipLevelFormData.purchasingAndVAT.vatNumber,
+    registration_country:
+      membershipLevelFormData.purchasingAndVAT.countryOfRegistration,
   };
 }
 
@@ -338,17 +378,18 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formId
         )
       );
+      callSendData(
+        formId,
+        '',
+        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+      );
       break;
 
     case 2:
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(
-          formData.membershipLevel,
-          formId,
-          userId
-        )
+        matchMembershipLevelFieldsToBackend(formData, formId, userId)
       );
       break;
 
@@ -363,6 +404,15 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       break;
 
     case 4:
+      callSendData(
+        formId,
+        END_POINT.contacts,
+        matchContactFieldsToBackend(
+          formData.signingAuthorityRepresentative,
+          CONTACT_TYPE.SIGNING,
+          formId
+        )
+      );
       return;
 
     default:

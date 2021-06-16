@@ -11,6 +11,9 @@ const provinceOrState = 'Province Or State';
 const postalCode = 'Postal Code';
 const country = 'Country';
 const jobtitle = 'Job Title';
+const purchasingProcess = 'Require or Not';
+const vatNumber = 'VAT Number';
+const countryOfRegistration = 'Country of Registration';
 
 export const requiredErrorMsg = 'is required';
 
@@ -60,6 +63,14 @@ export const initialValues = {
       jobtitle: '',
       email: '',
     },
+  },
+
+  // Step1: purchasing and VAT
+  purchasingAndVAT: {
+    purchasingProcess: '',
+    'purchasingProcess-label': '',
+    vatNumber: '',
+    countryOfRegistration: '',
   },
 
   // Step 2
@@ -183,6 +194,23 @@ export const formField = {
       invalidErrorMsg: 'email format is incorrect',
     },
   ],
+  purchasingProcess: {
+    name: 'purchasingAndVAT.purchasingProcess',
+    label: purchasingProcess,
+    placeholder: purchasingProcess,
+  },
+  vatRegistration: {
+    vatNumber: {
+      name: 'purchasingAndVAT.vatNumber',
+      label: vatNumber,
+      placeholder: vatNumber,
+    },
+    countryOfRegistration: {
+      name: 'purchasingAndVAT.countryOfRegistration',
+      label: countryOfRegistration,
+      placeholder: countryOfRegistration,
+    },
+  },
   membershipLevel: {
     name: 'membershipLevel',
     label: 'Membership Level',

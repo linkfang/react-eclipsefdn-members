@@ -50,7 +50,14 @@ export const CONTACT_TYPE = {
   MARKETING: 'MARKETING',
   ACCOUNTING: 'ACCOUNTING',
   WORKING_GROUP: 'WORKING_GROUP',
+  SIGNING: 'SIGNING',
 };
+
+export const OPTIONS_FOR_PURCHASING_PROCES = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+  { label: 'Not Applicable', value: 'na' },
+];
 
 export const END_POINT = {
   organizations: 'organizations',
@@ -74,7 +81,7 @@ export function getCurrentMode() {
     '//membership-staging.eclipse.org',
     '//membership.eclipse.org/',
     '//www.rem.docker/',
-  ].some(value => {
+  ].some((value) => {
     return window.location.href.indexOf(value) !== -1;
   });
 
