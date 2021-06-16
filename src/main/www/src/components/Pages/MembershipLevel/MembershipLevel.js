@@ -31,15 +31,7 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
   // Function does not change, will not cause re-render again
 
   useEffect(() => {
-    formik.setFieldValue('membershipLevel', updatedFormValues.membershipLevel);
-    formik.setFieldValue(
-      'membershipLevel-label',
-      updatedFormValues['membershipLevel-label']
-    );
-    formik.setFieldValue(
-      'purchasingAndVAT',
-      updatedFormValues.purchasingAndVAT
-    );
+    console.log('hello?', formik.values);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -61,9 +53,9 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
               options={MEMBERSHIP_LEVELS}
               fullWidth={true}
               getOptionLabel={(option) => (option?.label ? option.label : '')}
-              getOptionSelected={(option, value) =>
-                option.value === value.value
-              }
+              getOptionSelected={(option, value) => {
+                return option.value === value.value;
+              }}
               onChange={(ev, value) => {
                 // this is only for display
                 formik.setFieldValue(

@@ -140,7 +140,6 @@ export function matchContactFields(existingContactData) {
   let existingAccoutingContact = existingContactData.find(
     (el) => el.type === CONTACT_TYPE.ACCOUNTING
   );
-
   let existingSigningContact = existingContactData.find(
     (el) => el.type === CONTACT_TYPE.SIGNING
   );
