@@ -6,27 +6,28 @@ Supported by our member organizations, the Eclipse Foundation provides our commu
 
 
 <!-- TOC -->
-- [Getting Started](#getting-started)
-- [CSRF and API Security](#csrf-and-api-security)
-- [Running the project in included web server](#running-the-project-in-included-web-server)
+- [react-eclipsefdn-members](#react-eclipsefdn-members)
+  - [Getting Started](#getting-started)
+  - [CSRF and API Security](#csrf-and-api-security)
+  - [Running the project in included web server](#running-the-project-in-included-web-server)
     - [Dependencies to run](#dependencies-to-run)
     - [Setup](#setup)
     - [Running](#running)
     - [Docker](#docker)
-        - [Generate Certs for HTTPS](#generate-certs-for-https)
-        - [Update your Host file](#update-your-host-file)
-        - [Environment Variables](#environment-variables)
+      - [Generate Certs for HTTPS](#generate-certs-for-https)
+      - [Update your Host file](#update-your-host-file)
+      - [Environment Variables](#environment-variables)
     - [KeyCloak Setup](#keycloak-setup)
-        - [Create a realm](#create-a-realm)
-        - [Create a user](#create-a-user)
-        - [Eclipse Foundation as an Identity Provider](#eclipse-foundation-as-an-identity-provider)
-        - [Client Configuration](#client-configuration)
-- [Contributing](#contributing)
+      - [Create a realm](#create-a-realm)
+      - [Create a user](#create-a-user)
+      - [Eclipse Foundation as an Identity Provider](#eclipse-foundation-as-an-identity-provider)
+      - [Client Configuration](#client-configuration)
+  - [Contributing](#contributing)
     - [Declared Project Licenses](#declared-project-licenses)
-- [Bugs and feature requests](#bugs-and-feature-requests)
-- [Authors](#authors)
-- [Trademarks](#trademarks)
-- [Copyright and license](#copyright-and-license)
+  - [Bugs and feature requests](#bugs-and-feature-requests)
+  - [Authors](#authors)
+  - [Trademarks](#trademarks)
+  - [Copyright and license](#copyright-and-license)
 <!-- /TOC -->
 
 ## Getting Started
@@ -50,7 +51,7 @@ You will also see any lint errors in the console.
 
 
 ## CSRF and API Security
-Currently, the endpoints that can contain personal data of users have been secured by OIDC and CSRF. What this means for development in the front end is all requests will need to be performed with a legitimate Eclipse Foundation login and account for the CSRF header. 
+Currently, the endpoints that can contain personal data of users have been secured by OIDC and CSRF. What this means for development in the front end is all requests will need to be performed with a legitimate Eclipse Foundation login and account for the CSRF header.
 
 Pertaining to data posted to the API, there is no current automatic deletion policy enforced, and no current way in the UI to send a call to delete data. If you wish to delete this data, you will need to craft javascript within the site to take advantage of the session and CSRF headers, and manually make the call. More information on the form deletion endpoint can be seen in the OpenAPI spec under `/spec/openapi.yml`.
 
@@ -59,7 +60,7 @@ Additionally, when requesting any PII/form data, a CSRF token will need to be pa
 [^ Top](#react-eclipsefdn-members)
 ## Running the project in included web server
 
-### Dependencies to run  
+### Dependencies to run
 
 - Docker-compose
 - Maven
@@ -68,27 +69,27 @@ Additionally, when requesting any PII/form data, a CSRF token will need to be pa
 [^ Top](#react-eclipsefdn-members)
 ### Setup
 
-As part of the set up, you will need to create a `secret.properties` file within the `./config` folder and set up the secrets that are required to run the application. If named `secret.properties`, the file should be ignored by Github automatically, making it less risky that credentials are accidentally uploaded to a branch.  
+As part of the set up, you will need to create a `secret.properties` file within the `./config` folder and set up the secrets that are required to run the application. If named `secret.properties`, the file should be ignored by Github automatically, making it less risky that credentials are accidentally uploaded to a branch.
 
-The fields required to run are the datasource and OIDC properties. The datasource properties should be a set of user credentials that can write to a local mariadb instance. Within that mariadb instance, a database should be created to contain the data used in development. Once created, a JDBC URL can now be formed for the new database. This URL should follow the pattern below, with port not always required (depending on your local setup and proxy settings).  This will be set in the `secret.properties` file. 
+The fields required to run are the datasource and OIDC properties. The datasource properties should be a set of user credentials that can write to a local mariadb instance. Within that mariadb instance, a database should be created to contain the data used in development. Once created, a JDBC URL can now be formed for the new database. This URL should follow the pattern below, with port not always required (depending on your local setup and proxy settings).  This will be set in the `secret.properties` file.
 
-```  
+```
 quarkus.datasource.jdbc.url = jdbc:mariadb://<host><:port?>/<databaseName>
-```  
+```
 
-Once this is set, set the `quarkus.datasource.username` and `quarkus.datasource.password` fields to the user with access to the given database in the `secret.properties` file. 
+Once this is set, set the `quarkus.datasource.username` and `quarkus.datasource.password` fields to the user with access to the given database in the `secret.properties` file.
 
-The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work.  
+The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work.
 
 The `quarkus.oidc.auth-server-url` property in the `secret.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured. For the dockerized service, this should be set to your local IP address (note, not your public address). This can be retrieved from your IP configuration application and added in the format displayed in the `sample.secret.properties` file.
 
-Inside that realm, create a client and update the `quarkus.oidc.client-id` property within the `secret.properties` file. Inside that client, open the settings and go to the credentials tab. The secret will need to be copied and set into the `secret.properties` file in the `quarkus.oidc.credentials.client-secret.value` property. For proper reading and usage of development data, 3 users should be created and added to the realm with the usernames `user1`, `user2`, and `user3`.  
+Inside that realm, create a client and update the `quarkus.oidc.client-id` property within the `secret.properties` file. Inside that client, open the settings and go to the credentials tab. The secret will need to be copied and set into the `secret.properties` file in the `quarkus.oidc.credentials.client-secret.value` property. For proper reading and usage of development data, 3 users should be created and added to the realm with the usernames `user1`, `user2`, and `user3`.
 
 With these properties updated, the server should be able to start and authenticate properly. If the 3 users mentioned within the OIDC configuration section were added, the data should be accessible in a way that is comparable to how it would be in production.
 
 As a side note, regeneration of the database on start along with the insertion of data into the database can be disabled for development environments by setting the following fields within `src/main/resources/application.properties`:
 
-1. Setting `%dev.eclipse.dataloader.enabled` to false. This property is what enables the Data bootstrap to load in mock data.  
+1. Setting `%dev.eclipse.dataloader.enabled` to false. This property is what enables the Data bootstrap to load in mock data.
 2. Removing the `%dev.quarkus.hibernate-orm.database.generation` property or commenting it out. This is what resets the database to empty on start.
 
 [^ Top](#react-eclipsefdn-members)
@@ -128,6 +129,7 @@ Linux / MacOS: /etc/hosts
 127.0.0.1 keycloak
 127.0.0.1 api.rem.docker
 127.0.0.1 www.rem.docker
+127.0.0.1 nginx.rem.docker
 ```
 
 #### Environment Variables
