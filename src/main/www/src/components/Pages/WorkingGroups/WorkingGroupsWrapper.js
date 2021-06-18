@@ -32,8 +32,11 @@ import { FormikProvider } from 'formik';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
+let hasWGData = false;
+
+const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   const { currentFormId } = useContext(MembershipContext);
+  const { setFieldValue } = formik;
   const [isLoading, setIsLoading] = useState(true);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
@@ -110,7 +113,8 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
                 fullWorkingGroupList
               );
               setWorkingGroupsUserJoined(theGroupsUserJoined);
-              formik.setFieldValue('workingGroups', theGroupsUserJoined);
+              setFieldValue('workingGroups', theGroupsUserJoined);
+              hasWGData = true;
             }
             setIsLoading(false);
           });
@@ -120,26 +124,8 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     };
 
     if (isStartNewForm) {
-      if (
-        furthestPage.index > 3 &&
-        !formik.values.workingGroups[0]?.id &&
-        window.location.hash === '#working-groups'
-        // the last condition is to avoid "can't perform a React state update on unmounted component" error
-      ) {
-        // This means user already submitted/finished this page, and comes back from a further page/step
-        // so, we need to GET the info user submitted and if user changes anything,
-        // we will use the organization_id from the GET to do the PUT to update the info.
-        if (fullWorkingGroupList.length > 0) {
-          fetchWorkingGroupsUserJoined();
-        }
-        setIsLoading(false);
-      } else {
-        // This means this is the 1st time the user see this page,
-        // or the user already got the organizations.id
-        // no need to do any API call
-        setIsLoading(false);
-      }
-    } else if (!formik.values.workingGroups[0]?.id) {
+      setIsLoading(false);
+    } else if (!hasWGData) {
       // continue with an existing one
       if (fullWorkingGroupList.length > 0) {
         fetchWorkingGroupsUserJoined();
@@ -147,13 +133,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, furthestPage }) => {
     } else {
       setIsLoading(false);
     }
-  }, [
-    isStartNewForm,
-    formik,
-    currentFormId,
-    furthestPage.index,
-    fullWorkingGroupList,
-  ]);
+  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue]);
 
   if (isLoading) {
     return <Loading />;

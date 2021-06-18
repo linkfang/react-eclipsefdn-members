@@ -1,7 +1,7 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
+
 /**
  * Have not added any API calls here,
  * simply use the form fields to render
@@ -9,17 +9,8 @@ import { useEffect } from 'react';
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik, updatedFormValues }) => {
+const SigningAuthority = ({ formik }) => {
   const { signingAuthorityRepresentative } = formField;
-
-  useEffect(() => {
-    formik.setFieldValue(
-      'signingAuthorityRepresentative',
-      updatedFormValues.signingAuthorityRepresentative
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>

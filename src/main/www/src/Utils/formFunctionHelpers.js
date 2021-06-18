@@ -343,13 +343,23 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(step, formData, formId, userId) {
+export async function executeSendDataByStep(
+  step,
+  formData,
+  formId,
+  userId,
+  setFieldValueObj
+) {
   switch (step) {
     case 1:
       callSendData(
         formId,
         END_POINT.organizations,
-        matchCompanyFieldsToBackend(formData.organization, formId)
+        matchCompanyFieldsToBackend(formData.organization, formId),
+        {
+          fieldName: setFieldValueObj.fieldName.organization,
+          method: setFieldValueObj.method,
+        }
       );
       callSendData(
         formId,
@@ -358,7 +368,11 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.member,
           CONTACT_TYPE.COMPANY,
           formId
-        )
+        ),
+        {
+          fieldName: setFieldValueObj.fieldName.member,
+          method: setFieldValueObj.method,
+        }
       );
       callSendData(
         formId,
@@ -367,7 +381,11 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.marketing,
           CONTACT_TYPE.MARKETING,
           formId
-        )
+        ),
+        {
+          fieldName: setFieldValueObj.fieldName.marketing,
+          method: setFieldValueObj.method,
+        }
       );
       callSendData(
         formId,
@@ -376,7 +394,11 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.representative.accounting,
           CONTACT_TYPE.ACCOUNTING,
           formId
-        )
+        ),
+        {
+          fieldName: setFieldValueObj.fieldName.accounting,
+          method: setFieldValueObj.method,
+        }
       );
       callSendData(
         formId,
@@ -394,11 +416,13 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
       break;
 
     case 3:
-      formData.workingGroups.forEach((item) => {
+      formData.workingGroups.forEach((item, index) => {
         callSendData(
           formId,
           END_POINT.working_groups,
-          matchWGFieldsToBackend(item, formId)
+          matchWGFieldsToBackend(item, formId),
+          setFieldValueObj,
+          index
         );
       });
       break;
@@ -411,7 +435,8 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
           formData.signingAuthorityRepresentative,
           CONTACT_TYPE.SIGNING,
           formId
-        )
+        ),
+        setFieldValueObj
       );
       return;
 
@@ -428,7 +453,13 @@ export async function executeSendDataByStep(step, formData, formId, userId) {
  * If empty, is creating a new entity, use POST method;
  * If has value, is fetched from server, use PUT or DELETE;
  */
-function callSendData(formId, endpoint = '', dataBody) {
+function callSendData(
+  formId,
+  endpoint = '',
+  dataBody,
+  setFieldValueObj,
+  index
+) {
   const entityId = dataBody.id ? dataBody.id : '';
   const method = dataBody.id ? FETCH_METHOD.PUT : FETCH_METHOD.POST;
 
@@ -454,9 +485,71 @@ function callSendData(formId, endpoint = '', dataBody) {
       method: method,
       headers: FETCH_HEADER,
       body: JSON.stringify(dataBody),
-    }).then((res) => {
-      console.log(res.status);
-    });
+    })
+      .then((res) => {
+        console.log(res.status);
+        return res.json();
+      })
+      .then((data) => {
+        if (setFieldValueObj && method === 'POST') {
+          // update the field id after a successful post
+          switch (setFieldValueObj.fieldName) {
+            case 'organization':
+              setFieldValueObj.method(
+                `${setFieldValueObj.fieldName}.id`,
+                data[0].id
+              );
+              setFieldValueObj.method(
+                'organization.address.id',
+                data[0]?.address.id
+              );
+              break;
+
+            case 'representative.member':
+              setFieldValueObj.method(
+                `${setFieldValueObj.fieldName}.id`,
+                data.id
+              );
+              break;
+
+            case 'representative.marketing':
+              setFieldValueObj.method(
+                `${setFieldValueObj.fieldName}.id`,
+                data.id
+              );
+              break;
+
+            case 'representative.accounting':
+              setFieldValueObj.method(
+                `${setFieldValueObj.fieldName}.id`,
+                data.id
+              );
+              break;
+
+            case 'workingGroups':
+              setFieldValueObj.method(`workingGroups[${index}].id`, data[0].id);
+              setFieldValueObj.method(
+                `workingGroups[${index}].workingGroupRepresentative.id`,
+                data[0].contact.id
+              );
+              break;
+
+            case 'signingAuthorityRepresentative':
+              setFieldValueObj.method.signingAuthority(
+                `${setFieldValueObj.fieldName}.id`,
+                data.id
+              );
+              setFieldValueObj.method.companyInfo(
+                `${setFieldValueObj.fieldName}.id`,
+                data.id
+              );
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
   }
 }
 

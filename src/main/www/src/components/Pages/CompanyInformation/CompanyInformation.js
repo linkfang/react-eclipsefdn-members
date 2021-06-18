@@ -43,9 +43,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+let hasOrgData = false;
+let hasMembershipLevelData = false;
+
 const CompanyInformation = ({ formik, isStartNewForm }) => {
-  const { currentFormId, furthestPage } = useContext(MembershipContext); // current chosen form id
+  const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
+  const { setFieldValue } = formik;
 
   useEffect(() => {
     const detectModeAndFetch = () => {
@@ -104,8 +108,10 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
               // organization field with the mapped data,
               // if nested, it will automatically map the
               // properties and values
-              formik.setFieldValue('organization', tempOrg);
+              setFieldValue('organization', tempOrg);
+              hasOrgData = true;
             }
+
             if (contacts.length) {
               // Call the the function to map the retrived contacts
               // (company representative, marketing rep, accounting rep)
@@ -114,15 +120,16 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
               // Prefill Data --> Call the setFieldValue of Formik,
               // to set representative field with the mapped data,
               // if nested, it will automatically map the properties and values
-              formik.setFieldValue(
+              setFieldValue(
                 'representative',
                 tempContacts.organizationContacts
               );
 
-              formik.setFieldValue(
+              setFieldValue(
                 'signingAuthorityRepresentative',
                 tempContacts.signingAuthorityRepresentative
               );
+              hasOrgData = true;
             }
             setLoading(false);
           });
@@ -159,17 +166,12 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
                 data[0]?.membership_level,
                 MEMBERSHIP_LEVELS
               );
-              formik.setFieldValue(
-                'membershipLevel',
-                tempMembershipLevel.value
-              );
-              formik.setFieldValue(
-                'membershipLevel-label',
-                tempMembershipLevel
-              );
+              setFieldValue('membershipLevel', tempMembershipLevel.value);
+              setFieldValue('membershipLevel-label', tempMembershipLevel);
 
               const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
-              formik.setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
+              setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
+              hasMembershipLevelData = true;
             }
             setLoading(false);
           });
@@ -179,33 +181,18 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
     };
 
     if (isStartNewForm) {
-      if (
-        furthestPage.index > 1 &&
-        !formik.values.organization?.id &&
-        window.location.hash === '#company-info'
-        // the last condition is to avoid "can't perform a React state update on unmounted component" error
-      ) {
-        // This means user already submitted/finished this page, and comes back from a further page/step
-        // so, we need to GET the info user submitted and if user changes anything,
-        // we will use the organization_id from the GET to do the PUT to update the info.
-        detectModeAndFetch();
-      } else {
-        // This means this is the 1st time the user see this page,
-        // or the user already got the organizations.id
-        // no need to do any API call
-        setLoading(false);
-      }
-    } else if (!formik.values.organization?.id) {
-      // continue with an existing one, if there is no id saved locally
+      setLoading(false);
+    } else {
+      // continue with an existing one, if there is no data saved locally
       // then it means this is the 1st time the user see this page
       // need to GET the data
-      detectModeAndFetch();
-      detectModeAndFetchMembershipLevel();
-    } else {
-      // user already has the data, no need to do any API call
-      setLoading(false);
+      if (!hasOrgData) detectModeAndFetch();
+
+      if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
+
+      if (hasOrgData && hasMembershipLevelData) setLoading(false);
     }
-  }, [isStartNewForm, formik, currentFormId, furthestPage.index]);
+  }, [isStartNewForm, setFieldValue, currentFormId]);
 
   // If it is in loading status,
   // only return a loading spinning

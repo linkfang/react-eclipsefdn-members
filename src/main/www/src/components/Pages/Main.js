@@ -45,6 +45,12 @@ export default function Main() {
     });
   };
 
+  const updateSigningAuthorityForm = (values) => {
+    values.forEach((item) => {
+      formikSigningAuthority.setFieldValue(item.field, item.value);
+    });
+  };
+
   const formikCompanyInfo = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[0],
@@ -70,15 +76,38 @@ export default function Main() {
       setUpdatedFormValues(theNewValue);
       console.log('updated company info: ', values);
 
-      const valueToUpdateFormik = [
+      const valueForMembershipLevelFormik = [
         { field: 'purchasingAndVAT', value: purchasingAndVAT },
         { field: 'membershipLevel', value: membershipLevel },
         { field: 'membershipLevel-label', value: membershipLevelLabel },
       ];
       // set valueToUpdateFormik to membershipLevel formik to make sure the value is up to date
-      updateMembershipLevelForm(valueToUpdateFormik);
+      updateMembershipLevelForm(valueForMembershipLevelFormik);
 
-      executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name);
+      const valueForSigningAuthorityFormik = [
+        {
+          field: 'signingAuthorityRepresentative',
+          value: signingAuthorityRepresentative,
+        },
+      ];
+      updateSigningAuthorityForm(valueForSigningAuthorityFormik);
+
+      const setFieldValueObj = {
+        fieldName: {
+          organization: 'organization',
+          member: 'representative.member',
+          accounting: 'representative.accounting',
+          marketing: 'representative.marketing',
+        },
+        method: formikCompanyInfo.setFieldValue,
+      };
+      executeSendDataByStep(
+        1,
+        theNewValue,
+        currentFormId,
+        currentUser.name,
+        setFieldValueObj
+      );
 
       goToNextStep(1, '/membership-level');
     },
@@ -120,7 +149,17 @@ export default function Main() {
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
       console.log('updated working groups: ', values);
 
-      executeSendDataByStep(3, values, currentFormId, currentUser.name);
+      const setFieldValueObj = {
+        fieldName: 'workingGroups',
+        method: formikWorkingGroups.setFieldValue,
+      };
+      executeSendDataByStep(
+        3,
+        values,
+        currentFormId,
+        currentUser.name,
+        setFieldValueObj
+      );
 
       goToNextStep(3, '/signing-authority');
     },
@@ -147,7 +186,20 @@ export default function Main() {
       ];
       // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
       updateCompanyInfoForm(valueToUpdateFormik);
-      executeSendDataByStep(4, values, currentFormId, currentUser.name);
+      const setFieldValueObj = {
+        fieldName: 'signingAuthorityRepresentative',
+        method: {
+          signingAuthority: formikSigningAuthority.setFieldValue,
+          companyInfo: formikCompanyInfo.setFieldValue,
+        },
+      };
+      executeSendDataByStep(
+        4,
+        values,
+        currentFormId,
+        currentUser.name,
+        setFieldValueObj
+      );
 
       goToNextStep(4, '/review');
     },
@@ -175,8 +227,7 @@ export default function Main() {
   return (
     <div className="container eclipseFdn-membership-webform">
       <>
-        {window.location.hash === '/' ||
-        window.location.hash === '#sign-in' ? (
+        {window.location.hash === '/' || window.location.hash === '#sign-in' ? (
           <SignInIntroduction />
         ) : null}
 
