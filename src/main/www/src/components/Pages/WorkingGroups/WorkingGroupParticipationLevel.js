@@ -39,7 +39,14 @@ const ParticipationLevel = ({
       let temp = fullWorkingGroupList?.find(
         (item) => workingGroupUserJoined.value === item.value
       );
-      setParticipationLevelOptions(temp?.participation_levels);
+
+      // extract all the participation_levels
+      const optionsForParticipationLevels = temp?.participation_levels
+        ? temp?.participation_levels.map((item) => item.level)
+        : [];
+
+      // the Set will deduplicate participation_levels options
+      setParticipationLevelOptions([...new Set(optionsForParticipationLevels)]);
     }
   }, [workingGroupUserJoined, fullWorkingGroupList]);
 

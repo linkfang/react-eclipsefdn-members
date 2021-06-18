@@ -69,7 +69,6 @@ public class FormOrganizationsResource extends AbstractRESTResource {
     @POST
     public List<FormOrganization> create(@PathParam("id") String formID, FormOrganization org) {
         org.setForm(dao.getReference(formID, MembershipForm.class));
-        org.setFormID(formID);
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org));
     }
 
@@ -99,7 +98,6 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             FormOrganization org) {
         // need to fetch ref to use attached entity
         FormOrganization ref = dao.getReference(id, FormOrganization.class);
-        ref.setFormID(formID);
         ref.setForm(dao.getReference(formID, MembershipForm.class));
         org.cloneTo(ref);
         // update the nested address

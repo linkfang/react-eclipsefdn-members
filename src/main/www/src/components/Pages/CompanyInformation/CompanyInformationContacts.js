@@ -177,7 +177,7 @@ const Contacts = ({ formik }) => {
         label="Same as member rep."
       />
 
-      <div className="row">
+      <div className="row margin-bottom-40">
         {generateContacts(
           companyRep,
           'accounting-rep',

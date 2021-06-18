@@ -1,7 +1,7 @@
 import MembershipContext from '../../../Context/MembershipContext';
 import {
   FETCH_HEADER,
-  api_prefix_form,
+  API_PREFIX_FORM,
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
@@ -36,7 +36,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix_form;
+        url_prefix_local = API_PREFIX_FORM;
       }
 
       fetch(url_prefix_local, { headers: FETCH_HEADER })

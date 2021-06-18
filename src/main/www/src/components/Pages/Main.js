@@ -33,11 +33,16 @@ export default function Main() {
     history.push(nextPage);
   };
 
-  const submitForm = (pageIndex, nextPage) => {
-    // do something for submiting
-    // ...
+  const updateMembershipLevelForm = (values) => {
+    values.forEach((item) => {
+      formikMembershipLevel.setFieldValue(item.field, item.value);
+    });
+  };
 
-    goToNextStep(pageIndex, nextPage);
+  const updateCompanyInfoForm = (values) => {
+    values.forEach((item) => {
+      formikCompanyInfo.setFieldValue(item.field, item.value);
+    });
   };
 
   const formikCompanyInfo = useFormik({
@@ -47,14 +52,33 @@ export default function Main() {
       // update the organization values
       const organization = values.organization;
       const representative = values.representative;
-      setUpdatedFormValues({
+      const purchasingAndVAT = values.purchasingAndVAT;
+      const membershipLevel = values.membershipLevel;
+      const membershipLevelLabel = values['membershipLevel-label'];
+      const signingAuthorityRepresentative =
+        values.signingAuthorityRepresentative;
+
+      const theNewValue = {
         ...updatedFormValues,
         organization,
         representative,
-      });
+        purchasingAndVAT,
+        membershipLevel,
+        'membershipLevel-label': membershipLevelLabel,
+        signingAuthorityRepresentative: signingAuthorityRepresentative,
+      };
+      setUpdatedFormValues(theNewValue);
       console.log('updated company info: ', values);
 
-      executeSendDataByStep(1, values, currentFormId, currentUser.name);
+      const valueToUpdateFormik = [
+        { field: 'purchasingAndVAT', value: purchasingAndVAT },
+        { field: 'membershipLevel', value: membershipLevel },
+        { field: 'membershipLevel-label', value: membershipLevelLabel },
+      ];
+      // set valueToUpdateFormik to membershipLevel formik to make sure the value is up to date
+      updateMembershipLevelForm(valueToUpdateFormik);
+
+      executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name);
 
       goToNextStep(1, '/membership-level');
     },
@@ -66,8 +90,20 @@ export default function Main() {
     onSubmit: (values) => {
       // update the membershipLevel values
       const membershipLevel = values.membershipLevel;
-      setUpdatedFormValues({ ...updatedFormValues, membershipLevel });
+      const membershipLevelLabel = values['membershipLevel-label'];
+      setUpdatedFormValues({
+        ...updatedFormValues,
+        membershipLevel,
+        'membershipLevel-label': membershipLevelLabel,
+      });
       console.log('updated membership level: ', values);
+
+      const valueToUpdateFormik = [
+        { field: 'membershipLevel', value: membershipLevel },
+        { field: 'membershipLevel-label', value: membershipLevelLabel },
+      ];
+      // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
+      updateCompanyInfoForm(valueToUpdateFormik);
 
       executeSendDataByStep(2, values, currentFormId, currentUser.name);
 
@@ -101,6 +137,18 @@ export default function Main() {
         ...updatedFormValues,
         signingAuthorityRepresentative,
       });
+      console.log('updated SigningAuthority: ', values);
+
+      const valueToUpdateFormik = [
+        {
+          field: 'signingAuthorityRepresentative',
+          value: signingAuthorityRepresentative,
+        },
+      ];
+      // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
+      updateCompanyInfoForm(valueToUpdateFormik);
+      executeSendDataByStep(4, values, currentFormId, currentUser.name);
+
       goToNextStep(4, '/review');
     },
   });
@@ -171,6 +219,7 @@ export default function Main() {
                 formik={formikMembershipLevel}
                 isStartNewForm={isStartNewForm}
                 furthestPage={furthestPage}
+                updatedFormValues={updatedFormValues}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -191,7 +240,10 @@ export default function Main() {
 
           <Route path="/signing-authority">
             {furthestPage.index >= 4 ? (
-              <SigningAuthority formik={formikSigningAuthority} />
+              <SigningAuthority
+                formik={formikSigningAuthority}
+                updatedFormValues={updatedFormValues}
+              />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}
@@ -199,7 +251,7 @@ export default function Main() {
 
           <Route path="/review">
             {furthestPage.index >= 5 ? (
-              <Review values={updatedFormValues} submitForm={submitForm} />
+              <Review values={updatedFormValues} submitForm={goToNextStep} />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}

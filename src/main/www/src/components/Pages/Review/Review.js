@@ -148,6 +148,30 @@ const Review = ({ values, submitForm }) => {
           </div>
         </div>
 
+        <h2 className="fw-600 h3">Purchasing Process and VAT</h2>
+        <div className="row margin-bottom-30">
+          <div className="col-md-8">
+            <label>Require Purchasing Process</label>
+            <div className="preview-field">
+              {values.purchasingAndVAT['purchasingProcess-label']['label']}
+            </div>
+          </div>
+
+          <div className="col-md-8">
+            <label>VAT Number</label>
+            <div className="preview-field">
+              {values.purchasingAndVAT.vatNumber}
+            </div>
+          </div>
+
+          <div className="col-md-8">
+            <label>Country of Registration</label>
+            <div className="preview-field">
+              {values.purchasingAndVAT.countryOfRegistration}
+            </div>
+          </div>
+        </div>
+
         <h2 className="fw-600 h3">Intended Membership Level</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-10">

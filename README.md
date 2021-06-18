@@ -4,6 +4,31 @@
 
 Supported by our member organizations, the Eclipse Foundation provides our community with Intellectual Property, Mentorship, Marketing, Event and IT Services.
 
+
+<!-- TOC -->
+- [Getting Started](#getting-started)
+- [CSRF and API Security](#csrf-and-api-security)
+- [Running the project in included web server](#running-the-project-in-included-web-server)
+    - [Dependencies to run](#dependencies-to-run)
+    - [Setup](#setup)
+    - [Running](#running)
+    - [Docker](#docker)
+        - [Generate Certs for HTTPS](#generate-certs-for-https)
+        - [Update your Host file](#update-your-host-file)
+        - [Environment Variables](#environment-variables)
+    - [KeyCloak Setup](#keycloak-setup)
+        - [Create a realm](#create-a-realm)
+        - [Create a user](#create-a-user)
+        - [Eclipse Foundation as an Identity Provider](#eclipse-foundation-as-an-identity-provider)
+        - [Client Configuration](#client-configuration)
+- [Contributing](#contributing)
+    - [Declared Project Licenses](#declared-project-licenses)
+- [Bugs and feature requests](#bugs-and-feature-requests)
+- [Authors](#authors)
+- [Trademarks](#trademarks)
+- [Copyright and license](#copyright-and-license)
+<!-- /TOC -->
+
 ## Getting Started
 
 Before you start, please make sure you have [yarn](https://classic.yarnpkg.com/en/docs/install/) installed.
@@ -23,6 +48,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
+
+## CSRF and API Security
+Currently, the endpoints that can contain personal data of users have been secured by OIDC and CSRF. What this means for development in the front end is all requests will need to be performed with a legitimate Eclipse Foundation login and account for the CSRF header. 
+
+Pertaining to data posted to the API, there is no current automatic deletion policy enforced, and no current way in the UI to send a call to delete data. If you wish to delete this data, you will need to craft javascript within the site to take advantage of the session and CSRF headers, and manually make the call. More information on the form deletion endpoint can be seen in the OpenAPI spec under `/spec/openapi.yml`.
+
+Additionally, when requesting any PII/form data, a CSRF token will need to be passed unless disabled on a development server. This token will live under the `x-csrf-token` header that is supplied on every request the user makes to the server, including the unprotected `/csrf/` endpoint that is available. The token should be posted back to the server using the same header. This value will remain the same for the duration of the browser session.
+
+[^ Top](#react-eclipsefdn-members)
 ## Running the project in included web server
 
 ### Dependencies to run  
@@ -31,6 +65,7 @@ You will also see any lint errors in the console.
 - Maven
 - Java version 11
 
+[^ Top](#react-eclipsefdn-members)
 ### Setup
 
 As part of the set up, you will need to create a `secret.properties` file within the `./config` folder and set up the secrets that are required to run the application. If named `secret.properties`, the file should be ignored by Github automatically, making it less risky that credentials are accidentally uploaded to a branch.  
@@ -56,10 +91,12 @@ As a side note, regeneration of the database on start along with the insertion o
 1. Setting `%dev.eclipse.dataloader.enabled` to false. This property is what enables the Data bootstrap to load in mock data.  
 2. Removing the `%dev.quarkus.hibernate-orm.database.generation` property or commenting it out. This is what resets the database to empty on start.
 
+[^ Top](#react-eclipsefdn-members)
 ### Running
 
 To run the server as a local instance as a stack, you will need to compile the application first, which can be done through `make compile-start`. This takes care of all of the steps needed to cleanly build and rebuild the application from scratch. This will also run the stack with the packaged application.
 
+[^ Top](#react-eclipsefdn-members)
 ### Docker
 
 We include a `docker-compose.yml` file with this project to help you get started. This includes:
@@ -112,6 +149,7 @@ Once this initial setup is done, you can start these services with this command:
 make compile-start
 ```
 
+[^ Top](#react-eclipsefdn-members)
 ### KeyCloak Setup
 
 #### Create a realm
@@ -157,6 +195,7 @@ Clients tab allows you to manage list of allowed applications.
 
 To create a client, click on `Clients` in the left menu. You can set the client_id to `rem_app` and the `Root URL` to `http://localhost:3000`. Make sure that the `Client Protocol` is set to `openid-connect`  and the `Access Type` is set to `confidential`.
 
+[^ Top](#react-eclipsefdn-members)
 ## Contributing
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) the [eclipsefdn/react-eclipsefdn-members](https://github.com/eclipsefdn/react-eclipsefdn-members) repository
@@ -166,6 +205,7 @@ To create a client, click on `Clients` in the left menu. You can set the client_
 5. Push feature branch: `git push origin my-new-feature`
 6. Submit a pull request
 
+[^ Top](#react-eclipsefdn-members)
 ### Declared Project Licenses
 
 This program and the accompanying materials are made available under the terms
@@ -174,10 +214,12 @@ http://www.eclipse.org/legal/epl-2.0.
 
 SPDX-License-Identifier: EPL-2.0
 
+[^ Top](#react-eclipsefdn-members)
 ## Bugs and feature requests
 
 Have a bug or a feature request? Please search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/eclipsefdn/react-eclipsefdn-members/issues/new).
 
+[^ Top](#react-eclipsefdn-members)
 ## Authors
 
 **Christopher Guindon (Eclipse Foundation)**
@@ -193,11 +235,13 @@ Have a bug or a feature request? Please search for existing and closed issues. I
 
 - <https://github.com/linkfang>
 
+[^ Top](#react-eclipsefdn-members)
 ## Trademarks
 
 * Eclipse® is a Trademark of the Eclipse Foundation, Inc.
 * Eclipse Foundation is a Trademark of the Eclipse Foundation, Inc.
 
+[^ Top](#react-eclipsefdn-members)
 ## Copyright and license
 
 Copyright 2021 the [Eclipse Foundation, Inc.](https://www.eclipse.org) and the [react-eclipsefdn-members authors](https://github.com/eclipsefdn/react-eclipsefdn-members/graphs/contributors). Code released under the [Eclipse Public License Version 2.0 (EPL-2.0)](https://github.com/eclipsefdn/react-eclipsefdn-members/blob/src/LICENSE).

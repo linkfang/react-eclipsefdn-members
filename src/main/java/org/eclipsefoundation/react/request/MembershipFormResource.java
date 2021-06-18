@@ -43,7 +43,7 @@ import io.quarkus.security.Authenticated;
  *
  * @author Martin Lowe
  */
-@Authenticated
+//@Authenticated
 @Path("form")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -106,7 +106,7 @@ public class MembershipFormResource extends AbstractRESTResource {
     public Response delete(@PathParam("id") String formID) {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
-        params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
+        //params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
 
         dao.delete(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         return Response.ok().build();
