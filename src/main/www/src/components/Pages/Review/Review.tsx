@@ -1,13 +1,13 @@
 import React from 'react';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
-import { FormValue } from '../../../Constants/Interface';
+import { FormValue } from '../../../Interfaces/form_interface';
 
-interface Props {
+interface ReviewProps {
   values: FormValue;
   submitForm: (pageIndex: number, nextPage: string) => void;
 }
 
-const Review: React.FC<Props> = ({ values, submitForm }) => {
+const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
   return (
     <form onSubmit={() => submitForm(5, '/submitted')}>
       <h1 className="fw-600 h2">
