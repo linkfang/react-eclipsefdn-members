@@ -48,7 +48,7 @@ spec:
         - name: secret-properties
           mountPath: "/run/secrets/react-membership-app"
           readOnly: true
-                - name: app
+      - name: app
         image: eclipsefdn/eclipsefdn-react-membership:latest
         imagePullPolicy: Always
         ports:
@@ -79,7 +79,7 @@ spec:
           requests:
             cpu: 200m
             memory: 128Mi
-                volumes:
+      volumes:
       - name: secret-properties
         secret:
           secretName: react-membership-app-staging

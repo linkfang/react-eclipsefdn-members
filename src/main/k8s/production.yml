@@ -80,9 +80,9 @@ spec:
             cpu: 200m
             memory: 128Mi
       volumes:
-      - name: secret-properties
-        secret:
-          secretName: react-membership-app
+        - name: secret-properties
+          secret:
+            secretName: react-membership-app
 ---
 apiVersion: "v1"
 kind: "Service"

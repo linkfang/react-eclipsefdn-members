@@ -3,3 +3,5 @@
 !target/*-runner.jar
 !target/lib/*
 !target/quarkus-app/*
+!config/nginx/*
+!src/main/www/build/*
