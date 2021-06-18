@@ -187,9 +187,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // then it means this is the 1st time the user see this page
       // need to GET the data
       if (!hasOrgData) detectModeAndFetch();
-
       if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
-
       if (hasOrgData && hasMembershipLevelData) setLoading(false);
     }
   }, [isStartNewForm, setFieldValue, currentFormId]);

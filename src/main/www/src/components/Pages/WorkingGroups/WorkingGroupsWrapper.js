@@ -125,11 +125,9 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
 
     if (isStartNewForm) {
       setIsLoading(false);
-    } else if (!hasWGData) {
+    } else if (!hasWGData && fullWorkingGroupList.length > 0) {
       // continue with an existing one
-      if (fullWorkingGroupList.length > 0) {
-        fetchWorkingGroupsUserJoined();
-      }
+      fetchWorkingGroupsUserJoined();
     } else {
       setIsLoading(false);
     }
