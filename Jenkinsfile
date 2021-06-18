@@ -115,6 +115,7 @@ pipeline {
           readTrusted 'pom.xml'
           sh 'make compile'
           stash name: "target", includes: "target/**/*"
+          stash name: "build", includes: "src/main/www/build/**/*"
         }
       }
     }
@@ -127,6 +128,8 @@ pipeline {
         readTrusted 'src/main/docker/Dockerfile.jvm'
 
         unstash 'target'
+        unstash 'build'
+
         sh '''
           docker build -f src/main/docker/Dockerfile.jvm --no-cache -t ${IMAGE_NAME}:${TAG_NAME} -t ${IMAGE_NAME}:latest .
           docker build -f src/main/docker/Dockerfile.www --no-cache -t ${IMAGE_NAME}-www:${TAG_NAME} -t ${IMAGE_NAME}-www:latest .
