@@ -76,7 +76,7 @@ pipeline {
   environment {
     APP_NAME = 'eclipsefdn-react-membership'
     NAMESPACE = 'foundation-internal-webdev-apps'
-    IMAGE_NAME = 'eclipsefdn/react-membership'
+    IMAGE_NAME = 'eclipsefdn/eclipsefdn-react-membership'
     CONTAINER_NAME = 'api'
     ENVIRONMENT = sh(
       script: """
