@@ -5,7 +5,7 @@
  * just hope to use consistent variables for strings.
  */
 export const api_prefix = () => {
-  return '//' + window.location.host;
+  return '//' + window.location.host + '/api';
 };
 
 export const API_PREFIX_FORM = api_prefix() + '/form';

@@ -29,7 +29,7 @@ spec:
                 - fast
             weight: 1
       containers:
-      - name: app
+      - name: api
         image: eclipsefdn/eclipsefdn-react-membership:latest
         imagePullPolicy: Always
         ports:
@@ -41,13 +41,44 @@ spec:
           requests:
             cpu: 200m
             memory: 128Mi
-        env: 
+        env:
         - name: CONFIG_SECRET_PATH
           value: "/run/secrets/react-membership-app/secret.properties"
         volumeMounts:
         - name: secret-properties
           mountPath: "/run/secrets/react-membership-app"
           readOnly: true
+      - name: app
+        image: eclipsefdn/eclipsefdn-react-membership:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8090
+        resources:
+          limits:
+            cpu: '1'
+            memory: 256Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        env:
+        - name: CONFIG_SECRET_PATH
+          value: "/run/secrets/react-membership-app/secret.properties"
+        volumeMounts:
+        - name: secret-properties
+          mountPath: "/run/secrets/react-membership-app"
+          readOnly: true
+      - name: nginx
+        image: eclipsefdn/eclipsefdn-react-membership-www:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: '1'
+            memory: 256Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
       volumes:
       - name: secret-properties
         secret:

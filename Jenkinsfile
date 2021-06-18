@@ -77,7 +77,7 @@ pipeline {
     APP_NAME = 'eclipsefdn-react-membership'
     NAMESPACE = 'foundation-internal-webdev-apps'
     IMAGE_NAME = 'eclipsefdn/react-membership'
-    CONTAINER_NAME = 'app'
+    CONTAINER_NAME = 'api'
     ENVIRONMENT = sh(
       script: """
         if [ "${env.BRANCH_NAME}" = "master" ]; then
@@ -127,8 +127,10 @@ pipeline {
         readTrusted 'src/main/docker/Dockerfile.jvm'
 
         unstash 'target'
-
-        sh 'docker build -f src/main/docker/Dockerfile.jvm --no-cache -t ${IMAGE_NAME}:${TAG_NAME} -t ${IMAGE_NAME}:latest .'
+        sh '''
+          docker build -f src/main/docker/Dockerfile.jvm --no-cache -t ${IMAGE_NAME}:${TAG_NAME} -t ${IMAGE_NAME}:latest .
+          docker build -f src/main/docker/Dockerfile.www --no-cache -t ${IMAGE_NAME}-www:${TAG_NAME} -t ${IMAGE_NAME}-www:latest .
+        '''
       }
     }
 
@@ -147,6 +149,8 @@ pipeline {
           sh '''
             docker push ${IMAGE_NAME}:${TAG_NAME}
             docker push ${IMAGE_NAME}:latest
+            docker push ${IMAGE_NAME}-www:${TAG_NAME}
+            docker push ${IMAGE_NAME}-www:latest
           '''
         }
       }
@@ -199,6 +203,12 @@ pipeline {
             selector: "app=${env.APP_NAME},environment=${env.ENVIRONMENT}",
             containerName: "${env.CONTAINER_NAME}",
             newImageRef: "${env.IMAGE_NAME}:${env.TAG_NAME}"
+          ])
+          updateContainerImage([
+            namespace: "${env.NAMESPACE}",
+            selector: "app=${env.APP_NAME},environment=${env.ENVIRONMENT}",
+            containerName: "nginx",
+            newImageRef: "${env.IMAGE_NAME}-www:${env.TAG_NAME}"
           ])
         }
       }
