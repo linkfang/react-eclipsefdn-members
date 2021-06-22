@@ -81,6 +81,7 @@ export function getCurrentMode() {
     '//membership-staging.eclipse.org',
     '//membership.eclipse.org/',
     '//www.rem.docker/',
+    '//nginx.rem.docker/'
   ].some((value) => {
     return window.location.href.indexOf(value) !== -1;
   });

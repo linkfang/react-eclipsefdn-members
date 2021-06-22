@@ -23,6 +23,8 @@ import javax.ws.rs.core.Response;
 import io.quarkus.security.Authenticated;
 import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 /**
  * Handles OIDC routing for the request.
  *
@@ -31,11 +33,14 @@ import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 @Path("")
 public class OIDCResource extends AbstractRESTResource {
 
+    @ConfigProperty(name = "eclipse.app.base-url", defaultValue = "/")
+    String baseUrl;
+
     @GET
     @Authenticated
     @Path("/login")
     public Response routeLogin() throws URISyntaxException {
-        return redirect("/");
+        return redirect(baseUrl);
     }
 
     /**
@@ -46,7 +51,7 @@ public class OIDCResource extends AbstractRESTResource {
     @GET
     @Path("/logout")
     public Response routeLogout() throws URISyntaxException {
-        return redirect("/");
+        return redirect(baseUrl);
     }
 
     @GET
@@ -83,7 +88,6 @@ public class OIDCResource extends AbstractRESTResource {
         return Response.temporaryRedirect(new URI(location)).build();
     }
 
-    
     public static class InfoWrapper {
         String name;
         String givenName;
