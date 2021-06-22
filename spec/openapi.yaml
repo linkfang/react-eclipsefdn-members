@@ -79,6 +79,8 @@ paths:
                         $ref: '#/components/schemas/MembershipForm'
             403:
                description: Unauthorized
+            404:
+               description: Form not found
             500:
                description: Error while retrieving data
       put:
@@ -111,6 +113,28 @@ paths:
                description: Success
             403:
                description: Unauthorized
+   /form/{id}/complete:
+      parameters:
+      -  name: id
+         in: path
+         description: Unique ID of the membership form entry
+         required: true
+         schema:
+            $ref: '#/components/schemas/ObjectID'
+      post: 
+         tags:
+         - Membership form
+         summary: Membership form submit
+         description: Submit a finalized form to the membership team 
+         responses:
+            200:
+               description: Success
+            403:
+               description: Unauthorized
+            404:
+               description: Form not found
+            500:
+               description: Error while retrieving data
    /form/{id}/contacts:
       parameters:
       -  name: id
