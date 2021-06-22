@@ -25,10 +25,6 @@ const MembershipLevel = ({ formik }) => {
   const { membershipLevel } = formField;
   const classes = useStyles();
 
-  // Fetch data only once and prefill data, as long as
-  // currentFormId, membershipLevel.name and setFieldValue
-  // Function does not change, will not cause re-render again
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">

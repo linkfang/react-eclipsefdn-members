@@ -48,7 +48,6 @@ const ParticipationLevel = ({
       // the Set will deduplicate participation_levels options
       setParticipationLevelOptions([...new Set(optionsForParticipationLevels)]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workingGroupUserJoined, fullWorkingGroupList]);
 
   return (

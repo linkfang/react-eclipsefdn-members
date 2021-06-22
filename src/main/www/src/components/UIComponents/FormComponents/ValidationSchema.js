@@ -35,7 +35,7 @@ export const validationSchema = [
   yup.object().shape({
     // First step - representative contacts
     representative: yup.object().shape({
-      company: yup.object().shape({
+      member: yup.object().shape({
         email: yup.string('Enter your email').email('Enter a valid email'),
       }),
       marketing: yup.object().shape({
