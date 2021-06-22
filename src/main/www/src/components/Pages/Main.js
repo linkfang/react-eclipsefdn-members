@@ -19,6 +19,8 @@ import { validationSchema } from '../UIComponents/FormComponents/ValidationSchem
 import { useHistory } from 'react-router-dom';
 import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
+import NotFound404 from './ErrorPages/NotFound404';
+import InternalError50x from './ErrorPages/InternalError50x';
 
 export default function Main() {
   const history = useHistory();
@@ -227,18 +229,14 @@ export default function Main() {
   return (
     <div className="container eclipseFdn-membership-webform">
       <>
-        {window.location.hash === '/' || window.location.hash === '#sign-in' ? (
-          <SignInIntroduction />
-        ) : null}
-
-        {window.location.hash !== '#submitted' && renderStepper()}
-
         <Switch>
           <Route exact path="/">
             <Redirect to="/sign-in" />
           </Route>
 
           <Route exact path="/sign-in">
+            <SignInIntroduction />
+            {renderStepper()}
             <SignIn
               formField={formField}
               label={COMPANY_INFORMATION}
@@ -249,13 +247,11 @@ export default function Main() {
           </Route>
 
           <Route path="/company-info">
+            {renderStepper()}
             {
               // stop users visiting steps/pages that are not able to edit yet
               furthestPage.index >= 1 ? (
-                <CompanyInformation
-                  formik={formikCompanyInfo}
-                  isStartNewForm={isStartNewForm}
-                />
+                <CompanyInformation formik={formikCompanyInfo} isStartNewForm={isStartNewForm} />
               ) : (
                 // if uses are not allowed to visit this page,
                 // then will be brought back to the furthest they can visit
@@ -265,6 +261,7 @@ export default function Main() {
           </Route>
 
           <Route path="/membership-level">
+            {renderStepper()}
             {furthestPage.index >= 2 ? (
               <MembershipLevel
                 formik={formikMembershipLevel}
@@ -278,6 +275,7 @@ export default function Main() {
           </Route>
 
           <Route path="/working-groups">
+            {renderStepper()}
             {furthestPage.index >= 3 ? (
               <WorkingGroupsWrapper
                 formik={formikWorkingGroups}
@@ -290,17 +288,16 @@ export default function Main() {
           </Route>
 
           <Route path="/signing-authority">
+            {renderStepper()}
             {furthestPage.index >= 4 ? (
-              <SigningAuthority
-                formik={formikSigningAuthority}
-                updatedFormValues={updatedFormValues}
-              />
+              <SigningAuthority formik={formikSigningAuthority} updatedFormValues={updatedFormValues} />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}
           </Route>
 
           <Route path="/review">
+            {renderStepper()}
             {furthestPage.index >= 5 ? (
               <Review values={updatedFormValues} submitForm={goToNextStep} />
             ) : (
@@ -309,11 +306,15 @@ export default function Main() {
           </Route>
 
           <Route path="/submitted">
-            {furthestPage.index >= 6 ? (
-              <SubmitSuccess />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
+            {furthestPage.index >= 6 ? <SubmitSuccess /> : <Redirect to={furthestPage.pathName} />}
+          </Route>
+
+          <Route path="/404">
+            <NotFound404 />
+          </Route>
+
+          <Route path="/50x">
+            <InternalError50x />
           </Route>
         </Switch>
       </>
