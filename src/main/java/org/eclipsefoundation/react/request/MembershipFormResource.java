@@ -43,7 +43,7 @@ import io.quarkus.security.Authenticated;
  *
  * @author Martin Lowe
  */
-//@Authenticated
+@Authenticated
 @Path("form")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -89,6 +89,7 @@ public class MembershipFormResource extends AbstractRESTResource {
     @POST
     public List<MembershipForm> create(MembershipForm mem) {
         mem.setUserID(ident.getPrincipal().getName());
+        mem.setDateCreated(System.currentTimeMillis());
         return dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mem));
     }
 
