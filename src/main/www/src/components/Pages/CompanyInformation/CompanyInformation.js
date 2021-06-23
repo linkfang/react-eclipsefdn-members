@@ -5,6 +5,7 @@ import {
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
+  requestErrorHandler,
 } from '../../../Utils/formFunctionHelpers';
 import CompanyInformationCompany from './CompanyInformationCompany';
 import CompanyInformationContacts from './CompanyInformationContacts';
@@ -46,7 +47,7 @@ const useStyles = makeStyles(() => ({
 let hasOrgData = false;
 let hasMembershipLevelData = false;
 
-const CompanyInformation = ({ formik, isStartNewForm }) => {
+const CompanyInformation = ({ formik, isStartNewForm, redirectTo }) => {
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
@@ -74,68 +75,75 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       if (getCurrentMode() === MODE_REACT_API) {
         url_prefix_local = API_PREFIX_FORM;
       }
-      // If the current form id exsits
-      if (currentFormId) {
-        // Using promise pool, because in first step,
-        // need to get company data, and contacts data
-        let pool = [
-          fetch(
-            url_prefix_local +
-              `/${currentFormId}/` +
-              END_POINT.organizations +
-              url_suffix_local,
-            { headers: FETCH_HEADER }
-          ),
-          fetch(
-            url_prefix_local +
-              `/${currentFormId}/` +
-              END_POINT.contacts +
-              url_suffix_local,
-            { headers: FETCH_HEADER }
-          ),
-        ];
-        Promise.all(pool)
-          .then((res) => Promise.all(res.map((r) => r.json())))
-          .then(([organizations, contacts]) => {
-            // Matching the field data
-            if (organizations[0]) {
-              // the organization data returned is always an
-              // array of one object, that is why using [0]
-              // Call the the function to map the retrived
-              // organization backend data to fit frontend
-              let tempOrg = matchCompanyFields(organizations[0]);
-              // Call the setFieldValue of Formik, to set
-              // organization field with the mapped data,
-              // if nested, it will automatically map the
-              // properties and values
-              setFieldValue('organization', tempOrg);
-              hasOrgData = true;
-            }
 
-            if (contacts.length) {
-              // Call the the function to map the retrived contacts
-              // (company representative, marketing rep, accounting rep)
-              // backend data to fit frontend
-              let tempContacts = matchContactFields(contacts);
-              // Prefill Data --> Call the setFieldValue of Formik,
-              // to set representative field with the mapped data,
-              // if nested, it will automatically map the properties and values
-              setFieldValue(
-                'representative',
-                tempContacts.organizationContacts
-              );
+      // Using promise pool, because in first step,
+      // need to get company data, and contacts data
+      let pool = [
+        fetch(
+          url_prefix_local +
+            `/${currentFormId}/` +
+            END_POINT.organizations +
+            url_suffix_local,
+          {
+            headers: FETCH_HEADER,
+          }
+        ),
+        fetch(
+          url_prefix_local +
+            `/${currentFormId}/` +
+            END_POINT.contacts +
+            url_suffix_local,
+          {
+            headers: FETCH_HEADER,
+          }
+        ),
+      ];
+      Promise.all(pool)
+        .then((res) =>
+          Promise.all(
+            res.map((r) => {
+              if (r.ok) return r.json();
 
-              setFieldValue(
-                'signingAuthorityRepresentative',
-                tempContacts.signingAuthorityRepresentative
-              );
-              hasOrgData = true;
-            }
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
+              requestErrorHandler(r.status, redirectTo);
+              throw new Error(`${r.status} ${r.statusText}`);
+            })
+          )
+        )
+        .then(([organizations, contacts]) => {
+          // Matching the field data
+          if (organizations[0]) {
+            // the organization data returned is always an
+            // array of one object, that is why using [0]
+            // Call the the function to map the retrived
+            // organization backend data to fit frontend
+            let tempOrg = matchCompanyFields(organizations[0]);
+            // Call the setFieldValue of Formik, to set
+            // organization field with the mapped data,
+            // if nested, it will automatically map the
+            // properties and values
+            setFieldValue('organization', tempOrg);
+            hasOrgData = true;
+          }
+
+          if (contacts.length) {
+            // Call the the function to map the retrived contacts
+            // (company representative, marketing rep, accounting rep)
+            // backend data to fit frontend
+            let tempContacts = matchContactFields(contacts);
+            // Prefill Data --> Call the setFieldValue of Formik,
+            // to set representative field with the mapped data,
+            // if nested, it will automatically map the properties and values
+            setFieldValue('representative', tempContacts.organizationContacts);
+
+            setFieldValue(
+              'signingAuthorityRepresentative',
+              tempContacts.signingAuthorityRepresentative
+            );
+            hasOrgData = true;
+          }
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     };
 
     const detectModeAndFetchMembershipLevel = () => {
@@ -150,34 +158,35 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         url_prefix_local = API_PREFIX_FORM;
       }
 
-      // If the current form exsits, and it is not creating a new form
-      if (currentFormId) {
-        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
-          headers: FETCH_HEADER,
-        })
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data) {
-              // mapMembershipLevel(): Call the the function to map
-              // the retrived membership level backend data to fit frontend, and
-              // setFieldValue(): Prefill Data --> Call the setFieldValue of
-              // Formik, to set membershipLevel field with the mapped data
-              const tempMembershipLevel = mapMembershipLevel(
-                data[0]?.membership_level,
-                MEMBERSHIP_LEVELS
-              );
-              setFieldValue('membershipLevel', tempMembershipLevel.value);
-              setFieldValue('membershipLevel-label', tempMembershipLevel);
+      fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
+        headers: FETCH_HEADER,
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
 
-              const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
-              setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
-              hasMembershipLevelData = true;
-            }
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
+          requestErrorHandler(res.status, redirectTo);
+          throw new Error(`${res.status} ${res.statusText}`);
+        })
+        .then((data) => {
+          if (data) {
+            // mapMembershipLevel(): Call the the function to map
+            // the retrived membership level backend data to fit frontend, and
+            // setFieldValue(): Prefill Data --> Call the setFieldValue of
+            // Formik, to set membershipLevel field with the mapped data
+            const tempMembershipLevel = mapMembershipLevel(
+              data[0]?.membership_level,
+              MEMBERSHIP_LEVELS
+            );
+            setFieldValue('membershipLevel', tempMembershipLevel.value);
+            setFieldValue('membershipLevel-label', tempMembershipLevel);
+
+            const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
+            setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
+            hasMembershipLevelData = true;
+          }
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     };
 
     if (isStartNewForm) {
@@ -190,7 +199,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
       if (hasOrgData && hasMembershipLevelData) setLoading(false);
     }
-  }, [isStartNewForm, setFieldValue, currentFormId]);
+  }, [isStartNewForm, setFieldValue, currentFormId, redirectTo]);
 
   // If it is in loading status,
   // only return a loading spinning

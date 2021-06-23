@@ -108,6 +108,7 @@ export default function Main() {
         theNewValue,
         currentFormId,
         currentUser.name,
+        history.push,
         setFieldValueObj
       );
 
@@ -136,7 +137,13 @@ export default function Main() {
       // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
       updateCompanyInfoForm(valueToUpdateFormik);
 
-      executeSendDataByStep(2, values, currentFormId, currentUser.name);
+      executeSendDataByStep(
+        2,
+        values,
+        currentFormId,
+        currentUser.name,
+        history.push
+      );
 
       goToNextStep(2, '/working-groups');
     },
@@ -160,6 +167,7 @@ export default function Main() {
         values,
         currentFormId,
         currentUser.name,
+        history.push,
         setFieldValueObj
       );
 
@@ -200,6 +208,7 @@ export default function Main() {
         values,
         currentFormId,
         currentUser.name,
+        history.push,
         setFieldValueObj
       );
 
@@ -251,7 +260,11 @@ export default function Main() {
             {
               // stop users visiting steps/pages that are not able to edit yet
               furthestPage.index >= 1 ? (
-                <CompanyInformation formik={formikCompanyInfo} isStartNewForm={isStartNewForm} />
+                <CompanyInformation
+                  formik={formikCompanyInfo}
+                  isStartNewForm={isStartNewForm}
+                  redirectTo={history.push}
+                />
               ) : (
                 // if uses are not allowed to visit this page,
                 // then will be brought back to the furthest they can visit
@@ -281,6 +294,7 @@ export default function Main() {
                 formik={formikWorkingGroups}
                 isStartNewForm={isStartNewForm}
                 furthestPage={furthestPage}
+                redirectTo={history.push}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -290,7 +304,10 @@ export default function Main() {
           <Route path="/signing-authority">
             {renderStepper()}
             {furthestPage.index >= 4 ? (
-              <SigningAuthority formik={formikSigningAuthority} updatedFormValues={updatedFormValues} />
+              <SigningAuthority
+                formik={formikSigningAuthority}
+                updatedFormValues={updatedFormValues}
+              />
             ) : (
               <Redirect to={furthestPage.pathName} />
             )}
@@ -306,7 +323,11 @@ export default function Main() {
           </Route>
 
           <Route path="/submitted">
-            {furthestPage.index >= 6 ? <SubmitSuccess /> : <Redirect to={furthestPage.pathName} />}
+            {furthestPage.index >= 6 ? (
+              <SubmitSuccess />
+            ) : (
+              <Redirect to={furthestPage.pathName} />
+            )}
           </Route>
 
           <Route path="/404">
@@ -316,6 +337,9 @@ export default function Main() {
           <Route path="/50x">
             <InternalError50x />
           </Route>
+
+            {/* Redirect user to 404 page for all the unknown pathnames/urls */}
+          <Redirect to="404" />
         </Switch>
       </>
     </div>

@@ -348,6 +348,7 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
+  redirectTo,
   setFieldValueObj
 ) {
   switch (step) {
@@ -356,6 +357,7 @@ export async function executeSendDataByStep(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
+        redirectTo,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -369,6 +371,7 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.COMPANY,
           formId
         ),
+        redirectTo,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -382,6 +385,7 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.MARKETING,
           formId
         ),
+        redirectTo,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -395,6 +399,7 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.ACCOUNTING,
           formId
         ),
+        redirectTo,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -403,7 +408,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo
       );
       break;
 
@@ -411,7 +417,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo
       );
       break;
 
@@ -421,6 +428,7 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
+          redirectTo,
           setFieldValueObj,
           index
         );
@@ -436,6 +444,7 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.SIGNING,
           formId
         ),
+        redirectTo,
         setFieldValueObj
       );
       return;
@@ -457,6 +466,7 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
+  redirectTo,
   setFieldValueObj,
   index
 ) {
@@ -487,8 +497,10 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        console.log(res.status);
-        return res.json();
+        if (res.ok) return res.json();
+
+        requestErrorHandler(res.status, redirectTo);
+        throw new Error(`${res.status} ${res.statusText}`);
       })
       .then((data) => {
         if (setFieldValueObj && method === 'POST') {
@@ -549,7 +561,8 @@ function callSendData(
               break;
           }
         }
-      });
+      })
+      .catch((err) => console.log(err));
   }
 }
 
@@ -634,4 +647,17 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
+}
+
+export function requestErrorHandler(statusCode, redirectTo) {
+  switch (statusCode) {
+    case 404:
+      redirectTo('/404');
+      break;
+    case 500:
+      redirectTo('/50x');
+      break;
+    default:
+      break;
+  }
 }
