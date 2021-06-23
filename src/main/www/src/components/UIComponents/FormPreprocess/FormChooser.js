@@ -5,6 +5,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  API_FORM_PARAM,
 } from '../../../Constants/Constants';
 import { handleNewForm } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -36,7 +37,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = API_PREFIX_FORM;
+        url_prefix_local = API_PREFIX_FORM + API_FORM_PARAM;
       }
 
       fetch(url_prefix_local, { headers: FETCH_HEADER })
