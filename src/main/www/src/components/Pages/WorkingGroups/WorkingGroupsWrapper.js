@@ -37,7 +37,12 @@ import { FormikProvider } from 'formik';
 
 let hasWGData = false;
 
-const WorkingGroupsWrapper = ({ formik, isStartNewForm, redirectTo }) => {
+const WorkingGroupsWrapper = ({
+  formik,
+  isStartNewForm,
+  redirectTo,
+  handleLoginExpired,
+}) => {
   const { currentFormId } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const [isLoading, setIsLoading] = useState(true);
@@ -67,7 +72,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, redirectTo }) => {
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo);
+          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
           throw new Error(`${res.status} ${res.statusText}`);
         })
         .then((data) => {
@@ -82,7 +87,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, redirectTo }) => {
     };
 
     fetchAvailableFullWorkingGroupList();
-  }, [redirectTo]);
+  }, [redirectTo, handleLoginExpired]);
 
   useEffect(() => {
     // Fetch the working groups user has joined
@@ -113,7 +118,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, redirectTo }) => {
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo);
+          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
           throw new Error(`${res.status} ${res.statusText}`);
         })
         .then((data) => {
@@ -141,7 +146,14 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm, redirectTo }) => {
     } else {
       setIsLoading(false);
     }
-  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue, redirectTo]);
+  }, [
+    isStartNewForm,
+    currentFormId,
+    fullWorkingGroupList,
+    setFieldValue,
+    redirectTo,
+    handleLoginExpired,
+  ]);
 
   if (isLoading) {
     return <Loading />;

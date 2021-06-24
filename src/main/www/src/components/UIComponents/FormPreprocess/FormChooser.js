@@ -17,7 +17,12 @@ const styles = {
   textAlign: 'center',
 };
 
-const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
+const FormChooser = ({
+  setFurthestPage,
+  history,
+  setIsStartNewForm,
+  handleLoginExpired,
+}) => {
   const { setCurrentFormId } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
@@ -46,7 +51,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, history.push);
+          requestErrorHandler(res.status, history.push, handleLoginExpired);
           throw new Error(`${res.status} ${res.statusText}`);
         })
         .then((data) => {
@@ -65,7 +70,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
     if (hasExistingForm === '') {
       fetchExistingForms();
     }
-  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm, history.push]);
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm, history.push, handleLoginExpired]);
 
   return (
     <>

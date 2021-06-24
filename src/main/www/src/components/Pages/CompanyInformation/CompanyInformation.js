@@ -47,7 +47,12 @@ const useStyles = makeStyles(() => ({
 let hasOrgData = false;
 let hasMembershipLevelData = false;
 
-const CompanyInformation = ({ formik, isStartNewForm, redirectTo }) => {
+const CompanyInformation = ({
+  formik,
+  isStartNewForm,
+  redirectTo,
+  handleLoginExpired,
+}) => {
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
@@ -104,7 +109,7 @@ const CompanyInformation = ({ formik, isStartNewForm, redirectTo }) => {
             res.map((r) => {
               if (r.ok) return r.json();
 
-              requestErrorHandler(r.status, redirectTo);
+              requestErrorHandler(r.status, redirectTo, handleLoginExpired);
               throw new Error(`${r.status} ${r.statusText}`);
             })
           )
@@ -164,7 +169,7 @@ const CompanyInformation = ({ formik, isStartNewForm, redirectTo }) => {
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo);
+          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
           throw new Error(`${res.status} ${res.statusText}`);
         })
         .then((data) => {
@@ -199,7 +204,7 @@ const CompanyInformation = ({ formik, isStartNewForm, redirectTo }) => {
       if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
       if (hasOrgData && hasMembershipLevelData) setLoading(false);
     }
-  }, [isStartNewForm, setFieldValue, currentFormId, redirectTo]);
+  }, [isStartNewForm, setFieldValue, currentFormId, redirectTo, handleLoginExpired]);
 
   // If it is in loading status,
   // only return a loading spinning

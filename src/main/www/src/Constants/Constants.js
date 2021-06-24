@@ -16,6 +16,9 @@ export const WORKING_GROUPS = 'Working Groups';
 export const SIGNING_AUTHORITY = 'Signing Authority';
 export const REVIEW = 'Review';
 
+export const LOGIN_EXPIRED_MSG =
+  'Your session has expired, please sign in again.';
+
 export const FETCH_METHOD = {
   POST: 'POST',
   GET: 'GET',
@@ -81,7 +84,7 @@ export function getCurrentMode() {
     '//membership-staging.eclipse.org',
     '//membership.eclipse.org/',
     '//www.rem.docker/',
-    '//nginx.rem.docker/'
+    '//nginx.rem.docker/',
   ].some((value) => {
     return window.location.href.indexOf(value) !== -1;
   });

@@ -349,6 +349,7 @@ export async function executeSendDataByStep(
   formId,
   userId,
   redirectTo,
+  handleLoginExpired,
   setFieldValueObj
 ) {
   switch (step) {
@@ -358,6 +359,7 @@ export async function executeSendDataByStep(
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
         redirectTo,
+        handleLoginExpired,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -372,6 +374,7 @@ export async function executeSendDataByStep(
           formId
         ),
         redirectTo,
+        handleLoginExpired,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -386,6 +389,7 @@ export async function executeSendDataByStep(
           formId
         ),
         redirectTo,
+        handleLoginExpired,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -400,6 +404,7 @@ export async function executeSendDataByStep(
           formId
         ),
         redirectTo,
+        handleLoginExpired,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -409,7 +414,8 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo
+        redirectTo,
+        handleLoginExpired
       );
       break;
 
@@ -418,7 +424,8 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo
+        redirectTo,
+        handleLoginExpired
       );
       break;
 
@@ -429,6 +436,7 @@ export async function executeSendDataByStep(
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
           redirectTo,
+          handleLoginExpired,
           setFieldValueObj,
           index
         );
@@ -445,6 +453,7 @@ export async function executeSendDataByStep(
           formId
         ),
         redirectTo,
+        handleLoginExpired,
         setFieldValueObj
       );
       return;
@@ -467,6 +476,7 @@ function callSendData(
   endpoint = '',
   dataBody,
   redirectTo,
+  handleLoginExpired,
   setFieldValueObj,
   index
 ) {
@@ -649,7 +659,11 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
 }
 
-export function requestErrorHandler(statusCode, redirectTo) {
+export function requestErrorHandler(
+  statusCode,
+  redirectTo,
+  handleLoginExpired
+) {
   switch (statusCode) {
     case 404:
       redirectTo('/404');
@@ -657,7 +671,12 @@ export function requestErrorHandler(statusCode, redirectTo) {
     case 500:
       redirectTo('/50x');
       break;
+    case 401:
+      redirectTo('/');
+      handleLoginExpired();
+      break;
     default:
+      redirectTo('/404');
       break;
   }
 }
