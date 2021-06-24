@@ -509,7 +509,7 @@ function callSendData(
       .then((res) => {
         if (res.ok) return res.json();
 
-        requestErrorHandler(res.status, redirectTo);
+        requestErrorHandler(res.status, redirectTo, handleLoginExpired);
         throw new Error(`${res.status} ${res.statusText}`);
       })
       .then((data) => {
