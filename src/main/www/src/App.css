@@ -31,6 +31,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
 }
 .eclipseFdn-membership-webform .form-control {
   border-radius: 5px;
