@@ -40,7 +40,9 @@ const App = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path="/portal">
-              <MainPortal />
+              <HashRouter hashType="noslash">
+                <MainPortal />
+              </HashRouter>
             </Route>
 
             <Route exact path="/">
