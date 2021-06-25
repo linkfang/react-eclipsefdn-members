@@ -43,7 +43,7 @@ import io.quarkus.security.Authenticated;
  *
  * @author Martin Lowe
  */
-//@Authenticated
+@Authenticated
 @Path("form")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -89,6 +89,7 @@ public class MembershipFormResource extends AbstractRESTResource {
     @POST
     public List<MembershipForm> create(MembershipForm mem) {
         mem.setUserID(ident.getPrincipal().getName());
+        mem.setDateCreated(System.currentTimeMillis());
         return dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mem));
     }
 
@@ -109,6 +110,27 @@ public class MembershipFormResource extends AbstractRESTResource {
         //params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
 
         dao.delete(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("{id}/complete")
+    public Response completeForm(@PathParam("id") String formID) {
+        // create parameter map
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
+        params.add(DefaultUrlParameterNames.ID.getName(), formID);
+        params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
+
+        // retrieve the possible cached object
+        List<MembershipForm> results = dao.get(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
+        if (results == null) {
+            return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
+        }
+
+        // TODO actual action here
+
         return Response.ok().build();
     }
 }

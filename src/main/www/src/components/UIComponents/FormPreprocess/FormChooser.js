@@ -5,11 +5,11 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  API_FORM_PARAM,
 } from '../../../Constants/Constants';
 import { handleNewForm } from '../../../Utils/formFunctionHelpers';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
-
 const styles = {
   marginBottom: '20px',
   textAlign: 'center',
@@ -19,10 +19,10 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
   const { setCurrentFormId } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
-  const goToCompanyInfoStep = () => {
+  const goToCompanyInfoStep = useCallback(() => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
     history.push('/company-info');
-  };
+  }, [history, setFurthestPage]);
 
   const handleContinueExistingForm = () => {
     setIsStartNewForm(false);
@@ -37,7 +37,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
       }
 
       if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = API_PREFIX_FORM;
+        url_prefix_local = API_PREFIX_FORM + API_FORM_PARAM;
       }
 
       fetch(url_prefix_local, { headers: FETCH_HEADER })
@@ -56,9 +56,10 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
         .catch((err) => console.log(err));
     };
 
-    fetchExistingForms();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (hasExistingForm === '') {
+      fetchExistingForms();
+    }
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm]);
 
   return (
     <>

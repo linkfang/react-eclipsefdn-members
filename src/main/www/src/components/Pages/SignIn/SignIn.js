@@ -68,7 +68,7 @@ class SignIn extends React.Component {
 
         {getCurrentMode() === MODE_REACT_API && (
           <a
-            href="/login"
+            href="/api/login"
             className="btn btn-secondary"
             onClick={() => this.setState({ needLoading: true })}
           >

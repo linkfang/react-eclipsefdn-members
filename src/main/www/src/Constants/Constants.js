@@ -9,6 +9,7 @@ export const api_prefix = () => {
 };
 
 export const API_PREFIX_FORM = api_prefix() + '/form';
+export const API_FORM_PARAM = '?sort=dateCreated%20ASC';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
@@ -81,6 +82,7 @@ export function getCurrentMode() {
     '//membership-staging.eclipse.org',
     '//membership.eclipse.org/',
     '//www.rem.docker/',
+    '//nginx.rem.docker/',
   ].some((value) => {
     return window.location.href.indexOf(value) !== -1;
   });

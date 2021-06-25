@@ -33,6 +33,7 @@ import org.eclipsefoundation.persistence.dto.filter.DtoFilter;
 import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
+import org.eclipsefoundation.persistence.model.SortableField;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -51,14 +52,16 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
+    @SortableField
+    private Long dateCreated;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "form_id")
     private List<Contact> contacts;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "form_id")
     private List<FormWorkingGroup> workingGroups;
-    @OneToOne(mappedBy = "form", orphanRemoval=true)
+    @OneToOne(mappedBy = "form", orphanRemoval = true)
     private FormOrganization organization;
 
     /** @return the id */
@@ -128,6 +131,15 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         this.registrationCountry = registrationCountry;
     }
 
+    public Long getDateCreated() {
+        return this.dateCreated;
+    }
+
+    @JsonbTransient
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     @Override
     public MembershipForm cloneTo(MembershipForm target) {
         target.setUserID(getUserID());
@@ -136,6 +148,9 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         target.setPurchaseOrderRequired(getPurchaseOrderRequired());
         target.setRegistrationCountry(getRegistrationCountry());
         target.setVatNumber(getVatNumber());
+        if (getDateCreated() != null) {
+            target.setDateCreated(getDateCreated());
+        }
         return target;
     }
 
@@ -144,7 +159,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber,
-                registrationCountry, purchaseOrderRequired);
+                registrationCountry, purchaseOrderRequired, dateCreated);
         return result;
     }
 
@@ -159,7 +174,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         MembershipForm other = (MembershipForm) obj;
         return Objects.equals(id, other.id) && Objects.equals(membershipLevel, other.membershipLevel)
                 && signingAuthority == other.signingAuthority && Objects.equals(userID, other.userID)
-                && Objects.equals(vatNumber, other.vatNumber)
+                && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(dateCreated, other.dateCreated)
                 && Objects.equals(registrationCountry, other.registrationCountry)
                 && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired);
     }
@@ -181,6 +196,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         builder.append(registrationCountry);
         builder.append(", vatNumber=");
         builder.append(vatNumber);
+        builder.append(", dateCreated=");
+        builder.append(dateCreated);
         builder.append("]");
         return builder.toString();
     }

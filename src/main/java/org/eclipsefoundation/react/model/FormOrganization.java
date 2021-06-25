@@ -48,10 +48,10 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
 
     // form entity
     @OneToOne(targetEntity = MembershipForm.class)
-    @JoinColumn(name = "form_id")
+    @JoinColumn(name = "form_id", unique = true)
     private MembershipForm form;
 
-    @OneToOne(cascade = { CascadeType.ALL },mappedBy = "organization")
+    @OneToOne(cascade = { CascadeType.ALL }, mappedBy = "organization")
     private Address address;
 
     @Override
