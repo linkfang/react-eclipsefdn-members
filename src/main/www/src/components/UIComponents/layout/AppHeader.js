@@ -1,56 +1,92 @@
-import React from 'react';
+import { useContext } from 'react';
+import { api_prefix } from '../../../Constants/Constants';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 export default function AppHeader() {
+  const { currentUser, setNeedLoadingSignIn } = useContext(MembershipContext);
+  const logout = () => {
+    fetch(`${api_prefix()}/logout`)
+      .then(() => {
+        window.location.assign('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        window.location.assign('/');
+      });
+  };
+
   return (
     <header className="header-wrapper" id="header-wrapper">
       <div className="clearfix toolbar-container-wrapper">
         <div className="container">
           <div className="text-right toolbar-row row hidden-print">
             <div className="col-md-24 row-toolbar-col">
-              <ul className="list-inline">
-                <li className="dropdown">
+              {
+                //Check if user is logged in, if so, show welcome drop down menu;
+                //if not, show log in
+              }
+              {currentUser ? (
+                <ul className="list-inline">
+                  <li className="dropdown">
+                    <a
+                      href="#"
+                      className="dropdown-toggle"
+                      type="button"
+                      id="dropdownMenu2"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Welcome {currentUser.name} <span className="caret" />
+                    </a>
+                    <ul
+                      className="dropdown-menu toolbar-dropdown-menu"
+                      aria-labelledby="dropdownMenu1"
+                    >
+                      <li>
+                        <a href="https://www.eclipse.org/user">
+                          <i className="fa fa-user" /> View Profile
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://accounts.eclipse.org/user/edit"
+                          data-tab-destination="tab-profile"
+                        >
+                          <i className="fa fa-edit" /> Edit Profile
+                        </a>
+                      </li>
+                      <li className="divider" />
+                      <li>
+                        <a className="toolbar-manage-cookies dropdown-toggle">
+                          <i className="fa fa-wrench" /> Manage Cookies
+                        </a>
+                      </li>
+                      <li className="divider" />
+
+                      <li>
+                        <span onClick={logout}>
+                          <i className="fa fa-sign-out" /> Log out
+                        </span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              ) : (
+                <div className="toolbar-no-login">
                   <a
-                    href="#"
-                    className="dropdown-toggle"
-                    type="button"
-                    id="dropdownMenu2"
-                    data-toggle="dropdown"
-                    // aria-haspopup="true"
-                    aria-expanded="false">
-                    Welcome <span className="caret" />
+                    href="/api/login"
+                    onClick={() => setNeedLoadingSignIn(true)}
+                  >
+                    <i className="fa fa-sign-in" /> Log in
                   </a>
-                  <ul
-                    className="dropdown-menu toolbar-dropdown-menu"
-                    aria-labelledby="dropdownMenu1">
-                    <li>
-                      <a href="https://www.eclipse.org/user">
-                        <i className="fa fa-user" /> View Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://accounts.eclipse.org/user/edit"
-                        data-tab-destination="tab-profile">
-                        <i className="fa fa-edit" /> Edit Profile
-                      </a>
-                    </li>
-                    <li className="divider" />
-                    <li>
-                      <a className="toolbar-manage-cookies dropdown-toggle">
-                        <i className="fa fa-wrench" /> Manage Cookies
-                      </a>
-                    </li>
-                    <li className="divider" />
-                    <li>
-                      <a href="https://accounts.eclipse.org/user/logout">
-                        <i className="fa fa-sign-out" /> Log out
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+
+                  <a className="toolbar-manage-cookies dropdown-toggle">
+                    <i className="fa fa-wrench" /> Manage Cookies
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -71,7 +107,8 @@ export default function AppHeader() {
           </div>{' '}
           <div
             className="col-sm-19 col-md-20 margin-top-10"
-            id="main-menu-wrapper">
+            id="main-menu-wrapper"
+          >
             <div className="float-right hidden-xs" id="btn-call-for-action">
               <a href="/downloads/" className="btn btn-huge btn-warning">
                 <i className="fa fa-download" /> Download
@@ -88,14 +125,16 @@ export default function AppHeader() {
                   <li>
                     <a
                       href="https://www.eclipse.org/org/workinggroups/"
-                      target="_self">
+                      target="_self"
+                    >
                       Working Groups
                     </a>
                   </li>
                   <li>
                     <a
                       href="https://www.eclipse.org/membership/"
-                      target="_self">
+                      target="_self"
+                    >
                       Members
                     </a>
                   </li>{' '}
@@ -103,7 +142,8 @@ export default function AppHeader() {
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle">
+                      className="dropdown-toggle"
+                    >
                       Community <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -137,7 +177,8 @@ export default function AppHeader() {
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle">
+                      className="dropdown-toggle"
+                    >
                       Participate <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -171,7 +212,8 @@ export default function AppHeader() {
                     <a
                       href="#"
                       data-toggle="dropdown"
-                      className="dropdown-toggle">
+                      className="dropdown-toggle"
+                    >
                       Eclipse IDE <b className="caret" />
                     </a>
                     <ul className="dropdown-menu">
@@ -211,7 +253,8 @@ export default function AppHeader() {
                     <a
                       data-toggle="dropdown"
                       className="dropdown-toggle"
-                      role="button">
+                      role="button"
+                    >
                       More
                       <b className="caret" />
                     </a>
@@ -340,7 +383,8 @@ export default function AppHeader() {
                   type="button"
                   className="navbar-toggle"
                   data-toggle="collapse"
-                  data-target="#navbar-main-menu">
+                  data-target="#navbar-main-menu"
+                >
                   <span className="sr-only">Toggle navigation</span>
                   <span className="icon-bar" />
                   <span className="icon-bar" />
@@ -350,7 +394,8 @@ export default function AppHeader() {
                 <div className="wrapper-logo-mobile">
                   <a
                     className="navbar-brand visible-xs"
-                    href="https://www.eclipse.org/">
+                    href="https://www.eclipse.org/"
+                  >
                     <img
                       className="logo-eclipse-default-mobile img-responsive"
                       alt="Eclipse.org logo"

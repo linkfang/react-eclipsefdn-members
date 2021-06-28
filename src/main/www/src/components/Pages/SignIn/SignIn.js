@@ -37,9 +37,7 @@ import Loading from '../../UIComponents/Loading/Loading';
  */
 class SignIn extends React.Component {
   static contextType = MembershipContext;
-  state = {
-    needLoading: true,
-  };
+
   getFakeUser = (setFurthestPage) => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
@@ -50,7 +48,7 @@ class SignIn extends React.Component {
   };
 
   renderButtons = (setFurthestPage) =>
-    this.state.needLoading ? (
+    this.context.needLoadingSignIn ? (
       <Loading />
     ) : (
       <div className="text-center margin-bottom-20">
@@ -70,7 +68,7 @@ class SignIn extends React.Component {
           <a
             href="/api/login"
             className="btn btn-secondary"
-            onClick={() => this.setState({ needLoading: true })}
+            onClick={() => this.context.setNeedLoadingSignIn(true)}
           >
             Sign In
           </a>
@@ -88,14 +86,14 @@ class SignIn extends React.Component {
         .then((data) => {
           console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
           this.context.setCurrentUser(data);
-          this.setState({ needLoading: false });
+          this.context.setNeedLoadingSignIn(false);
         })
         .catch((err) => {
           console.log(err);
-          this.setState({ needLoading: false });
+          this.context.setNeedLoadingSignIn(false);
         });
     } else {
-      this.setState({ needLoading: false });
+      this.context.setNeedLoadingSignIn(false);
     }
   }
 

@@ -24,14 +24,17 @@ const App = () => {
     index: 0,
     pathName: '/sign-in',
   });
+  const [needLoadingSignIn, setNeedLoadingSignIn] = useState(true);
 
   const membershipContextValue = {
     currentUser,
-    setCurrentUser: (val) => setCurrentUser(val),
+    setCurrentUser,
     currentFormId,
-    setCurrentFormId: (val) => setCurrentFormId(val),
+    setCurrentFormId,
     furthestPage,
     setFurthestPage,
+    needLoadingSignIn,
+    setNeedLoadingSignIn,
   };
 
   return (
@@ -44,8 +47,9 @@ const App = () => {
             </Route>
 
             <Route exact path="/">
-              <AppHeader />
               <MembershipContext.Provider value={membershipContextValue}>
+                <AppHeader />
+
                 <HashRouter hashType="noslash">
                   <Main />
                 </HashRouter>
