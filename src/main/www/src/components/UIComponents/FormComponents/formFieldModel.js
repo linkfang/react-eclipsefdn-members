@@ -69,6 +69,7 @@ export const initialValues = {
   purchasingAndVAT: {
     purchasingProcess: '',
     'purchasingProcess-label': '',
+    isRegistered: false,
     vatNumber: '',
     countryOfRegistration: '',
   },
@@ -200,6 +201,10 @@ export const formField = {
     placeholder: purchasingProcess,
   },
   vatRegistration: {
+    isRegistered: {
+      name: 'purchasingAndVAT.isRegistered',
+      label: 'Your organization is registered for VAT in the European Union',
+    },
     vatNumber: {
       name: 'purchasingAndVAT.vatNumber',
       label: vatNumber,
