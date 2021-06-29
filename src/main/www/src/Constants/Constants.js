@@ -4,6 +4,18 @@
  * The purpose of this file is try to avoid using strings directly everywhere,
  * just hope to use consistent variables for strings.
  */
+
+import {
+  Home as HomeIcon,
+  Assessment as AssessmentIcon,
+  Business as BusinessIcon,
+  BusinessCenter as BusinessCenterIcon,
+  PeopleAlt as PeopleAltIcon,
+  Description as DescriptionIcon,
+  Help as HelpIcon,
+  RecentActors as RecentActorsIcon,
+} from '@material-ui/icons';
+
 export const api_prefix = () => {
   return '//' + window.location.host + '/api';
 };
@@ -133,3 +145,52 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
     ],
   },
 ];
+
+export const NAV_OPTIONS_DATA = [
+  {
+    name: 'Home',
+    path: '/home',
+    icon: <HomeIcon />,
+  },
+  {
+    name: 'Dashboard',
+    path: '/dashboard',
+    icon: <AssessmentIcon />,
+  },
+  {
+    name: 'Your Organization Profile',
+    path: '/org-profile',
+    // don't find an icon match the design
+    icon: <BusinessIcon />,
+  },
+  {
+    name: 'Projects and Working Groups',
+    path: '/projects-wg',
+    icon: <BusinessCenterIcon />,
+  },
+  {
+    name: 'Committers and Contributors',
+    path: '/committers-contributors',
+    icon: <PeopleAltIcon />,
+  },
+  {
+    name: 'Resources',
+    path: '/resources',
+    icon: <DescriptionIcon />,
+  },
+  {
+    name: 'FAQs',
+    path: '/faqs',
+    icon: <HelpIcon />,
+  },
+  {
+    name: 'Contact Management',
+    path: '/contact-management',
+    icon: <RecentActorsIcon />,
+  },
+];
+
+// Constants for styles
+export const drawerWidth = 280;
+export const themeBlack = '#0B0B0B';
+export const darkOrange = '#DD730A';
