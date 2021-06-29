@@ -8,6 +8,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
+  PATH_NAME_ARRAY,
 } from '../Constants/Constants';
 
 /**
@@ -350,8 +351,14 @@ export async function executeSendDataByStep(
   userId,
   redirectTo,
   handleLoginExpired,
+  goToNextStep,
   setFieldValueObj
 ) {
+  const goToNextStepObj = {
+    method: goToNextStep,
+    stepNum: step,
+    pathName: PATH_NAME_ARRAY[step],
+  };
   switch (step) {
     case 1:
       callSendData(
@@ -360,6 +367,7 @@ export async function executeSendDataByStep(
         matchCompanyFieldsToBackend(formData.organization, formId),
         redirectTo,
         handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -375,6 +383,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -390,6 +399,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -405,6 +415,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -415,7 +426,8 @@ export async function executeSendDataByStep(
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
         redirectTo,
-        handleLoginExpired
+        handleLoginExpired,
+        goToNextStepObj
       );
       break;
 
@@ -425,7 +437,8 @@ export async function executeSendDataByStep(
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
         redirectTo,
-        handleLoginExpired
+        handleLoginExpired,
+        goToNextStepObj
       );
       break;
 
@@ -437,6 +450,7 @@ export async function executeSendDataByStep(
           matchWGFieldsToBackend(item, formId),
           redirectTo,
           handleLoginExpired,
+          goToNextStepObj,
           setFieldValueObj,
           index
         );
@@ -454,6 +468,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
+        goToNextStepObj,
         setFieldValueObj
       );
       return;
@@ -477,6 +492,7 @@ function callSendData(
   dataBody,
   redirectTo,
   handleLoginExpired,
+  goToNextStepObj,
   setFieldValueObj,
   index
 ) {
@@ -519,51 +535,54 @@ function callSendData(
             case 'organization':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data[0].id
+                data[0]?.id
               );
               setFieldValueObj.method(
                 'organization.address.id',
-                data[0]?.address.id
+                data[0]?.address?.id
               );
               break;
 
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'workingGroups':
-              setFieldValueObj.method(`workingGroups[${index}].id`, data[0].id);
+              setFieldValueObj.method(
+                `workingGroups[${index}].id`,
+                data[0]?.id
+              );
               setFieldValueObj.method(
                 `workingGroups[${index}].workingGroupRepresentative.id`,
-                data[0].contact.id
+                data[0]?.contact?.id
               );
               break;
 
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
@@ -571,6 +590,10 @@ function callSendData(
               break;
           }
         }
+        goToNextStepObj.method(
+          goToNextStepObj.stepNum,
+          goToNextStepObj.pathName
+        );
       })
       .catch((err) => console.log(err));
   }

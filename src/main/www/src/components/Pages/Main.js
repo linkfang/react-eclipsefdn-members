@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
@@ -108,10 +108,9 @@ export default function Main() {
         currentUser.name,
         history.push,
         handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(1, '/membership-level');
     },
   });
 
@@ -142,10 +141,9 @@ export default function Main() {
         currentFormId,
         currentUser.name,
         history.push,
-        handleLoginExpired
+        handleLoginExpired,
+        goToNextStep
       );
-
-      goToNextStep(2, '/working-groups');
     },
   });
 
@@ -169,10 +167,9 @@ export default function Main() {
         currentUser.name,
         history.push,
         handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(3, '/signing-authority');
     },
   });
 
@@ -211,19 +208,18 @@ export default function Main() {
         currentUser.name,
         history.push,
         handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(4, '/review');
     },
   });
 
-  const handleLoginExpired = () => {
+  const handleLoginExpired = useCallback(() => {
     setIsLoginExpired(true);
     setTimeout(() => {
       setIsLoginExpired(false);
     }, 6000);
-  };
+  }, []);
 
   // generate the step options above the form
   const renderStepper = () => (
@@ -345,7 +341,10 @@ export default function Main() {
         <Redirect to="404" />
       </Switch>
 
-      <TopSlideMsg shouldShowUp={isLoginExpired} msgContent={LOGIN_EXPIRED_MSG} />
+      <TopSlideMsg
+        shouldShowUp={isLoginExpired}
+        msgContent={LOGIN_EXPIRED_MSG}
+      />
     </div>
   );
 }
