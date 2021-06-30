@@ -1,14 +1,23 @@
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { TextField } from '@material-ui/core';
+import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { OPTIONS_FOR_PURCHASING_PROCES } from '../../../Constants/Constants';
 
 const { purchasingProcess, vatRegistration } = formField;
 
-
 export default function CompanyInformationVAT({ formik, useStyles }) {
   const classes = useStyles();
+
+  const handleIsRegistered = () => {
+    const isRegistered = formik.values.purchasingAndVAT.isRegistered;
+    if (!isRegistered) {
+      // if user uncheck it, then we need to delete the value for vatNumber and countryOfRegistration
+      formik.setFieldValue('purchasingAndVAT.vatNumber', '');
+      formik.setFieldValue('purchasingAndVAT.countryOfRegistration', '');
+    }
+    formik.setFieldValue('purchasingAndVAT.isRegistered', !isRegistered);
+  };
 
   return (
     <>
@@ -73,35 +82,45 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
       <h4 className="fw-600" id="vatRegistration">
         VAT Registration
       </h4>
-      <p>
-        If your organization is registered for VAT in the European Union, please
-        provide the following:
-      </p>
-      <div className="row">
-        <div className="col-md-12">
-          <Input
-            name={vatRegistration.vatNumber.name}
-            labelName={vatRegistration.vatNumber.label}
-            placeholder={vatRegistration.vatNumber.placeholder}
-            requiredMark={false}
-            value={formik.values.purchasingAndVAT.vatNumber}
-            onChange={formik.handleChange}
-            ariaLabel={`vatRegistration`}
+      <FormControlLabel
+        control={
+          <Checkbox
+            name={vatRegistration.isRegistered.name}
+            color="primary"
+            checked={formik.values.purchasingAndVAT.isRegistered}
+            onChange={handleIsRegistered}
           />
-        </div>
+        }
+        label={vatRegistration.isRegistered.label}
+      />
 
-        <div className="col-md-12">
-          <Input
-            name={vatRegistration.countryOfRegistration.name}
-            labelName={vatRegistration.countryOfRegistration.label}
-            placeholder={vatRegistration.countryOfRegistration.placeholder}
-            requiredMark={false}
-            value={formik.values.purchasingAndVAT.countryOfRegistration}
-            onChange={formik.handleChange}
-            ariaLabel={`vatRegistration`}
-          />
+      {formik.values.purchasingAndVAT.isRegistered && (
+        <div className="row">
+          <div className="col-md-12">
+            <Input
+              name={vatRegistration.vatNumber.name}
+              labelName={vatRegistration.vatNumber.label}
+              placeholder={vatRegistration.vatNumber.placeholder}
+              requiredMark={false}
+              value={formik.values.purchasingAndVAT.vatNumber}
+              onChange={formik.handleChange}
+              ariaLabel={`vatRegistration`}
+            />
+          </div>
+
+          <div className="col-md-12">
+            <Input
+              name={vatRegistration.countryOfRegistration.name}
+              labelName={vatRegistration.countryOfRegistration.label}
+              placeholder={vatRegistration.countryOfRegistration.placeholder}
+              requiredMark={false}
+              value={formik.values.purchasingAndVAT.countryOfRegistration}
+              onChange={formik.handleChange}
+              ariaLabel={`vatRegistration`}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

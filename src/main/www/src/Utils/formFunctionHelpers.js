@@ -491,7 +491,7 @@ function callSendData(
         return res.json();
       })
       .then((data) => {
-        if (setFieldValueObj && method === 'POST') {
+        if (setFieldValueObj && method === 'POST' && data.status_code === 200) {
           // update the field id after a successful post
           switch (setFieldValueObj.fieldName) {
             case 'organization':
