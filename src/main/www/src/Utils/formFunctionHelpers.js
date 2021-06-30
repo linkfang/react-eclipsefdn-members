@@ -75,16 +75,16 @@ export function matchCompanyFields(existingOrganizationData) {
     id: existingOrganizationData?.id || '',
     legalName: existingOrganizationData?.legal_name || '',
     address: {
-      id: existingOrganizationData?.address.id || '',
-      street: existingOrganizationData?.address.street || '',
-      city: existingOrganizationData?.address.city || '',
-      provinceOrState: existingOrganizationData?.address.province_state || '',
-      country: existingOrganizationData?.address.country || '',
+      id: existingOrganizationData?.address?.id || '',
+      street: existingOrganizationData?.address?.street || '',
+      city: existingOrganizationData?.address?.city || '',
+      provinceOrState: existingOrganizationData?.address?.province_state || '',
+      country: existingOrganizationData?.address?.country || '',
       'country-label': {
-        label: existingOrganizationData?.address.country || '',
-        value: existingOrganizationData?.address.country || '',
+        label: existingOrganizationData?.address?.country || '',
+        value: existingOrganizationData?.address?.country || '',
       },
-      postalCode: existingOrganizationData?.address.postal_code || '',
+      postalCode: existingOrganizationData?.address?.postal_code || '',
     },
     twitterHandle: existingOrganizationData?.twitter_handle || '',
   };
@@ -97,17 +97,17 @@ export function matchCompanyFields(existingOrganizationData) {
 export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
   const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
     (item) =>
-      item.value === existingPurchasingAndVATData.purchase_order_required
+      item.value === existingPurchasingAndVATData?.purchase_order_required
   );
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     legalName: existingPurchasingAndVATData?.legal_name || '',
 
-    purchasingProcess: existingPurchasingAndVATData.purchase_order_required,
+    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
     'purchasingProcess-label': currentOption,
-    vatNumber: existingPurchasingAndVATData.vat_number,
-    countryOfRegistration: existingPurchasingAndVATData.registration_country,
+    vatNumber: existingPurchasingAndVATData?.vat_number,
+    countryOfRegistration: existingPurchasingAndVATData?.registration_country,
   };
 }
 
@@ -133,16 +133,16 @@ export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
  * **/
 export function matchContactFields(existingContactData) {
   let existingCompanyContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.COMPANY
+    (el) => el?.type === CONTACT_TYPE.COMPANY
   );
   let existingMarketingContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.MARKETING
+    (el) => el?.type === CONTACT_TYPE.MARKETING
   );
   let existingAccoutingContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.ACCOUNTING
+    (el) => el?.type === CONTACT_TYPE.ACCOUNTING
   );
   let existingSigningContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.SIGNING
+    (el) => el?.type === CONTACT_TYPE.SIGNING
   );
 
   return {
@@ -202,7 +202,7 @@ export function matchWorkingGroupFields(
 ) {
   var res = [];
   // Array
-  existingworkingGroupData.forEach((item, index) => {
+  existingworkingGroupData.forEach((item) => {
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
@@ -217,11 +217,11 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact.first_name || '',
-        lastName: item?.contact.last_name || '',
-        jobtitle: item?.contact.job_title || '',
-        email: item?.contact.email || '',
-        id: item?.contact.id || '',
+        firstName: item?.contact?.first_name || '',
+        lastName: item?.contact?.last_name || '',
+        jobtitle: item?.contact?.job_title || '',
+        email: item?.contact?.email || '',
+        id: item?.contact?.id || '',
       },
     });
   });
@@ -529,7 +529,7 @@ function callSendData(
         throw new Error(`${res.status} ${res.statusText}`);
       })
       .then((data) => {
-        if (setFieldValueObj && method === 'POST' && data.status_code === 200) {
+        if (setFieldValueObj && method === 'POST') {
           // update the field id after a successful post
           switch (setFieldValueObj.fieldName) {
             case 'organization':
