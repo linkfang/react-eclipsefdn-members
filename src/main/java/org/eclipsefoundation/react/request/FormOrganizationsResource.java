@@ -30,9 +30,8 @@ import javax.ws.rs.core.Response;
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.model.Address;
-import org.eclipsefoundation.react.model.MembershipForm;
 import org.eclipsefoundation.react.model.FormOrganization;
+import org.eclipsefoundation.react.model.MembershipForm;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 
@@ -68,7 +67,13 @@ public class FormOrganizationsResource extends AbstractRESTResource {
 
     @POST
     public List<FormOrganization> create(@PathParam("id") String formID, FormOrganization org) {
-        org.setForm(dao.getReference(formID, MembershipForm.class));
+        // handle cases where an organization already exists and replace it
+        MembershipForm form = dao.getReference(formID, MembershipForm.class);
+        if (form.getOrganization() != null) {
+            return update(formID, form.getOrganization().getId(), org);
+        } else {
+            org.setForm(form);
+        }
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org));
     }
 
@@ -98,15 +103,13 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             FormOrganization org) {
         // need to fetch ref to use attached entity
         FormOrganization ref = dao.getReference(id, FormOrganization.class);
-        ref.setForm(dao.getReference(formID, MembershipForm.class));
         org.cloneTo(ref);
-        // update the nested address
-        if (org.getAddress() != null) {
-            org.getAddress().setOrganization(ref);
-            if (ref.getAddress().getId() != null) {
-                // update the address object to get entity ref if set
-                ref.setAddress(org.getAddress().cloneTo(dao.getReference(org.getAddress().getId(), Address.class)));
-            }
+        if (ref.getAddress() != null && org.getAddress() != null) {
+            // if both remote + new set, update remote values
+            org.getAddress().cloneTo(ref.getAddress());
+        } else {
+            // if remote or new are missing, replace remote w/ new value
+            ref.setAddress(org.getAddress());
         }
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref));
     }

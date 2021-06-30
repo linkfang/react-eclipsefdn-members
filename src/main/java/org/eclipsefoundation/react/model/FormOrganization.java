@@ -113,7 +113,6 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
 
     @Override
     public FormOrganization cloneTo(FormOrganization target) {
-        target.setAddress(getAddress());
         target.setLegalName(getLegalName());
         target.setTwitterHandle(getTwitterHandle());
         return target;

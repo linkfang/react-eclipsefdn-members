@@ -1,7 +1,10 @@
 import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
-import { matchWorkingGroupFields } from '../../../Utils/formFunctionHelpers';
+import {
+  matchWorkingGroupFields,
+  requestErrorHandler,
+} from '../../../Utils/formFunctionHelpers';
 import Loading from '../../UIComponents/Loading/Loading';
 import {
   END_POINT,
@@ -34,7 +37,12 @@ import { FormikProvider } from 'formik';
 
 let hasWGData = false;
 
-const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
+const WorkingGroupsWrapper = ({
+  formik,
+  isStartNewForm,
+  redirectTo,
+  handleLoginExpired,
+}) => {
   const { currentFormId } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +69,12 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
       fetch(url_prefix_local + END_POINT.working_groups, {
         headers: FETCH_HEADER,
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) return res.json();
+
+          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
+          throw new Error(`${res.status} ${res.statusText}`);
+        })
         .then((data) => {
           let options = data.map((item) => ({
             label: item.name,
@@ -69,11 +82,12 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
             participation_levels: item.levels,
           }));
           setFullWorkingGroupList(options);
-        });
+        })
+        .catch((err) => console.log(err));
     };
 
     fetchAvailableFullWorkingGroupList();
-  }, []);
+  }, [redirectTo, handleLoginExpired]);
 
   useEffect(() => {
     // Fetch the working groups user has joined
@@ -92,35 +106,38 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
         url_prefix_local = API_PREFIX_FORM;
       }
 
-      // If the current form exsits, and it is not creating a new form
-      if (currentFormId) {
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            END_POINT.working_groups +
-            url_suffix_local,
-          { headers: FETCH_HEADER }
-        )
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data.length) {
-              // matchWorkingGroupFields(): Call the the function to map
-              // the retrived working groups backend data to fit frontend, and
-              // setFieldValue(): Prefill Data --> Call the setFieldValue
-              // of Formik, to set workingGroups field with the mapped data
-              const theGroupsUserJoined = matchWorkingGroupFields(
-                data,
-                fullWorkingGroupList
-              );
-              setWorkingGroupsUserJoined(theGroupsUserJoined);
-              setFieldValue('workingGroups', theGroupsUserJoined);
-              hasWGData = true;
-            }
-            setIsLoading(false);
-          });
-      } else {
-        setIsLoading(false);
-      }
+      fetch(
+        url_prefix_local +
+          `/${currentFormId}/` +
+          END_POINT.working_groups +
+          url_suffix_local,
+        {
+          headers: FETCH_HEADER,
+        }
+      )
+        .then((res) => {
+          if (res.ok) return res.json();
+
+          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
+          throw new Error(`${res.status} ${res.statusText}`);
+        })
+        .then((data) => {
+          if (data.length) {
+            // matchWorkingGroupFields(): Call the the function to map
+            // the retrived working groups backend data to fit frontend, and
+            // setFieldValue(): Prefill Data --> Call the setFieldValue
+            // of Formik, to set workingGroups field with the mapped data
+            const theGroupsUserJoined = matchWorkingGroupFields(
+              data,
+              fullWorkingGroupList
+            );
+            setWorkingGroupsUserJoined(theGroupsUserJoined);
+            setFieldValue('workingGroups', theGroupsUserJoined);
+            hasWGData = true;
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => console.log(err));
     };
 
     if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0) {
@@ -129,7 +146,14 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
     } else {
       setIsLoading(false);
     }
-  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue]);
+  }, [
+    isStartNewForm,
+    currentFormId,
+    fullWorkingGroupList,
+    setFieldValue,
+    redirectTo,
+    handleLoginExpired,
+  ]);
 
   if (isLoading) {
     return <Loading />;

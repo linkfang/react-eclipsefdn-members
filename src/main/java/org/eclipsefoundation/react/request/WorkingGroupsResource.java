@@ -110,14 +110,14 @@ public class WorkingGroupsResource extends AbstractRESTResource {
         FormWorkingGroup ref = wg.cloneTo(dao.getReference(wgID, FormWorkingGroup.class));
         ref.setForm(dao.getReference(formID, MembershipForm.class));
         // update the nested contact
-        if (ref.getContact() != null) {
-            if (ref.getContact().getId() != null) {
-                // update the contact object to get entity ref if set
-                Contact c = dao.getReference(wg.getContact().getId(), Contact.class);
-                ref.setContact(ref.getContact().cloneTo(c));
-            }
+        if (ref.getContact() != null && wg.getContact() != null) {
+            wg.getContact().cloneTo(ref.getContact());
+        } else {
+            ref.setContact(wg.getContact());
             // set the form back for references
-            ref.getContact().setForm(ref.getForm());
+            if (ref.getContact() != null) {
+                ref.getContact().setForm(ref.getForm());
+            }
         }
         return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(ref));
     }

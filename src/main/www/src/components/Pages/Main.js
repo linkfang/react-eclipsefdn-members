@@ -1,12 +1,9 @@
-import { useContext, useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { useCallback, useContext, useState } from 'react';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import { COMPANY_INFORMATION, PAGE_STEP } from '../../Constants/Constants';
-import {
-  formField,
-  initialValues,
-} from '../UIComponents/FormComponents/formFieldModel';
+import { LOGIN_EXPIRED_MSG, PAGE_STEP } from '../../Constants/Constants';
+import { initialValues } from '../UIComponents/FormComponents/formFieldModel';
 import CompanyInformation from './CompanyInformation/CompanyInformation';
 import MembershipLevel from './MembershipLevel/MembershipLevel';
 import WorkingGroupsWrapper from './WorkingGroups/WorkingGroupsWrapper';
@@ -16,9 +13,11 @@ import Step from '../UIComponents/Steppers/Step';
 import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
-import { useHistory } from 'react-router-dom';
 import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
+import NotFound404 from './ErrorPages/NotFound404';
+import InternalError50x from './ErrorPages/InternalError50x';
+import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
 export default function Main() {
   const history = useHistory();
@@ -26,6 +25,7 @@ export default function Main() {
     useContext(MembershipContext);
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
   const [isStartNewForm, setIsStartNewForm] = useState(true);
+  const [isLoginExpired, setIsLoginExpired] = useState(false);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -106,10 +106,11 @@ export default function Main() {
         theNewValue,
         currentFormId,
         currentUser.name,
+        history.push,
+        handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(1, '/membership-level');
     },
   });
 
@@ -134,9 +135,15 @@ export default function Main() {
       // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
       updateCompanyInfoForm(valueToUpdateFormik);
 
-      executeSendDataByStep(2, values, currentFormId, currentUser.name);
-
-      goToNextStep(2, '/working-groups');
+      executeSendDataByStep(
+        2,
+        values,
+        currentFormId,
+        currentUser.name,
+        history.push,
+        handleLoginExpired,
+        goToNextStep
+      );
     },
   });
 
@@ -158,10 +165,11 @@ export default function Main() {
         values,
         currentFormId,
         currentUser.name,
+        history.push,
+        handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(3, '/signing-authority');
     },
   });
 
@@ -198,12 +206,20 @@ export default function Main() {
         values,
         currentFormId,
         currentUser.name,
+        history.push,
+        handleLoginExpired,
+        goToNextStep,
         setFieldValueObj
       );
-
-      goToNextStep(4, '/review');
     },
   });
+
+  const handleLoginExpired = useCallback(() => {
+    setIsLoginExpired(true);
+    setTimeout(() => {
+      setIsLoginExpired(false);
+    }, 6000);
+  }, []);
 
   // generate the step options above the form
   const renderStepper = () => (
@@ -226,97 +242,109 @@ export default function Main() {
 
   return (
     <div className="container eclipseFdn-membership-webform">
-      <>
-        {window.location.hash === '/' || window.location.hash === '#sign-in' ? (
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/sign-in" />
+        </Route>
+
+        <Route exact path="/sign-in">
           <SignInIntroduction />
-        ) : null}
+          {renderStepper()}
+          <SignIn
+            setFurthestPage={setFurthestPage}
+            history={history}
+            setIsStartNewForm={setIsStartNewForm}
+            handleLoginExpired={handleLoginExpired}
+          />
+        </Route>
 
-        {window.location.hash !== '#submitted' && renderStepper()}
+        <Route path="/company-info">
+          {renderStepper()}
+          {
+            // stop users visiting steps/pages that are not able to edit yet
+            furthestPage.index >= 1 ? (
+              <CompanyInformation
+                formik={formikCompanyInfo}
+                isStartNewForm={isStartNewForm}
+                redirectTo={history.push}
+                handleLoginExpired={handleLoginExpired}
+              />
+            ) : (
+              // if uses are not allowed to visit this page,
+              // then will be brought back to the furthest they can visit
+              <Redirect to={furthestPage.pathName} />
+            )
+          }
+        </Route>
 
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/sign-in" />
-          </Route>
+        <Route path="/membership-level">
+          {renderStepper()}
+          {furthestPage.index >= 2 ? (
+            <MembershipLevel formik={formikMembershipLevel} />
+          ) : (
+            <Redirect to={furthestPage.pathName} />
+          )}
+        </Route>
 
-          <Route exact path="/sign-in">
-            <SignIn
-              formField={formField}
-              label={COMPANY_INFORMATION}
-              setFurthestPage={setFurthestPage}
-              history={history}
-              setIsStartNewForm={setIsStartNewForm}
+        <Route path="/working-groups">
+          {renderStepper()}
+          {furthestPage.index >= 3 ? (
+            <WorkingGroupsWrapper
+              formik={formikWorkingGroups}
+              isStartNewForm={isStartNewForm}
+              redirectTo={history.push}
+              handleLoginExpired={handleLoginExpired}
             />
-          </Route>
+          ) : (
+            <Redirect to={furthestPage.pathName} />
+          )}
+        </Route>
 
-          <Route path="/company-info">
-            {
-              // stop users visiting steps/pages that are not able to edit yet
-              furthestPage.index >= 1 ? (
-                <CompanyInformation
-                  formik={formikCompanyInfo}
-                  isStartNewForm={isStartNewForm}
-                />
-              ) : (
-                // if uses are not allowed to visit this page,
-                // then will be brought back to the furthest they can visit
-                <Redirect to={furthestPage.pathName} />
-              )
-            }
-          </Route>
+        <Route path="/signing-authority">
+          {renderStepper()}
+          {furthestPage.index >= 4 ? (
+            <SigningAuthority
+              formik={formikSigningAuthority}
+              updatedFormValues={updatedFormValues}
+            />
+          ) : (
+            <Redirect to={furthestPage.pathName} />
+          )}
+        </Route>
 
-          <Route path="/membership-level">
-            {furthestPage.index >= 2 ? (
-              <MembershipLevel
-                formik={formikMembershipLevel}
-                isStartNewForm={isStartNewForm}
-                furthestPage={furthestPage}
-                updatedFormValues={updatedFormValues}
-              />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
-          </Route>
+        <Route path="/review">
+          {renderStepper()}
+          {furthestPage.index >= 5 ? (
+            <Review values={updatedFormValues} submitForm={goToNextStep} />
+          ) : (
+            <Redirect to={furthestPage.pathName} />
+          )}
+        </Route>
 
-          <Route path="/working-groups">
-            {furthestPage.index >= 3 ? (
-              <WorkingGroupsWrapper
-                formik={formikWorkingGroups}
-                isStartNewForm={isStartNewForm}
-                furthestPage={furthestPage}
-              />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
-          </Route>
+        <Route path="/submitted">
+          {furthestPage.index >= 6 ? (
+            <SubmitSuccess />
+          ) : (
+            <Redirect to={furthestPage.pathName} />
+          )}
+        </Route>
 
-          <Route path="/signing-authority">
-            {furthestPage.index >= 4 ? (
-              <SigningAuthority
-                formik={formikSigningAuthority}
-                updatedFormValues={updatedFormValues}
-              />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
-          </Route>
+        <Route path="/404">
+          <NotFound404 />
+        </Route>
 
-          <Route path="/review">
-            {furthestPage.index >= 5 ? (
-              <Review values={updatedFormValues} submitForm={goToNextStep} />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
-          </Route>
+        <Route path="/50x">
+          <InternalError50x />
+        </Route>
 
-          <Route path="/submitted">
-            {furthestPage.index >= 6 ? (
-              <SubmitSuccess />
-            ) : (
-              <Redirect to={furthestPage.pathName} />
-            )}
-          </Route>
-        </Switch>
-      </>
+        {/* Redirect user to 404 page for all the unknown pathnames/urls */}
+        <Redirect to="404" />
+      </Switch>
+
+      <TopSlideMsg
+        shouldShowUp={isLoginExpired}
+        msgContent={LOGIN_EXPIRED_MSG}
+      />
     </div>
   );
 }

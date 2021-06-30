@@ -105,6 +105,7 @@ class SignIn extends React.Component {
             setFurthestPage={this.props.setFurthestPage}
             history={this.props.history}
             setIsStartNewForm={this.props.setIsStartNewForm}
+            handleLoginExpired={this.props.handleLoginExpired}
           />
         ) : (
           this.renderButtons(this.props.setFurthestPage)
