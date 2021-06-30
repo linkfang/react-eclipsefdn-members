@@ -11,6 +11,7 @@
  */
 package org.eclipsefoundation.react.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -138,6 +139,30 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     @JsonbTransient
     public void setDateCreated(Long dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    /**
+     * @return the contacts
+     */
+    @JsonbTransient
+    public List<Contact> getContacts() {
+        return new ArrayList<>(contacts);
+    }
+
+    /**
+     * @return the workingGroups
+     */
+    @JsonbTransient
+    public List<FormWorkingGroup> getWorkingGroups() {
+        return new ArrayList<>(workingGroups);
+    }
+
+    /**
+     * @return the organization
+     */
+    @JsonbTransient
+    public FormOrganization getOrganization() {
+        return organization;
     }
 
     @Override
