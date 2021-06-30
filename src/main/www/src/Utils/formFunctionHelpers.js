@@ -8,6 +8,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
+  PATH_NAME_ARRAY,
 } from '../Constants/Constants';
 
 /**
@@ -348,14 +349,25 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
+  redirectTo,
+  handleLoginExpired,
+  goToNextStep,
   setFieldValueObj
 ) {
+  const goToNextStepObj = {
+    method: goToNextStep,
+    stepNum: step,
+    pathName: PATH_NAME_ARRAY[step],
+  };
   switch (step) {
     case 1:
       callSendData(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -369,6 +381,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.COMPANY,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -382,6 +397,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.MARKETING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -395,6 +413,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.ACCOUNTING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -403,7 +424,10 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj
       );
       break;
 
@@ -411,7 +435,10 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj
       );
       break;
 
@@ -421,6 +448,9 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
+          redirectTo,
+          handleLoginExpired,
+          goToNextStepObj,
           setFieldValueObj,
           index
         );
@@ -436,6 +466,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.SIGNING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         setFieldValueObj
       );
       return;
@@ -457,6 +490,9 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
+  redirectTo,
+  handleLoginExpired,
+  goToNextStepObj,
   setFieldValueObj,
   index
 ) {
@@ -487,8 +523,10 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        console.log(res.status);
-        return res.json();
+        if (res.ok) return res.json();
+
+        requestErrorHandler(res.status, redirectTo, handleLoginExpired);
+        throw new Error(`${res.status} ${res.statusText}`);
       })
       .then((data) => {
         if (setFieldValueObj && method === 'POST' && data.status_code === 200) {
@@ -497,51 +535,54 @@ function callSendData(
             case 'organization':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data[0].id
+                data[0]?.id
               );
               setFieldValueObj.method(
                 'organization.address.id',
-                data[0]?.address.id
+                data[0]?.address?.id
               );
               break;
 
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'workingGroups':
-              setFieldValueObj.method(`workingGroups[${index}].id`, data[0].id);
+              setFieldValueObj.method(
+                `workingGroups[${index}].id`,
+                data[0]?.id
+              );
               setFieldValueObj.method(
                 `workingGroups[${index}].workingGroupRepresentative.id`,
-                data[0].contact.id
+                data[0]?.contact?.id
               );
               break;
 
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
@@ -549,7 +590,12 @@ function callSendData(
               break;
           }
         }
-      });
+        goToNextStepObj.method(
+          goToNextStepObj.stepNum,
+          goToNextStepObj.pathName
+        );
+      })
+      .catch((err) => console.log(err));
   }
 }
 
@@ -634,4 +680,26 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
+}
+
+export function requestErrorHandler(
+  statusCode,
+  redirectTo,
+  handleLoginExpired
+) {
+  switch (statusCode) {
+    case 404:
+      redirectTo('/404');
+      break;
+    case 500:
+      redirectTo('/50x');
+      break;
+    case 401:
+      redirectTo('/');
+      handleLoginExpired();
+      break;
+    default:
+      redirectTo('/404');
+      break;
+  }
 }
