@@ -34,6 +34,12 @@ export const validationSchema = [
   // First step - company Info
   yup.object().shape({
     // First step - representative contacts
+    organization: yup.object().shape({
+      twitterHandle: yup
+        .string('')
+        .min(2, 'Enter a valid Twitter handle')
+        .matches(/^@([A-Za-z0-9._+-])*$/, 'Enter a valid Twitter handle'),
+    }),
     representative: yup.object().shape({
       member: yup.object().shape({
         email: yup.string('Enter your email').email('Enter a valid email'),
