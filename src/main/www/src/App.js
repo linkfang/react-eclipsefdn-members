@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import AppFooter from './components/UIComponents/layout/AppFooter';
-import AppHeader from './components/UIComponents/layout/AppHeader';
+import AppTemplate from './components/UIComponents/layout/AppTemplate';
 import MembershipContext from './Context/MembershipContext';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import {
@@ -13,6 +12,8 @@ import {
 } from 'react-router-dom';
 import Main from './components/Pages/Main';
 import MainPortal from './components/PagesPortal/MainPortal';
+import NotFound404 from './components/Pages/ErrorPages/NotFound404';
+import InternalError50x from './components/Pages/ErrorPages/InternalError50x';
 
 const theme = createMuiTheme({
   palette: {
@@ -54,17 +55,33 @@ const App = () => {
 
             <Route exact path="/application">
               <MembershipContext.Provider value={membershipContextValue}>
-                <AppHeader />
-                <HashRouter hashType="noslash">
-                  <Main />
-                </HashRouter>
+                <AppTemplate>
+                  <HashRouter hashType="noslash">
+                    <Main />
+                  </HashRouter>
+                </AppTemplate>
               </MembershipContext.Provider>
-              <AppFooter />
             </Route>
 
             <Route exact path="/">
               <Redirect to="/application" />
             </Route>
+
+            <Route exact path="/404">
+              <AppTemplate>
+                <NotFound404 />
+              </AppTemplate>
+            </Route>
+
+            <Route exact path="/50x">
+              <AppTemplate>
+                <InternalError50x />
+              </AppTemplate>
+            </Route>
+
+            {/* Redirect user to 404 page for all the unknown pathnames/urls */}
+            <Redirect to="404" />
+
           </Switch>
         </BrowserRouter>
       </ThemeProvider>

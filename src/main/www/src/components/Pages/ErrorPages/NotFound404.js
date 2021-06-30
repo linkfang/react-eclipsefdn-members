@@ -2,13 +2,17 @@ export default function NotFound404() {
   return (
     <>
       <h1>404 File not found</h1>
-      <p>We're sorry, the page you requested cannot be found. Below are some links that may be useful.</p>
+      <p>
+        We're sorry, the page you requested cannot be found. Below are some
+        links that may be useful.
+      </p>
       <ul>
         <li>
           <a href="https://eclipse.org/">Eclipse home</a>
         </li>
         <li>
-          <a href="https://eclipse.org/projects/searchpage.php">Search</a> our site
+          <a href="https://eclipse.org/projects/searchpage.php">Search</a> our
+          site
         </li>
         <li>
           Website
@@ -22,7 +26,9 @@ export default function NotFound404() {
           <a href="https://eclipse.org/artwork/">Logos</a> and artwork
         </li>
         <li>
-          <a href="https://wiki.eclipse.org/index.php/Webmaster_FAQ">webmaster FAQ</a>
+          <a href="https://wiki.eclipse.org/index.php/Webmaster_FAQ">
+            webmaster FAQ
+          </a>
         </li>
         <li>
           <a href="mailto:webmaster@eclipse.org">Email the webmaster</a>

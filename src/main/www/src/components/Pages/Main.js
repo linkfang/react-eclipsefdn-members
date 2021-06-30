@@ -15,8 +15,6 @@ import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
 import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
-import NotFound404 from './ErrorPages/NotFound404';
-import InternalError50x from './ErrorPages/InternalError50x';
 import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
 export default function Main() {
@@ -241,7 +239,7 @@ export default function Main() {
   );
 
   return (
-    <div className="container eclipseFdn-membership-webform">
+    <>
       <Switch>
         <Route exact path="/">
           <Redirect to="/sign-in" />
@@ -328,23 +326,12 @@ export default function Main() {
             <Redirect to={furthestPage.pathName} />
           )}
         </Route>
-
-        <Route path="/404">
-          <NotFound404 />
-        </Route>
-
-        <Route path="/50x">
-          <InternalError50x />
-        </Route>
-
-        {/* Redirect user to 404 page for all the unknown pathnames/urls */}
-        <Redirect to="404" />
       </Switch>
 
       <TopSlideMsg
         shouldShowUp={isLoginExpired}
         msgContent={LOGIN_EXPIRED_MSG}
       />
-    </div>
+    </>
   );
 }

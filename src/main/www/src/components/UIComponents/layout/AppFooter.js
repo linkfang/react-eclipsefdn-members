@@ -20,7 +20,8 @@ export default function AppFooter() {
           borderBottom: '1px solid #ccc',
           borderTop: '1px solid #ccc',
           backgroundPosition: 'bottom',
-        }}>
+        }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-sm-24">
@@ -33,7 +34,8 @@ export default function AppFooter() {
               </p>
               <a
                 className="btn btn-primary btn-lg"
-                href="https://www.eclipsecon.org/2020/registration">
+                href="https://www.eclipsecon.org/2020/registration"
+              >
                 Register Now
               </a>
             </div>
@@ -45,7 +47,8 @@ export default function AppFooter() {
           <div className="row">
             <section
               className="col-sm-6 hidden-print"
-              id="footer-eclipse-foundation">
+              id="footer-eclipse-foundation"
+            >
               <h2 className="section-title">Eclipse Foundation</h2>
               <ul className="nav">
                 <li>
@@ -178,7 +181,8 @@ export default function AppFooter() {
                     <li>
                       <a
                         className="social-media-link fa-stack fa-lg"
-                        href="https://twitter.com/EclipseFdn">
+                        href="https://twitter.com/EclipseFdn"
+                      >
                         <i className="fa fa-circle-thin fa-stack-2x" />
                         <i className="fa fa-twitter fa-stack-1x" />
                       </a>
@@ -186,7 +190,8 @@ export default function AppFooter() {
                     <li>
                       <a
                         className="social-media-link fa-stack fa-lg"
-                        href="https://www.facebook.com/eclipse.org">
+                        href="https://www.facebook.com/eclipse.org"
+                      >
                         <i className="fa fa-circle-thin fa-stack-2x" />
                         <i className="fa fa-facebook fa-stack-1x" />
                       </a>
@@ -194,7 +199,8 @@ export default function AppFooter() {
                     <li>
                       <a
                         className="social-media-link fa-stack fa-lg"
-                        href="https://www.youtube.com/user/EclipseFdn">
+                        href="https://www.youtube.com/user/EclipseFdn"
+                      >
                         <i className="fa fa-circle-thin fa-stack-2x" />
                         <i className="fa fa-youtube fa-stack-1x" />
                       </a>
@@ -202,7 +208,8 @@ export default function AppFooter() {
                     <li>
                       <a
                         className="social-media-link fa-stack fa-lg"
-                        href="https://www.linkedin.com/company/eclipse-foundation">
+                        href="https://www.linkedin.com/company/eclipse-foundation"
+                      >
                         <i className="fa fa-circle-thin fa-stack-2x" />
                         <i className="fa fa-linkedin fa-stack-1x" />
                       </a>
