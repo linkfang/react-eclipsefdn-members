@@ -687,19 +687,20 @@ export function requestErrorHandler(
   redirectTo,
   handleLoginExpired
 ) {
+  const origin = window.location.origin;
   switch (statusCode) {
     case 404:
-      redirectTo('/404');
+      window.location.assign(origin + '/404');
       break;
     case 500:
-      redirectTo('/50x');
+      window.location.assign(origin + '/50x');
       break;
     case 401:
       redirectTo('/');
       handleLoginExpired();
       break;
     default:
-      redirectTo('/404');
+      window.location.assign(origin + '/50x');
       break;
   }
 }
