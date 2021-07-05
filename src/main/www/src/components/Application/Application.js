@@ -77,7 +77,7 @@ export default function Application() {
       const valueForMembershipLevelFormik = [
         { field: 'purchasingAndVAT', value: purchasingAndVAT },
         { field: 'membershipLevel', value: membershipLevel },
-        { field: 'membershipLevel-label', value: membershipLevelLabel },
+        { field: 'membershipLevel-label', value: membershipLevelLabel?.label ? membershipLevelLabel : null},
       ];
       // set valueToUpdateFormik to membershipLevel formik to make sure the value is up to date
       updateMembershipLevelForm(valueForMembershipLevelFormik);
