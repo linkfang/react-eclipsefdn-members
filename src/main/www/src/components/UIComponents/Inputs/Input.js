@@ -20,6 +20,8 @@ const useStyles = makeStyles(() => ({
   root: {
     marginBottom: 14,
     marginTop: 6,
+  },
+  input: {
     backgroundColor: 'white',
   },
 }));
@@ -55,6 +57,7 @@ export default function Input(props) {
       fullWidth={true}
       placeholder={placeholder}
       InputProps={{
+        className: classes.input,
         inputProps: {
           'aria-labelledby': ariaLabel,
         },

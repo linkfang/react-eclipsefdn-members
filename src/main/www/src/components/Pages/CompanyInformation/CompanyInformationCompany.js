@@ -47,14 +47,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             requiredMark={true}
             value={formik.values.organization.twitterHandle}
             onChange={formik.handleChange}
-            error={
-              formik.touched.organization?.twitterHandle &&
-              Boolean(formik.errors.organization?.twitterHandle)
-            }
-            helperText={
-              formik.touched.organization?.twitterHandle &&
-              formik.errors.organization?.twitterHandle
-            }
+            error={Boolean(formik.errors.organization?.twitterHandle)}
+            helperText={formik.errors.organization?.twitterHandle}
           />
         </div>
       </div>
