@@ -1,4 +1,4 @@
-export default function MainPortal() {
+export default function Portal() {
   return (
     <div>
       <h1>Hello Portal!</h1>

@@ -17,7 +17,7 @@ import { executeSendDataByStep } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
 import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
-export default function Main() {
+export default function Application() {
   const history = useHistory();
   const { currentFormId, furthestPage, setFurthestPage, currentUser } =
     useContext(MembershipContext);

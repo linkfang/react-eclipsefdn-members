@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import AppTemplate from './components/UIComponents/layout/AppTemplate';
+import AppTemplate from './components/UIComponents/Templates/AppTemplate';
 import MembershipContext from './Context/MembershipContext';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import {
@@ -10,10 +10,10 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import Main from './components/Pages/Main';
-import MainPortal from './components/PagesPortal/MainPortal';
-import NotFound404 from './components/Pages/ErrorPages/NotFound404';
-import InternalError50x from './components/Pages/ErrorPages/InternalError50x';
+import Application from './components/Application/Application';
+import Portal from './components/Portal/Portal';
+import NotFound404 from './components/ErrorPages/NotFound404';
+import InternalError50x from './components/ErrorPages/InternalError50x';
 
 const theme = createMuiTheme({
   palette: {
@@ -50,14 +50,14 @@ const App = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path="/portal">
-              <MainPortal />
+              <Portal />
             </Route>
 
             <Route exact path="/application">
               <MembershipContext.Provider value={membershipContextValue}>
                 <AppTemplate>
                   <HashRouter hashType="noslash">
-                    <Main />
+                    <Application />
                   </HashRouter>
                 </AppTemplate>
               </MembershipContext.Provider>
