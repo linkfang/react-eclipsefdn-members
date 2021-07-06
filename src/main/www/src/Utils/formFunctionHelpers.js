@@ -361,6 +361,7 @@ export async function executeSendDataByStep(
   };
   switch (step) {
     case 1:
+      // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
       callSendData(
         formId,
         END_POINT.organizations,
@@ -383,7 +384,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
-        goToNextStepObj,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -399,7 +400,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
-        goToNextStepObj,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -415,7 +416,7 @@ export async function executeSendDataByStep(
         ),
         redirectTo,
         handleLoginExpired,
-        goToNextStepObj,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -427,7 +428,7 @@ export async function executeSendDataByStep(
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
         redirectTo,
         handleLoginExpired,
-        goToNextStepObj
+        ''
       );
       break;
 
@@ -590,10 +591,13 @@ function callSendData(
               break;
           }
         }
-        goToNextStepObj.method(
-          goToNextStepObj.stepNum,
-          goToNextStepObj.pathName
-        );
+
+        if (goToNextStepObj) {
+          goToNextStepObj.method(
+            goToNextStepObj.stepNum,
+            goToNextStepObj.pathName
+          );
+        }
       })
       .catch((err) => console.log(err));
   }
@@ -687,19 +691,20 @@ export function requestErrorHandler(
   redirectTo,
   handleLoginExpired
 ) {
+  const origin = window.location.origin;
   switch (statusCode) {
     case 404:
-      redirectTo('/404');
+      window.location.assign(origin + '/404');
       break;
     case 500:
-      redirectTo('/50x');
+      window.location.assign(origin + '/50x');
       break;
     case 401:
       redirectTo('/');
       handleLoginExpired();
       break;
     default:
-      redirectTo('/404');
+      window.location.assign(origin + '/50x');
       break;
   }
 }
