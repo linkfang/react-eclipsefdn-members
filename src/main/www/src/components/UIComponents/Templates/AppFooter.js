@@ -1,4 +1,4 @@
-import React from 'react';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -217,10 +217,10 @@ export default function AppFooter() {
                   </ul>
                 </div>
               </div>
-            </div>{' '}
-            <a href="#" className="scrollup">
+            </div>
+            {/* <span onClick={scrollToTop} className="scrollup">
               Back to the top
-            </a>
+            </span> */}
           </div>
         </div>
       </footer>
