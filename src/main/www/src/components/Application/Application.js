@@ -326,6 +326,9 @@ export default function Application() {
             <Redirect to={furthestPage.pathName} />
           )}
         </Route>
+
+        <Redirect to="/" />
+
       </Switch>
 
       <TopSlideMsg
