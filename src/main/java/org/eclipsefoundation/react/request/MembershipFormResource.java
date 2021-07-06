@@ -23,11 +23,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -49,13 +47,12 @@ import io.quarkus.security.Authenticated;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MembershipFormResource extends AbstractRESTResource {
 
-    @Context
-    SecurityContext ctx;
 
     @GET
     public Response getAll(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
@@ -73,6 +70,11 @@ public class MembershipFormResource extends AbstractRESTResource {
     public Response get(@PathParam("id") String formID, @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
@@ -95,19 +97,28 @@ public class MembershipFormResource extends AbstractRESTResource {
 
     @PUT
     @Path("{id}")
-    public List<MembershipForm> update(@PathParam("id") String formID, MembershipForm mem) {
+    public Response update(@PathParam("id") String formID, MembershipForm mem) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         mem.setUserID(ident.getPrincipal().getName());
         // need to fetch ref to use attached entity
         MembershipForm ref = mem.cloneTo(dao.getReference(formID, MembershipForm.class));
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref))).build();
     }
 
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") String formID) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
-        //params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
 
         dao.delete(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         return Response.ok().build();
@@ -116,10 +127,14 @@ public class MembershipFormResource extends AbstractRESTResource {
     @POST
     @Path("{id}/complete")
     public Response completeForm(@PathParam("id") String formID) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
-        params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
 
         // retrieve the possible cached object
         List<MembershipForm> results = dao.get(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));

@@ -12,6 +12,7 @@
 package org.eclipsefoundation.react.request;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.helper.ResponseHelper;
@@ -20,6 +21,9 @@ import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.core.service.CachingService;
 import org.eclipsefoundation.persistence.dao.PersistenceDao;
 import org.eclipsefoundation.persistence.service.FilterService;
+import org.eclipsefoundation.react.model.MembershipForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.security.identity.SecurityIdentity;
 
@@ -29,6 +33,7 @@ import io.quarkus.security.identity.SecurityIdentity;
  * @author Martin Lowe
  */
 public abstract class AbstractRESTResource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRESTResource.class);
     public static final String ALL_CACHE_PLACEHOLDER = "all";
 
     @Inject
@@ -49,4 +54,30 @@ public abstract class AbstractRESTResource {
     AdditionalUserData aud;
     @Inject
     SecurityIdentity ident;
+
+    /**
+     * Check if the current user has access to the current resource, based on owner of form and current logged in user.
+     * 
+     * @param formId the form ID that is being loaded, or has assets that are to be loaded/modified.
+     * @return a response if there is an access error, or null if there is no access error.
+     */
+    protected Response checkAccess(String formId) {
+        // check if there is a logged in user
+        if (ident.isAnonymous()) {
+            return Response.status(401).build();
+        }
+        // check if user is allowed to get these resources
+        MembershipForm form = dao.getReference(formId, MembershipForm.class);
+        if (form == null) {
+            return Response.status(404).build();
+        }
+        // check that the logged in user is the creator of the form
+        if (!form.getUserID().equalsIgnoreCase(ident.getPrincipal().getName())) {
+            LOGGER.warn("User with name '{}' attempted to access form data for user '{}'",
+                    ident.getPrincipal().getName(), form.getUserID());
+            return Response.status(403).build();
+        }
+        // if there is no issue, return no response
+        return null;
+    }
 }

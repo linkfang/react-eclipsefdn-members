@@ -53,6 +53,12 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
+
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
@@ -66,15 +72,24 @@ public class FormOrganizationsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<FormOrganization> create(@PathParam("id") String formID, FormOrganization org) {
-        // handle cases where an organization already exists and replace it
+    public Response create(@PathParam("id") String formID, FormOrganization org) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MembershipForm form = dao.getReference(formID, MembershipForm.class);
+        // handle cases where an organization already exists and replace it
         if (form.getOrganization() != null) {
             return update(formID, form.getOrganization().getId(), org);
         } else {
             org.setForm(form);
+            if (org.getAddress() != null) {
+                org.getAddress().setOrganization(org);
+            }
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org)))
+                .build();
     }
 
     @GET
@@ -83,6 +98,11 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
+
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
@@ -99,9 +119,12 @@ public class FormOrganizationsResource extends AbstractRESTResource {
 
     @PUT
     @Path("{orgID}")
-    public List<FormOrganization> update(@PathParam("id") String formID, @PathParam("orgID") String id,
-            FormOrganization org) {
+    public Response update(@PathParam("id") String formID, @PathParam("orgID") String id, FormOrganization org) {
         // need to fetch ref to use attached entity
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         FormOrganization ref = dao.getReference(id, FormOrganization.class);
         org.cloneTo(ref);
         if (ref.getAddress() != null && org.getAddress() != null) {
@@ -111,12 +134,17 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             // if remote or new are missing, replace remote w/ new value
             ref.setAddress(org.getAddress());
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref)))
+                .build();
     }
 
     @DELETE
     @Path("{orgID}")
     public Response delete(@PathParam("id") String formID, @PathParam("orgID") String id) {
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
