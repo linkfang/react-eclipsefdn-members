@@ -37,11 +37,9 @@ export const validationSchema = [
     organization: yup.object().shape({
       twitterHandle: yup
         .string()
-        .min(2, 'Please enter a valid Twitter handle')
-        .matches(
-          /^@([A-Za-z0-9._+-])*$/,
-          'Please enter a valid Twitter handle'
-        ),
+        .min(2, 'Twitter handle is too short')
+        .max(16, 'Twitter handle is too long')
+        .matches(/^@([A-Za-z0-9_])*$/, 'Please enter a valid Twitter handle'),
     }),
     representative: yup.object().shape({
       member: yup.object().shape({
