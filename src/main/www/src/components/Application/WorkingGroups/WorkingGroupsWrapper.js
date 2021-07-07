@@ -4,6 +4,7 @@ import WorkingGroup from './WorkingGroup';
 import {
   matchWorkingGroupFields,
   requestErrorHandler,
+  scrollToTop,
 } from '../../../Utils/formFunctionHelpers';
 import Loading from '../../UIComponents/Loading/Loading';
 import {
@@ -48,6 +49,10 @@ const WorkingGroupsWrapper = ({
   const [isLoading, setIsLoading] = useState(true);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   // Fetch data only once and prefill data, as long as
   // fetchWorkingGroupsData Function does not change,

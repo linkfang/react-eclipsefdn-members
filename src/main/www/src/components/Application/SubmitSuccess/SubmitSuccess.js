@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+
 /**
  * This is just a pure html component to
  * display after all steps finished and
  * final submitted after preview
  */
 const SubmitSuccess = () => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   return (
     <>
       <h2>Confirmation message on submission: </h2>

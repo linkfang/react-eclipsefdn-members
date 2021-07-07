@@ -34,15 +34,22 @@ export const validationSchema = [
   // First step - company Info
   yup.object().shape({
     // First step - representative contacts
+    organization: yup.object().shape({
+      twitterHandle: yup
+        .string()
+        .min(2, 'Twitter handle is too short')
+        .max(16, 'Twitter handle is too long')
+        .matches(/^@([A-Za-z0-9_])*$/, 'Please enter a valid Twitter handle'),
+    }),
     representative: yup.object().shape({
       member: yup.object().shape({
-        email: yup.string('Enter your email').email('Enter a valid email'),
+        email: yup.string().email('Please enter a valid email'),
       }),
       marketing: yup.object().shape({
-        email: yup.string('Enter your email').email('Enter a valid email'),
+        email: yup.string().email('Please enter a valid email'),
       }),
       accounting: yup.object().shape({
-        email: yup.string('Enter your email').email('Enter a valid email'),
+        email: yup.string().email('Please enter a valid email'),
       }),
     }),
   }),
@@ -57,7 +64,7 @@ export const validationSchema = [
     workingGroups: yup.array().of(
       yup.object().shape({
         workingGroupRepresentative: yup.object().shape({
-          email: yup.string('Enter your email').email('Enter a valid email'),
+          email: yup.string().email('Please enter a valid email'),
         }),
       })
     ),
@@ -69,7 +76,7 @@ export const validationSchema = [
       firstName: yup.string().required(`${requiredErrorMsg}`),
       lastName: yup.string().required(`${requiredErrorMsg}`),
       jobtitle: yup.string().required(`${requiredErrorMsg}`),
-      email: yup.string('Enter your email').email('Enter a valid email'),
+      email: yup.string().email('Please enter a valid email'),
     }),
   }),
 ];

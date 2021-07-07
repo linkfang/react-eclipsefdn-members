@@ -1,6 +1,8 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
+import { useEffect } from 'react';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 /**
  * Have not added any API calls here,
@@ -11,6 +13,10 @@ import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 const sectionName = 'signing-authority';
 const SigningAuthority = ({ formik }) => {
   const { signingAuthorityRepresentative } = formField;
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>
