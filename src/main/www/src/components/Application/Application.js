@@ -253,6 +253,10 @@ export default function Application() {
             history={history}
             setIsStartNewForm={setIsStartNewForm}
             handleLoginExpired={handleLoginExpired}
+            resetCompanyInfoForm={formikCompanyInfo.resetForm}
+            resetMembershipLevelForm={formikMembershipLevel.resetForm}
+            resetWorkingGroupForm={formikWorkingGroups.resetForm}
+            resetSigningAuthorityForm={formikSigningAuthority.resetForm}
           />
         </Route>
 
