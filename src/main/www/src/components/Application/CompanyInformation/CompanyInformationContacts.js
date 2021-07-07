@@ -49,31 +49,44 @@ const Contacts = ({ formik }) => {
   };
 
   const handleMemberInputChange = (value, name) => {
+    const representativeValue = formik.values.representative;
     const memberRepInfo = {
-      ...formik.values.representative.member,
+      ...representativeValue.member,
       [name]: value,
     };
-    formik.setFieldValue('representative.member', memberRepInfo);
+
+    let newRepresentativeValue = {
+      ...representativeValue,
+      member: memberRepInfo,
+    };
 
     // update representative.marketing values based on related checkbox
     if (isMarketingSameAsCompany) {
-      const newValues = {
+      const newMarketingRepValues = {
         ...memberRepInfo,
-        id: formik.values.representative.marketing.id || '',
+        id: representativeValue.marketing.id || '',
         sameAsCompany: isMarketingSameAsCompany,
       };
-      formik.setFieldValue('representative.marketing', newValues);
+      newRepresentativeValue = {
+        ...newRepresentativeValue,
+        marketing: newMarketingRepValues,
+      };
     }
 
     // update representative.accounting values based on related checkbox
     if (isAccountingSameAsCompany) {
-      const newValues = {
+      const newAccountingRepValues = {
         ...memberRepInfo,
-        id: formik.values.representative.accounting.id || '',
+        id: representativeValue.accounting.id || '',
         sameAsCompany: isAccountingSameAsCompany,
       };
-      formik.setFieldValue('representative.accounting', newValues);
+      newRepresentativeValue = {
+        ...newRepresentativeValue,
+        accounting: newAccountingRepValues,
+      };
     }
+
+    formik.setFieldValue('representative', newRepresentativeValue);
   };
 
   const generateContacts = (
@@ -98,14 +111,8 @@ const Contacts = ({ formik }) => {
                 : formik.handleChange
             }
             value={formik.values.representative?.[type]?.[el.name]}
-            error={
-              formik.touched.representative?.[type]?.[el.name] &&
-              Boolean(formik.errors.representative?.[type]?.[el.name])
-            }
-            helperText={
-              formik.touched.representative?.[type]?.[el.name] &&
-              formik.errors.representative?.[type]?.[el.name]
-            }
+            error={Boolean(formik.errors.representative?.[type]?.[el.name])}
+            helperText={formik.errors.representative?.[type]?.[el.name]}
           />
         </div>
       ))}

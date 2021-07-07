@@ -4,6 +4,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
+import { useEffect } from 'react';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
@@ -24,6 +26,10 @@ const useStyles = makeStyles(() => ({
 const MembershipLevel = ({ formik }) => {
   const { membershipLevel } = formField;
   const classes = useStyles();
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>

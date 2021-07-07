@@ -6,6 +6,7 @@ import {
   matchCompanyFields,
   matchContactFields,
   requestErrorHandler,
+  scrollToTop,
 } from '../../../Utils/formFunctionHelpers';
 import CompanyInformationCompany from './CompanyInformationCompany';
 import CompanyInformationContacts from './CompanyInformationContacts';
@@ -56,6 +57,10 @@ const CompanyInformation = ({
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   useEffect(() => {
     const detectModeAndFetch = () => {

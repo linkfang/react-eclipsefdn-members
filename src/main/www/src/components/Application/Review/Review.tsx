@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 interface ReviewProps {
   values: FormValue;
@@ -8,6 +9,10 @@ interface ReviewProps {
 }
 
 const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+
   return (
     <form onSubmit={() => submitForm(5, '/submitted')}>
       <h1 className="fw-600 h2">

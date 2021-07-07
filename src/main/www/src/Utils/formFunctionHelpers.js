@@ -515,6 +515,9 @@ function callSendData(
   if (getCurrentMode() === MODE_REACT_ONLY) {
     console.log(`You called ${url} with Method ${method} and data body is:`);
     console.log(JSON.stringify(dataBody));
+    if (goToNextStepObj) {
+      goToNextStepObj.method(goToNextStepObj.stepNum, goToNextStepObj.pathName);
+    }
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -707,4 +710,8 @@ export function requestErrorHandler(
       window.location.assign(origin + '/50x');
       break;
   }
+}
+
+export function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
