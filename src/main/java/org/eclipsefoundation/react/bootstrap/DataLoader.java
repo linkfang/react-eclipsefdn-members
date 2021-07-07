@@ -80,7 +80,7 @@ public class DataLoader {
             List<MembershipForm> forms = new ArrayList<>(config.getFormCount());
             for (int i = 0; i < config.getFormCount(); i++) {
                 MembershipForm mf = new MembershipForm();
-                String userID = config.getUserIDs().get(r.nextInt(config.getUserIDs().size()));
+                String userID = config.getUserIds().get(r.nextInt(config.getUserIds().size()));
 
                 mf.setUserID(userID);
                 mf.setMembershipLevel(config.getMembershipLevels().get(r.nextInt(config.getMembershipLevels().size())));

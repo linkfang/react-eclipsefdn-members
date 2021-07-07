@@ -77,3 +77,6 @@ docker.secret.properties
 
 #environment variables
 .env
+
+#Test resources
+src/test/resources/schemas

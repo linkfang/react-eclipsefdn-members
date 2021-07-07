@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,6 +45,7 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
     private String legalName;
+    @JsonbProperty("twitter")
     private String twitterHandle;
 
     // form entity

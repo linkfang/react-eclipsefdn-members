@@ -9,6 +9,7 @@ clean:;
 install-react:;
 	yarn --cwd src/main/www install --frozen-lockfile
 validate-spec: install-react;
+	yarn --cwd src/main/www generate-json-schema
 	yarn --cwd src/main/www test-spec
 generate-cert:;
 	rm -rf certs && mkdir -p certs

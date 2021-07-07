@@ -47,7 +47,6 @@ import io.quarkus.security.Authenticated;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MembershipFormResource extends AbstractRESTResource {
 
-
     @GET
     public Response getAll(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
@@ -83,9 +82,11 @@ public class MembershipFormResource extends AbstractRESTResource {
         List<MembershipForm> results = dao.get(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         if (results == null) {
             return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
         }
         // return the results as a response
-        return Response.ok(results).build();
+        return Response.ok(results.get(0)).build();
     }
 
     @POST
@@ -98,6 +99,10 @@ public class MembershipFormResource extends AbstractRESTResource {
     @PUT
     @Path("{id}")
     public Response update(@PathParam("id") String formID, MembershipForm mem) {
+        // make sure we have something to put
+        if (mem == null) {
+            return Response.status(500).build();
+        }
         // check if user is allowed to modify these resources
         Response r = checkAccess(formID);
         if (r != null) {
@@ -106,7 +111,8 @@ public class MembershipFormResource extends AbstractRESTResource {
         mem.setUserID(ident.getPrincipal().getName());
         // need to fetch ref to use attached entity
         MembershipForm ref = mem.cloneTo(dao.getReference(formID, MembershipForm.class));
-        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref))).build();
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref)))
+                .build();
     }
 
     @DELETE

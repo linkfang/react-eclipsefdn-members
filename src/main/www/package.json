@@ -32,7 +32,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test-spec": "swagger-repo validate -b ../../../spec",
-    "start-spec": "swagger-repo serve -b ../../../spec -p 8999"
+    "start-spec": "swagger-repo serve -b ../../../spec -p 8999",
+    "generate-json-schema": "node src/openapi2schema.js -s ../../../spec/openapi.yaml -t ../../test/resources"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,8 +52,13 @@
     ]
   },
   "devDependencies": {
+    "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
+    "@stoplight/json-ref-resolver": "^3.1.2",
+    "decamelize": "^5.0.0",
+    "js-yaml": "^4.1.0",
     "react-datepicker": "^3.2.2",
     "react-select": "^4.1.0",
+    "yargs": "^17.0.1",
     "yup": "^0.32.8"
   },
   "prettier": {

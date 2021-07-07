@@ -11,13 +11,9 @@
  */
 package org.eclipsefoundation.react.service.impl;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -27,8 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
-
-import com.google.inject.Singleton;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipsefoundation.react.model.WorkingGroup;

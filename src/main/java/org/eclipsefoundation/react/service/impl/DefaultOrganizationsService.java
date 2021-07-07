@@ -11,10 +11,8 @@
  */
 package org.eclipsefoundation.react.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +31,6 @@ import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.runtime.Startup;
-
 /**
  * Builds a list of working group definitions from an embedded list of working
  * group definitions. This is an interim solution to accelerate this project and
@@ -42,7 +38,6 @@ import io.quarkus.runtime.Startup;
  * 
  * @author Martin Lowe
  */
-@Startup
 @ApplicationScoped
 public class DefaultOrganizationsService implements OrganizationsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(DefaultOrganizationsService.class);
@@ -54,7 +49,7 @@ public class DefaultOrganizationsService implements OrganizationsService {
     CachingService cache;
 
     @PostConstruct
-    void init() throws IOException {
+    void init() {
         LOGGER.info("Starting init of cached organizations");
         Optional<List<Organization>> orgs = cache.get("all", new MultivaluedMapImpl<>(), Organization.class, () -> getAll(null));
         if (orgs.isEmpty()) {
@@ -79,13 +74,13 @@ public class DefaultOrganizationsService implements OrganizationsService {
     private List<Organization> getAll(String workingGroup) {
         String actualWG = workingGroup == null ? "" : workingGroup;
         List<Organization> orgs = new LinkedList<>();
-        Set<Organization> tmp = Collections.emptySet();
+        Set<Organization> tmp;
         int count = 1;
         do {
             tmp = orgAPI.organizations(actualWG, count);
             orgs.addAll(tmp);
             count++;
-        } while(!tmp.isEmpty() && tmp != null);
+        } while(!tmp.isEmpty());
         return orgs;
     }
 }

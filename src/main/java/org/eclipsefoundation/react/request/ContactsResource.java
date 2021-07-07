@@ -102,9 +102,11 @@ public class ContactsResource extends AbstractRESTResource {
         List<Contact> results = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), params));
         if (results == null) {
             return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
         }
         // return the results as a response
-        return Response.ok(results).build();
+        return Response.ok(results.get(0)).build();
     }
 
     @PUT
