@@ -199,3 +199,6 @@ html {
     padding-top: 10px;
   }
 }
+.scrollup {
+  cursor: pointer;
+}

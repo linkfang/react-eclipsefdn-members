@@ -5,11 +5,6 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 export default function AppFooter() {
   return (
     <div>
-      <p id="back-to-top">
-        <a className="visible-xs" href="#top">
-          Back to the top
-        </a>
-      </p>
       {/* Sign Up to our Newsletter */}
       <div
         className="featured-footer featured-footer-newsletter"
@@ -218,9 +213,7 @@ export default function AppFooter() {
                 </div>
               </div>
             </div>
-            {/* <span onClick={scrollToTop} className="scrollup">
-              Back to the top
-            </span> */}
+            <span onClick={scrollToTop} className="scrollup"></span>
           </div>
         </div>
       </footer>
