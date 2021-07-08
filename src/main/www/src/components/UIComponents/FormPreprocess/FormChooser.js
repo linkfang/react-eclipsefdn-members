@@ -43,35 +43,12 @@ const FormChooser = ({
 
   const handleStartNewForm = () => {
     // reset the form if user has gone to a further page/step
-    switch (furthestPage.index) {
-      case 1:
-        resetCompanyInfoForm();
-        break;
-      case 2:
-        resetCompanyInfoForm();
-        resetMembershipLevelForm();
-        break;
-      case 3:
-        resetCompanyInfoForm();
-        resetMembershipLevelForm();
-        resetWorkingGroupForm();
-        break;
-      case 4:
-        resetCompanyInfoForm();
-        resetMembershipLevelForm();
-        resetWorkingGroupForm();
-        resetSigningAuthorityForm();
-        break;
-      case 5:
-        resetCompanyInfoForm();
-        resetMembershipLevelForm();
-        resetWorkingGroupForm();
-        resetSigningAuthorityForm();
-        break;
-      default:
-        break;
+    if(furthestPage.index > 0){
+      resetCompanyInfoForm();
+      resetMembershipLevelForm();
+      resetWorkingGroupForm();
+      resetSigningAuthorityForm();
     }
-
     handleNewForm(setCurrentFormId, goToCompanyInfoStep);
   };
 
