@@ -5,6 +5,7 @@ import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import demoAvatar from '../../assets/demo-avatar.jpg';
 import LeftNavBar from './NavBar/LeftNavBar';
 import { drawerWidth, themeBlack } from '../../Constants/Constants';
+import Dashboard from './Dashboard/Dashboard';
 
 const theme = createMuiTheme({
   palette: {
@@ -92,7 +93,7 @@ export default function MainPortal() {
             <h1>Home</h1>
           </Route>
           <Route exact path="/dashboard">
-            <h1>Dashboard</h1>
+            <Dashboard />
           </Route>
           <Route exact path="/org-profile">
             <h1>Your Organization Profile</h1>
