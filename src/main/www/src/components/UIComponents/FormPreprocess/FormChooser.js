@@ -23,8 +23,12 @@ const FormChooser = ({
   history,
   setIsStartNewForm,
   handleLoginExpired,
+  resetSigningAuthorityForm,
+  resetWorkingGroupForm,
+  resetMembershipLevelForm,
+  resetCompanyInfoForm,
 }) => {
-  const { setCurrentFormId } = useContext(MembershipContext);
+  const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = useCallback(() => {
@@ -35,6 +39,17 @@ const FormChooser = ({
   const handleContinueExistingForm = () => {
     setIsStartNewForm(false);
     goToCompanyInfoStep();
+  };
+
+  const handleStartNewForm = () => {
+    // reset the form if user has gone to a further page/step
+    if(furthestPage.index > 0){
+      resetCompanyInfoForm();
+      resetMembershipLevelForm();
+      resetWorkingGroupForm();
+      resetSigningAuthorityForm();
+    }
+    handleNewForm(setCurrentFormId, goToCompanyInfoStep);
   };
 
   useEffect(() => {
@@ -97,9 +112,7 @@ const FormChooser = ({
 
             <button
               type="button"
-              onClick={() => {
-                handleNewForm(setCurrentFormId, goToCompanyInfoStep);
-              }}
+              onClick={handleStartNewForm}
               className="btn btn-primary"
             >
               Start New Application
