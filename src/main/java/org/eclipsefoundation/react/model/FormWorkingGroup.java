@@ -59,7 +59,7 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
 
     // form entity
     @OneToOne(targetEntity = MembershipForm.class)
-    @JoinColumn(name = "form_id", unique = true)
+    @JoinColumn(name = "form_id")
     private MembershipForm form;
 
     @OneToOne(cascade = CascadeType.ALL)
