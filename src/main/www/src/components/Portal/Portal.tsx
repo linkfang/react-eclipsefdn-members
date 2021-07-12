@@ -1,11 +1,10 @@
 import { Switch, Route } from 'react-router-dom';
-import { Theme, AppBar, Toolbar, Typography, ThemeProvider } from '@material-ui/core';
+import { Theme, ThemeProvider } from '@material-ui/core';
 import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
-import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
-import demoAvatar from '../../assets/demo-avatar.jpg';
 import LeftNavBar from './NavBar/LeftNavBar';
-import { drawerWidth, mainContentBGColor, themeBlack } from '../../Constants/Constants';
+import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
+import AppTopBar from './NavBar/AppTopBar';
 
 const theme = createMuiTheme({
   palette: {
@@ -20,40 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-    },
-    appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      height: 70,
-      marginLeft: drawerWidth,
-      backgroundColor: '#fff',
-      boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
-    },
-    toolbarCtn: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      padding: '0 32px',
-    },
-    verticalDivider: {
-      backgroundColor: '#EBEBF2',
-      height: 28,
-      width: 1,
-      marginRight: 21,
-    },
-    username: {
-      marginBottom: 0,
-      marginRight: 7,
-    },
-    dropDownIcon: {
-      color: '#A4AFB7',
-    },
-    avatarCtn: {
-      width: 38,
-      borderRadius: '50%',
-      overflow: 'hidden',
-      marginLeft: 11,
-    },
-    avatar: {
-      width: 38,
     },
     content: {
       marginTop: 64,
@@ -73,18 +38,7 @@ export default function MainPortal() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar className={classes.toolbarCtn}>
-          <div className={classes.verticalDivider}></div>
-          <Typography paragraph className={classes.username}>
-            John Doe
-          </Typography>
-          <ExpandMoreIcon className={classes.dropDownIcon} />
-          <div className={classes.avatarCtn}>
-            <img src={demoAvatar} alt="user avatar" className={classes.avatar} />
-          </div>
-        </Toolbar>
-      </AppBar>
+      <AppTopBar />
 
       <LeftNavBar />
 
