@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import {
-  List,
   ListItem,
   ListItemText,
   Collapse,
   Container,
   makeStyles,
-  Theme,
   createStyles,
   ListItemIcon,
 } from '@material-ui/core';
