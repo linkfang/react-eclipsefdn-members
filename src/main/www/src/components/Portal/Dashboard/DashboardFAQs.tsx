@@ -7,6 +7,7 @@ import {
   makeStyles,
   createStyles,
   ListItemIcon,
+  List,
 } from '@material-ui/core';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -96,7 +97,7 @@ export default function DashboardFAQs() {
   };
 
   const renderFAQs = faqItems.map((item, index) => (
-    <Container className={classes.faqItemCtn}>
+    <List className={classes.faqItemCtn} key={index}>
       <ListItem className={classes.faqQuestion}>
         <ListItemText primary={item.question} onClick={() => handleClick(index)} />
         <ListItemIcon className={classes.faqExpandIcon}>
@@ -108,7 +109,7 @@ export default function DashboardFAQs() {
           <ListItemText primary={item.answer} />
         </ListItem>
       </Collapse>
-    </Container>
+    </List>
   ));
   return (
     <>
