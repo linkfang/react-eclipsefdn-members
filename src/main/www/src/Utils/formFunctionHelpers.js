@@ -8,6 +8,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
+  PATH_NAME_ARRAY,
 } from '../Constants/Constants';
 
 /**
@@ -74,16 +75,16 @@ export function matchCompanyFields(existingOrganizationData) {
     id: existingOrganizationData?.id || '',
     legalName: existingOrganizationData?.legal_name || '',
     address: {
-      id: existingOrganizationData?.address.id || '',
-      street: existingOrganizationData?.address.street || '',
-      city: existingOrganizationData?.address.city || '',
-      provinceOrState: existingOrganizationData?.address.province_state || '',
-      country: existingOrganizationData?.address.country || '',
+      id: existingOrganizationData?.address?.id || '',
+      street: existingOrganizationData?.address?.street || '',
+      city: existingOrganizationData?.address?.city || '',
+      provinceOrState: existingOrganizationData?.address?.province_state || '',
+      country: existingOrganizationData?.address?.country || '',
       'country-label': {
-        label: existingOrganizationData?.address.country || '',
-        value: existingOrganizationData?.address.country || '',
+        label: existingOrganizationData?.address?.country || '',
+        value: existingOrganizationData?.address?.country || '',
       },
-      postalCode: existingOrganizationData?.address.postal_code || '',
+      postalCode: existingOrganizationData?.address?.postal_code || '',
     },
     twitterHandle: existingOrganizationData?.twitter_handle || '',
   };
@@ -96,17 +97,17 @@ export function matchCompanyFields(existingOrganizationData) {
 export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
   const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
     (item) =>
-      item.value === existingPurchasingAndVATData.purchase_order_required
+      item.value === existingPurchasingAndVATData?.purchase_order_required
   );
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     legalName: existingPurchasingAndVATData?.legal_name || '',
 
-    purchasingProcess: existingPurchasingAndVATData.purchase_order_required,
+    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
     'purchasingProcess-label': currentOption,
-    vatNumber: existingPurchasingAndVATData.vat_number,
-    countryOfRegistration: existingPurchasingAndVATData.registration_country,
+    vatNumber: existingPurchasingAndVATData?.vat_number,
+    countryOfRegistration: existingPurchasingAndVATData?.registration_country,
   };
 }
 
@@ -132,16 +133,16 @@ export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
  * **/
 export function matchContactFields(existingContactData) {
   let existingCompanyContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.COMPANY
+    (el) => el?.type === CONTACT_TYPE.COMPANY
   );
   let existingMarketingContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.MARKETING
+    (el) => el?.type === CONTACT_TYPE.MARKETING
   );
   let existingAccoutingContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.ACCOUNTING
+    (el) => el?.type === CONTACT_TYPE.ACCOUNTING
   );
   let existingSigningContact = existingContactData.find(
-    (el) => el.type === CONTACT_TYPE.SIGNING
+    (el) => el?.type === CONTACT_TYPE.SIGNING
   );
 
   return {
@@ -201,7 +202,7 @@ export function matchWorkingGroupFields(
 ) {
   var res = [];
   // Array
-  existingworkingGroupData.forEach((item, index) => {
+  existingworkingGroupData.forEach((item) => {
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
@@ -216,11 +217,11 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact.first_name || '',
-        lastName: item?.contact.last_name || '',
-        jobtitle: item?.contact.job_title || '',
-        email: item?.contact.email || '',
-        id: item?.contact.id || '',
+        firstName: item?.contact?.first_name || '',
+        lastName: item?.contact?.last_name || '',
+        jobtitle: item?.contact?.job_title || '',
+        email: item?.contact?.email || '',
+        id: item?.contact?.id || '',
       },
     });
   });
@@ -348,14 +349,26 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
+  redirectTo,
+  handleLoginExpired,
+  goToNextStep,
   setFieldValueObj
 ) {
+  const goToNextStepObj = {
+    method: goToNextStep,
+    stepNum: step,
+    pathName: PATH_NAME_ARRAY[step],
+  };
   switch (step) {
     case 1:
+      // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
       callSendData(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -369,6 +382,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.COMPANY,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -382,6 +398,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.MARKETING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -395,6 +414,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.ACCOUNTING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        '',
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -403,7 +425,10 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo,
+        handleLoginExpired,
+        ''
       );
       break;
 
@@ -411,7 +436,10 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId)
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj
       );
       break;
 
@@ -421,6 +449,9 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
+          redirectTo,
+          handleLoginExpired,
+          goToNextStepObj,
           setFieldValueObj,
           index
         );
@@ -436,6 +467,9 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.SIGNING,
           formId
         ),
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
         setFieldValueObj
       );
       return;
@@ -457,6 +491,9 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
+  redirectTo,
+  handleLoginExpired,
+  goToNextStepObj,
   setFieldValueObj,
   index
 ) {
@@ -478,6 +515,9 @@ function callSendData(
   if (getCurrentMode() === MODE_REACT_ONLY) {
     console.log(`You called ${url} with Method ${method} and data body is:`);
     console.log(JSON.stringify(dataBody));
+    if (goToNextStepObj) {
+      goToNextStepObj.method(goToNextStepObj.stepNum, goToNextStepObj.pathName);
+    }
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -487,8 +527,10 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        console.log(res.status);
-        return res.json();
+        if (res.ok) return res.json();
+
+        requestErrorHandler(res.status, redirectTo, handleLoginExpired);
+        throw new Error(`${res.status} ${res.statusText}`);
       })
       .then((data) => {
         if (setFieldValueObj && method === 'POST') {
@@ -497,51 +539,54 @@ function callSendData(
             case 'organization':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data[0].id
+                data[0]?.id
               );
               setFieldValueObj.method(
                 'organization.address.id',
-                data[0]?.address.id
+                data[0]?.address?.id
               );
               break;
 
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
             case 'workingGroups':
-              setFieldValueObj.method(`workingGroups[${index}].id`, data[0].id);
+              setFieldValueObj.method(
+                `workingGroups[${index}].id`,
+                data[0]?.id
+              );
               setFieldValueObj.method(
                 `workingGroups[${index}].workingGroupRepresentative.id`,
-                data[0].contact.id
+                data[0]?.contact?.id
               );
               break;
 
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data.id
+                data?.id
               );
               break;
 
@@ -549,7 +594,15 @@ function callSendData(
               break;
           }
         }
-      });
+
+        if (goToNextStepObj) {
+          goToNextStepObj.method(
+            goToNextStepObj.stepNum,
+            goToNextStepObj.pathName
+          );
+        }
+      })
+      .catch((err) => console.log(err));
   }
 }
 
@@ -634,4 +687,31 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
+}
+
+export function requestErrorHandler(
+  statusCode,
+  redirectTo,
+  handleLoginExpired
+) {
+  const origin = window.location.origin;
+  switch (statusCode) {
+    case 404:
+      window.location.assign(origin + '/404');
+      break;
+    case 500:
+      window.location.assign(origin + '/50x');
+      break;
+    case 401:
+      redirectTo('/');
+      handleLoginExpired();
+      break;
+    default:
+      window.location.assign(origin + '/50x');
+      break;
+  }
+}
+
+export function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }

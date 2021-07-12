@@ -30,9 +30,8 @@ import javax.ws.rs.core.Response;
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.model.Address;
-import org.eclipsefoundation.react.model.MembershipForm;
 import org.eclipsefoundation.react.model.FormOrganization;
+import org.eclipsefoundation.react.model.MembershipForm;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 
@@ -54,6 +53,12 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
+
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
@@ -67,9 +72,24 @@ public class FormOrganizationsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<FormOrganization> create(@PathParam("id") String formID, FormOrganization org) {
-        org.setForm(dao.getReference(formID, MembershipForm.class));
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org));
+    public Response create(@PathParam("id") String formID, FormOrganization org) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
+        MembershipForm form = dao.getReference(formID, MembershipForm.class);
+        // handle cases where an organization already exists and replace it
+        if (form.getOrganization() != null) {
+            return update(formID, form.getOrganization().getId(), org);
+        } else {
+            org.setForm(form);
+            if (org.getAddress() != null) {
+                org.getAddress().setOrganization(org);
+            }
+        }
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(org)))
+                .build();
     }
 
     @GET
@@ -78,6 +98,11 @@ public class FormOrganizationsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
+
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
@@ -87,33 +112,41 @@ public class FormOrganizationsResource extends AbstractRESTResource {
         List<FormOrganization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), params));
         if (results == null) {
             return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
         }
         // return the results as a response
-        return Response.ok(results).build();
+        return Response.ok(results.get(0)).build();
     }
 
     @PUT
     @Path("{orgID}")
-    public List<FormOrganization> update(@PathParam("id") String formID, @PathParam("orgID") String id,
-            FormOrganization org) {
+    public Response update(@PathParam("id") String formID, @PathParam("orgID") String id, FormOrganization org) {
         // need to fetch ref to use attached entity
-        FormOrganization ref = dao.getReference(id, FormOrganization.class);
-        ref.setForm(dao.getReference(formID, MembershipForm.class));
-        org.cloneTo(ref);
-        // update the nested address
-        if (org.getAddress() != null) {
-            org.getAddress().setOrganization(ref);
-            if (ref.getAddress().getId() != null) {
-                // update the address object to get entity ref if set
-                ref.setAddress(org.getAddress().cloneTo(dao.getReference(org.getAddress().getId(), Address.class)));
-            }
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref));
+        FormOrganization ref = dao.getReference(id, FormOrganization.class);
+        org.cloneTo(ref);
+        if (ref.getAddress() != null && org.getAddress() != null) {
+            // if both remote + new set, update remote values
+            org.getAddress().cloneTo(ref.getAddress());
+        } else {
+            // if remote or new are missing, replace remote w/ new value
+            ref.setAddress(org.getAddress());
+        }
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), Arrays.asList(ref)))
+                .build();
     }
 
     @DELETE
     @Path("{orgID}")
     public Response delete(@PathParam("id") String formID, @PathParam("orgID") String id) {
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);

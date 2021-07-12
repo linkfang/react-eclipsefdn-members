@@ -7,7 +7,10 @@ import {
   MODE_REACT_API,
   API_FORM_PARAM,
 } from '../../../Constants/Constants';
-import { handleNewForm } from '../../../Utils/formFunctionHelpers';
+import {
+  handleNewForm,
+  requestErrorHandler,
+} from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
 const styles = {
@@ -15,8 +18,17 @@ const styles = {
   textAlign: 'center',
 };
 
-const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
-  const { setCurrentFormId } = useContext(MembershipContext);
+const FormChooser = ({
+  setFurthestPage,
+  history,
+  setIsStartNewForm,
+  handleLoginExpired,
+  resetSigningAuthorityForm,
+  resetWorkingGroupForm,
+  resetMembershipLevelForm,
+  resetCompanyInfoForm,
+}) => {
+  const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = useCallback(() => {
@@ -27,6 +39,17 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
   const handleContinueExistingForm = () => {
     setIsStartNewForm(false);
     goToCompanyInfoStep();
+  };
+
+  const handleStartNewForm = () => {
+    // reset the form if user has gone to a further page/step
+    if(furthestPage.index > 0){
+      resetCompanyInfoForm();
+      resetMembershipLevelForm();
+      resetWorkingGroupForm();
+      resetSigningAuthorityForm();
+    }
+    handleNewForm(setCurrentFormId, goToCompanyInfoStep);
   };
 
   useEffect(() => {
@@ -41,10 +64,14 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
       }
 
       fetch(url_prefix_local, { headers: FETCH_HEADER })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) return res.json();
+
+          requestErrorHandler(res.status, history.push, handleLoginExpired);
+          throw new Error(`${res.status} ${res.statusText}`);
+        })
         .then((data) => {
           console.log('existing forms:  ', data);
-
           if (data.length > 0) {
             setHasExistingForm(data[data.length - 1]?.id);
             setCurrentFormId(data[data.length - 1]?.id);
@@ -59,7 +86,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
     if (hasExistingForm === '') {
       fetchExistingForms();
     }
-  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm]);
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm, history.push, handleLoginExpired]);
 
   return (
     <>
@@ -85,9 +112,7 @@ const FormChooser = ({ setFurthestPage, history, setIsStartNewForm }) => {
 
             <button
               type="button"
-              onClick={() => {
-                handleNewForm(setCurrentFormId, goToCompanyInfoStep);
-              }}
+              onClick={handleStartNewForm}
               className="btn btn-primary"
             >
               Start New Application

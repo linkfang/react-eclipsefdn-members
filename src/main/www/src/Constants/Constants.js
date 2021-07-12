@@ -29,6 +29,17 @@ export const WORKING_GROUPS = 'Working Groups';
 export const SIGNING_AUTHORITY = 'Signing Authority';
 export const REVIEW = 'Review';
 
+export const LOGIN_EXPIRED_MSG =
+  'Your session has expired, please sign in again.';
+
+export const PATH_NAME_ARRAY = [
+  '/company-info',
+  '/membership-level',
+  '/working-groups',
+  '/signing-authority',
+  '/review',
+];
+
 export const FETCH_METHOD = {
   POST: 'POST',
   GET: 'GET',

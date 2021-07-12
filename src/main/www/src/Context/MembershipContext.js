@@ -15,7 +15,9 @@ const MembershipContext = React.createContext({
   currentFormId: '',
   setCurrentFormId: () => {},
   furthestPage: '',
-  setFurthestPage: '',
+  setFurthestPage: () => {},
+  needLoadingSignIn: '',
+  setNeedLoadingSignIn: () => {},
 });
 
 export default MembershipContext;

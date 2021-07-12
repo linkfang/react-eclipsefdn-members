@@ -53,6 +53,11 @@ public class ContactsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
@@ -67,9 +72,14 @@ public class ContactsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<Contact> create(@PathParam("id") String formID, Contact contact) {
+    public Response create(@PathParam("id") String formID, Contact contact) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         contact.setForm(dao.getReference(formID, MembershipForm.class));
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), Arrays.asList(contact));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), Arrays.asList(contact))).build();
     }
 
     @GET
@@ -78,6 +88,11 @@ public class ContactsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
@@ -87,23 +102,35 @@ public class ContactsResource extends AbstractRESTResource {
         List<Contact> results = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), params));
         if (results == null) {
             return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
         }
         // return the results as a response
-        return Response.ok(results).build();
+        return Response.ok(results.get(0)).build();
     }
 
     @PUT
     @Path("{contactID}")
-    public List<Contact> update(@PathParam("id") String formID, @PathParam("contactID") String id, Contact contact) {
+    public Response update(@PathParam("id") String formID, @PathParam("contactID") String id, Contact contact) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // need to fetch ref to use attached entity
         Contact ref = contact.cloneTo(dao.getReference(id, Contact.class));
         ref.setForm(dao.getReference(formID, MembershipForm.class));
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), Arrays.asList(ref));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), Arrays.asList(ref))).build();
     }
 
     @DELETE
     @Path("{contactID}")
     public Response delete(@PathParam("id") String formID, @PathParam("contactID") String id) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);

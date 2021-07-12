@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2021 Eclipse Foundation, Inc.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * Contributors:
  *   Christopher Guindon <chris.guindon@eclipse-foundation.org>
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
 */
 
@@ -55,11 +55,30 @@
 @eclipse-light-grey: #e8e8e8;
 @eclipse-highlight-grey: #ececec;
 
+//== Everything related to sizes
+@border-radius: 5px;
+
 html {
   font-size: 14px;
 }
 
-.eclipseFdn-membership-webform {
+.dropdown-menu {
+  li:last-child {
+    cursor: pointer;
+    span {
+      color: #4c4d4e;
+      padding: 3px 20px;
+    }
+  }
+}
+
+.toolbar-no-login{
+  a{
+    margin-left: 13px;
+  }
+}
+
+.eclipsefdn-membership-webform {
   .input-group .form-control {
     z-index: unset;
   }
@@ -77,10 +96,12 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
   }
 
   .form-control {
-    border-radius: 5px;
+    border-radius: @border-radius;
     box-shadow: none;
     height: 36px;
   }
@@ -95,7 +116,7 @@ html {
 
   .btn {
     margin: 0 10px;
-    border-radius: 5px;
+    border-radius: @border-radius;
   }
 
   .button-container {
@@ -123,7 +144,7 @@ html {
     width: 30px;
     height: 30px;
     border: 1px solid hsl(0, 0%, 80%);
-    border-radius: 5px;
+    border-radius: @border-radius;
     margin-top: 0;
     margin-right: 15px;
   }
@@ -143,7 +164,7 @@ html {
   .preview-field {
     padding: 5px;
     border: 1px solid hsl(0, 0%, 80%);
-    border-radius: 5px;
+    border-radius: @border-radius;
     background: @white;
     min-height: 32px;
   }
@@ -216,7 +237,7 @@ html {
     left: 15px;
   }
 
-  .step-title-container-active:extend(.eclipseFdn-membership-webform
+  .step-title-container-active:extend(.eclipsefdn-membership-webform
       .step-title-container) {
     // &:extend(.step-title-container);
     background: @brand-secondary 50% no-repeat;
@@ -231,6 +252,34 @@ html {
       width: 80px;
       margin: 0 14px;
     }
+  }
+
+  .msg-popup {
+    & {
+      position: absolute;
+      top: -70px;
+      left: calc(50vw - 200px);
+      width: 400px;
+      height: 60px;
+      background-color: white;
+      border-radius: @border-radius;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.15);
+      transition: all 0.35s ease-in;
+    }
+    svg {
+      margin: 0 0.5rem;
+    }
+    span {
+      margin: 0 0.5rem;
+    }
+  }
+
+  .msg-popup-show {
+    top: 25px;
+    transition: all 0.35s ease-out;
   }
 
   // Mobile First

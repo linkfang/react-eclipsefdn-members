@@ -15,10 +15,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.eclipsefoundation.core.helper.CSRFHelper;
 
 import io.quarkus.security.Authenticated;
 import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
@@ -44,7 +47,8 @@ public class OIDCResource extends AbstractRESTResource {
     }
 
     /**
-     * While OIDC plugin takes care of actual logout, a route is needed to properly reroute anon user to home page.
+     * While OIDC plugin takes care of actual logout, a route is needed to properly
+     * reroute anon user to home page.
      *
      * @throws URISyntaxException
      */
@@ -57,7 +61,9 @@ public class OIDCResource extends AbstractRESTResource {
     @GET
     @Path("userinfo")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserInfo() {
+    public Response getUserInfo(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
+        // require CSRF to protect user info (could contain PII)
+        csrfHelper.compareCSRF(aud, csrf);
         if (!ident.isAnonymous()) {
             // cast the principal to a JWT token (which is the type for OIDC)
             DefaultJWTCallerPrincipal defaultPrin = (DefaultJWTCallerPrincipal) ident.getPrincipal();
@@ -68,20 +74,14 @@ public class OIDCResource extends AbstractRESTResource {
             uiw.familyName = defaultPrin.getClaim("family_name");
             return Response.ok(uiw).build();
         } else {
-            return Response.ok().build();
+            return Response.noContent().build();
         }
     }
 
     @GET
     @Path("csrf")
     public Response generateCSRF() {
-        if (!ident.isAnonymous()) {
-            aud.setCsrf(csrfHelper.getNewCSRFToken());
-            wrap.setHeader("csrf", aud.getCsrf());
-            return Response.ok().build();
-        } else {
-            return Response.status(403).build();
-        }
+        return Response.ok().build();
     }
 
     private Response redirect(String location) throws URISyntaxException {

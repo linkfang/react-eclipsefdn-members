@@ -1,69 +1,81 @@
 /*
  * Copyright (c) 2021 Eclipse Foundation, Inc.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * Contributors:
  *   Christopher Guindon <chris.guindon@eclipse-foundation.org>
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
 */
 html {
   font-size: 14px;
 }
-.eclipseFdn-membership-webform {
+.dropdown-menu li:last-child {
+  cursor: pointer;
+}
+.dropdown-menu li:last-child span {
+  color: #4c4d4e;
+  padding: 3px 20px;
+}
+.toolbar-no-login a {
+  margin-left: 13px;
+}
+.eclipsefdn-membership-webform {
   /* Stepper */
 }
-.eclipseFdn-membership-webform .input-group .form-control {
+.eclipsefdn-membership-webform .input-group .form-control {
   z-index: unset;
 }
-.eclipseFdn-membership-webform .error {
+.eclipsefdn-membership-webform .error {
   color: #ff0000;
 }
-.eclipseFdn-membership-webform .orange-star {
+.eclipsefdn-membership-webform .orange-star {
   color: #f7941e;
   font-weight: bold;
   font-size: larger;
 }
-.eclipseFdn-membership-webform .display-center {
+.eclipsefdn-membership-webform .display-center {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
 }
-.eclipseFdn-membership-webform .form-control {
+.eclipsefdn-membership-webform .form-control {
   border-radius: 5px;
   box-shadow: none;
   height: 36px;
 }
-.eclipseFdn-membership-webform label {
+.eclipsefdn-membership-webform label {
   font-weight: unset;
 }
-.eclipseFdn-membership-webform .form-border-error {
+.eclipsefdn-membership-webform .form-border-error {
   border-color: #ff0000;
 }
-.eclipseFdn-membership-webform .btn {
+.eclipsefdn-membership-webform .btn {
   margin: 0 10px;
   border-radius: 5px;
 }
-.eclipseFdn-membership-webform .button-container {
+.eclipsefdn-membership-webform .button-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.eclipseFdn-membership-webform label#effective-date-label {
+.eclipsefdn-membership-webform label#effective-date-label {
   display: none;
 }
-.eclipseFdn-membership-webform select.form-control {
+.eclipsefdn-membership-webform select.form-control {
   width: 50%;
 }
-.eclipseFdn-membership-webform .align-center {
+.eclipsefdn-membership-webform .align-center {
   max-width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
-.eclipseFdn-membership-webform input[type='checkbox'] {
+.eclipsefdn-membership-webform input[type='checkbox'] {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -72,24 +84,24 @@ html {
   margin-top: 0;
   margin-right: 15px;
 }
-.eclipseFdn-membership-webform input[type='checkbox']:checked {
+.eclipsefdn-membership-webform input[type='checkbox']:checked {
   background-color: #f7941e;
 }
-.eclipseFdn-membership-webform .verical-center {
+.eclipsefdn-membership-webform .verical-center {
   display: flex;
   align-items: center;
 }
-.eclipseFdn-membership-webform input[type='checkbox']:focus {
+.eclipsefdn-membership-webform input[type='checkbox']:focus {
   outline: none !important;
 }
-.eclipseFdn-membership-webform .preview-field {
+.eclipsefdn-membership-webform .preview-field {
   padding: 5px;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 5px;
   background: #fff;
   min-height: 32px;
 }
-.eclipseFdn-membership-webform .stepper {
+.eclipsefdn-membership-webform .stepper {
   display: flex;
   flex-wrap: wrap;
   margin-top: 0;
@@ -97,7 +109,7 @@ html {
   margin-right: auto;
   margin-bottom: 50px;
 }
-.eclipseFdn-membership-webform .step {
+.eclipsefdn-membership-webform .step {
   width: calc(100% / 3);
   display: flex;
   flex-direction: column;
@@ -105,36 +117,36 @@ html {
   position: relative;
   padding-top: 30px;
 }
-.eclipseFdn-membership-webform .step a {
+.eclipsefdn-membership-webform .step a {
   text-decoration: none;
   color: inherit;
 }
-.eclipseFdn-membership-webform .step a:visited {
+.eclipsefdn-membership-webform .step a:visited {
   color: inherit;
 }
-.eclipseFdn-membership-webform .btn a {
+.eclipsefdn-membership-webform .btn a {
   text-decoration: none;
   color: inherit;
 }
-.eclipseFdn-membership-webform .btn a:visited {
+.eclipsefdn-membership-webform .btn a:visited {
   color: inherit;
 }
-.eclipseFdn-membership-webform .step-span {
+.eclipsefdn-membership-webform .step-span {
   width: 50px;
   height: 50px;
   background: #f7941e;
 }
-.eclipseFdn-membership-webform .step-span-index {
+.eclipsefdn-membership-webform .step-span-index {
   font-size: xx-large;
   font-weight: 600;
   padding-left: 15px;
 }
-.eclipseFdn-membership-webform .step-title {
+.eclipsefdn-membership-webform .step-title {
   padding: 10px;
   font-weight: 600;
 }
-.eclipseFdn-membership-webform .step-title-container,
-.eclipseFdn-membership-webform .step-title-container-active {
+.eclipsefdn-membership-webform .step-title-container,
+.eclipsefdn-membership-webform .step-title-container-active {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -146,19 +158,43 @@ html {
   top: 15px;
   left: 15px;
 }
-.eclipseFdn-membership-webform .step-title-container-active {
+.eclipsefdn-membership-webform .step-title-container-active {
   background: #404040 50% no-repeat;
   color: #fff;
 }
-.eclipseFdn-membership-webform .button-container a {
+.eclipsefdn-membership-webform .button-container a {
   text-decoration: none;
 }
-.eclipseFdn-membership-webform .button-container button {
+.eclipsefdn-membership-webform .button-container button {
   width: 80px;
   margin: 0 14px;
 }
+.eclipsefdn-membership-webform .msg-popup {
+  position: absolute;
+  top: -70px;
+  left: calc(50vw - 200px);
+  width: 400px;
+  height: 60px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 14px rgba(0, 0, 0, 0.15);
+  transition: all 0.35s ease-in;
+}
+.eclipsefdn-membership-webform .msg-popup svg {
+  margin: 0 0.5rem;
+}
+.eclipsefdn-membership-webform .msg-popup span {
+  margin: 0 0.5rem;
+}
+.eclipsefdn-membership-webform .msg-popup-show {
+  top: 25px;
+  transition: all 0.35s ease-out;
+}
 @media (min-width: 992px) {
-  .eclipseFdn-membership-webform .step {
+  .eclipsefdn-membership-webform .step {
     width: calc(100% / 6);
     padding-top: 10px;
   }

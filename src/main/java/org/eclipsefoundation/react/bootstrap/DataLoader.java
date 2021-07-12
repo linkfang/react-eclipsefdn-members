@@ -80,11 +80,14 @@ public class DataLoader {
             List<MembershipForm> forms = new ArrayList<>(config.getFormCount());
             for (int i = 0; i < config.getFormCount(); i++) {
                 MembershipForm mf = new MembershipForm();
-                String userID = config.getUserIDs().get(r.nextInt(config.getUserIDs().size()));
+                String userID = config.getUserIds().get(r.nextInt(config.getUserIds().size()));
 
                 mf.setUserID(userID);
                 mf.setMembershipLevel(config.getMembershipLevels().get(r.nextInt(config.getMembershipLevels().size())));
                 mf.setSigningAuthority(Math.random() > 0.5);
+                mf.setRegistrationCountry("CA");
+                mf.setVatNumber(RandomStringUtils.randomNumeric(10));
+                mf.setPurchaseOrderRequired(Math.random() > 0.5 ?"yes": "no");
                 mf.setDateCreated(Math.random() > 0.5 ? System.currentTimeMillis() + r.nextInt(10000): System.currentTimeMillis() - r.nextInt(10000));
                 forms.add(mf);
             }

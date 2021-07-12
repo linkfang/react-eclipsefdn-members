@@ -54,6 +54,11 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
@@ -67,7 +72,12 @@ public class WorkingGroupsResource extends AbstractRESTResource {
     }
 
     @POST
-    public List<FormWorkingGroup> createWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg) {
+    public Response createWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MembershipForm form = dao.getReference(formID, MembershipForm.class);
         wg.setForm(dao.getReference(formID, MembershipForm.class));
         // update the nested contact
@@ -80,7 +90,8 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             // set the form back for wgerences
             wg.getContact().setForm(form);
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(wg));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(wg)))
+                .build();
     }
 
     @GET
@@ -89,6 +100,11 @@ public class WorkingGroupsResource extends AbstractRESTResource {
             @HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // ensure csrf
         csrfHelper.compareCSRF(aud, csrf);
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), wgID);
@@ -97,34 +113,48 @@ public class WorkingGroupsResource extends AbstractRESTResource {
         List<FormWorkingGroup> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), params));
         if (results == null) {
             return Response.serverError().build();
+        } else if (results.isEmpty()) {
+            return Response.status(404).build();
         }
+        
         // return the results as a response
-        return Response.ok(results).build();
+        return Response.ok(results.get(0)).build();
     }
 
     @PUT
     @Path("{wgID}")
-    public List<FormWorkingGroup> updateWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg,
+    public Response updateWorkingGroup(@PathParam("id") String formID, FormWorkingGroup wg,
             @PathParam("wgID") String wgID) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         // need to fetch ref to use attached entity
         FormWorkingGroup ref = wg.cloneTo(dao.getReference(wgID, FormWorkingGroup.class));
         ref.setForm(dao.getReference(formID, MembershipForm.class));
         // update the nested contact
-        if (ref.getContact() != null) {
-            if (ref.getContact().getId() != null) {
-                // update the contact object to get entity ref if set
-                Contact c = dao.getReference(wg.getContact().getId(), Contact.class);
-                ref.setContact(ref.getContact().cloneTo(c));
-            }
+        if (ref.getContact() != null && wg.getContact() != null) {
+            wg.getContact().cloneTo(ref.getContact());
+        } else {
+            ref.setContact(wg.getContact());
             // set the form back for references
-            ref.getContact().setForm(ref.getForm());
+            if (ref.getContact() != null) {
+                ref.getContact().setForm(ref.getForm());
+            }
         }
-        return dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(ref));
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class)), Arrays.asList(ref)))
+                .build();
     }
 
     @DELETE
     @Path("{wgID}")
-    public Response deleteWorkingGroup(@PathParam("wgID") String id) {
+    public Response deleteWorkingGroup(@PathParam("id") String formID, @PathParam("wgID") String id) {
+        // check if user is allowed to modify these resources
+        Response r = checkAccess(formID);
+        if (r != null) {
+            return r;
+        }
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), id);
         params.add(MembershipFormAPIParameterNames.USER_ID.getName(), ident.getPrincipal().getName());
