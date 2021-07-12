@@ -1,4 +1,4 @@
-<div style="background: #efefef; margin-left:-10px; margin-right: -10px;">
+<div style="background: #efefef; margin-left: -10px; margin-right: -10px;">
   <div style="background: #FFF; min-width: 700px; width: 66%; margin: auto; margin-top: -20px; margin-bottom: -20px;">
     <div style="padding: 20px">
       <h2>Organization</h2>
@@ -7,14 +7,10 @@
       <div>
         <h3>Address</h3>
         <p>
-          {org.address.street}<br />
-          {org.address.city}<br />
-          {org.address.provinceState}<br />
-          {org.address.country}<br />
-          {org.address.postalCode}
+          {org.address.street}<br /> {org.address.city}<br /> {org.address.provinceState}<br /> {org.address.country}<br /> {org.address.postalCode}
         </p>
       </div>
-      
+
       <h2>Contacts</h2>
       <table style="width: 100%">
         <thead style="background: #dfdfdf">
@@ -26,8 +22,8 @@
           </tr>
         </thead>
         <tbody>
-          {#for contact in contacts}
-          <tr{#if even} style="background: #efefef"{/if}>
+          {#for contact in contacts.orEmpty}
+          <tr {#if even} style="background: #efefef"{/if}>
             <td>{contact.fName} {contact.lName}</td>
             <td>{contact.email}</td>
             <td>{contact.title}</td>
@@ -36,8 +32,8 @@
           {/for}
         </tbody>
       </table>
-      
-      
+
+
       <h2>Working Groups</h2>
       <table style="width: 100%">
         <thead style="background: #dfdfdf">
@@ -49,12 +45,12 @@
           </tr>
         </thead>
         <tbody>
-          {#for wg in wgs}
-          <tr{#if even} style="background: #efefef"{/if}>
+          {#for wg in wgs.orEmpty}
+          <tr {#if even} style="background: #efefef"{/if}>
             <td>{wg.workingGroupID}</td>
             <td>{wg.participationLevel}</td>
-            <td>{time:format(wg.effectiveDate,'d MMM uuuu')}</td>
-            <td>{wg.contact.fName} {wg.contact.lName}</td>
+            <td>{#if wg.effectiveDate != null}{time:format(wg.effectiveDate,'d MMM uuuu')}{/if}</td>
+            <td>{#if wg.contact != null}{wg.contact.fName} {wg.contact.lName}{/if}</td>
           </tr>
           {/for}
         </tbody>

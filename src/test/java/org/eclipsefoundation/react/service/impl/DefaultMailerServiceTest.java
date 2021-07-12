@@ -1,5 +1,6 @@
 package org.eclipsefoundation.react.service.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +49,7 @@ class DefaultMailerServiceTest {
     void sendToFormAuthor_success() {
         // set up form to submit through mock service
         MembershipForm f = new MembershipForm();
+        f.setUserID(AuthHelper.TEST_USER_NAME);
 
         // perform the action
         mailerService.sendToFormAuthor(f);
@@ -83,9 +85,9 @@ class DefaultMailerServiceTest {
         MembershipForm f = new MembershipForm();
         FormOrganization org = new FormOrganization();
         FormWorkingGroup wg = new FormWorkingGroup();
-        List<FormWorkingGroup> wgs = Arrays.asList(wg);
+        List<FormWorkingGroup> wgs = new ArrayList<>(Arrays.asList(wg));
         Contact c = new Contact();
-        List<Contact> contacts = Arrays.asList(c);
+        List<Contact> contacts = new ArrayList<>(Arrays.asList(c));
 
         // perform the action
         mailerService.sendToMembershipTeam(f, org, wgs, contacts);

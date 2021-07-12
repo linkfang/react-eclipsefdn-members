@@ -14,6 +14,8 @@ import org.eclipsefoundation.react.model.FormOrganization;
 import org.eclipsefoundation.react.model.FormWorkingGroup;
 import org.eclipsefoundation.react.model.MembershipForm;
 import org.eclipsefoundation.react.service.MailerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -29,6 +31,8 @@ import io.quarkus.qute.Template;
  */
 @ApplicationScoped
 public class DefaultMailerService implements MailerService {
+    public static final Logger LOGGER = LoggerFactory.getLogger(DefaultMailerService.class);
+    
     @ConfigProperty(name = "eclipse.mailer.membership.inbox")
     String membershipMailbox;
 
@@ -55,6 +59,7 @@ public class DefaultMailerService implements MailerService {
         if (form == null) {
             throw new IllegalStateException("A form is required to submit for mailing");
         }
+        /*
         // get the user object for the current form
         List<EclipseUser> users = accounts.getUsers(form.getUserID(), null, null);
         if (users == null || users.isEmpty()) {
@@ -62,7 +67,7 @@ public class DefaultMailerService implements MailerService {
         }
         EclipseUser user = users.get(0);
         // TODO use this for mail TO field rather than webdev
-        user.getMail();
+        user.getMail();*/
         // send the email, using the users primary email address
         Mail m = Mail.withHtml("webdev@eclipse-foundation.org", "Thank you for completing the member enrollment form",
                 authorTemplateWeb.data("form", form).render());
@@ -79,11 +84,15 @@ public class DefaultMailerService implements MailerService {
             throw new IllegalStateException(
                     "Could not find a fully complete form for form with ID '" + form.getId() + "'");
         }
-
+        String text = membershipTemplate.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render();
+        LOGGER.error("Generated email text: {}", text);
+        
+        String html = membershipTemplateWeb.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render();
+        LOGGER.error("Generated email HTML: {}", html);
         // generate the mail message, sending the messsage to the membershipMailbox
         Mail m = Mail.withHtml(membershipMailbox, "A NEW CHALLENGER APPROACHES",
-                membershipTemplateWeb.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render());
-        m.setText(membershipTemplate.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render());
+                html);
+        m.setText(text);
         mailer.send(m);
     }
 

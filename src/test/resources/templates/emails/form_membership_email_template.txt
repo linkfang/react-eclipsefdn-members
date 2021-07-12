@@ -19,7 +19,7 @@ Name: {contact.fName} {contact.lName}
 Email: {contact.email}
 Title: {contact.title}
 Contact type: {contact.type}
-
+userID
 {/for}
 
 Working Groups
