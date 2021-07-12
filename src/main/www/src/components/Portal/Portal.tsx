@@ -4,7 +4,7 @@ import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styl
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import demoAvatar from '../../assets/demo-avatar.jpg';
 import LeftNavBar from './NavBar/LeftNavBar';
-import { drawerWidth, themeBlack } from '../../Constants/Constants';
+import { drawerWidth, mainContentBGColor, themeBlack } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 
 const theme = createMuiTheme({
@@ -55,12 +55,14 @@ const useStyles = makeStyles((theme: Theme) =>
     avatar: {
       width: 38,
     },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
     content: {
+      marginTop: 64,
       marginLeft: 280,
+      paddingLeft: 60,
+      paddingRight: 60,
+      minHeight: 'calc(100vh - 64px)',
       flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: mainContentBGColor,
       padding: theme.spacing(3),
     },
   })
@@ -87,7 +89,6 @@ export default function MainPortal() {
       <LeftNavBar />
 
       <main className={classes.content}>
-        <div className={classes.toolbar} />
         <Switch>
           <Route exact path="/home">
             <h1>Home</h1>

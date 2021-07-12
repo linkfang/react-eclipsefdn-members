@@ -29,8 +29,7 @@ export const WORKING_GROUPS = 'Working Groups';
 export const SIGNING_AUTHORITY = 'Signing Authority';
 export const REVIEW = 'Review';
 
-export const LOGIN_EXPIRED_MSG =
-  'Your session has expired, please sign in again.';
+export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
 
 export const PATH_NAME_ARRAY = [
   '/company-info',
@@ -205,3 +204,6 @@ export const NAV_OPTIONS_DATA = [
 export const drawerWidth = 280;
 export const themeBlack = '#0B0B0B';
 export const darkOrange = '#DD730A';
+export const iconGray = '#9B9BAE';
+export const borderRadiusSize = 5;
+export const mainContentBGColor = '#fff';
