@@ -1,15 +1,23 @@
-import { Container } from '@material-ui/core';
+import DashboardCommittersAndContributors from './DashboardCommittersAndContributors';
 import DashboardFAQs from './DashboardFAQs';
+import DashboardIntro from './DashboardIntro';
+import DashboardOverview from './DashboardOverview';
+import DashboardProjectsAndWG from './DashboardProjectsAndWG';
+import DashboardResources from './DashboardResources';
 
 export default function Dashboard() {
   return (
-    <Container>
-      <h2>Overview</h2>
-      <h2>Projects and Working Groups</h2>
-      <h2>Committers and Contributors</h2>
-      <h2>Projects and Working Groups</h2>
-      <h2>Resources</h2>
+    <div
+      style={{
+        margin: '40px 0',
+      }}
+    >
+      <DashboardIntro />
+      <DashboardOverview />
+      <DashboardProjectsAndWG />
+      <DashboardCommittersAndContributors />
+      <DashboardResources />
       <DashboardFAQs />
-    </Container>
+    </div>
   );
 }

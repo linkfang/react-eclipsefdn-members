@@ -113,13 +113,17 @@ export default function DashboardFAQs() {
     </List>
   ));
   return (
-    <>
+    <div
+      style={{
+        margin: '10px 0 80px',
+      }}
+    >
       <Typography variant="h4">FAQs</Typography>
       <Container className={classes.faqContainer}>
         <ContactSupportIcon className={classes.faqIcon} />
         <Container className={classes.faqList}>{renderFAQs}</Container>
         <ContactSupportIcon className={classes.faqIconForBG} />
       </Container>
-    </>
+    </div>
   );
 }

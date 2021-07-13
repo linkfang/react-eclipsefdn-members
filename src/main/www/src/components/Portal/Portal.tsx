@@ -5,6 +5,13 @@ import LeftNavBar from './NavBar/LeftNavBar';
 import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
+import Home from './Home/Home';
+import OrgProfile from './OrgProfile/OrgProfiles';
+import ProjectsAndWG from './ProjectsAndWG/ProjectsAndWG';
+import CommitersAndContributors from './CommittersAndContributors/CommitersAndContributors';
+import Resources from './Resources/Resources';
+import FAQs from './FAQs/FAQs';
+import ContactManagement from './ContactManagement/ContactManagement';
 
 const theme = createMuiTheme({
   palette: {
@@ -23,8 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       marginTop: 64,
       marginLeft: 280,
-      paddingLeft: 60,
-      paddingRight: 60,
+      paddingLeft: 64,
+      paddingRight: 64,
       minHeight: 'calc(100vh - 64px)',
       flexGrow: 1,
       backgroundColor: mainContentBGColor,
@@ -45,28 +52,28 @@ export default function MainPortal() {
       <main className={classes.content}>
         <Switch>
           <Route exact path="/home">
-            <h1>Home</h1>
+            <Home />
           </Route>
           <Route exact path="/dashboard">
             <Dashboard />
           </Route>
           <Route exact path="/org-profile">
-            <h1>Your Organization Profile</h1>
+            <OrgProfile />
           </Route>
           <Route exact path="/projects-wg">
-            <h1>Projects and Working Groups</h1>
+            <ProjectsAndWG />
           </Route>
           <Route exact path="/committers-contributors">
-            <h1>Committers and Contributors</h1>
+            <CommitersAndContributors />
           </Route>
           <Route exact path="/resources">
-            <h1>Resources</h1>
+            <Resources />
           </Route>
           <Route exact path="/faqs">
-            <h1>FAQs</h1>
+            <FAQs />
           </Route>
           <Route exact path="/contact-management">
-            <h1>Contact Management</h1>
+            <ContactManagement />
           </Route>
         </Switch>
       </main>
