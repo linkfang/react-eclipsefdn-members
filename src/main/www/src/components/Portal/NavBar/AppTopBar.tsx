@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Avatar, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { useState } from 'react';
@@ -35,8 +35,7 @@ const useStyles = makeStyles(() =>
     },
     avatarCtn: {
       width: 38,
-      borderRadius: '50%',
-      overflow: 'hidden',
+      height: 38,
       marginLeft: 11,
     },
     avatar: {
@@ -92,9 +91,11 @@ export default function AppTopBar() {
           {userInfo?.full_name ? userInfo.full_name : 'John Doe'}
         </Typography>
         <ExpandMoreIcon className={classes.dropDownIcon} />
-        <div className={classes.avatarCtn}>
-          <img src={userInfo?.picture ? userInfo.picture : demoAvatar} alt="user avatar" className={classes.avatar} />
-        </div>
+        <Avatar
+          className={classes.avatarCtn}
+          alt="user avatar"
+          src={userInfo?.picture ? userInfo.picture : demoAvatar}
+        />
       </Toolbar>
     </AppBar>
   );

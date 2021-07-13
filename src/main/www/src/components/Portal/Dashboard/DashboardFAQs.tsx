@@ -8,6 +8,7 @@ import {
   createStyles,
   ListItemIcon,
   List,
+  Typography,
 } from '@material-ui/core';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -113,7 +114,7 @@ export default function DashboardFAQs() {
   ));
   return (
     <>
-      <h2>FAQs</h2>
+      <Typography variant="h4">FAQs</Typography>
       <Container className={classes.faqContainer}>
         <ContactSupportIcon className={classes.faqIcon} />
         <Container className={classes.faqList}>{renderFAQs}</Container>
