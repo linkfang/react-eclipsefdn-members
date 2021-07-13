@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Theme, ThemeProvider } from '@material-ui/core';
 import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
 import LeftNavBar from './NavBar/LeftNavBar';
@@ -51,9 +51,9 @@ export default function MainPortal() {
 
       <main className={classes.content}>
         <Switch>
-          <Route exact path="/home">
+          {/* <Route exact path="/home">
             <Home />
-          </Route>
+          </Route> */}
           <Route exact path="/dashboard">
             <Dashboard />
           </Route>
@@ -74,6 +74,9 @@ export default function MainPortal() {
           </Route>
           <Route exact path="/contact-management">
             <ContactManagement />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/dashboard" />
           </Route>
         </Switch>
       </main>

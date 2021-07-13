@@ -157,11 +157,11 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
 ];
 
 export const NAV_OPTIONS_DATA = [
-  {
-    name: 'Home',
-    path: '/home',
-    icon: <HomeIcon />,
-  },
+  // {
+  //   name: 'Home',
+  //   path: '/home',
+  //   icon: <HomeIcon />,
+  // },
   {
     name: 'Dashboard',
     path: '/dashboard',
