@@ -6,7 +6,7 @@
  */
 
 import {
-  Home as HomeIcon,
+  // Home as HomeIcon,
   Assessment as AssessmentIcon,
   Business as BusinessIcon,
   BusinessCenter as BusinessCenterIcon,
