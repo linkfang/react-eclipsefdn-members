@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.2.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
@@ -15,6 +16,7 @@
     "@types/react-dom": "^17.0.5",
     "concurrently": "^6.1.0",
     "country-list": "^2.2.0",
+    "eclipsefdn-solstice-assets": "^0.0.162",
     "formik": "^2.2.6",
     "less-watch-compiler": "^1.15.1",
     "react": "^17.0.0",
@@ -27,10 +29,10 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "concurrently --kill-others \"less-watch-compiler\" \"react-scripts start\"",
-    "build": "lessc src/less/App.less src/App.css && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "concurrently --kill-others \"less-watch-compiler\" \"craco start\"",
+    "build": "lessc src/less/App.less src/App.css && craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "test-spec": "swagger-repo validate -b ../../../spec",
     "start-spec": "swagger-repo serve -b ../../../spec -p 8999",
     "generate-json-schema": "node src/openapi2schema.js -s ../../../spec/openapi.yaml -t ../../test/resources"
