@@ -9,6 +9,7 @@ import {
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
   PATH_NAME_ARRAY,
+  api_prefix,
 } from '../Constants/Constants';
 
 /**
@@ -715,3 +716,14 @@ export function requestErrorHandler(
 export function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+export const logout = () => {
+  fetch(`${api_prefix()}/logout`)
+    .then(() => {
+      window.location.assign('/');
+    })
+    .catch((err) => {
+      console.log(err);
+      window.location.assign('/');
+    });
+};

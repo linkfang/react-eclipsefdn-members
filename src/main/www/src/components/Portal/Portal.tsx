@@ -5,7 +5,7 @@ import LeftNavBar from './NavBar/LeftNavBar';
 import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
-import Home from './Home/Home';
+// import Home from './Home/Home';
 import OrgProfile from './OrgProfile/OrgProfiles';
 import ProjectsAndWG from './ProjectsAndWG/ProjectsAndWG';
 import CommitersAndContributors from './CommittersAndContributors/CommitersAndContributors';

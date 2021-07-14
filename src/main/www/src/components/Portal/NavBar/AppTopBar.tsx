@@ -1,10 +1,25 @@
-import { AppBar, Avatar, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Avatar,
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
+import EditIcon from '@material-ui/icons/Edit';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import demoAvatar from '../../../assets/demo-avatar.jpg';
 import { api_prefix, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
+import { logout } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,8 +45,16 @@ const useStyles = makeStyles(() =>
       marginBottom: 0,
       marginRight: 7,
     },
+    dropDownBtn: {
+      minWidth: 38,
+      height: 30,
+      padding: 0,
+    },
     dropDownIcon: {
       color: '#A4AFB7',
+    },
+    dropDownItemIcon: {
+      minWidth: 30,
     },
     avatarCtn: {
       width: 38,
@@ -52,6 +75,48 @@ interface UserInfo {
 export default function AppTopBar() {
   const classes = useStyles();
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleDropdownBtnClicked = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleOptionClicked = (destination: string) => {
+    window.location.assign(destination);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const renderDropdownMenu = () => (
+    <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+      <MenuItem onClick={() => handleOptionClicked('https://www.eclipse.org/user')}>
+        <ListItemIcon className={classes.dropDownItemIcon}>
+          <PersonIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="View Profile" />
+      </MenuItem>
+      <MenuItem onClick={() => handleOptionClicked('https://accounts.eclipse.org/user/edit')}>
+        <ListItemIcon className={classes.dropDownItemIcon}>
+          <EditIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Edit Profile" />
+      </MenuItem>
+      <MenuItem className="toolbar-manage-cookies" onClick={handleClose}>
+        <ListItemIcon className={classes.dropDownItemIcon}>
+          <SettingsIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Manage Cookies" />
+      </MenuItem>
+      <MenuItem onClick={logout}>
+        <ListItemIcon className={classes.dropDownItemIcon}>
+          <ExitToAppIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Log Out" />
+      </MenuItem>
+    </Menu>
+  );
 
   useEffect(() => {
     const getUserFullInfo = (username: String) => {
@@ -90,7 +155,13 @@ export default function AppTopBar() {
         <Typography paragraph className={classes.username}>
           {userInfo?.full_name ? userInfo.full_name : 'John Doe'}
         </Typography>
-        <ExpandMoreIcon className={classes.dropDownIcon} />
+
+        <Button className={classes.dropDownBtn} onClick={handleDropdownBtnClicked}>
+          <ExpandMoreIcon className={classes.dropDownIcon} />
+        </Button>
+
+        {renderDropdownMenu()}
+
         <Avatar
           className={classes.avatarCtn}
           alt="user avatar"
