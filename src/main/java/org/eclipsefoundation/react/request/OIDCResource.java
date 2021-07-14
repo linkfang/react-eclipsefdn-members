@@ -63,7 +63,7 @@ public class OIDCResource extends AbstractRESTResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserInfo(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // require CSRF to protect user info (could contain PII)
-        csrfHelper.compareCSRF(aud, csrf);
+        //csrfHelper.compareCSRF(aud, csrf);
         if (!ident.isAnonymous()) {
             // cast the principal to a JWT token (which is the type for OIDC)
             DefaultJWTCallerPrincipal defaultPrin = (DefaultJWTCallerPrincipal) ident.getPrincipal();
