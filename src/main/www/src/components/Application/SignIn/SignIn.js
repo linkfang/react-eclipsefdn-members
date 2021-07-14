@@ -99,7 +99,7 @@ class SignIn extends React.Component {
     client.send();
 
     client.onreadystatechange = () => {
-      if (this.readyState == this.HEADERS_RECEIVED) {
+      if (this.readyState === this.HEADERS_RECEIVED) {
         const csrfToken = client.getResponseHeader('x-csrf-token');
         FETCH_HEADER['x-csrf-token'] = csrfToken;
         this.getUserInfo();
