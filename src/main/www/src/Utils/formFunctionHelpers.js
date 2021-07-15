@@ -86,7 +86,7 @@ export function matchCompanyFields(existingOrganizationData) {
       },
       postalCode: existingOrganizationData?.address?.postal_code || '',
     },
-    twitterHandle: existingOrganizationData?.twitter_handle || '',
+    twitterHandle: existingOrganizationData?.twitter || '',
   };
 }
 
@@ -248,7 +248,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
-    twitter_handle: organizationData.twitterHandle || '',
+    twitter: organizationData.twitterHandle || '',
   };
 
   if (organizationData.address.id) {
