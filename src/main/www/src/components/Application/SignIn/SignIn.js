@@ -94,17 +94,10 @@ class SignIn extends React.Component {
   };
 
   getCSRFToken = () => {
-    const client = new XMLHttpRequest();
-    client.open('GET', `${api_prefix()}/csrf`, true);
-    client.send();
-
-    client.onreadystatechange = () => {
-      if (this.readyState === this.HEADERS_RECEIVED) {
-        const csrfToken = client.getResponseHeader('x-csrf-token');
-        FETCH_HEADER['x-csrf-token'] = csrfToken;
-        this.getUserInfo();
-      }
-    };
+    fetch(`${api_prefix()}/csrf`, { headers: FETCH_HEADER }).then((res) => {
+      FETCH_HEADER['x-csrf-token'] = res.headers.get('x-csrf-token');
+      this.getUserInfo();
+    });
   };
 
   componentDidMount() {

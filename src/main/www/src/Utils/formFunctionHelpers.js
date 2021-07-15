@@ -103,7 +103,7 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     legalName: existingPurchasingAndVATData?.legal_name || '',
-
+    isRegistered: !!existingPurchasingAndVATData?.registration_country,
     purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
     'purchasingProcess-label': currentOption,
     vatNumber: existingPurchasingAndVATData?.vat_number,
