@@ -47,8 +47,7 @@ public class OIDCResource extends AbstractRESTResource {
     }
 
     /**
-     * While OIDC plugin takes care of actual logout, a route is needed to properly
-     * reroute anon user to home page.
+     * While OIDC plugin takes care of actual logout, a route is needed to properly reroute anon user to home page.
      *
      * @throws URISyntaxException
      */
@@ -72,6 +71,7 @@ public class OIDCResource extends AbstractRESTResource {
             uiw.name = defaultPrin.getName();
             uiw.givenName = defaultPrin.getClaim("given_name");
             uiw.familyName = defaultPrin.getClaim("family_name");
+            uiw.email = defaultPrin.getClaim("email");
             return Response.ok(uiw).build();
         } else {
             return Response.noContent().build();
@@ -92,6 +92,7 @@ public class OIDCResource extends AbstractRESTResource {
         String name;
         String givenName;
         String familyName;
+        String email;
 
         /**
          * @return the name
@@ -133,6 +134,20 @@ public class OIDCResource extends AbstractRESTResource {
          */
         public void setFamilyName(String familyName) {
             this.familyName = familyName;
+        }
+
+        /**
+         * @return the email
+         */
+        public String getEmail() {
+            return email;
+        }
+
+        /**
+         * @param email the email to set
+         */
+        public void setEmail(String email) {
+            this.email = email;
         }
 
     }
