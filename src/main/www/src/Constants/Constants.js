@@ -9,7 +9,7 @@ export const api_prefix = () => {
 };
 
 export const API_PREFIX_FORM = api_prefix() + '/form';
-export const API_FORM_PARAM = '?sort=dateCreated%20DESC';
+export const API_FORM_PARAM = '?sort=dateCreated&order=desc';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
