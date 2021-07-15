@@ -79,19 +79,30 @@ class SignIn extends React.Component {
       </div>
     );
 
+  getUserInfo = () => {
+    fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
+        this.context.setCurrentUser(data);
+        this.context.setNeedLoadingSignIn(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.context.setNeedLoadingSignIn(false);
+      });
+  };
+
+  getCSRFToken = () => {
+    fetch(`${api_prefix()}/csrf`, { headers: FETCH_HEADER }).then((res) => {
+      FETCH_HEADER['x-csrf-token'] = res.headers.get('x-csrf-token');
+      this.getUserInfo();
+    });
+  };
+
   componentDidMount() {
     if (getCurrentMode() === MODE_REACT_API) {
-      fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
-          this.context.setCurrentUser(data);
-          this.context.setNeedLoadingSignIn(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          this.context.setNeedLoadingSignIn(false);
-        });
+      this.getCSRFToken();
     } else {
       this.context.setNeedLoadingSignIn(false);
     }

@@ -11,12 +11,16 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
 
   const handleIsRegistered = () => {
     const isRegistered = formik.values.purchasingAndVAT.isRegistered;
-    if (!isRegistered) {
+    
+    // use spread operator to avoid editing formik.values directly
+    let purchasingAndVATValue = { ...formik.values.purchasingAndVAT };
+    if (isRegistered) {
       // if user uncheck it, then we need to delete the value for vatNumber and countryOfRegistration
-      formik.setFieldValue('purchasingAndVAT.vatNumber', '');
-      formik.setFieldValue('purchasingAndVAT.countryOfRegistration', '');
+      purchasingAndVATValue.vatNumber = '';
+      purchasingAndVATValue.countryOfRegistration = '';
     }
-    formik.setFieldValue('purchasingAndVAT.isRegistered', !isRegistered);
+    purchasingAndVATValue.isRegistered = !isRegistered;
+    formik.setFieldValue('purchasingAndVAT', purchasingAndVATValue);
   };
 
   return (

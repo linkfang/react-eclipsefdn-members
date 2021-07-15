@@ -86,7 +86,7 @@ export function matchCompanyFields(existingOrganizationData) {
       },
       postalCode: existingOrganizationData?.address?.postal_code || '',
     },
-    twitterHandle: existingOrganizationData?.twitter_handle || '',
+    twitterHandle: existingOrganizationData?.twitter || '',
   };
 }
 
@@ -102,8 +102,7 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
-    legalName: existingPurchasingAndVATData?.legal_name || '',
-
+    isRegistered: !!existingPurchasingAndVATData?.registration_country,
     purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
     'purchasingProcess-label': currentOption,
     vatNumber: existingPurchasingAndVATData?.vat_number,
@@ -249,7 +248,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
-    twitter_handle: organizationData.twitterHandle || '',
+    twitter: organizationData.twitterHandle || '',
   };
 
   if (organizationData.address.id) {
