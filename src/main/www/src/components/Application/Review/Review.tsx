@@ -14,7 +14,12 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
   }, []);
 
   return (
-    <form onSubmit={() => submitForm()}>
+    <form
+      onSubmit={(ev) => {
+        ev.preventDefault();
+        submitForm();
+      }}
+    >
       <h1 className="fw-600 h2">
         Review and Submit your Completed Application
       </h1>

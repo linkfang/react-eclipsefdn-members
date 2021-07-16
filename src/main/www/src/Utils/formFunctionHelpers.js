@@ -538,7 +538,6 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        console.log(goToNextStepObj.stepNum);
         if (goToNextStepObj.stepNum === 5) {
           if (res.ok) return res;
         } else {
