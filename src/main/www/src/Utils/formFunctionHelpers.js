@@ -471,7 +471,19 @@ export async function executeSendDataByStep(
         goToNextStepObj,
         setFieldValueObj
       );
-      return;
+      break;
+
+    case 5:
+      callSendData(
+        formId,
+        END_POINT.complete,
+        false,
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
+        setFieldValueObj
+      );
+      break;
 
     default:
       return;
@@ -526,7 +538,12 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (res.ok) return res.json();
+        console.log(goToNextStepObj.stepNum);
+        if (goToNextStepObj.stepNum === 5) {
+          if (res.ok) return res;
+        } else {
+          if (res.ok) return res.json();
+        }
 
         requestErrorHandler(res.status, redirectTo, handleLoginExpired);
         throw new Error(`${res.status} ${res.statusText}`);

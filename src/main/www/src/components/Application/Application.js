@@ -49,6 +49,19 @@ export default function Application() {
     });
   };
 
+  const submitForm = () => {
+    executeSendDataByStep(
+      5,
+      '',
+      currentFormId,
+      currentUser.name,
+      history.push,
+      handleLoginExpired,
+      goToNextStep,
+      ''
+    );
+  };
+
   const formikCompanyInfo = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[0],
@@ -317,7 +330,7 @@ export default function Application() {
         <Route path="/review">
           {renderStepper()}
           {furthestPage.index >= 5 ? (
-            <Review values={updatedFormValues} submitForm={goToNextStep} />
+            <Review values={updatedFormValues} submitForm={submitForm} />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}
@@ -332,7 +345,6 @@ export default function Application() {
         </Route>
 
         <Redirect to="/" />
-
       </Switch>
 
       <TopSlideMsg

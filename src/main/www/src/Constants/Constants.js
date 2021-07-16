@@ -26,6 +26,7 @@ export const PATH_NAME_ARRAY = [
   '/working-groups',
   '/signing-authority',
   '/review',
+  '/submitted',
 ];
 
 export const FETCH_METHOD = {
@@ -76,6 +77,7 @@ export const END_POINT = {
   contacts: 'contacts',
   working_groups: 'working_groups',
   userinfo: 'userinfo',
+  complete: 'complete',
 };
 
 // const for workingGroups string

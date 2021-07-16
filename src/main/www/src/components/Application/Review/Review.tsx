@@ -5,7 +5,7 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 interface ReviewProps {
   values: FormValue;
-  submitForm: (pageIndex: number, nextPage: string) => void;
+  submitForm: () => void;
 }
 
 const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
@@ -14,7 +14,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
   }, []);
 
   return (
-    <form onSubmit={() => submitForm(5, '/submitted')}>
+    <form onSubmit={() => submitForm()}>
       <h1 className="fw-600 h2">
         Review and Submit your Completed Application
       </h1>
