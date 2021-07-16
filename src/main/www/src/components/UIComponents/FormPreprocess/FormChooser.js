@@ -43,7 +43,7 @@ const FormChooser = ({
 
   const handleStartNewForm = () => {
     // reset the form if user has gone to a further page/step
-    if(furthestPage.index > 0){
+    if (furthestPage.index > 0) {
       resetCompanyInfoForm();
       resetMembershipLevelForm();
       resetWorkingGroupForm();
@@ -80,7 +80,10 @@ const FormChooser = ({
             handleNewForm(setCurrentFormId, goToCompanyInfoStep);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(0, history.push, handleLoginExpired);
+          console.log(err);
+        });
     };
 
     if (hasExistingForm === '') {

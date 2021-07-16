@@ -471,7 +471,19 @@ export async function executeSendDataByStep(
         goToNextStepObj,
         setFieldValueObj
       );
-      return;
+      break;
+
+    case 5:
+      callSendData(
+        formId,
+        END_POINT.complete,
+        false,
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
+        setFieldValueObj
+      );
+      break;
 
     default:
       return;
@@ -526,7 +538,11 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (goToNextStepObj.stepNum === 5) {
+          if (res.ok) return res;
+        } else {
+          if (res.ok) return res.json();
+        }
 
         requestErrorHandler(res.status, redirectTo, handleLoginExpired);
         throw new Error(`${res.status} ${res.statusText}`);
@@ -601,7 +617,12 @@ function callSendData(
           );
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        // This will make sure when "then" is skipped, we could still handle the error
+        // And because this "err" is just an error message without error/status code, so we use 0 here.
+        requestErrorHandler(0, redirectTo, handleLoginExpired);
+      });
   }
 }
 

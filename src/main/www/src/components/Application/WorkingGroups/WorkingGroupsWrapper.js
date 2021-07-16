@@ -88,7 +88,10 @@ const WorkingGroupsWrapper = ({
           }));
           setFullWorkingGroupList(options);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          console.log(err);
+        });
     };
 
     fetchAvailableFullWorkingGroupList();
@@ -142,7 +145,10 @@ const WorkingGroupsWrapper = ({
           }
           setIsLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          console.log(err);
+        });
     };
 
     if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0) {
