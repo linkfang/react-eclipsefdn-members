@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts/core';
+import { Bar } from 'react-chartjs-2';
 
 export default function CommitersAndContributors() {
   const optionForAreaStack = {
@@ -169,7 +170,6 @@ export default function CommitersAndContributors() {
         min: 0,
         max: 250,
         interval: 50,
- 
       },
       {
         type: 'value',
@@ -184,15 +184,40 @@ export default function CommitersAndContributors() {
         name: 'Projects',
         type: 'bar',
         data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+        color: '#519978',
       },
       {
         name: 'Total Views',
         type: 'line',
         yAxisIndex: 1,
         data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+        color: '#FE8A88',
       },
     ],
   };
+
+  const rand = () => Math.round(Math.random() * 20);
+
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'OCt', 'Nov', 'Dec'],
+    datasets: [
+      {
+        type: 'line',
+        label: 'Dataset 1',
+        borderColor: 'rgb(54, 162, 235)',
+        borderWidth: 2,
+        fill: false,
+        data: [rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand()],
+      },
+      {
+        type: 'bar',
+        label: 'Dataset 3',
+        backgroundColor: 'rgb(75, 192, 192)',
+        data: [rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand()],
+      },
+    ],
+  };
+
   return (
     <div
       style={{
@@ -200,11 +225,20 @@ export default function CommitersAndContributors() {
       }}
     >
       <Typography variant="h4">Commiters and Contributors</Typography>
-      <Typography variant="h5">Area Stack Chart</Typography>
+      <Typography style={{ marginTop: 40 }} variant="h5">
+        Echart - Area Stack Chart
+      </Typography>
       <ReactECharts option={optionForAreaStack} style={{ height: 400 }} />
 
-      <Typography variant="h5">Bar Line Chart</Typography>
+      <Typography style={{ marginTop: 40 }} variant="h5">
+        Echart - Bar Line Chart
+      </Typography>
       <ReactECharts option={optionForLineBar} style={{ height: 400 }} />
+
+      <Typography style={{ marginTop: 40 }} variant="h5">
+        Chartjs - Bar Line Chart
+      </Typography>
+      <Bar data={data} type="bar" />
     </div>
   );
 }
