@@ -196,7 +196,10 @@ const CompanyInformation = ({
           }
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          console.log(err);
+        });
     };
 
     if (isStartNewForm) {

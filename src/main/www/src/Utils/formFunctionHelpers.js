@@ -601,7 +601,12 @@ function callSendData(
           );
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        // This will make sure when "then" is skipped, we could still handle the error
+        // And because this "err" is just an error message without error/status code, so we use 0 here.
+        requestErrorHandler(0, redirectTo, handleLoginExpired);
+      });
   }
 }
 
