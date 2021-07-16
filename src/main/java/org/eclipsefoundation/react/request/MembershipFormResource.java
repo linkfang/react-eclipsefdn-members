@@ -98,7 +98,6 @@ public class MembershipFormResource extends AbstractRESTResource {
         } else if (results.isEmpty()) {
             return Response.status(404).build();
         }
-        LOGGER.error("First: {}", results);
         // return the results as a response
         return Response.ok(results.get(0)).build();
     }
@@ -122,7 +121,6 @@ public class MembershipFormResource extends AbstractRESTResource {
         if (r != null) {
             return r;
         }
-        LOGGER.error("First: {}", mem);
         mem.setUserID(ident.getPrincipal().getName());
         // need to fetch ref to use attached entity
         MembershipForm ref = mem.cloneTo(dao.getReference(formID, MembershipForm.class));
