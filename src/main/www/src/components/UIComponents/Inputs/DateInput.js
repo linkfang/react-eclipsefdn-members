@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
@@ -10,6 +9,7 @@ const useStyles = makeStyles(() => ({
 
 const DateInput = ({ ariaLabel, onChange, name, value }) => {
   const classes = useStyles();
+  const today = new Date();
 
   return (
     <div className="date-input">
@@ -24,6 +24,7 @@ const DateInput = ({ ariaLabel, onChange, name, value }) => {
         InputProps={{
           inputProps: {
             'aria-labelledby': ariaLabel,
+            min: today.toISOString().slice(0, 10), //expect yyyy-mm-dd
           },
         }}
       />
