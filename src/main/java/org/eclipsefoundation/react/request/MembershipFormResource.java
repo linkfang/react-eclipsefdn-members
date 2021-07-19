@@ -14,6 +14,7 @@ package org.eclipsefoundation.react.request;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -136,9 +137,16 @@ public class MembershipFormResource extends AbstractRESTResource {
         if (r != null) {
             return r;
         }
+        // standard form params
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
 
+        // FK dependents params
+        MultivaluedMap<String, String> depParams = new MultivaluedMapImpl<>();
+        depParams.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), depParams));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(Contact.class), depParams));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), depParams));
         dao.delete(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         return Response.ok().build();
     }
