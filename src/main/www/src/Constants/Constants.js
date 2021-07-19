@@ -21,7 +21,7 @@ export const api_prefix = () => {
 };
 
 export const API_PREFIX_FORM = api_prefix() + '/form';
-export const API_FORM_PARAM = '?sort=dateCreated%20ASC';
+export const API_FORM_PARAM = '?sort=dateCreated&order=desc';
 
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
@@ -37,6 +37,7 @@ export const PATH_NAME_ARRAY = [
   '/working-groups',
   '/signing-authority',
   '/review',
+  '/submitted',
 ];
 
 export const FETCH_METHOD = {
@@ -87,6 +88,7 @@ export const END_POINT = {
   contacts: 'contacts',
   working_groups: 'working_groups',
   userinfo: 'userinfo',
+  complete: 'complete',
 };
 
 // const for workingGroups string

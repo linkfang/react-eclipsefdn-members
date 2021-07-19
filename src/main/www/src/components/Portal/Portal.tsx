@@ -1,3 +1,5 @@
+import 'eclipsefdn-solstice-assets/js/ga'
+import 'eclipsefdn-solstice-assets/js/privacy'
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Theme, ThemeProvider } from '@material-ui/core';
 import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';

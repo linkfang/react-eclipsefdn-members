@@ -11,8 +11,6 @@
  */
 package org.eclipsefoundation.react.request;
 
-import java.util.Set;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

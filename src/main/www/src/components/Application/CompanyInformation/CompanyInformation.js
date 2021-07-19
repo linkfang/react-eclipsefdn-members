@@ -184,19 +184,22 @@ const CompanyInformation = ({
             // setFieldValue(): Prefill Data --> Call the setFieldValue of
             // Formik, to set membershipLevel field with the mapped data
             const tempMembershipLevel = mapMembershipLevel(
-              data[0]?.membership_level,
+              data.membership_level,
               MEMBERSHIP_LEVELS
             );
             setFieldValue('membershipLevel', tempMembershipLevel.value);
             setFieldValue('membershipLevel-label', tempMembershipLevel);
 
-            const tempPurchasingAndVAT = mapPurchasingAndVAT(data[0]);
+            const tempPurchasingAndVAT = mapPurchasingAndVAT(data);
             setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
             hasMembershipLevelData = true;
           }
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          console.log(err);
+        });
     };
 
     if (isStartNewForm) {

@@ -127,7 +127,10 @@ public class DataLoader {
                     contacts.add(c);
                 }
                 // randomly create WG entries
-                while (Math.random() > 0.5) {
+                while (true) {
+                    if (Math.random() > 0.5) {
+                        break;
+                    }
                     FormWorkingGroup wg = new FormWorkingGroup();
                     wg.setWorkingGroupID(config.getWorkingGroups().get(r.nextInt(config.getWorkingGroups().size())));
                     wg.setParticipationLevel(

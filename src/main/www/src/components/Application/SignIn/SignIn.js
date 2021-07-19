@@ -35,6 +35,9 @@ import Loading from '../../UIComponents/Loading/Loading';
  * https://stackoverflow.com/questions/63201445/react-hook-useeffect-missing-dependencies-warning
  *
  */
+
+const IS_SIGN_IN_CLICKED_KEY = 'isSignInClicked';
+
 class SignIn extends React.Component {
   static contextType = MembershipContext;
 
@@ -45,6 +48,11 @@ class SignIn extends React.Component {
       .then((data) => {
         this.context.setCurrentUser(data);
       });
+  };
+
+  handleSignIn = () => {
+    localStorage.setItem(IS_SIGN_IN_CLICKED_KEY, 'true');
+    this.context.setNeedLoadingSignIn(true);
   };
 
   renderButtons = (setFurthestPage) =>
@@ -68,7 +76,7 @@ class SignIn extends React.Component {
           <a
             href="/api/login"
             className="btn btn-secondary"
-            onClick={() => this.context.setNeedLoadingSignIn(true)}
+            onClick={this.handleSignIn}
           >
             Sign In
           </a>
@@ -79,19 +87,42 @@ class SignIn extends React.Component {
       </div>
     );
 
+  getUserInfo = () => {
+    fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
+        this.context.setCurrentUser(data);
+        this.context.setNeedLoadingSignIn(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.context.setNeedLoadingSignIn(false);
+      });
+  };
+
+  getCSRFToken = () => {
+    fetch(`${api_prefix()}/csrf`, { headers: FETCH_HEADER }).then((res) => {
+      FETCH_HEADER['x-csrf-token'] = res.headers.get('x-csrf-token');
+      this.getUserInfo();
+    });
+  };
+
   componentDidMount() {
+    // window.document.documentMode will return 11 if it's IE11
+    // and will return undefined for other browsers.
+    if (window.document.documentMode) {
+      // If returns a number, means it's IE[number]
+      const isSignInClicked = localStorage.getItem(IS_SIGN_IN_CLICKED_KEY);
+
+      // Check if the sign in button is clicked, if so, reload the page to get the q_session cookie ready.
+      if (isSignInClicked) {
+        localStorage.setItem(IS_SIGN_IN_CLICKED_KEY, '');
+        window.location.reload();
+      }
+    }
     if (getCurrentMode() === MODE_REACT_API) {
-      fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
-          this.context.setCurrentUser(data);
-          this.context.setNeedLoadingSignIn(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          this.context.setNeedLoadingSignIn(false);
-        });
+      this.getCSRFToken();
     } else {
       this.context.setNeedLoadingSignIn(false);
     }

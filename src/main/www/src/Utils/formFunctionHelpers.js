@@ -86,7 +86,7 @@ export function matchCompanyFields(existingOrganizationData) {
       },
       postalCode: existingOrganizationData?.address?.postal_code || '',
     },
-    twitterHandle: existingOrganizationData?.twitter_handle || '',
+    twitterHandle: existingOrganizationData?.twitter || '',
   };
 }
 
@@ -102,8 +102,7 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
-    legalName: existingPurchasingAndVATData?.legal_name || '',
-
+    isRegistered: !!existingPurchasingAndVATData?.registration_country,
     purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
     'purchasingProcess-label': currentOption,
     vatNumber: existingPurchasingAndVATData?.vat_number,
@@ -249,7 +248,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
-    twitter_handle: organizationData.twitterHandle || '',
+    twitter: organizationData.twitterHandle || '',
   };
 
   if (organizationData.address.id) {
@@ -472,7 +471,19 @@ export async function executeSendDataByStep(
         goToNextStepObj,
         setFieldValueObj
       );
-      return;
+      break;
+
+    case 5:
+      callSendData(
+        formId,
+        END_POINT.complete,
+        false,
+        redirectTo,
+        handleLoginExpired,
+        goToNextStepObj,
+        setFieldValueObj
+      );
+      break;
 
     default:
       return;
@@ -527,7 +538,11 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (goToNextStepObj.stepNum === 5) {
+          if (res.ok) return res;
+        } else {
+          if (res.ok) return res.json();
+        }
 
         requestErrorHandler(res.status, redirectTo, handleLoginExpired);
         throw new Error(`${res.status} ${res.statusText}`);
@@ -602,7 +617,12 @@ function callSendData(
           );
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        // This will make sure when "then" is skipped, we could still handle the error
+        // And because this "err" is just an error message without error/status code, so we use 0 here.
+        requestErrorHandler(0, redirectTo, handleLoginExpired);
+      });
   }
 }
 
