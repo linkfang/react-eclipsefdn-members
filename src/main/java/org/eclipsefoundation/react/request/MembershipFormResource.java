@@ -177,7 +177,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         List<FormWorkingGroup> wgs = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), extraparams));
         List<Contact> contacts = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), extraparams));
         // send the membership team email message
-        mailer.sendToMembershipTeam(mf, org.get(0), wgs, contacts);
+        mailer.sendToMembershipTeam(mf, !org.isEmpty() ? org.get(0) : null, wgs, contacts);
 
         // update the state and push the update
         mf.setState(FormState.SUBMITTED);
