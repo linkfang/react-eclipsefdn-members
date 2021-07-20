@@ -10,8 +10,8 @@ import javax.json.bind.Jsonb;
 
 import org.eclipsefoundation.core.config.JsonBConfig;
 import org.eclipsefoundation.core.helper.CSRFHelper;
-import org.eclipsefoundation.react.model.Address;
-import org.eclipsefoundation.react.model.FormOrganization;
+import org.eclipsefoundation.react.dto.Address;
+import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;
 import org.hamcrest.text.IsEmptyString;

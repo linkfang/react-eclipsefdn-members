@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 /**
  * Indicates the the object should be able to clone itself into Target Object. This allows for entity refs retrieved

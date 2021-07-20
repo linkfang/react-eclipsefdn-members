@@ -11,8 +11,8 @@ import javax.json.bind.Jsonb;
 
 import org.eclipsefoundation.core.config.JsonBConfig;
 import org.eclipsefoundation.core.helper.CSRFHelper;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;

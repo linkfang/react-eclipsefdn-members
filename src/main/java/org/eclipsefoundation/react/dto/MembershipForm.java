@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 import java.util.Objects;
 
@@ -21,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -46,7 +47,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     @NotBlank(message = "Membership level cannot be blank")
     private String membershipLevel;
-    @NotBlank(message = "Signing authority cannot be blank")
+    @NotNull(message = "Signing authority cannot be null")
     private boolean signingAuthority;
     @NotBlank(message = "Purchase order state cannot be blank")
     private String purchaseOrderRequired;
@@ -54,7 +55,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
-    @NotBlank(message = "The form state cannot be blank")
+    @NotNull(message = "The form state cannot be null")
     private FormState state;
 
     /** @return the id */

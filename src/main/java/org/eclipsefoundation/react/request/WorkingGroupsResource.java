@@ -30,9 +30,9 @@ import javax.ws.rs.core.Response;
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.MembershipForm;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 

@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 import java.util.Objects;
 
@@ -27,6 +27,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -72,7 +73,7 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
     @NotBlank(message = "Job title cannot be blank")
     @JsonbProperty(value = "job_title")
     private String title;
-    @NotBlank(message = "Contact type cannot be blank")
+    @NotNull(message = "Contact type cannot be empty")
     @Enumerated(EnumType.STRING)
     private ContactTypes type;
 

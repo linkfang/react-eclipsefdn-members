@@ -8,10 +8,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormOrganization;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
