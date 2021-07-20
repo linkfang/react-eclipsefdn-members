@@ -230,6 +230,12 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".userID = ?",
                         new Object[] { userId }));
             }
+            // form state check
+            String formState = params.getFirst(MembershipFormAPIParameterNames.FORM_STATE.getName());
+            if (formState != null) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".state = ?",
+                        new Object[] { FormState.valueOf(formState.toUpperCase()) }));
+            }
             return stmt;
         }
 
