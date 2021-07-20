@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts/core';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 
 export default function CommitersAndContributors() {
   const optionForAreaStack = {
@@ -198,7 +198,8 @@ export default function CommitersAndContributors() {
 
   const rand = () => Math.round(Math.random() * 20);
 
-  const data = {
+  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+  const dataForLineBar = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'OCt', 'Nov', 'Dec'],
     datasets: [
       {
@@ -216,6 +217,66 @@ export default function CommitersAndContributors() {
         data: [rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand()],
       },
     ],
+  };
+
+  const dataForAreaStack = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'My First dataset',
+        data: [140, 532, 101, 464, 90, 340, 300],
+        borderColor: '#FF6384',
+        backgroundColor: '#FF6384',
+        fill: true,
+      },
+      {
+        label: 'My Second dataset',
+        data: [120, 582, 111, 434, 220, 340, 450],
+        borderColor: '#36A2EB',
+        backgroundColor: '#36A2EB',
+        fill: true,
+      },
+      {
+        label: 'My Third dataset',
+        data: [220, 532, 181, 434, 210, 290, 100],
+        borderColor: '#4BC0C0',
+        backgroundColor: '#4BC0C0',
+        fill: true,
+      },
+    ],
+  };
+
+  const config = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Your Committer Activity',
+      },
+      tooltip: {
+        mode: 'index',
+      },
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false,
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Month',
+        },
+      },
+      y: {
+        stacked: true,
+        title: {
+          display: true,
+          text: 'Value',
+        },
+      },
+    },
   };
 
   return (
@@ -238,7 +299,12 @@ export default function CommitersAndContributors() {
       <Typography style={{ marginTop: 40 }} variant="h5">
         Chartjs - Bar Line Chart
       </Typography>
-      <Bar data={data} type="bar" />
+      <Bar data={dataForLineBar} type="bar" />
+
+      <Typography style={{ marginTop: 40 }} variant="h5">
+        Chartjs - Area Stack Chart
+      </Typography>
+      <Line data={dataForAreaStack} options={config} type="line" />
     </div>
   );
 }
