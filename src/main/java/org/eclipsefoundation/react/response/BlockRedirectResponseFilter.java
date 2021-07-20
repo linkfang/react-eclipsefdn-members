@@ -4,21 +4,29 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
+import javax.ws.rs.ConstrainedTo;
+import javax.ws.rs.RuntimeType;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.vertx.core.http.HttpServerResponse;
+
 /**
- * Stops redirects from base Quarkus impl unless they are under given paths (based on regex expressions).
+ * Stops redirects from base Quarkus impl unless they are under given paths (based on regex expressions). This does not
+ * work with multi-tenant OIDC, and may need some upgrades to work with that should it be used.
  * 
  * @author Martin Lowe
  */
 @Provider
+@ConstrainedTo(RuntimeType.CLIENT)
 public class BlockRedirectResponseFilter implements ContainerResponseFilter {
     public static final Logger LOGGER = LoggerFactory.getLogger(BlockRedirectResponseFilter.class);
 
@@ -29,13 +37,29 @@ public class BlockRedirectResponseFilter implements ContainerResponseFilter {
     @ConfigProperty(name = "eclipse.http.redirect-block.code", defaultValue = "499")
     Instance<Integer> returnCode;
 
+    @ConfigProperty(name = "quarkus.oidc.auth-server-url")
+    Instance<String> authServerURL;
+
+    @Context
+    HttpServerResponse response;
+
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         // only act on filter data if filter is enabled, is a redirect, and falls under specified paths
         if (Boolean.TRUE.equals(enabled.get()) && Math.floorDiv(responseContext.getStatus(), 100) == 3
                 && doesPathMatchIgnorePattern(requestContext.getUriInfo().getPath())) {
-            responseContext.setStatus(returnCode.get());
+            // if the URL is leading to the auth server, then return unauthorized
+            if (responseContext.getLocation() != null
+                    && responseContext.getLocation().toString().startsWith(authServerURL.get())) {
+                // change the response type
+                responseContext.setStatus(Status.UNAUTHORIZED.getStatusCode());
+                // remove the redirect location header
+                responseContext.getHeaders().remove("Location");
+
+            } else {
+                responseContext.setStatus(returnCode.get());
+            }
         }
     }
 
