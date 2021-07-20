@@ -22,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -53,10 +54,15 @@ public class Address extends BareNode implements TargetedClone<Address> {
     @JoinColumn(name = "organization_id", unique = true)
     private FormOrganization organization;
 
+    @NotBlank(message = "Street cannot be blank")
     private String street;
+    @NotBlank(message = "City cannot be blank")
     private String city;
+    @NotBlank(message = "Province/state cannot be blank")
     private String provinceState;
+    @NotBlank(message = "Country cannot be blank")
     private String country;
+    @NotBlank(message = "Postal code cannot be blank")
     private String postalCode;
 
     /** @return the id */

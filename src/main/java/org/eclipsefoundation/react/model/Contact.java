@@ -25,6 +25,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -58,13 +60,19 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
     @JoinColumn(name = "form_id")
     private MembershipForm form;
 
+
+    @NotBlank(message = "First name cannot be blank")
     @JsonbProperty(value = "first_name")
     private String fName;
+    @NotBlank(message = "Last name cannot be blank")
     @JsonbProperty(value = "last_name")
     private String lName;
+    @Email(message = "Email address is not valid")
     private String email;
+    @NotBlank(message = "Job title cannot be blank")
     @JsonbProperty(value = "job_title")
     private String title;
+    @NotBlank(message = "Contact type cannot be blank")
     @Enumerated(EnumType.STRING)
     private ContactTypes type;
 

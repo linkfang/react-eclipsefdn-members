@@ -24,9 +24,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.dto.BareNode;
@@ -36,6 +36,8 @@ import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents a prospective Working Group relationship with the current
@@ -52,9 +54,12 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
+    @NotBlank(message = "Working Group ID cannot be blank")
     @JsonProperty("working_group")
     private String workingGroupID;
+    @NotBlank(message = "Participation level cannot be blank")
     private String participationLevel;
+    @NotNull(message = "Effective date cannot be blank")
     private Date effectiveDate;
 
     // form entity
@@ -62,6 +67,7 @@ public class FormWorkingGroup extends BareNode implements TargetedClone<FormWork
     @JoinColumn(name = "form_id")
     private MembershipForm form;
 
+    @NotNull(message = "Organization Contact cannot be null")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id", unique = true)
     private Contact contact;

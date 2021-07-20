@@ -20,6 +20,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -43,13 +44,17 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
     private String userID;
+    @NotBlank(message = "Membership level cannot be blank")
     private String membershipLevel;
+    @NotBlank(message = "Signing authority cannot be blank")
     private boolean signingAuthority;
+    @NotBlank(message = "Purchase order state cannot be blank")
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
+    @NotBlank(message = "The form state cannot be blank")
     private FormState state;
 
     /** @return the id */

@@ -24,6 +24,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -44,7 +46,9 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
+    @NotBlank(message = "Legal name cannot be blank")
     private String legalName;
+    @NotBlank(message = "Twitter handle cannot be blank")
     @JsonbProperty("twitter")
     private String twitterHandle;
 
@@ -52,7 +56,7 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     @OneToOne(targetEntity = MembershipForm.class)
     @JoinColumn(name = "form_id", unique = true)
     private MembershipForm form;
-
+    @NotNull(message = "Organization Address must be set")
     @OneToOne(cascade = { CascadeType.ALL }, mappedBy = "organization")
     private Address address;
 
