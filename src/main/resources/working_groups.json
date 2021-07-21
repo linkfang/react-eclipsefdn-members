@@ -642,10 +642,7 @@
       "charter": "https://www.eclipse.org/org/workinggroups/science_charter.php",
       "participation_agreements": {
         "individual": null,
-        "organization": {
-          "document_id": "2fc4cedbbdb70b2ebf69",
-          "pdf": ""
-        }
+        "organization": null
       },
       "website": "https://science.eclipse.org",
       "members": "https://science.eclipse.org/membership/",
