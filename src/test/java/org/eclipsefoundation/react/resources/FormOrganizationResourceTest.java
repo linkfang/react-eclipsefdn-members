@@ -10,9 +10,9 @@ import javax.json.bind.Jsonb;
 
 import org.eclipsefoundation.core.config.JsonBConfig;
 import org.eclipsefoundation.core.helper.CSRFHelper;
-import org.eclipsefoundation.react.dto.Address;
 import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
+import org.eclipsefoundation.react.test.helper.DtoHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;
 import org.hamcrest.text.IsEmptyString;
 import org.junit.jupiter.api.Assertions;
@@ -372,17 +372,8 @@ public class FormOrganizationResourceTest {
     }
 
     private FormOrganization generateSampleRaw(Optional<String> id) {
-        FormOrganization out = new FormOrganization();
+        FormOrganization out = DtoHelper.generateOrg(DtoHelper.generateForm(Optional.empty()));
         id.ifPresent(out::setId);
-        out.setLegalName("Sample Organization");
-        out.setTwitterHandle("TwitterHandle");
-        Address a = new Address();
-        a.setCity("Sample");
-        a.setCountry("Country");
-        a.setPostalCode("Postal Code");
-        a.setProvinceState("ON");
-        a.setStreet("Sample street rd");
-        out.setAddress(a);
         return out;
     }
 

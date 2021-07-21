@@ -13,6 +13,7 @@ import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.react.dto.Contact;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
+import org.eclipsefoundation.react.test.helper.DtoHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;
 import org.hamcrest.text.IsEmptyString;
 import org.junit.jupiter.api.Assertions;
@@ -361,13 +362,9 @@ public class ContactResourceTest {
     }
 
     private String generateSample(Optional<String> id) {
-        Contact out = new Contact();
+        Contact out = DtoHelper.generateContact(DtoHelper.generateForm(Optional.of(AuthHelper.TEST_USER_NAME)),
+                Optional.of(ContactTypes.ACCOUNTING));
         id.ifPresent(out::setId);
-        out.setEmail("sample@sample.com");
-        out.setfName("First Name");
-        out.setlName("Last Name");
-        out.setTitle("sample title");
-        out.setType(ContactTypes.ACCOUNTING);
         return ContactResourceTest.jsonb.toJson(out);
     }
 }

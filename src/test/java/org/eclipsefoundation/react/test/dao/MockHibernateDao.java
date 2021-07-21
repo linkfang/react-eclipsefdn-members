@@ -1,12 +1,12 @@
 package org.eclipsefoundation.react.test.dao;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -15,16 +15,15 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipsefoundation.persistence.dao.PersistenceDao;
 import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.dto.Address;
 import org.eclipsefoundation.react.dto.Contact;
 import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.namespace.ContactTypes;
-import org.eclipsefoundation.react.resources.ContactResourceTest;
 import org.eclipsefoundation.react.resources.FormOrganizationResourceTest;
 import org.eclipsefoundation.react.resources.FormWorkingGroupsResourceTest;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
+import org.eclipsefoundation.react.test.helper.DtoHelper;
 
 import io.quarkus.test.Mock;
 
@@ -45,49 +44,20 @@ public class MockHibernateDao implements PersistenceDao {
     @PostConstruct
     public void init() {
         this.mockData = new HashMap<>();
-        MembershipForm mf = new MembershipForm();
-        mf.setId("form-uuid");
+        MembershipForm mf = DtoHelper.generateForm(Optional.of("form-uuid"));
         mf.setUserID(AuthHelper.TEST_USER_NAME);
-        mf.setMembershipLevel("sample");
-        mf.setSigningAuthority(Math.random() > 0.5);
         mockData.put(MembershipForm.class, Arrays.asList(mf));
-        
-        FormOrganization formOrg = new FormOrganization();
+
+        FormOrganization formOrg = DtoHelper.generateOrg(mf);
         formOrg.setId(FormOrganizationResourceTest.SAMPLE_ORGANIZATION_ID);
-        formOrg.setLegalName("Sample Organization");
-        formOrg.setTwitterHandle("TwitterHandle");
-        Address a = new Address();
-        a.setCity("Sample");
-        a.setCountry("Country");
-        a.setPostalCode("Postal Code");
-        a.setProvinceState("ON");
-        a.setStreet("Sample street rd");
-        formOrg.setAddress(a);
         mockData.put(FormOrganization.class, Arrays.asList(formOrg));
-        
-        Contact formContact = new Contact();
-        formContact.setId(ContactResourceTest.SAMPLE_CONTACT_ID);
-        formContact.setEmail("sample@sample.com");
-        formContact.setfName("First Name");
-        formContact.setlName("Last Name");
-        formContact.setTitle("sample title");
-        formContact.setType(ContactTypes.ACCOUNTING);
+
+        Contact formContact = DtoHelper.generateContact(mf, Optional.of(ContactTypes.ACCOUNTING));
         mockData.put(Contact.class, Arrays.asList(formContact));
-        
-        FormWorkingGroup wg = new FormWorkingGroup();
-        wg.setEffectiveDate(new Date(System.currentTimeMillis()));
-        wg.setParticipationLevel("participant");
-        wg.setWorkingGroupID("internet-things-iot");
+
+        FormWorkingGroup wg = DtoHelper.generateWorkingGroups(mf).get(0);
         wg.setId(FormWorkingGroupsResourceTest.SAMPLE_WORKING_GROUPS_ID);
-        Contact c = new Contact();
-        c.setEmail("sample@sample.com");
-        c.setfName("First Name");
-        c.setlName("Last Name");
-        c.setTitle("sample title");
-        c.setType(ContactTypes.ACCOUNTING);
-        wg.setContact(c);
         mockData.put(FormWorkingGroup.class, Arrays.asList(wg));
-        
     }
 
     @Override

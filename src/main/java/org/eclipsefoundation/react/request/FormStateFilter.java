@@ -35,6 +35,7 @@ import io.undertow.httpcore.HttpMethodNames;
 @Provider
 public class FormStateFilter implements ContainerRequestFilter {
     public static final Logger LOGGER = LoggerFactory.getLogger(FormStateFilter.class);
+
     private static final Pattern SPECIFIC_FORM_URI_PATTERN = Pattern.compile("^\\/form\\/([^\\/]+)\\/?");
 
     @Inject

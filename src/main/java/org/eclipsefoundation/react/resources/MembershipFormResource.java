@@ -58,7 +58,7 @@ import io.quarkus.security.Authenticated;
  *
  * @author Martin Lowe
  */
-//@Authenticated
+@Authenticated
 @Path("form")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -95,7 +95,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         // check if user is allowed to modify these resources
         Response r = checkAccess(formID);
         if (r != null) {
-            //return r;
+            return r;
         }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
@@ -129,7 +129,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         // check if user is allowed to modify these resources
         Response r = checkAccess(formID);
         if (r != null) {
-            //return r;
+            return r;
         }
         mem.setUserID(ident.getPrincipal().getName());
         // need to fetch ref to use attached entity
@@ -166,7 +166,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         // check if user is allowed to modify these resources
         Response r = checkAccess(formID);
         if (r != null) {
-            //return r;
+            return r;
         }
         // create parameter map
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
@@ -204,8 +204,8 @@ public class MembershipFormResource extends AbstractRESTResource {
         }
 
         // send the forms to the mailing service
-        //mailer.sendToFormAuthor(mf);
-        //mailer.sendToMembershipTeam(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
+        mailer.sendToFormAuthor(mf);
+        mailer.sendToMembershipTeam(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
 
         // update the state and push the update
         mf.setState(FormState.SUBMITTED);
@@ -215,8 +215,7 @@ public class MembershipFormResource extends AbstractRESTResource {
 
     private <T extends BareNode> Set<ConstraintViolationWrap> recordViolations(List<T> items) {
         ConstraintViolationWrapFactory factory = new ConstraintViolationWrapFactory();
-        return items.stream()
-                .flatMap(item -> validator.validate(item).stream().map(violation -> factory.build(item, violation)))
+        return items.stream().flatMap(item -> factory.build(validator.validate(item)).stream())
                 .collect(Collectors.toSet());
     }
 }

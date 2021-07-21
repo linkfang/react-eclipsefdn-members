@@ -12,6 +12,7 @@ import org.eclipsefoundation.core.config.JsonBConfig;
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
+import org.eclipsefoundation.react.test.helper.DtoHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;
 import org.hamcrest.text.IsEmptyString;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ import io.restassured.http.ContentType;
 
 @QuarkusTest
 @QuarkusTestResource(OidcWiremockTestResource.class)
-public class MembershipFormResourceTest {
+class MembershipFormResourceTest {
     public static final String SAMPLE_FORM_UUID = "form-uuid";
     public static final String FORMS_BASE_URL = "/form";
     public static final String FORMS_BY_ID_URL = FORMS_BASE_URL + "/{id}";
@@ -230,7 +231,7 @@ public class MembershipFormResourceTest {
         SessionFilter sessionFilter = new SessionFilter();
         given().filter(sessionFilter).auth().oauth2(AuthHelper.getAccessToken(Collections.emptySet()))
                 .header(CSRFHelper.CSRF_HEADER_NAME, AuthHelper.getCSRFValue(sessionFilter))
-                .body(generateSample(Optional.empty())).contentType(ContentType.JSON).when()
+                .body(generateSample(Optional.of(SAMPLE_FORM_UUID))).contentType(ContentType.JSON).when()
                 .put(FORMS_BY_ID_URL, SAMPLE_FORM_UUID).then().statusCode(200);
     }
 
@@ -321,14 +322,8 @@ public class MembershipFormResourceTest {
     }
 
     private String generateSample(Optional<String> id) {
-        MembershipForm out = new MembershipForm();
+        MembershipForm out = DtoHelper.generateForm(Optional.of(AuthHelper.TEST_USER_NAME));
         id.ifPresent(out::setId);
-        out.setMembershipLevel("sample");
-        out.setPurchaseOrderRequired("no");
-        out.setRegistrationCountry("CA");
-        out.setSigningAuthority(false);
-        out.setVatNumber("123456789");
-        out.setUserID("sample_user");
         return MembershipFormResourceTest.jsonb.toJson(out);
     }
 }
