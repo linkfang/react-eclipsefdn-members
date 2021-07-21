@@ -166,38 +166,38 @@ export const NAV_OPTIONS_DATA = [
   // },
   {
     name: 'Dashboard',
-    path: '/dashboard',
+    path: '/portal/dashboard',
     icon: <AssessmentIcon />,
   },
   {
     name: 'Your Organization Profile',
-    path: '/org-profile',
+    path: '/portal/org-profile',
     // don't find an icon match the design
     icon: <BusinessIcon />,
   },
   {
     name: 'Projects and Working Groups',
-    path: '/projects-wg',
+    path: '/portal/dashboard#projects-wg',
     icon: <BusinessCenterIcon />,
   },
   {
     name: 'Committers and Contributors',
-    path: '/committers-contributors',
+    path: '/portal/dashboard#committers-contributors',
     icon: <PeopleAltIcon />,
   },
   {
     name: 'Resources',
-    path: '/resources',
+    path: '/portal/dashboard#resources',
     icon: <DescriptionIcon />,
   },
   {
     name: 'FAQs',
-    path: '/faqs',
+    path: '/portal/dashboard#faqs',
     icon: <HelpIcon />,
   },
   {
     name: 'Contact Management',
-    path: '/contact-management',
+    path: '/portal/contact-management',
     icon: <RecentActorsIcon />,
   },
 ];

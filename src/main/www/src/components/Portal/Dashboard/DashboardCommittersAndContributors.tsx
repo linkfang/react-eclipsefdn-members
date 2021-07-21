@@ -4,10 +4,11 @@ export default function DashboardCommittersAndContributors() {
   return (
     <div
       style={{
-        margin: '10px 0 80px',
+        paddingTop: 90,
         display: 'flex',
         flexDirection: 'column',
       }}
+      id="committers-contributors"
     >
       <Typography variant="h4">Committers and Contributors</Typography>
 
@@ -107,7 +108,7 @@ export default function DashboardCommittersAndContributors() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 40
+            marginBottom: 40,
           }}
         >
           <h5>Chart 1</h5>

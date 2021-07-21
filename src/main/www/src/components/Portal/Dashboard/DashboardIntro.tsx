@@ -4,7 +4,6 @@ export default function DashboardIntro() {
     <div
       style={{
         display: 'flex',
-        margin: '0 0 80px',
         justifyContent: 'space-between',
       }}
     >

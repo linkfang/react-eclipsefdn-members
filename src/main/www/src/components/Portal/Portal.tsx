@@ -1,5 +1,5 @@
-import 'eclipsefdn-solstice-assets/js/ga'
-import 'eclipsefdn-solstice-assets/js/privacy'
+import 'eclipsefdn-solstice-assets/js/ga';
+import 'eclipsefdn-solstice-assets/js/privacy';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Theme, ThemeProvider } from '@material-ui/core';
 import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
@@ -8,11 +8,11 @@ import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
 // import Home from './Home/Home';
+// import ProjectsAndWG from './ProjectsAndWG/ProjectsAndWG';
+// import CommitersAndContributors from './CommittersAndContributors/CommitersAndContributors';
+// import Resources from './Resources/Resources';
+// import FAQs from './FAQs/FAQs';
 import OrgProfile from './OrgProfile/OrgProfiles';
-import ProjectsAndWG from './ProjectsAndWG/ProjectsAndWG';
-import CommitersAndContributors from './CommittersAndContributors/CommitersAndContributors';
-import Resources from './Resources/Resources';
-import FAQs from './FAQs/FAQs';
 import ContactManagement from './ContactManagement/ContactManagement';
 
 const theme = createMuiTheme({
@@ -56,30 +56,31 @@ export default function MainPortal() {
           {/* <Route exact path="/home">
             <Home />
           </Route> */}
-          <Route exact path="/dashboard">
+          <Route path="/portal/dashboard">
             <Dashboard />
           </Route>
-          <Route exact path="/org-profile">
+          <Route exact path="/portal/org-profile">
             <OrgProfile />
           </Route>
-          <Route exact path="/projects-wg">
+          {/* <Route exact path="/projects-wg">
             <ProjectsAndWG />
-          </Route>
-          <Route exact path="/committers-contributors">
+          </Route> */}
+          {/* <Route exact path="/committers-contributors">
             <CommitersAndContributors />
-          </Route>
-          <Route exact path="/resources">
+          </Route> */}
+          {/* <Route exact path="/resources">
             <Resources />
-          </Route>
-          <Route exact path="/faqs">
+          </Route> */}
+          {/* <Route exact path="/faqs">
             <FAQs />
-          </Route>
-          <Route exact path="/contact-management">
+          </Route> */}
+          <Route exact path="/portal/contact-management">
             <ContactManagement />
           </Route>
-          <Route exact path="/">
-            <Redirect to="/dashboard" />
+          <Route path="/portal">
+            <Redirect to="/portal/dashboard" />
           </Route>
+          
         </Switch>
       </main>
     </ThemeProvider>
