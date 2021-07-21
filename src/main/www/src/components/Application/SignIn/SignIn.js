@@ -109,18 +109,14 @@ class SignIn extends React.Component {
   };
 
   componentDidMount() {
-    // window.document.documentMode will return 11 if it's IE11
-    // and will return undefined for other browsers.
-    if (window.document.documentMode) {
-      // If returns a number, means it's IE[number]
-      const isSignInClicked = localStorage.getItem(IS_SIGN_IN_CLICKED_KEY);
+    const isSignInClicked = localStorage.getItem(IS_SIGN_IN_CLICKED_KEY);
 
-      // Check if the sign in button is clicked, if so, reload the page to get the q_session cookie ready.
-      if (isSignInClicked) {
-        localStorage.setItem(IS_SIGN_IN_CLICKED_KEY, '');
-        window.location.reload();
-      }
+    // Check if the sign in button is clicked, if so, reload the page to get the q_session cookie ready.
+    if (isSignInClicked) {
+      localStorage.setItem(IS_SIGN_IN_CLICKED_KEY, '');
+      window.location.reload();
     }
+
     if (getCurrentMode() === MODE_REACT_API) {
       this.getCSRFToken();
     } else {

@@ -677,15 +677,15 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * @param setCurrentFormId - setCurrentFormId function from membership context
  * @param formData - Filled whole form data stored in formik context
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
- * @param defaultBehaviour - Go to the next step and add this step to complete set, passed from FormikStepper Component
+ * @param goToCompanyInfoStep - Go to the next step and add this step to complete set, passed from FormikStepper Component
  *
  * The logic:
  * - POST a new form and returned the new form Id
  * - Store the returned new form Id in my FormId Context
  * - Send the API calls to organizations and contacts
  * **/
-export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
-  defaultBehaviour();
+export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
+  goToCompanyInfoStep();
 
   if (getCurrentMode() === MODE_REACT_API) {
     var dataBody = {

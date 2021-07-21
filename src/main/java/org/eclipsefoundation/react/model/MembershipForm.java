@@ -11,20 +11,14 @@
  */
 package org.eclipsefoundation.react.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -57,15 +51,6 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     @SortableField
     private Long dateCreated;
     private FormState state;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "form_id")
-    private List<Contact> contacts;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "form_id")
-    private List<FormWorkingGroup> workingGroups;
-    @OneToOne(mappedBy = "form", orphanRemoval = true)
-    private FormOrganization organization;
 
     /** @return the id */
     @Override
@@ -149,30 +134,6 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
 
     public void setState(FormState state) {
         this.state = state;
-    }
-
-    /**
-     * @return the contacts
-     */
-    @JsonbTransient
-    public List<Contact> getContacts() {
-        return new ArrayList<>(contacts);
-    }
-
-    /**
-     * @return the workingGroups
-     */
-    @JsonbTransient
-    public List<FormWorkingGroup> getWorkingGroups() {
-        return new ArrayList<>(workingGroups);
-    }
-
-    /**
-     * @return the organization
-     */
-    @JsonbTransient
-    public FormOrganization getOrganization() {
-        return organization;
     }
 
     @Override

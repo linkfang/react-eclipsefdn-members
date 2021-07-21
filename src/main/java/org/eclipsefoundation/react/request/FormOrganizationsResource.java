@@ -78,11 +78,14 @@ public class FormOrganizationsResource extends AbstractRESTResource {
         if (r != null) {
             return r;
         }
-        MembershipForm form = dao.getReference(formID, MembershipForm.class);
-        // handle cases where an organization already exists and replace it
-        if (form.getOrganization() != null) {
-            return update(formID, form.getOrganization().getId(), org);
+        // check if an org for this form already exists. If so, replace it with this one
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
+        params.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
+        List<FormOrganization> results = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), params));
+        if (results != null && !results.isEmpty()) {
+            return update(formID, results.get(0).getId(), org);
         } else {
+            MembershipForm form = dao.getReference(formID, MembershipForm.class);
             org.setForm(form);
             if (org.getAddress() != null) {
                 org.getAddress().setOrganization(org);
