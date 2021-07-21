@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
-import javax.ws.rs.ConstrainedTo;
-import javax.ws.rs.RuntimeType;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -26,7 +24,6 @@ import io.vertx.core.http.HttpServerResponse;
  * @author Martin Lowe
  */
 @Provider
-@ConstrainedTo(RuntimeType.CLIENT)
 public class BlockRedirectResponseFilter implements ContainerResponseFilter {
     public static final Logger LOGGER = LoggerFactory.getLogger(BlockRedirectResponseFilter.class);
 
