@@ -51,6 +51,5 @@ public class ConstraintViolationWrapFactory {
         public String getPath() {
             return path;
         }
-
     }
 }
