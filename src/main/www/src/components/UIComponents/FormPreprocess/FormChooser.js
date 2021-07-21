@@ -42,6 +42,7 @@ const FormChooser = ({
   };
 
   const handleStartNewForm = () => {
+    setCurrentFormId('');
     // reset the form if user has gone to a further page/step
     if (furthestPage.index > 0) {
       resetCompanyInfoForm();
@@ -76,7 +77,7 @@ const FormChooser = ({
             setHasExistingForm(data[0]?.id);
             setCurrentFormId(data[0]?.id);
           } else {
-            setHasExistingForm(false);
+            setCurrentFormId('');
             handleNewForm(setCurrentFormId, goToCompanyInfoStep);
           }
         })

@@ -214,9 +214,9 @@ const CompanyInformation = ({
     }
   }, [isStartNewForm, setFieldValue, currentFormId, redirectTo, handleLoginExpired]);
 
-  // If it is in loading status,
+  // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
-  if (loading) {
+  if (loading || !currentFormId) {
     return <Loading />;
   }
 
