@@ -7,7 +7,7 @@ export default function OrgProfile() {
         margin: '40px 0',
       }}
     >
-      <Typography variant="h4">Your Organizatino Profile</Typography>
+      <Typography variant="h4">Your Organization Profile</Typography>
     </div>
   );
 }

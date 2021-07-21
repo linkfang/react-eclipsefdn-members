@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core';
 import DashboardCommittersAndContributors from './DashboardCommittersAndContributors';
 import DashboardFAQs from './DashboardFAQs';
 import DashboardIntro from './DashboardIntro';
@@ -7,9 +8,10 @@ import DashboardResources from './DashboardResources';
 
 export default function Dashboard() {
   return (
-    <div
+    <Container
       style={{
         margin: '40px 0',
+        padding: 0,
       }}
     >
       <DashboardIntro />
@@ -18,6 +20,6 @@ export default function Dashboard() {
       <DashboardCommittersAndContributors />
       <DashboardResources />
       <DashboardFAQs />
-    </div>
+    </Container>
   );
 }
