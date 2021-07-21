@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core';
 import DashboardCommittersAndContributors from './DashboardCommittersAndContributors';
 import DashboardFAQs from './DashboardFAQs';
 import DashboardIntro from './DashboardIntro';
