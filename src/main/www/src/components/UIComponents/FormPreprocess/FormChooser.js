@@ -22,7 +22,6 @@ const FormChooser = ({
   setFurthestPage,
   history,
   setIsStartNewForm,
-  handleLoginExpired,
   resetSigningAuthorityForm,
   resetWorkingGroupForm,
   resetMembershipLevelForm,
@@ -68,8 +67,8 @@ const FormChooser = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, history.push, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           console.log('existing forms:  ', data);
@@ -82,7 +81,7 @@ const FormChooser = ({
           }
         })
         .catch((err) => {
-          requestErrorHandler(0, history.push, handleLoginExpired);
+          requestErrorHandler(err);
           console.log(err);
         });
     };
@@ -90,7 +89,7 @@ const FormChooser = ({
     if (hasExistingForm === '') {
       fetchExistingForms();
     }
-  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm, history.push, handleLoginExpired]);
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm]);
 
   return (
     <>
