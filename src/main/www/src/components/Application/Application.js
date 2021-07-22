@@ -234,7 +234,7 @@ export default function Application() {
 
   useEffect(() => {
     handleLoginExpired();
-  }, []);
+  }, [handleLoginExpired]);
 
   // generate the step options above the form
   const renderStepper = () => (
