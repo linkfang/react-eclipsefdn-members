@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import { LOGIN_EXPIRED_MSG, PAGE_STEP } from '../../Constants/Constants';
+import { HAS_TOKEN_EXPIRED, LOGIN_EXPIRED_MSG, PAGE_STEP } from '../../Constants/Constants';
 import { initialValues } from '../UIComponents/FormComponents/formFieldModel';
 import CompanyInformation from './CompanyInformation/CompanyInformation';
 import MembershipLevel from './MembershipLevel/MembershipLevel';
@@ -219,8 +219,8 @@ export default function Application() {
   });
 
   const handleLoginExpired = useCallback(() => {
-    if (sessionStorage.getItem('HAS_TOKEN_EXPIREd')) {
-      sessionStorage.setItem('HAS_TOKEN_EXPIREd', '');
+    if (sessionStorage.getItem(HAS_TOKEN_EXPIRED)) {
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, '');
 
       // using setTimeout here is to make the pop up message more noticeable
       setTimeout(() => {

@@ -9,6 +9,7 @@ import {
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
   PATH_NAME_ARRAY,
+  HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
 /**
@@ -703,11 +704,11 @@ export function requestErrorHandler(statusCode) {
       window.location.assign(origin + '/50x');
       break;
     case 401:
-      sessionStorage.setItem('HAS_TOKEN_EXPIREd', 'true');
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
       window.location.assign(origin + '/');
       break;
     case 499:
-      sessionStorage.setItem('HAS_TOKEN_EXPIREd', 'true');
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
       window.location.assign(origin + '/');
       break;
     default:
