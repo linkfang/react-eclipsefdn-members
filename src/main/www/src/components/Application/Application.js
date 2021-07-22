@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
@@ -55,8 +55,6 @@ export default function Application() {
       '',
       currentFormId,
       currentUser.name,
-      history.push,
-      handleLoginExpired,
       goToNextStep,
       ''
     );
@@ -90,7 +88,10 @@ export default function Application() {
       const valueForMembershipLevelFormik = [
         { field: 'purchasingAndVAT', value: purchasingAndVAT },
         { field: 'membershipLevel', value: membershipLevel },
-        { field: 'membershipLevel-label', value: membershipLevelLabel?.label ? membershipLevelLabel : null},
+        {
+          field: 'membershipLevel-label',
+          value: membershipLevelLabel?.label ? membershipLevelLabel : null,
+        },
       ];
       // set valueToUpdateFormik to membershipLevel formik to make sure the value is up to date
       updateMembershipLevelForm(valueForMembershipLevelFormik);
@@ -117,8 +118,6 @@ export default function Application() {
         theNewValue,
         currentFormId,
         currentUser.name,
-        history.push,
-        handleLoginExpired,
         goToNextStep,
         setFieldValueObj
       );
@@ -151,8 +150,6 @@ export default function Application() {
         values,
         currentFormId,
         currentUser.name,
-        history.push,
-        handleLoginExpired,
         goToNextStep
       );
     },
@@ -176,8 +173,6 @@ export default function Application() {
         values,
         currentFormId,
         currentUser.name,
-        history.push,
-        handleLoginExpired,
         goToNextStep,
         setFieldValueObj
       );
@@ -217,8 +212,6 @@ export default function Application() {
         values,
         currentFormId,
         currentUser.name,
-        history.push,
-        handleLoginExpired,
         goToNextStep,
         setFieldValueObj
       );
@@ -226,10 +219,21 @@ export default function Application() {
   });
 
   const handleLoginExpired = useCallback(() => {
-    setIsLoginExpired(true);
-    setTimeout(() => {
-      setIsLoginExpired(false);
-    }, 6000);
+    if (sessionStorage.getItem('HAS_TOKEN_EXPIREd')) {
+      sessionStorage.setItem('HAS_TOKEN_EXPIREd', '');
+
+      // using setTimeout here is to make the pop up message more noticeable
+      setTimeout(() => {
+        setIsLoginExpired(true);
+      }, 200);
+      setTimeout(() => {
+        setIsLoginExpired(false);
+      }, 4000);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleLoginExpired();
   }, []);
 
   // generate the step options above the form
@@ -265,7 +269,6 @@ export default function Application() {
             setFurthestPage={setFurthestPage}
             history={history}
             setIsStartNewForm={setIsStartNewForm}
-            handleLoginExpired={handleLoginExpired}
             resetCompanyInfoForm={formikCompanyInfo.resetForm}
             resetMembershipLevelForm={formikMembershipLevel.resetForm}
             resetWorkingGroupForm={formikWorkingGroups.resetForm}
@@ -281,8 +284,6 @@ export default function Application() {
               <CompanyInformation
                 formik={formikCompanyInfo}
                 isStartNewForm={isStartNewForm}
-                redirectTo={history.push}
-                handleLoginExpired={handleLoginExpired}
               />
             ) : (
               // if uses are not allowed to visit this page,
@@ -307,8 +308,6 @@ export default function Application() {
             <WorkingGroupsWrapper
               formik={formikWorkingGroups}
               isStartNewForm={isStartNewForm}
-              redirectTo={history.push}
-              handleLoginExpired={handleLoginExpired}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />

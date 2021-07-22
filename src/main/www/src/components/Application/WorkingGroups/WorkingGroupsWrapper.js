@@ -38,12 +38,7 @@ import { FormikProvider } from 'formik';
 
 let hasWGData = false;
 
-const WorkingGroupsWrapper = ({
-  formik,
-  isStartNewForm,
-  redirectTo,
-  handleLoginExpired,
-}) => {
+const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   const { currentFormId } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const [isLoading, setIsLoading] = useState(true);
@@ -77,8 +72,8 @@ const WorkingGroupsWrapper = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           let options = data.map((item) => ({
@@ -89,13 +84,13 @@ const WorkingGroupsWrapper = ({
           setFullWorkingGroupList(options);
         })
         .catch((err) => {
-          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          requestErrorHandler(err);
           console.log(err);
         });
     };
 
     fetchAvailableFullWorkingGroupList();
-  }, [redirectTo, handleLoginExpired]);
+  }, []);
 
   useEffect(() => {
     // Fetch the working groups user has joined
@@ -126,8 +121,8 @@ const WorkingGroupsWrapper = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           if (data.length) {
@@ -146,7 +141,7 @@ const WorkingGroupsWrapper = ({
           setIsLoading(false);
         })
         .catch((err) => {
-          requestErrorHandler(0, redirectTo, handleLoginExpired);
+          requestErrorHandler(err);
           console.log(err);
         });
     };
@@ -157,14 +152,7 @@ const WorkingGroupsWrapper = ({
     } else {
       setIsLoading(false);
     }
-  }, [
-    isStartNewForm,
-    currentFormId,
-    fullWorkingGroupList,
-    setFieldValue,
-    redirectTo,
-    handleLoginExpired,
-  ]);
+  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue]);
 
   if (isLoading) {
     return <Loading />;
