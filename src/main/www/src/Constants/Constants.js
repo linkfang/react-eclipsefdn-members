@@ -40,6 +40,7 @@ export const FETCH_METHOD = {
 export const FETCH_HEADER = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
+  'x-Requested-With': 'JavaScript',
 };
 
 export const MEMBERSHIP_LEVELS = [
