@@ -36,7 +36,7 @@ import io.undertow.httpcore.HttpMethodNames;
 public class FormStateFilter implements ContainerRequestFilter {
     public static final Logger LOGGER = LoggerFactory.getLogger(FormStateFilter.class);
 
-    private static final Pattern SPECIFIC_FORM_URI_PATTERN = Pattern.compile("^\\/form\\/([^\\/]+)\\/?");
+    private static final Pattern SPECIFIC_FORM_URI_PATTERN = Pattern.compile("^\\/form\\/([^\\/]+)\\/?.*");
 
     @Inject
     PersistenceDao dao;
@@ -50,7 +50,8 @@ public class FormStateFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         // check if update method
         String httpMethod = requestContext.getMethod();
-        if (httpMethod.equalsIgnoreCase(HttpMethodNames.POST) || httpMethod.equalsIgnoreCase(HttpMethodNames.PUT)) {
+        if (httpMethod.equalsIgnoreCase(HttpMethodNames.POST) || httpMethod.equalsIgnoreCase(HttpMethodNames.PUT)
+                || httpMethod.equalsIgnoreCase(HttpMethodNames.DELETE)) {
             // check if path indicates a specific form
             String path = requestContext.getUriInfo().getPath();
             Matcher m = SPECIFIC_FORM_URI_PATTERN.matcher(path);

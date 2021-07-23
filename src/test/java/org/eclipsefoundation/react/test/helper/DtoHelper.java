@@ -59,7 +59,6 @@ public class DtoHelper {
         a.setPostalCode(RandomStringUtils.randomAlphabetic(4, 10));
         a.setProvinceState(RandomStringUtils.randomAlphabetic(2));
         a.setStreet(RandomStringUtils.randomAlphabetic(4, 10));
-        a.setOrganization(o);
         o.setAddress(a);
         return o;
     }
@@ -68,7 +67,7 @@ public class DtoHelper {
         List<Contact> out = new ArrayList<>();
         for (int j = 0; j < ContactTypes.values().length; j++) {
             // randomly skip contacts
-            if (Math.random() > 0.5) {
+            if (Math.random() > 0.5 && j > 0) {
                 continue;
             }
             out.add(generateContact(form, Optional.of(ContactTypes.values()[j])));
@@ -91,21 +90,24 @@ public class DtoHelper {
         List<FormWorkingGroup> wgs = new ArrayList<>();
         // randomly create WG entries
         while (true) {
-            FormWorkingGroup wg = new FormWorkingGroup();
-            wg.setWorkingGroupID(RandomStringUtils.randomAlphabetic(4, 10));
-            wg.setParticipationLevel(RandomStringUtils.randomAlphabetic(4, 10));
-            // get a random instance of time
-            Instant inst = Instant.now().minus(r.nextInt(1000000), ChronoUnit.SECONDS);
-            wg.setEffectiveDate(new Date(inst.getEpochSecond()));
-            wg.setContact(generateContact(form, Optional.empty()));
-            wg.setForm(form);
-            wgs.add(wg);
-            
+            wgs.add(generateWorkingGroup(form));
             if (Math.random() > 0.5) {
                 break;
             }
         }
         return wgs;
+    }
+    
+    public static FormWorkingGroup generateWorkingGroup(MembershipForm form) {
+        FormWorkingGroup wg = new FormWorkingGroup();
+        wg.setWorkingGroupID(RandomStringUtils.randomAlphabetic(4, 10));
+        wg.setParticipationLevel(RandomStringUtils.randomAlphabetic(4, 10));
+        // get a random instance of time
+        Instant inst = Instant.now().minus(r.nextInt(1000000), ChronoUnit.SECONDS);
+        wg.setEffectiveDate(new Date(inst.getEpochSecond()));
+        wg.setContact(generateContact(form, Optional.empty()));
+        wg.setForm(form);
+        return wg;
     }
 
     private static String generateEmail() {
