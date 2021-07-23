@@ -155,7 +155,7 @@ const Contacts = ({ formik }) => {
             }
           />
         }
-        label="Same as member rep."
+        label="Same as Member Representative"
       />
 
       <div className="row">
@@ -181,7 +181,7 @@ const Contacts = ({ formik }) => {
             }
           />
         }
-        label="Same as member rep."
+        label="Same as Member Representative"
       />
 
       <div className="row margin-bottom-40">
