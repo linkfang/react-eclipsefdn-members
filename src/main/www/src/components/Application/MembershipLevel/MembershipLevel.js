@@ -34,13 +34,14 @@ const MembershipLevel = ({ formik }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
-        <h1 className="fw-600 h2">Membership Level</h1>
+        <h2 className="fw-600">Membership Level</h2>
         <p>
           Please Indicate the class of membership for which you are applying
         </p>
-        <h2 className="fw-600 h3" id={membershipLevel.name}>
+        <h4 className="fw-600" id={membershipLevel.name}>
           What is your intended Membership Level?
-        </h2>
+          <span className="orange-star margin-left-5">*</span>
+        </h4>
         <div className="row">
           <div className="col-md-12">
             <Autocomplete

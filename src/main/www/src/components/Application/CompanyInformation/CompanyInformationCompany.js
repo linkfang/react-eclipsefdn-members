@@ -24,9 +24,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
 
   return (
     <>
-      <h2 className="fw-600 h4" id={organizationName.name}>
-        Organization <span className="orange-star">*</span>
-      </h2>
+      <h4 className="fw-600" id={organizationName.name}>
+        Organization
+      </h4>
 
       <Input
         name={organizationName.name}
@@ -44,7 +44,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             labelName={organizationTwitter.label}
             placeholder={organizationTwitter.placeholder}
             ariaLabel={organizationName.name}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.twitterHandle}
             onChange={formik.handleChange}
             error={Boolean(formik.errors.organization?.twitterHandle)}
@@ -132,7 +132,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             name={organizationAddress.provinceOrState.name}
             labelName={organizationAddress.provinceOrState.label}
             placeholder={organizationAddress.provinceOrState.placeholder}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.address.provinceOrState}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
@@ -144,7 +144,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             name={organizationAddress.postalCode.name}
             labelName={organizationAddress.postalCode.label}
             placeholder={organizationAddress.postalCode.placeholder}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.address.postalCode}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}

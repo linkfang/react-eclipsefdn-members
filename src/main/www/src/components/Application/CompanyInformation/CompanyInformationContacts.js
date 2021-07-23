@@ -143,6 +143,7 @@ const Contacts = ({ formik }) => {
 
       <h4 className="fw-600" id="marketing-rep">
         Company Marketing Representative
+        <span className="orange-star margin-left-5">*</span>
       </h4>
       <FormControlLabel
         control={
@@ -169,6 +170,7 @@ const Contacts = ({ formik }) => {
 
       <h4 className="fw-600" id="accounting-rep">
         Company Accounting Representative
+        <span className="orange-star margin-left-5">*</span>
       </h4>
       <FormControlLabel
         control={

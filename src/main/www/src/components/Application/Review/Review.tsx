@@ -20,9 +20,9 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
         submitForm();
       }}
     >
-      <h1 className="fw-600 h2">
+      <h2 className="fw-600">
         Review and Submit your Completed Application
-      </h1>
+      </h2>
       <p>
         Please review your completed membership application form. If you would
         like to make changes to the information, please click the back button.
