@@ -26,7 +26,7 @@ import javax.json.bind.Jsonb;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipsefoundation.react.model.WorkingGroup;
-import org.eclipsefoundation.react.model.WorkingGroupList;
+import org.eclipsefoundation.react.model.WorkingGroupMap;
 import org.eclipsefoundation.react.service.WorkingGroupsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +57,8 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
     void init() throws IOException {
         LOGGER.info("Starting init of working group levels static members");
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath)) {
-            WorkingGroupList list = json.fromJson(is, WorkingGroupList.class);
-            this.wgs = list.getWorkingGroups().stream().collect(Collectors.toMap(WorkingGroup::getName, Function.identity()));
+            WorkingGroupMap map = json.fromJson(is, WorkingGroupMap.class);
+            this.wgs = map.getWorkingGroups();
             LOGGER.info("Initialized {} working group", wgs.size());
         }
     }

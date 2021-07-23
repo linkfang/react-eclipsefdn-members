@@ -45,7 +45,7 @@ public class WorkingGroupLevelsResource extends AbstractRESTResource {
     }
 
     @GET
-    @Path("{documentID}")
+    @Path("{name}")
     public Response getWorkingGroups(@PathParam("name") String name) {
         // return the results as a response
         return Response.ok(wgService.getByName(name)).build();

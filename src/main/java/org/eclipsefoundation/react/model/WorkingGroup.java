@@ -14,42 +14,97 @@ package org.eclipsefoundation.react.model;
 import java.util.List;
 import java.util.Objects;
 
-
 public class WorkingGroup {
-
-    private String documentID;
-    private String name;
+    private String alias;
+    private String title;
+    private String status;
+    private String logo;
+    private String description;
+    private WorkingGroupResources resources;
     private List<WorkingGroupParticipationLevel> levels;
 
-    public WorkingGroup(String documentID, String name, List<WorkingGroupParticipationLevel> levels) {
-        this.documentID = documentID;
-        this.name = name;
-        this.levels = levels;
+    /**
+     * @return the alias
+     */
+    public String getAlias() {
+        return alias;
     }
 
-
-    public WorkingGroup() {
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
-    public WorkingGroup(String documentID, String name) {
-        this.documentID = documentID;
-        this.name = name;
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
     }
 
-    public String getDocumentID() {
-        return this.documentID;
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setDocumentID(String documentID) {
-        this.documentID = documentID;
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
 
-    public String getName() {
-        return this.name;
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * @return the logo
+     */
+    public String getLogo() {
+        return logo;
+    }
+
+    /**
+     * @param logo the logo to set
+     */
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the resources
+     */
+    public WorkingGroupResources getResources() {
+        return resources;
+    }
+
+    /**
+     * @param resources the resources to set
+     */
+    public void setResources(WorkingGroupResources resources) {
+        this.resources = resources;
     }
 
     public List<WorkingGroupParticipationLevel> getLevels() {
@@ -60,34 +115,24 @@ public class WorkingGroup {
         this.levels = levels;
     }
 
-    public WorkingGroup documentID(String documentID) {
-        setDocumentID(documentID);
-        return this;
-    }
-
-    public WorkingGroup name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public WorkingGroup levels(List<WorkingGroupParticipationLevel> levels) {
-        setLevels(levels);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof WorkingGroup)) {
-            return false;
-        }
-        WorkingGroup workingGroup = (WorkingGroup) o;
-        return Objects.equals(documentID, workingGroup.documentID) && Objects.equals(name, workingGroup.name);
-    }
-
     @Override
     public int hashCode() {
-        return Objects.hash(documentID, name);
+        return Objects.hash(alias, description, levels, logo, resources, status, title);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        WorkingGroup other = (WorkingGroup) obj;
+        return Objects.equals(alias, other.alias) && Objects.equals(description, other.description)
+                && Objects.equals(levels, other.levels) && Objects.equals(logo, other.logo)
+                && Objects.equals(resources, other.resources) && Objects.equals(status, other.status)
+                && Objects.equals(title, other.title);
+    }
+
 }
