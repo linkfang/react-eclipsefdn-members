@@ -48,7 +48,6 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     private String id;
     @NotBlank(message = "Legal name cannot be blank")
     private String legalName;
-    @NotBlank(message = "Twitter handle cannot be blank")
     @JsonbProperty("twitter")
     private String twitterHandle;
 

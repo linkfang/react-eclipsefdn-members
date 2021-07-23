@@ -58,11 +58,9 @@ public class Address extends BareNode implements TargetedClone<Address> {
     private String street;
     @NotBlank(message = "City cannot be blank")
     private String city;
-    @NotBlank(message = "Province/state cannot be blank")
     private String provinceState;
     @NotBlank(message = "Country cannot be blank")
     private String country;
-    @NotBlank(message = "Postal code cannot be blank")
     private String postalCode;
 
     /** @return the id */
