@@ -9,6 +9,7 @@ import {
   MODE_REACT_API,
   OPTIONS_FOR_PURCHASING_PROCES,
   PATH_NAME_ARRAY,
+  HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
 /**
@@ -348,8 +349,6 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
-  redirectTo,
-  handleLoginExpired,
   goToNextStep,
   setFieldValueObj
 ) {
@@ -365,8 +364,6 @@ export async function executeSendDataByStep(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.organization,
@@ -381,8 +378,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.COMPANY,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.member,
@@ -397,8 +392,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.MARKETING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.marketing,
@@ -413,8 +406,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.ACCOUNTING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.accounting,
@@ -425,8 +416,6 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo,
-        handleLoginExpired,
         ''
       );
       break;
@@ -436,8 +425,6 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj
       );
       break;
@@ -448,8 +435,6 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          redirectTo,
-          handleLoginExpired,
           goToNextStepObj,
           setFieldValueObj,
           index
@@ -466,8 +451,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.SIGNING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj,
         setFieldValueObj
       );
@@ -478,8 +461,6 @@ export async function executeSendDataByStep(
         formId,
         END_POINT.complete,
         false,
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj,
         setFieldValueObj
       );
@@ -502,8 +483,6 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
-  redirectTo,
-  handleLoginExpired,
   goToNextStepObj,
   setFieldValueObj,
   index
@@ -544,8 +523,8 @@ function callSendData(
           if (res.ok) return res.json();
         }
 
-        requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-        throw new Error(`${res.status} ${res.statusText}`);
+        requestErrorHandler(res.status);
+        throw res.status;
       })
       .then((data) => {
         if (setFieldValueObj && method === 'POST') {
@@ -621,7 +600,7 @@ function callSendData(
         console.log(err);
         // This will make sure when "then" is skipped, we could still handle the error
         // And because this "err" is just an error message without error/status code, so we use 0 here.
-        requestErrorHandler(0, redirectTo, handleLoginExpired);
+        requestErrorHandler(err);
       });
   }
 }
@@ -698,7 +677,12 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
       headers: FETCH_HEADER,
       body: JSON.stringify(dataBody),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) return res.json();
+
+        requestErrorHandler(res.status);
+        throw res.status;
+      })
       .then((data) => {
         console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
@@ -709,12 +693,9 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
 }
 
-export function requestErrorHandler(
-  statusCode,
-  redirectTo,
-  handleLoginExpired
-) {
+export function requestErrorHandler(statusCode) {
   const origin = window.location.origin;
+
   switch (statusCode) {
     case 404:
       window.location.assign(origin + '/404');
@@ -723,8 +704,12 @@ export function requestErrorHandler(
       window.location.assign(origin + '/50x');
       break;
     case 401:
-      redirectTo('/');
-      handleLoginExpired();
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
+      window.location.assign(origin + '/');
+      break;
+    case 499:
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
+      window.location.assign(origin + '/');
       break;
     default:
       window.location.assign(origin + '/50x');

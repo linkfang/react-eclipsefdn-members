@@ -66,10 +66,12 @@ public class DefaultMailerService implements MailerService {
         }
         // convert the logged in user into a JWT token to read user claims
         DefaultJWTCallerPrincipal defaultPrin = (DefaultJWTCallerPrincipal) ident.getPrincipal();
+
+        String name = generateName(defaultPrin);
         // send the email, using the users primary email address
         Mail m = Mail.withHtml(defaultPrin.getClaim("email"), "Thank you for completing the member enrollment form",
-                authorTemplateWeb.data("form", form).render());
-        m.setText(authorTemplate.data("form", form).render());
+                authorTemplateWeb.data("form", form, "name", name).render());
+        m.setText(authorTemplate.data("form", form, "name", name).render());
         // add BCC if set
         if (!authorMessageMailboxBcc.isEmpty()) {
             m.setBcc(authorMessageMailboxBcc.get());
@@ -86,11 +88,13 @@ public class DefaultMailerService implements MailerService {
             throw new IllegalStateException(
                     "Could not find a fully complete form for form with ID '" + form.getId() + "'");
         }
-
+        String name = generateName((DefaultJWTCallerPrincipal) ident.getPrincipal());
         // generate the mail message, sending the messsage to the membershipMailbox
-        Mail m = Mail.withHtml(membershipMailbox, "A NEW CHALLENGER APPROACHES",
-                membershipTemplateWeb.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render());
-        m.setText(membershipTemplate.data("form", form, "org", org, "wgs", wgs, "contacts", contacts).render());
+        Mail m = Mail.withHtml(membershipMailbox, "New Request to join working group(s) - " + name,
+                membershipTemplateWeb.data("form", form, "org", org, "wgs", wgs, "contacts", contacts, "name", name)
+                        .render());
+        m.setText(membershipTemplate.data("form", form, "org", org, "wgs", wgs, "contacts", contacts, "name", name)
+                .render());
         // add BCC if set
         if (!membershipMessageMailboxBcc.isEmpty()) {
             m.setBcc(membershipMessageMailboxBcc.get());
@@ -98,4 +102,8 @@ public class DefaultMailerService implements MailerService {
         mailer.send(m);
     }
 
+    private String generateName(DefaultJWTCallerPrincipal defaultPrin) {
+        return new StringBuilder().append((String) defaultPrin.getClaim("given_name")).append(" ")
+                .append((String) defaultPrin.getClaim("family_name")).toString();
+    }
 }

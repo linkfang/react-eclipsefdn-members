@@ -93,8 +93,8 @@ class DefaultMailerServiceTest {
         Assertions.assertEquals(0, mailbox.getTotalMessagesSent());
     }
 
-    @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    //@Test
+    //@TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
     void sendToMembershipTeam_success() {
         // set up form to submit through mock service
         MembershipForm f = new MembershipForm();
