@@ -19,6 +19,8 @@ import {
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Wrapper for FieldArray of WorkingGroup component,
@@ -44,6 +46,18 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
+
+  const handleIsJoiningWG = () => {
+    const isJoiningWG = formik.values.isJoiningWG;
+
+    if (isJoiningWG) {
+      // if user uncheck it, then we need to reset WG form
+      formik.resetForm();
+    } else {
+      formik.setFieldValue('isJoiningWG', !isJoiningWG);
+      formik.setFieldValue('workingGroups', initialValues.workingGroups);
+    }
+  };
 
   useEffect(() => {
     scrollToTop();
@@ -166,18 +180,33 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
           className="align-center margin-top-50 margin-bottom-30"
         >
           <h1 className="fw-600 h2">Working Group</h1>
-          <p>
-            Please complete the following details for joining a Working Group
-          </p>
-
-          <WorkingGroup
-            formik={formik}
-            workingGroupsUserJoined={workingGroupsUserJoined}
-            fullWorkingGroupList={fullWorkingGroupList}
-            isLoading={isLoading}
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="isJoiningWG"
+                color="primary"
+                checked={formik.values.isJoiningWG}
+                onChange={() => handleIsJoiningWG()}
+              />
+            }
+            label="Joining a Working Group"
           />
-        </div>
+          {formik.values.isJoiningWG && (
+            <>
+              <p>
+                Please complete the following details for joining a Working
+                Group
+              </p>
 
+              <WorkingGroup
+                formik={formik}
+                workingGroupsUserJoined={workingGroupsUserJoined}
+                fullWorkingGroupList={fullWorkingGroupList}
+                isLoading={isLoading}
+              />
+            </>
+          )}
+        </div>
         <CustomStepButton
           previousPage="/membership-level"
           nextPage="/signing-authority"
