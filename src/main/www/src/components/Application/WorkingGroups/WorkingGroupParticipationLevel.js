@@ -42,7 +42,7 @@ const ParticipationLevel = ({
 
       // extract all the participation_levels
       const optionsForParticipationLevels = temp?.participation_levels
-        ? temp?.participation_levels.map((item) => item.level)
+        ? temp?.participation_levels.map((item) => item.description)
         : [];
 
       // the Set will deduplicate participation_levels options

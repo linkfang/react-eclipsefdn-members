@@ -77,8 +77,8 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
         })
         .then((data) => {
           let options = data.map((item) => ({
-            label: item.name,
-            value: item.name,
+            label: item.title,
+            value: item.title,
             participation_levels: item.levels,
           }));
           setFullWorkingGroupList(options);
