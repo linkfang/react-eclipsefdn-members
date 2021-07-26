@@ -21,9 +21,9 @@ const SigningAuthority = ({ formik }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
-        <h2 className="fw-600" id={sectionName}>
+        <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
-        </h2>
+        </h1>
         <p>
           Please Indicate the individual who has the signing authority for the
           agreement

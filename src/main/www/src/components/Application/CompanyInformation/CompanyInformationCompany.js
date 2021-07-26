@@ -24,9 +24,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
 
   return (
     <>
-      <h4 className="fw-600" id={organizationName.name}>
+      <h2 className="fw-600 h4" id={organizationName.name}>
         Organization
-      </h4>
+      </h2>
 
       <Input
         name={organizationName.name}
@@ -53,9 +53,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         </div>
       </div>
 
-      <h4 className="fw-600" id={`${organizationName.name}-address`}>
+      <h2 className="fw-600 h4" id={`${organizationName.name}-address`}>
         Address
-      </h4>
+      </h2>
       <div className="row">
         <div className="col-md-16">
           <Input

@@ -223,7 +223,7 @@ const CompanyInformation = ({
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
-        <h2 className="fw-600">Company Information</h2>
+        <h1 className="fw-600 h2">Company Information</h1>
         <p>
           Please complete your company information below. This should be the
           legal name and address of your organization.
