@@ -620,12 +620,12 @@ function callSendData(
  */
 export function deleteData(formId, endpoint, entityId, callback, index) {
   // If the added field array is not in the server, just remove it from frontend
-  if (!entityId) {
+  if (!entityId && index) {
     callback(index);
   }
 
   // If the not using java server, just remove it from frontend
-  if (getCurrentMode() === MODE_REACT_ONLY) {
+  if (getCurrentMode() === MODE_REACT_ONLY && index) {
     callback(index);
   }
 
@@ -644,7 +644,9 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
       console.log(res.status);
       // Remove from frontend
       if (res.status === 200) {
-        callback(index);
+        // If index exists then callback will only delete a specific wg
+        // If not, callback is the resetForm function and does not need parameter
+        index ? callback(index) : callback();
         return Promise.resolve(res);
       }
     });

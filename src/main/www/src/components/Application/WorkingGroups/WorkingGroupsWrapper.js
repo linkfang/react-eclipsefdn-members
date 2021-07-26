@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
+  deleteData,
   matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
@@ -52,7 +53,16 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
 
     if (isJoiningWG) {
       // if user uncheck it, then we need to reset WG form
-      formik.resetForm();
+      formik.values.workingGroups.map((item) => {
+        deleteData(
+          currentFormId,
+          END_POINT.working_groups,
+          item.id,
+          formik.resetForm,
+          ''
+        );
+        return null;
+      });
     } else {
       formik.setFieldValue('isJoiningWG', !isJoiningWG);
       formik.setFieldValue('workingGroups', initialValues.workingGroups);
@@ -149,6 +159,7 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
               fullWorkingGroupList
             );
             setWorkingGroupsUserJoined(theGroupsUserJoined);
+            setFieldValue('isJoiningWG', true);
             setFieldValue('workingGroups', theGroupsUserJoined);
             hasWGData = true;
           }
