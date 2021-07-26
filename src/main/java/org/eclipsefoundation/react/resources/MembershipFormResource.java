@@ -12,7 +12,7 @@
 package org.eclipsefoundation.react.resources;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -193,7 +193,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         List<Contact> contacts = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), extraparams));
 
         // validate form elements
-        Set<ConstraintViolationWrap> violations = new HashSet<>();
+        Set<ConstraintViolationWrap> violations = new LinkedHashSet<>();
         violations.addAll(recordViolations(results));
         violations.addAll(recordViolations(orgs));
         violations.addAll(recordViolations(wgs));
