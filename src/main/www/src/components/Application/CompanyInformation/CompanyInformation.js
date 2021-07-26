@@ -217,12 +217,12 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h1 className="fw-600 h2">Company Information</h1>
-      <p>
-        Please complete your company information below. This should be the legal
-        name and address of your organization.
-      </p>
       <div className="align-center">
+        <h1 className="fw-600 h2">Company Information</h1>
+        <p>
+          Please complete your company information below. This should be the
+          legal name and address of your organization.
+        </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
         <CompanyInformationVAT formik={formik} useStyles={useStyles} />

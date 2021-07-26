@@ -161,12 +161,15 @@ const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormikProvider value={formik}>
-        <h1 className="fw-600 h2">Working Group</h1>
-        <p>Please complete the following details for joining a Working Group</p>
         <div
           id="working-groups-page"
           className="align-center margin-top-50 margin-bottom-30"
         >
+          <h1 className="fw-600 h2">Working Group</h1>
+          <p>
+            Please complete the following details for joining a Working Group
+          </p>
+
           <WorkingGroup
             formik={formik}
             workingGroupsUserJoined={workingGroupsUserJoined}

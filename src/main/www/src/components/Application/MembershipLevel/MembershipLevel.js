@@ -38,8 +38,9 @@ const MembershipLevel = ({ formik }) => {
         <p>
           Please indicate the class of membership for which you are applying
         </p>
-        <h2 className="fw-600 h3" id={membershipLevel.name}>
+        <h2 className="fw-600 h4" id={membershipLevel.name}>
           What is your intended Membership Level?
+          <span className="orange-star margin-left-5">*</span>
         </h2>
         <div className="row">
           <div className="col-md-12">

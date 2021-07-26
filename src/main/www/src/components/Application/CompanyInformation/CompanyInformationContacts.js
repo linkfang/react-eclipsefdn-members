@@ -121,10 +121,10 @@ const Contacts = ({ formik }) => {
 
   return (
     <>
-      <h4 className="fw-600" id="company-rep">
+      <h2 className="fw-600 h4" id="company-rep">
         Company Member Representative
         <span className="orange-star margin-left-5">*</span>
-      </h4>
+      </h2>
       <p>
         Please indicate the primary point of contact between your organization
         and the Eclipse Foundation. As per the Eclipse Bylaws, the Member
@@ -141,9 +141,10 @@ const Contacts = ({ formik }) => {
         {generateContacts(companyRep, 'company-rep', 'member', false)}
       </div>
 
-      <h4 className="fw-600" id="marketing-rep">
+      <h2 className="fw-600 h4" id="marketing-rep">
         Company Marketing Representative
-      </h4>
+        <span className="orange-star margin-left-5">*</span>
+      </h2>
       <FormControlLabel
         control={
           <Checkbox
@@ -167,9 +168,10 @@ const Contacts = ({ formik }) => {
         )}
       </div>
 
-      <h4 className="fw-600" id="accounting-rep">
+      <h2 className="fw-600 h4" id="accounting-rep">
         Company Accounting Representative
-      </h4>
+        <span className="orange-star margin-left-5">*</span>
+      </h2>
       <FormControlLabel
         control={
           <Checkbox
