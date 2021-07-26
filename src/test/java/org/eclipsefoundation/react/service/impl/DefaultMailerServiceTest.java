@@ -138,9 +138,6 @@ class DefaultMailerServiceTest {
             mailerService.sendToMembershipTeam(f, org, wgs, null);
         });
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(f, org, Collections.emptyList(), contacts);
-        });
-        Assertions.assertThrows(IllegalStateException.class, () -> {
             mailerService.sendToMembershipTeam(f, org, wgs, Collections.emptyList());
         });
         // verify that no messages were sent
