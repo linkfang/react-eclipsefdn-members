@@ -84,7 +84,7 @@ public class DefaultMailerService implements MailerService {
             List<Contact> contacts) {
         if (form == null) {
             throw new IllegalStateException("A form is required to submit for mailing");
-        } else if (org == null || wgs == null || wgs.isEmpty() || contacts == null || contacts.isEmpty()) {
+        } else if (org == null || wgs == null || contacts == null || contacts.isEmpty()) {
             throw new IllegalStateException(
                     "Could not find a fully complete form for form with ID '" + form.getId() + "'");
         }

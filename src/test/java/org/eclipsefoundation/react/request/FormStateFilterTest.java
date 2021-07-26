@@ -102,6 +102,7 @@ class FormStateFilterTest {
         Mockito.when(dao.getReference(ArgumentMatchers.eq(contact.getId()), ArgumentMatchers.eq(Contact.class)))
                 .thenReturn(contact);
 
+        // organization data mocks 
         org = DtoHelper.generateOrg(completed);
         org.setId(UUID.randomUUID().toString());
         Mockito.when(dao.get(ArgumentMatchers.argThat(new ArgumentMatcher<RDBMSQuery<FormOrganization>>() {
@@ -113,6 +114,7 @@ class FormStateFilterTest {
         Mockito.when(dao.getReference(ArgumentMatchers.eq(org.getId()), ArgumentMatchers.eq(FormOrganization.class)))
                 .thenReturn(org);
 
+        // form working group mock
         wg = DtoHelper.generateWorkingGroup(completed);
         wg.setId(UUID.randomUUID().toString());
         Mockito.when(dao.get(ArgumentMatchers.argThat(new ArgumentMatcher<RDBMSQuery<FormWorkingGroup>>() {
