@@ -1,75 +1,677 @@
 {
-    "workingGroups": [
-        {
-            "documentID": "1",
-            "name": "Internet of Things - IoT",
-            "levels": [
-                {
-                    "documentID": "1",
-                    "level": "Strategic Member",
-                    "price": "$50,000",
-                    "revenue": "1000000000"
-                },
-                {
-                    "documentID": "1",
-                    "level": "Participant Member",
-                    "price": "0"
-                },
-                {
-                    "documentID": "1",
-                    "level": "Guest Member",
-                    "price": "0"
-                }
-            ]
-        },
-        {
-            "documentID": "2",
-            "name": "AsciiDoc",
-            "levels": [
-                {
-                    "documentID": "2",
-                    "level": "Partner members",
-                    "price": "$10,000",
-                    "revenueBottom": "1000000001"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Partner members",
-                    "price": "$8,000",
-                    "revenueTop": "1000000000",
-                    "revenueBottom": "100000001"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Partner members",
-                    "price": "$6,000",
-                    "revenueTop": "100000000",
-                    "revenueBottom": "10000001"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Partner members",
-                    "price": "$4,000",
-                    "revenueTop": "9999999"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Partner members",
-                    "price": "$1,500",
-                    "revenueTop": "999999",
-                    "companySize": "10"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Committer members",
-                    "price": "0"
-                },
-                {
-                    "documentID": "2",
-                    "level": "Guest members",
-                    "price": "0"
-                }
-            ]
-        }
-    ]
+	"workingGroups": {
+		"adoptium": {
+			"alias": "adoptium",
+			"title": "Adoptium Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-adoptium.svg",
+			"description": "The Adoptium Working Group promotes and supports high-quality runtimes and associated technology for use across the Java ecosystem. Our vision is to meet the needs of Eclipse and the broader Java community by providing runtimes for Java-based applications. We embrace existing standards and a wide variety of hardware and cloud platforms.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/adoptium-charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "32c5a745df264aa2a809",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/eclipse-cloud-development-tools-participation-agreement.pdf"
+					}
+				},
+				"website": "https://adoptium.net",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGDSA",
+					"description": "Enterprise Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGFHA",
+					"description": "Committer Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"asciidoc": {
+			"alias": "asciidoc",
+			"title": " AsciiDoc® Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_asciidoc.svg",
+			"description": "The AsciiDoc® Working Group drives the standardization, adoption, and evolution of AsciiDoc. This group encourages and shapes the open, collaborative development of the AsciiDoc language and its processors.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/asciidoc-charter.php",
+				"participation_agreements": {
+					"individual": {
+						"document_id": "9cc0aa80da4741eefc4c",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/asciidoc-individual-participation-agreement.pdf"
+					},
+					"organization": {
+						"document_id": "df911e0adcad1a1c51df",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/asciidoc-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://asciidoc-wg.eclipse.org",
+				"members": "https://asciidoc-wg.eclipse.org/membership/members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGPAA",
+					"description": "Partner Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"cloud-development-tools": {
+			"alias": "cloud-development-tools",
+			"title": "Eclipse Cloud Development (ECD) Tools Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-ecd-tools.png",
+			"description": "The Eclipse Cloud Development (ECD) Tools Working Group drives the evolution and broad adoption of de facto standards for cloud development tools, including language support, extensions, and developer workspace definition.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/eclipse_cloud_development_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "d96a8cabd0d04f29dfe6",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/eclipse-cloud-development-tools-participation-agreement.pdf"
+					}
+				},
+				"website": "https://ecdtools.eclipse.org/",
+				"members": "https://ecdtools.eclipse.org/#members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership/ecdtools"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"eclipse-ide": {
+			"alias": "eclipse-ide",
+			"title": "Eclipse® IDE Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_eclipse_ide.svg",
+			"description": "The Eclipse® IDE Working Group is formed to ensure the continued sustainability, integrity, evolution and adoption of the Eclipse IDE suite of products and related technologies. In particular, it is formed to provide governance, guidance, and funding for the communities that support the delivery of the Eclipse Foundation’s flagship “Eclipse IDE” products.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/eclipse-ide-charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "fb4d6a3ddca7cfc1de0d",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/eclipse-ide-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://ide-wg.eclipse.org",
+				"members": "https://ide-wg.eclipse.org/index.html#members",
+				"sponsorship": "https://www.eclipse.org/org/workinggroups/sponsorship/working-group-sponsorship-agreement.pdf",
+				"contact_form": "https://ide-wg.eclipse.org/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGIDE",
+					"description": "Supporter Member"
+				},
+				{
+					"relation": "WGFHA",
+					"description": "Committer Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"edge-native": {
+			"alias": "edge-native",
+			"title": "Eclipse Edge Native Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-edgenative.png",
+			"description": "The Eclipse Edge Native Working Group drives the adoption of Edge Computing technologies. It provides services like vendor-neutral marketing to the Eclipse Edge Native ecosystem and defines licensing and intellectual property flows that encourage the community to open collaboration",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/eclipse_edge_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "595efa7bce8fffe3dcaf",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/eclipse-edge-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://edgenative.eclipse.org/",
+				"members": "https://edgenative.eclipse.org/#members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGFVA",
+					"description": "Gold Member"
+				},
+				{
+					"relation": "WGHLP",
+					"description": "Silver Member"
+				},
+				{
+					"relation": "WGFHA",
+					"description": "Committer Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"internet-things-iot": {
+			"alias": "internet-things-iot",
+			"title": "Eclipse IoT Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_iot.svg",
+			"description": "The Eclipse IoT Working Group enables collaboration on the development of open source implementations of IoT standards and protocols, frameworks and services used by IoT solutions, and tools for IoT developers for commercial-grade IoT.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/iotwg_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "598b0ec4df9dcbb23499",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/eclipse-iot-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://iot.eclipse.org",
+				"members": "https://iot.eclipse.org/membership/members/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership/iot"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"jakarta-ee": {
+			"alias": "jakarta-ee",
+			"title": "Jakarta EE Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_jakarta.png",
+			"description": "The Jakarta EE Working Group enables Java ecosystem players to collaborate on advancing enterprise Java technologies in the cloud. This initiative focuses on cultivating the business interests associated with Eclipse Enterprise for Java (EE4J) technologies.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php",
+				"participation_agreement": {
+					"individual": "",
+					"organization": "",
+					"default": ""
+				},
+				"participation_agreements": {
+					"individual": {
+						"document_id": "76ef85c1acbb4fb6d348",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/jakarta-ee-individual-working-group-participation-agreement.pdf"
+					},
+					"organization": {
+						"document_id": "e3985a1aead45e62ef7b",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/jakarta-ee-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://jakarta.ee",
+				"members": "https://jakarta.ee/membership/members/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership/jakarta-ee"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGDSA",
+					"description": "Enterprise Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"microprofile": {
+			"alias": "microprofile",
+			"title": "MicroProfile® Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_microprofile.svg",
+			"description": "The MicroProfile® Working Group drives the evolution and broad adoption of technologies related to the MicroProfile Project. MicroProfile is an open forum that optimizes Enterprise Java for a microservice architecture by innovating across multiple implementations and collaborating on common areas of interest with a goal of standardization.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/microprofile-charter.php",
+				"participation_agreements": {
+					"individual": {
+						"document_id": "1cb0c421ab3ddd2fbaf8",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/microprofile-working-group-participation-agreement-individual.pdf"
+					},
+					"organization": {
+						"document_id": "8d438deac670301c236d",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/microprofile-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://microprofile.io/",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "abcde",
+					"description": "Corporate Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"openadx": {
+			"alias": "openadx",
+			"title": "OpenADx Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-openadx.png",
+			"description": "The OpenADx Working Group is centered around the autonomous driving toolchain and aims to bring transparency and better integration capabilities into the autonomous driving tool space.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/openadx_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "d0358f01f03deb7eccea",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/openadx-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://openadx.eclipse.org/",
+				"members": "https://openadx.eclipse.org/members/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGPAE",
+					"description": "Driver Member"
+				},
+				{
+					"relation": "WGHIL",
+					"description": "Development Member"
+				},
+				{
+					"relation": "WGPAR",
+					"description": "User Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"opengenesis": {
+			"alias": "opengenesis",
+			"title": "openGENESIS Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-opengenesis-logo.svg",
+			"description": "Before deployment onto public roads, artificial intelligence (AI) must be proven safe and roadworthy. The openGENESIS Working Group aims to foster, support and provide knowledge, methods, and tools for the assessment of AI used in autonomous driving applications.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/opengenesis_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "c282723cbb8ab2e2ed9e",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/opengenesis-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://wiki.eclipse.org/OpenGENESIS_WG",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGPAE",
+					"description": "Driver Member"
+				},
+				{
+					"relation": "WGHIL",
+					"description": "Development Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"openmdm": {
+			"alias": "openmdm",
+			"title": "openMDM Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/mdm_logo.gif",
+			"description": "The openMDM Working Group fosters and supports an open and innovative eco-system providing tools and systems, qualification kits and adapters for standardized and vendor independent management of measurement data in accordance with the ASAM ODS standard.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/mdmwg_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "776731a0c98fcf80ee81",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/openmdm-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://openmdm.org",
+				"members": "https://openmdm.org/members/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGPAE",
+					"description": "Driver Member"
+				},
+				{
+					"relation": "WGPAR",
+					"description": "User Member"
+				},
+				{
+					"relation": "WGKNA",
+					"description": "Application Member"
+				},
+				{
+					"relation": "WGJAN",
+					"description": "Service Provider Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"openmobility": {
+			"alias": "openmobility",
+			"title": "openMobility Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_openmobility.png",
+			"description": "The openMobility Working Group drives the evolution and broad adoption of mobility modelling and simulation technologies.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/openmobility_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "4d0545bdd64b0a98f5b2",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/openmobility-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://openmobility.eclipse.org/",
+				"members": "https://openmobility.eclipse.org/members/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGFHA",
+					"description": "Committer Member"
+				}
+			]
+		},
+		"openpass": {
+			"alias": "openpass",
+			"title": "openPASS Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_openpass.png",
+			"description": "The openPASS Working Group promotes a collaborative and innovative ecosystem by offering tools, systems, and adapters for a standardized, openly-available and vendor-neutral platform for traffic scenario simulation.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/openpasswg_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "aea0514f5cc2d0407ffd",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/openpass-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://openpass.eclipse.org/",
+				"members": "https://openpass.eclipse.org/about/#members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGPAE",
+					"description": "Driver Member"
+				},
+				{
+					"relation": "WGJAN",
+					"description": "Service Provider Member"
+				},
+				{
+					"relation": "WGPAR",
+					"description": "User Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"osgi": {
+			"alias": "osgi",
+			"title": "OSGi Working Group ",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-osgi.png",
+			"description": "The OSGi Working Group drives the evolution and broad adoption of software technologies derived from or related to the OSGi Specification Project which is an open source initiative to create software specifications, compatible implementations and TCKs to enable development, deployment and management of embedded, server-side, and cloud-native applications by using software modularity to vastly improve the evolution, maintainability, and interoperability of applications and infrastructure.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/osgi-charter.php",
+				"participation_agreements": {
+					"individual": {
+						"document_id": "c7975e1d05ffd0a8ebe1",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/osgi-individual-participation-agreement.pdf"
+					},
+					"organization": {
+						"document_id": "68db2919ffe553250ae8",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/osgi-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://www.osgi.org/",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"sparkplug": {
+			"alias": "sparkplug",
+			"title": "Eclipse Sparkplug Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg-sparkplug.svg",
+			"description": "The Eclipse Sparkplug Working Group drives the evolution and broad adoption of the Eclipse Sparkplug protocol and related technologies that enable the creation of open, collaborative, and interoperable Industrial IoT solutions, and a framework for supporting Industry 4.0.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/eclipse_sparkplug_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "f351fc9ba96cb468393f",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/sparkplug-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://sparkplug.eclipse.org/",
+				"members": "https://sparkplug.eclipse.org/#members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"tangle-ee": {
+			"alias": "tangle-ee",
+			"title": "Tangle EE Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_tangle-ee.svg",
+			"description": "The Tangle EE Working Group drives the adoption of IOTA's underlying network, the Tangle, and explores key IOTA use case areas including decentralized identity, data integrity and feeless payments.",
+			"resources": {
+				"charter": "",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "b4ef8fc3fefcdcda93ba",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wpga/tangle-ee-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://www.eclipse.org/org/workinggroups/tangle_ee_charter.php",
+				"members": "https://tangle.ee/members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGSD",
+					"description": "Strategic Member"
+				},
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
+		},
+		"gemoc": {
+			"alias": "gemoc",
+			"title": "GEMOC Research Consortium",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_gemoc-rc.png",
+			"description": "The GEMOC Research Consortium is an open and collaborative initiative which supports the development, coordination, and dissemination of the research efforts on the use and globalization of modeling languages.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/gemoc_rc_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": null
+				},
+				"website": "https://gemoc.org",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				}
+			]
+		},
+		"science": {
+			"alias": "science",
+			"title": "Science Working Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_science.png",
+			"description": "The Science Working Group represents a collaborative effort involving industry, academia, and government with the purpose of developing reusable open source software for scientific research",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/science_charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": null
+				},
+				"website": "https://science.eclipse.org",
+				"members": "https://science.eclipse.org/membership/",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership"
+			},
+			"levels": [
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				}
+			]
+		},
+		"openhw-group": {
+			"alias": "openhw-group",
+			"title": "OpenHW Group",
+			"status": "active",
+			"logo": "https://www.eclipse.org/org/workinggroups/assets/images/wg_openhw.svg",
+			"description": "OpenHW Group is an independent not-for-profit, global organization where hardware and software designers collaborate in the development of open-source cores, related IP, tools and software, using industry best practices. OpenHW has released its first 32bit RISC-V compliant processor core and has several processor cores in active development.",
+			"resources": {
+				"charter": "",
+				"participation_agreements": {
+					"individual": null,
+					"organization": null
+				},
+				"website": "https://www.openhwgroup.org",
+				"members": "https://www.openhwgroup.org/membership/members",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership",
+				"membership": "https://www.openhwgroup.org/membership"
+			},
+			"levels": []
+		}
+	}
 }
