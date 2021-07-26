@@ -42,6 +42,19 @@ services:
     depends_on:
       - mariadb
       - keycloak
+      - foundationdb
+  foundationdb:
+    image: eclipsefdn/foundationdb-api
+    ports: 
+       - '8095:8095'
+    environment:
+      - CONFIG_SECRET_PATH=/var/run/secrets/secret.properties
+    volumes:
+       - ./config/foundationdb/secret.properties:/var/run/secrets/secret.properties
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
   mariadb:
     image: mariadb:latest
     command: --max_allowed_packet=100000000
