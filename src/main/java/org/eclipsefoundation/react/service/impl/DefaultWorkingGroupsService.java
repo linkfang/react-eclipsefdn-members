@@ -32,9 +32,8 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.runtime.Startup;
 
 /**
- * Builds a list of working group definitions from an embedded list of working
- * group definitions. This is an interim solution to accelerate this project and
- * should be replaced with a call to the foundation API to retrieve this data.
+ * Builds a list of working group definitions from an embedded list of working group definitions. This is an interim
+ * solution to accelerate this project and should be replaced with a call to the foundation API to retrieve this data.
  * 
  * @author Martin Lowe
  */
@@ -51,6 +50,13 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
 
     private Map<String, WorkingGroup> wgs;
 
+    /**
+     * At startup, will load the working groups and store them locally to be used throughout the servers life time. As
+     * this resource is embedded within the Jar, we do not need to look for changes to the resource, as that would not
+     * happen with a production server.
+     * 
+     * @throws IOException if there is an issue loading the working groups resource from within the Jar resources.
+     */
     @PostConstruct
     void init() throws IOException {
         LOGGER.info("Starting init of working group levels static members");

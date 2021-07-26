@@ -1,9 +1,27 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.model;
 
 import java.util.Objects;
 
 import javax.json.bind.annotation.JsonbProperty;
 
+/**
+ * Defines a PDF version of a blank participation agreement, as well as the document ID for the document within the
+ * Eclipse databases.
+ * 
+ * @author Martin Lowe
+ *
+ */
 public class WorkingGroupParticipationAgreement {
     @JsonbProperty("document_id")
     private String documentId;

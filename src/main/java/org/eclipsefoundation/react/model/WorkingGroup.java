@@ -9,11 +9,29 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.model;
 
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Definition representing data about a working group, including the core information about the group, links to
+ * resources for the group, and available participation levels.
+ * 
+ * @author Martin Lowe
+ *
+ */
 public class WorkingGroup {
     private String alias;
     private String title;

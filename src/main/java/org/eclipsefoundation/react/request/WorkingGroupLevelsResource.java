@@ -21,8 +21,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipsefoundation.react.service.WorkingGroupsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Retrieves working group definitions from the working groups service.
@@ -33,7 +31,6 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class WorkingGroupLevelsResource extends AbstractRESTResource {
-    public static final Logger LOGGER = LoggerFactory.getLogger(WorkingGroupLevelsResource.class);
 
     @Inject
     WorkingGroupsService wgService;
