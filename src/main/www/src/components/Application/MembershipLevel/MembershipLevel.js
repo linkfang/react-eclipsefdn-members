@@ -1,9 +1,13 @@
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
-import { makeStyles, TextField } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+  FormControl,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
 import { useEffect } from 'react';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
@@ -13,13 +17,22 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  *  - Props:
  *    -  otherProps: any other props passing down from FormikStepper components, including formik props of formik library (such as "formik.values", "formik.setFieldValue");
  *    - formField: the form field in formModels/formFieldModel.js;
- */ 
+ */
 
 const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
     marginTop: 6,
     backgroundColor: 'white',
+  },
+  formControl: {
+    width: '100%',
+  },
+  selectField: {
+    backgroundColor: 'white',
+    '& div:focus': {
+      backgroundColor: 'white',
+    },
   },
 }));
 
@@ -44,50 +57,32 @@ const MembershipLevel = ({ formik }) => {
         </h2>
         <div className="row">
           <div className="col-md-12">
-            <Autocomplete
-              id={membershipLevel.name}
-              options={MEMBERSHIP_LEVELS}
-              fullWidth={true}
-              getOptionLabel={(option) => (option?.label ? option.label : '')}
-              getOptionSelected={(option, value) => {
-                return option.value === value.value;
-              }}
-              onChange={(ev, value) => {
-                // this is only for display
-                formik.setFieldValue(
-                  `${membershipLevel.name}-label`,
-                  value ? value : null
-                );
-
-                // this is the data will be actually used
-                formik.setFieldValue(
-                  membershipLevel.name,
-                  value ? value.value : null
-                );
-              }}
-              value={
-                formik.values['membershipLevel-label']
-                  ? formik.values['membershipLevel-label']
-                  : null
-              }
-              renderInput={(params) => {
-                params.inputProps = {
-                  ...params.inputProps,
-                  'aria-labelledby': membershipLevel.name,
-                };
-                return (
-                  <TextField
-                    {...params}
-                    label="Select a level"
-                    placeholder="Select a level"
-                    variant="outlined"
-                    size="small"
-                    required={true}
-                    className={classes.textField}
-                  />
-                );
-              }}
-            />
+            <FormControl
+              margin="dense"
+              variant="outlined"
+              required={true}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                Select a level
+              </InputLabel>
+              <Select
+                name={membershipLevel.name}
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={formik.values.membershipLevel || ''}
+                onChange={formik.handleChange}
+                label="Select a level"
+                className={classes.selectField}
+              >
+                <MenuItem value={'Strategic Member'}>Strategic Member</MenuItem>
+                <MenuItem value={'Contributing Member'}>
+                  Contributing Member (formerly referred to as Solutions
+                  Members)
+                </MenuItem>
+                <MenuItem value={'Associate Member'}>Associate Member</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         </div>
         <MembershipLevelFeeTable />

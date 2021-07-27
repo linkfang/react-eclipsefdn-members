@@ -106,22 +106,6 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
 }
 
 /**
- * @param membershipLevel -
- * Existing membershipLevel data, fetched from server
- * @param membership_levels
- * Options of membership levels, created in Constants file, passed from membership level step
- */
-export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
-  let membership = membership_levels.find(
-    (el) => el.value === existingMembershipLevel
-  );
-  return {
-    label: membership?.label,
-    value: existingMembershipLevel,
-  };
-}
-
-/**
  * @param existingContactData -
  * Existing Contacts data, fetched from server
  * **/

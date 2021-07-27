@@ -43,15 +43,6 @@ export const FETCH_HEADER = {
   'x-Requested-With': 'JavaScript',
 };
 
-export const MEMBERSHIP_LEVELS = [
-  { label: 'Strategic Member', value: 'Strategic Member' },
-  {
-    label: 'Contributing Member (formerly referred to as Solutions Members)',
-    value: 'Contributing Member',
-  },
-  { label: 'Associate Member', value: 'Associate Member' },
-];
-
 export const PAGE_STEP = [
   { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
   { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
