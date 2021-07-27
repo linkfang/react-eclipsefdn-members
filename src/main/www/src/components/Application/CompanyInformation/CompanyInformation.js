@@ -41,15 +41,6 @@ const useStyles = makeStyles(() => ({
     marginTop: 6,
     backgroundColor: 'white',
   },
-  formControl: {
-    width: '100%',
-  },
-  selectField: {
-    backgroundColor: 'white',
-    '& div:focus': {
-      backgroundColor: 'white',
-    },
-  },
 }));
 
 let hasOrgData = false;
@@ -225,7 +216,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
-        <CompanyInformationVAT formik={formik} useStyles={useStyles} />
+        <CompanyInformationVAT formik={formik} />
       </div>
 
       <CustomStepButton

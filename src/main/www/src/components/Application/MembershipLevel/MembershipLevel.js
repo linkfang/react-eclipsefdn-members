@@ -1,15 +1,10 @@
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
-import {
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useEffect } from 'react';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
@@ -19,26 +14,8 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginBottom: 14,
-    marginTop: 6,
-    backgroundColor: 'white',
-  },
-  formControl: {
-    width: '100%',
-  },
-  selectField: {
-    backgroundColor: 'white',
-    '& div:focus': {
-      backgroundColor: 'white',
-    },
-  },
-}));
-
 const MembershipLevel = ({ formik }) => {
   const { membershipLevel } = formField;
-  const classes = useStyles();
 
   useEffect(() => {
     scrollToTop();
@@ -57,32 +34,13 @@ const MembershipLevel = ({ formik }) => {
         </h2>
         <div className="row">
           <div className="col-md-12">
-            <FormControl
-              margin="dense"
-              variant="outlined"
-              required={true}
-              className={classes.formControl}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Select a level
-              </InputLabel>
-              <Select
-                name={membershipLevel.name}
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={formik.values.membershipLevel || ''}
-                onChange={formik.handleChange}
-                label="Select a level *"
-                className={classes.selectField}
-              >
-                <MenuItem value={'Strategic Member'}>Strategic Member</MenuItem>
-                <MenuItem value={'Contributing Member'}>
-                  Contributing Member (formerly referred to as Solutions
-                  Members)
-                </MenuItem>
-                <MenuItem value={'Associate Member'}>Associate Member</MenuItem>
-              </Select>
-            </FormControl>
+            <DropdownMenu
+              inputLabel="Select a level"
+              inputName={membershipLevel.name}
+              inputValue={formik.values.membershipLevel}
+              optionsArray={MEMBERSHIP_LEVELS}
+              handleChange={formik.handleChange}
+            />
           </div>
         </div>
         <MembershipLevelFeeTable />

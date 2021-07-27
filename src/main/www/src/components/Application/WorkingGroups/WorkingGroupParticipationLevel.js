@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 /**
  * Render Participation level selector component (React-Select)
@@ -16,23 +10,6 @@ import {
  *   - workingGroup: selected working group
  */
 
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginBottom: 14,
-    marginTop: 6,
-    backgroundColor: 'white',
-  },
-  formControl: {
-    width: '100%',
-  },
-  selectField: {
-    backgroundColor: 'white',
-    '& div:focus': {
-      backgroundColor: 'white',
-    },
-  },
-}));
-
 const ParticipationLevel = ({
   name,
   workingGroupUserJoined,
@@ -40,7 +17,6 @@ const ParticipationLevel = ({
   formik,
   index,
 }) => {
-  const classes = useStyles();
   const [participationLevelOptions, setParticipationLevelOptions] = useState(
     []
   );
@@ -55,12 +31,21 @@ const ParticipationLevel = ({
       );
 
       // extract all the participation_levels
-      const optionsForParticipationLevels = temp?.participation_levels
+      let optionsForParticipationLevels = temp?.participation_levels
         ? temp?.participation_levels.map((item) => item.level)
         : [];
 
       // the Set will deduplicate participation_levels options
-      setParticipationLevelOptions([...new Set(optionsForParticipationLevels)]);
+      optionsForParticipationLevels = [
+        ...new Set(optionsForParticipationLevels),
+      ];
+
+      optionsForParticipationLevels = optionsForParticipationLevels.map(
+        (item) => {
+          return { value: item, label: item };
+        }
+      );
+      setParticipationLevelOptions(optionsForParticipationLevels);
     }
   }, [workingGroupUserJoined, fullWorkingGroupList]);
 
@@ -72,34 +57,17 @@ const ParticipationLevel = ({
       </h3>
       <div className="row">
         <div className="col-md-12">
-          <FormControl
-            margin="dense"
-            variant="outlined"
-            required={true}
-            className={classes.formControl}
-          >
-            <InputLabel id="demo-simple-select-outlined-label">
-              Select a level
-            </InputLabel>
-            <Select
-              name={name}
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={
-                formik.values.workingGroups[theIndex]['participationLevel'] ||
-                ''
+          {participationLevelOptions.length > 0 && (
+            <DropdownMenu
+              inputLabel="Select a level"
+              inputName={name}
+              inputValue={
+                formik.values.workingGroups[theIndex]['participationLevel']
               }
-              onChange={formik.handleChange}
-              label="Select a level *"
-              className={classes.selectField}
-            >
-              {participationLevelOptions.map((item) => (
-                <MenuItem key={item} value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              optionsArray={participationLevelOptions}
+              handleChange={formik.handleChange}
+            />
+          )}
         </div>
       </div>
     </>

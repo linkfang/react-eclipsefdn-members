@@ -43,6 +43,15 @@ export const FETCH_HEADER = {
   'x-Requested-With': 'JavaScript',
 };
 
+export const MEMBERSHIP_LEVELS = [
+  { label: 'Strategic Member', value: 'Strategic Member' },
+  {
+    label: 'Contributing Member (formerly referred to as Solutions Members)',
+    value: 'Contributing Member',
+  },
+  { label: 'Associate Member', value: 'Associate Member' },
+];
+
 export const PAGE_STEP = [
   { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
   { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
@@ -58,6 +67,12 @@ export const CONTACT_TYPE = {
   WORKING_GROUP: 'WORKING_GROUP',
   SIGNING: 'SIGNING',
 };
+
+export const OPTIONS_FOR_PURCHASING_PROCESS = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+  { label: 'Not Applicable', value: 'na' },
+];
 
 export const END_POINT = {
   organizations: 'organizations',

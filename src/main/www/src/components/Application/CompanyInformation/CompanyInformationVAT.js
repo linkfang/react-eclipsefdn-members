@@ -1,22 +1,15 @@
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import {
-  Checkbox,
-  FormControlLabel,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
+import { OPTIONS_FOR_PURCHASING_PROCESS } from '../../../Constants/Constants';
 
 const { purchasingProcess, vatRegistration } = formField;
 
-export default function CompanyInformationVAT({ formik, useStyles }) {
-  const classes = useStyles();
-
+export default function CompanyInformationVAT({ formik }) {
   const handleIsRegistered = () => {
     const isRegistered = formik.values.purchasingAndVAT.isRegistered;
-    
+
     // use spread operator to avoid editing formik.values directly
     let purchasingAndVATValue = { ...formik.values.purchasingAndVAT };
     if (isRegistered) {
@@ -43,29 +36,13 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
       </p>
       <div className="row">
         <div className="col-md-12 margin-bottom-40">
-          <FormControl
-            margin="dense"
-            variant="outlined"
-            required={true}
-            className={classes.formControl}
-          >
-            <InputLabel id="demo-simple-select-outlined-label">
-              {purchasingProcess.label}
-            </InputLabel>
-            <Select
-              name="purchasingAndVAT.purchasingProcess"
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={formik.values.purchasingAndVAT.purchasingProcess || ''}
-              onChange={formik.handleChange}
-              label={`${purchasingProcess.label} *`}
-              className={classes.selectField}
-            >
-              <MenuItem value={'yes'}>Yes</MenuItem>
-              <MenuItem value={'no'}>No</MenuItem>
-              <MenuItem value={'na'}>Not Applicable</MenuItem>
-            </Select>
-          </FormControl>
+          <DropdownMenu
+            inputLabel={purchasingProcess.label}
+            inputName={purchasingProcess.name}
+            inputValue={formik.values.purchasingAndVAT.purchasingProcess}
+            optionsArray={OPTIONS_FOR_PURCHASING_PROCESS}
+            handleChange={formik.handleChange}
+          />
         </div>
       </div>
 
