@@ -13,6 +13,7 @@ package org.eclipsefoundation.react.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,7 +23,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipsefoundation.react.api.model.Organization;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipsefoundation.api.SysAPI;
+import org.eclipsefoundation.react.model.MemberOrganization;
 import org.eclipsefoundation.react.service.OrganizationsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +43,21 @@ public class OrganizationResource extends AbstractRESTResource {
     @Inject
     OrganizationsService orgAPI;
 
+
+    @RestClient
+    @Inject
+    SysAPI sysAPI;
+    
+    @GET
+    @Path("test")
+    public Response getSys() {
+        return Response.ok(sysAPI.getSysRelations(0)).build();
+    }
+    
+    
     @GET
     public Response get() {
-        List<Organization> orgs = orgAPI.get();
+        List<MemberOrganization> orgs = orgAPI.get();
         if (orgs.isEmpty()) {
             return Response.noContent().build();
         }
@@ -52,10 +67,10 @@ public class OrganizationResource extends AbstractRESTResource {
     @GET
     @Path("{orgID}")
     public Response get(@PathParam("orgID") String organizationID) {
-        Organization org = orgAPI.getByID(organizationID);
-        if (org == null) {
+        Optional<MemberOrganization> org = orgAPI.getByID(organizationID);
+        if (org.isEmpty()) {
             return Response.noContent().build();
         }
-        return Response.ok(org).build();
+        return Response.ok(org.get()).build();
     }
 }

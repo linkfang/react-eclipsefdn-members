@@ -12,11 +12,12 @@
 package org.eclipsefoundation.react.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.eclipsefoundation.react.api.model.Organization;
+import org.eclipsefoundation.react.model.MemberOrganization;
 
 public interface OrganizationsService {
-    public List<Organization> get();
+    public List<MemberOrganization> get();
 
-    public Organization getByID(String id);
+    public Optional<MemberOrganization> getByID(String id);
 }
