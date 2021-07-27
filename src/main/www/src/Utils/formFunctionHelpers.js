@@ -641,16 +641,21 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
     fetch(url, {
       method: FETCH_METHOD.DELETE,
       headers: FETCH_HEADER,
-    }).then((res) => {
-      console.log(res.status);
-      // Remove from frontend
-      if (res.status === 200) {
-        // If index exists then callback will only delete a specific wg
-        // If not, callback is the resetForm function and does not need parameter
-        index ? callback(index) : callback();
-        return Promise.resolve(res);
-      }
-    });
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Remove from frontend
+          callback(index);
+          return Promise.resolve(res);
+        }
+
+        requestErrorHandler(res.status);
+        throw res.status;
+      })
+      .catch((err) => {
+        console.log(err);
+        requestErrorHandler(err);
+      });
   }
 }
 /**
