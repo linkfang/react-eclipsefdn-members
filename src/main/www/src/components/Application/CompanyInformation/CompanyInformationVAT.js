@@ -1,8 +1,13 @@
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { OPTIONS_FOR_PURCHASING_PROCES } from '../../../Constants/Constants';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 
 const { purchasingProcess, vatRegistration } = formField;
 
@@ -38,48 +43,29 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
       </p>
       <div className="row">
         <div className="col-md-12 margin-bottom-40">
-          <Autocomplete
-            id={purchasingProcess.name}
-            options={OPTIONS_FOR_PURCHASING_PROCES}
-            getOptionLabel={(option) => (option?.label ? option.label : '')}
-            getOptionSelected={(option, value) => option.value === value.value}
-            fullWidth={true}
-            onChange={(ev, value) => {
-              // this is only for display
-              formik.setFieldValue(
-                `${purchasingProcess.name}-label`,
-                value ? value : null
-              );
-
-              // this is the data will be actually used
-              formik.setFieldValue(
-                purchasingProcess.name,
-                value ? value.value : null
-              );
-            }}
-            value={
-              formik.values.purchasingAndVAT['purchasingProcess-label']
-                ? formik.values.purchasingAndVAT['purchasingProcess-label']
-                : null
-            }
-            renderInput={(params) => {
-              params.inputProps = {
-                ...params.inputProps,
-                'aria-labelledby': `${purchasingProcess.name}-ctn`,
-              };
-              return (
-                <TextField
-                  {...params}
-                  label={purchasingProcess.label}
-                  placeholder={purchasingProcess.placeholder}
-                  variant="outlined"
-                  size="small"
-                  required={true}
-                  className={classes.textField}
-                />
-              );
-            }}
-          />
+          <FormControl
+            margin="dense"
+            variant="outlined"
+            required={true}
+            className={classes.formControl}
+          >
+            <InputLabel id="demo-simple-select-outlined-label">
+              {purchasingProcess.label}
+            </InputLabel>
+            <Select
+              name="purchasingAndVAT.purchasingProcess"
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={formik.values.purchasingAndVAT.purchasingProcess || ''}
+              onChange={formik.handleChange}
+              label={`${purchasingProcess.label} *`}
+              className={classes.selectField}
+            >
+              <MenuItem value={'yes'}>Yes</MenuItem>
+              <MenuItem value={'no'}>No</MenuItem>
+              <MenuItem value={'na'}>Not Applicable</MenuItem>
+            </Select>
+          </FormControl>
         </div>
       </div>
 

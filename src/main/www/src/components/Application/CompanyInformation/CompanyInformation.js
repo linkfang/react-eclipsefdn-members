@@ -43,6 +43,15 @@ const useStyles = makeStyles(() => ({
     marginTop: 6,
     backgroundColor: 'white',
   },
+  formControl: {
+    width: '100%',
+  },
+  selectField: {
+    backgroundColor: 'white',
+    '& div:focus': {
+      backgroundColor: 'white',
+    },
+  },
 }));
 
 let hasOrgData = false;

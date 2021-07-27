@@ -68,12 +68,6 @@ export const CONTACT_TYPE = {
   SIGNING: 'SIGNING',
 };
 
-export const OPTIONS_FOR_PURCHASING_PROCES = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'No', value: 'no' },
-  { label: 'Not Applicable', value: 'na' },
-];
-
 export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
