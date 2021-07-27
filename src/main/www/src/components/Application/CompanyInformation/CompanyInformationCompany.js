@@ -89,6 +89,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             getOptionLabel={(option) => (option?.label ? option.label : '')}
             getOptionSelected={(option, value) => option.value === value.value}
             fullWidth={true}
+            noOptionsText="Invalid country name"
+            openOnFocus={true}
             onChange={(ev, value) => {
               // this is only for display
               formik.setFieldValue(

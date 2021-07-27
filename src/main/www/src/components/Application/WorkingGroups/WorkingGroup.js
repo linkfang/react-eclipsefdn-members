@@ -93,6 +93,8 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                     option.value === value.value
                   }
                   fullWidth={true}
+                  noOptionsText="Invalid working group"
+                  openOnFocus={true}
                   onChange={(ev, value) => {
                     // this to clear the participation level when user selects another working group
                     formik.setFieldValue(
