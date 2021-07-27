@@ -620,7 +620,7 @@ function callSendData(
  */
 export function deleteData(formId, endpoint, entityId, callback, index) {
   // If the added field array is not in the server, just remove it from frontend
-  if (!entityId && index) {
+  if (!entityId) {
     callback(index);
   }
 
@@ -640,6 +640,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
     }
     fetch(url, {
       method: FETCH_METHOD.DELETE,
+      headers: FETCH_HEADER,
     }).then((res) => {
       console.log(res.status);
       // Remove from frontend
