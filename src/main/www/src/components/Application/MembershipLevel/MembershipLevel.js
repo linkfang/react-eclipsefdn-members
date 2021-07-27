@@ -72,7 +72,7 @@ const MembershipLevel = ({ formik }) => {
                 id="demo-simple-select-outlined"
                 value={formik.values.membershipLevel || ''}
                 onChange={formik.handleChange}
-                label="Select a level"
+                label="Select a level *"
                 className={classes.selectField}
               >
                 <MenuItem value={'Strategic Member'}>Strategic Member</MenuItem>

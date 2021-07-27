@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, TextField } from '@material-ui/core';
+import {
+  FormControl,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 
 /**
  * Render Participation level selector component (React-Select)
@@ -16,6 +21,15 @@ const useStyles = makeStyles(() => ({
     marginBottom: 14,
     marginTop: 6,
     backgroundColor: 'white',
+  },
+  formControl: {
+    width: '100%',
+  },
+  selectField: {
+    backgroundColor: 'white',
+    '& div:focus': {
+      backgroundColor: 'white',
+    },
   },
 }));
 
@@ -52,42 +66,40 @@ const ParticipationLevel = ({
 
   return (
     <>
-      <h3 className="fw-600 margin-top-30 h4" id={name}>
+      <h3 className="fw-600 margin-top-20 h4" id={name}>
         What is your intended participation level?
         <span className="orange-star margin-left-5">*</span>
       </h3>
       <div className="row">
         <div className="col-md-12">
-          <Autocomplete
-            options={participationLevelOptions || []}
-            getOptionLabel={(option) => (option ? option : '')}
-            fullWidth={true}
-            onChange={(ev, value) => {
-              formik.setFieldValue(name, value ? value : null);
-            }}
-            value={
-              formik.values.workingGroups[theIndex]['participationLevel']
-                ? formik.values.workingGroups[theIndex]['participationLevel']
-                : null
-            }
-            renderInput={(params) => {
-              params.inputProps = {
-                ...params.inputProps,
-                'aria-labelledby': name,
-              };
-              return (
-                <TextField
-                  {...params}
-                  label="Select a level"
-                  placeholder="Select a level"
-                  variant="outlined"
-                  size="small"
-                  required={true}
-                  className={classes.textField}
-                />
-              );
-            }}
-          />
+          <FormControl
+            margin="dense"
+            variant="outlined"
+            required={true}
+            className={classes.formControl}
+          >
+            <InputLabel id="demo-simple-select-outlined-label">
+              Select a level
+            </InputLabel>
+            <Select
+              name={name}
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={
+                formik.values.workingGroups[theIndex]['participationLevel'] ||
+                ''
+              }
+              onChange={formik.handleChange}
+              label="Select a level *"
+              className={classes.selectField}
+            >
+              {participationLevelOptions.map((item) => (
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
     </>
