@@ -257,6 +257,7 @@ export function matchMembershipLevelFieldsToBackend(
     vat_number: membershipLevelFormData.purchasingAndVAT.vatNumber,
     registration_country:
       membershipLevelFormData.purchasingAndVAT.countryOfRegistration,
+    state: 'INPROGRESS',
   };
 }
 
@@ -648,6 +649,8 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
+      purchase_order_required: 'na',
+      state: 'INPROGRESS',
     };
 
     fetch(API_PREFIX_FORM, {
