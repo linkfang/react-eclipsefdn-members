@@ -2,10 +2,10 @@ package org.eclipsefoundation.react.service;
 
 import java.util.List;
 
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormOrganization;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
 
 /**
  * Interface defining emails that need to be generated and sent as part of the submission of the membership forms to the

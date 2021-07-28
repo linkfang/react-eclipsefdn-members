@@ -29,12 +29,13 @@ import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.persistence.dao.PersistenceDao;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.persistence.service.FilterService;
-import org.eclipsefoundation.react.model.Address;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.MembershipForm;
-import org.eclipsefoundation.react.model.FormOrganization;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.Address;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.namespace.ContactTypes;
+import org.eclipsefoundation.react.namespace.FormState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,8 +75,7 @@ public class DataLoader {
     public void init(@Observes StartupEvent ev) {
         // if running in dev mode, preload a bunch of data using dao
         LOGGER.debug("Current mode: {}", ProfileManager.getActiveProfile());
-        if (config.isEnabled()
-                && config.getDataLoaderProfiles().contains(ProfileManager.getActiveProfile())) {
+        if (config.isEnabled() && config.getDataLoaderProfiles().contains(ProfileManager.getActiveProfile())) {
             RequestWrapper wrap = new RequestWrapper();
             List<MembershipForm> forms = new ArrayList<>(config.getFormCount());
             for (int i = 0; i < config.getFormCount(); i++) {
@@ -87,8 +87,10 @@ public class DataLoader {
                 mf.setSigningAuthority(Math.random() > 0.5);
                 mf.setRegistrationCountry("CA");
                 mf.setVatNumber(RandomStringUtils.randomNumeric(10));
-                mf.setPurchaseOrderRequired(Math.random() > 0.5 ?"yes": "no");
-                mf.setDateCreated(Math.random() > 0.5 ? System.currentTimeMillis() + r.nextInt(10000): System.currentTimeMillis() - r.nextInt(10000));
+                mf.setPurchaseOrderRequired(Math.random() > 0.5 ? "yes" : "no");
+                mf.setDateCreated(Math.random() > 0.5 ? System.currentTimeMillis() + r.nextInt(10000)
+                        : System.currentTimeMillis() - r.nextInt(10000));
+                mf.setState(FormState.INPROGRESS);
                 forms.add(mf);
             }
 
@@ -99,6 +101,7 @@ public class DataLoader {
             List<Contact> contacts = new ArrayList<>(forms.size() * ContactTypes.values().length);
             List<FormWorkingGroup> wgs = new ArrayList<>();
             for (MembershipForm mf : forms) {
+                // generate an org for form
                 FormOrganization o = new FormOrganization();
                 o.setForm(mf);
                 o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
@@ -112,36 +115,9 @@ public class DataLoader {
                 a.setOrganization(o);
                 o.setAddress(a);
                 organizations.add(o);
-                for (int j = 0; j < ContactTypes.values().length; j++) {
-                    // randomly skip contacts
-                    if (Math.random() > 0.5) {
-                        continue;
-                    }
-                    Contact c = new Contact();
-                    c.setForm(mf);
-                    c.setTitle("Sample Title");
-                    c.setfName(RandomStringUtils.randomAlphabetic(4, 10));
-                    c.setlName(RandomStringUtils.randomAlphabetic(4, 10));
-                    c.setType(ContactTypes.values()[j]);
-                    c.setEmail(RandomStringUtils.randomAlphabetic(4, 10));
-                    contacts.add(c);
-                }
-                // randomly create WG entries
-                while (true) {
-                    if (Math.random() > 0.5) {
-                        break;
-                    }
-                    FormWorkingGroup wg = new FormWorkingGroup();
-                    wg.setWorkingGroupID(config.getWorkingGroups().get(r.nextInt(config.getWorkingGroups().size())));
-                    wg.setParticipationLevel(
-                            config.getParticipationLevels().get(r.nextInt(config.getParticipationLevels().size())));
-                    // get a random instance of time
-                    Instant inst = Instant.now().minus(r.nextInt(1000000), ChronoUnit.SECONDS);
-                    wg.setEffectiveDate(new Date(inst.getEpochSecond()));
-                    wg.setContact(generateContact(mf, Optional.empty()));
-                    wg.setForm(mf);
-                    wgs.add(wg);
-                }
+                // generate contacts + wgs for form
+                contacts.addAll(generateContacts(mf));
+                wgs.addAll(generateWorkingGroups(mf));
             }
             organizations = dao.add(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class)), organizations);
             contacts = dao.add(new RDBMSQuery<>(wrap, filters.get(Contact.class)), contacts);
@@ -152,6 +128,39 @@ public class DataLoader {
         }
     }
 
+    private List<FormWorkingGroup> generateWorkingGroups(MembershipForm form) {
+        List<FormWorkingGroup> wgs = new ArrayList<>();
+        // randomly create WG entries
+        while (true) {
+            if (Math.random() > 0.5) {
+                break;
+            }
+            FormWorkingGroup wg = new FormWorkingGroup();
+            wg.setWorkingGroupID(config.getWorkingGroups().get(r.nextInt(config.getWorkingGroups().size())));
+            wg.setParticipationLevel(
+                    config.getParticipationLevels().get(r.nextInt(config.getParticipationLevels().size())));
+            // get a random instance of time
+            Instant inst = Instant.now().minus(r.nextInt(1000000), ChronoUnit.SECONDS);
+            wg.setEffectiveDate(new Date(inst.getEpochSecond()));
+            wg.setContact(generateContact(form, Optional.empty()));
+            wg.setForm(form);
+            wgs.add(wg);
+        }
+        return wgs;
+    }
+
+    private List<Contact> generateContacts(MembershipForm form) {
+        List<Contact> out = new ArrayList<>();
+        for (int j = 0; j < ContactTypes.values().length; j++) {
+            // randomly skip contacts
+            if (Math.random() > 0.5) {
+                continue;
+            }
+            out.add(generateContact(form, Optional.of(ContactTypes.values()[j])));
+        }
+        return out;
+    }
+
     private Contact generateContact(MembershipForm form, Optional<ContactTypes> type) {
         Contact c = new Contact();
         c.setForm(form);
@@ -159,8 +168,17 @@ public class DataLoader {
         c.setfName(RandomStringUtils.randomAlphabetic(4, 10));
         c.setlName(RandomStringUtils.randomAlphabetic(4, 10));
         c.setType(type.orElse(ContactTypes.WORKING_GROUP));
-        c.setEmail(RandomStringUtils.randomAlphabetic(4, 10));
+        c.setEmail(generateEmail());
         return c;
     }
 
+    private String generateEmail() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(RandomStringUtils.randomAlphabetic(4, 10));
+        sb.append("@");
+        sb.append(RandomStringUtils.randomAlphabetic(4, 10));
+        sb.append(".");
+        sb.append(RandomStringUtils.randomAlphabetic(2));
+        return sb.toString();
+    }
 }

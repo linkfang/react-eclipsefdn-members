@@ -8,6 +8,7 @@ CREATE TABLE `MembershipForm` (
   `signingAuthority` bit(1) NOT NULL,
   `userID` varchar(255) DEFAULT NULL,
   `vatNumber` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -43,7 +44,7 @@ CREATE TABLE `FormWorkingGroup` (
   `form_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_1gt3qh8yu1jpky54o38igvfrq` (`contact_id`),
-  UNIQUE KEY `UK_2qrha8ti59jcxnvi2h8b9d2u8` (`form_id`),
+  KEY `UK_2qrha8ti59jcxnvi2h8b9d2u8` (`form_id`),
   CONSTRAINT `FK8mhoi37sufequy7nnn19811rv` FOREIGN KEY (`form_id`) REFERENCES `MembershipForm` (`id`),
   CONSTRAINT `FKmnoygtwlsvh31vb4volo8odct` FOREIGN KEY (`contact_id`) REFERENCES `Contact` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
