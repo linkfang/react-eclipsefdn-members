@@ -86,10 +86,10 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           <Autocomplete
             id={organizationAddress.country.name}
             options={countryList}
-            getOptionLabel={(option) => (option?.label ? option.label : '')}
+            getOptionLabel={(option) => option?.label || ''}
             getOptionSelected={(option, value) => option.value === value.value}
             fullWidth={true}
-            noOptionsText="Invalid country name"
+            freeSolo={true}
             openOnFocus={true}
             onChange={(ev, value) => {
               // this is only for display
@@ -104,11 +104,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
                 value ? value.value : null
               );
             }}
-            value={
-              formik.values.organization.address['country-label']
-                ? formik.values.organization.address['country-label']
-                : null
-            }
+            value={formik.values.organization.address['country-label'] || null}
             renderInput={(params) => {
               params.inputProps = {
                 ...params.inputProps,
@@ -117,12 +113,20 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
               return (
                 <TextField
                   {...params}
+                  onChange={(ev) => {
+                    formik.setFieldValue(
+                      organizationAddress.country.name,
+                      ev.target.value || null
+                    );
+                  }}
                   label="Country"
                   placeholder="Country"
                   variant="outlined"
                   size="small"
                   required={true}
                   className={classes.textField}
+                  error={Boolean(formik.errors.organization?.address?.country)}
+                  helperText={formik.errors.organization?.address?.country}
                 />
               );
             }}

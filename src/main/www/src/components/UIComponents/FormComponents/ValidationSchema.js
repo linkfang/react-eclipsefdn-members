@@ -30,11 +30,22 @@ import { requiredErrorMsg } from './formFieldModel';
  * the formik.errors is an object of {fieldName: "error message"},
  * please refer to: https://formik.org/docs/api/formik#errors--field-string-string-
  */
+
+const countryList = require('country-list')
+  .getNames()
+  .map((item) => item);
+
 export const validationSchema = [
   // First step - company Info
   yup.object().shape({
     // First step - representative contacts
     organization: yup.object().shape({
+      address: yup.object().shape({
+        country: yup
+          .mixed()
+          .oneOf(countryList, 'Please enter/select a valid country name'),
+      }),
+
       twitterHandle: yup
         .string()
         .min(2, 'Twitter handle is too short')

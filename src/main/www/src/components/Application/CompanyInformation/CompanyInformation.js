@@ -39,7 +39,9 @@ const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
     marginTop: 6,
-    backgroundColor: 'white',
+    '& > div': {
+      backgroundColor: 'white',
+    },
   },
 }));
 
