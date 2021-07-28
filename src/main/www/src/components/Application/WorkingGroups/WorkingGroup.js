@@ -93,7 +93,10 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                     option.value === value.value
                   }
                   getOptionDisabled={(option) => {
-                    // disable all selected WGs
+                    // getOptionDisabled need a boolen,
+                    // so here we use !! for the result of array.find
+                    // selectedWG will be true if the WG is already selected
+                    // In this way, all selected WGs will be disabled
                     const selectedWG = !!formik.values.workingGroups.find(
                       (selectedWG) =>
                         selectedWG.workingGroup.label === option.label
