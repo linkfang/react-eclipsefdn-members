@@ -7,17 +7,13 @@ import DashboardResources from './DashboardResources';
 
 export default function Dashboard() {
   return (
-    <div
-      style={{
-        margin: '40px 0',
-      }}
-    >
+    <>
       <DashboardIntro />
       <DashboardOverview />
       <DashboardProjectsAndWG />
       <DashboardCommittersAndContributors />
       <DashboardResources />
       <DashboardFAQs />
-    </div>
+    </>
   );
 }
