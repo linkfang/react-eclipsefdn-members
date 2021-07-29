@@ -196,59 +196,66 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
         </div>
 
         <h2 className="fw-600 h3">Working Group(s) to Join</h2>
-        {values.workingGroups.map((el, index) => (
-          <React.Fragment key={index}>
-            <div className="row margin-bottom-30">
-              <div className="col-md-8">
-                <label>Working group</label>
-                <div className="preview-field">
-                  {el['workingGroup']['label']}
-                </div>
-              </div>
-              <div className="col-md-8">
-                <label>Intended Participation Level</label>
-                <div className="preview-field">{el.participationLevel}</div>
-              </div>
-              <div className="col-md-8">
-                <label>Effective Date</label>
-                <div className="preview-field">
-                  {new Date(el.effectiveDate).toLocaleDateString()}
-                </div>
-              </div>
+        {
+          // Check if the user joins at least 1 WG, if so, display all. If not, display 'Not joining'
+          values.workingGroups[0].workingGroup.label ? (
+            values.workingGroups.map((el, index) => (
+              <React.Fragment key={index}>
+                <div className="row margin-bottom-30">
+                  <div className="col-md-8">
+                    <label>Working group</label>
+                    <div className="preview-field">
+                      {el['workingGroup']['label']}
+                    </div>
+                  </div>
+                  <div className="col-md-8">
+                    <label>Intended Participation Level</label>
+                    <div className="preview-field">{el.participationLevel}</div>
+                  </div>
+                  <div className="col-md-8">
+                    <label>Effective Date</label>
+                    <div className="preview-field">
+                      {new Date(el.effectiveDate).toLocaleDateString()}
+                    </div>
+                  </div>
 
-              <div className="col-md-24">
-                <p className="h4 fw-600 margin-top-25">
-                  The working Group Representative
-                </p>
-              </div>
-              <div className="col-md-6">
-                <label>First Name</label>
-                <div className="preview-field">
-                  {el.workingGroupRepresentative.firstName}
+                  <div className="col-md-24">
+                    <p className="h4 fw-600 margin-top-25">
+                      The working Group Representative
+                    </p>
+                  </div>
+                  <div className="col-md-6">
+                    <label>First Name</label>
+                    <div className="preview-field">
+                      {el.workingGroupRepresentative.firstName}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label>Last Name</label>
+                    <div className="preview-field">
+                      {el.workingGroupRepresentative.lastName}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label>Job Title</label>
+                    <div className="preview-field">
+                      {el.workingGroupRepresentative.jobtitle}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label>Email</label>
+                    <div className="preview-field">
+                      {el.workingGroupRepresentative.email}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <label>Last Name</label>
-                <div className="preview-field">
-                  {el.workingGroupRepresentative.lastName}
-                </div>
-              </div>
-              <div className="col-md-6">
-                <label>Job Title</label>
-                <div className="preview-field">
-                  {el.workingGroupRepresentative.jobtitle}
-                </div>
-              </div>
-              <div className="col-md-6">
-                <label>Email</label>
-                <div className="preview-field">
-                  {el.workingGroupRepresentative.email}
-                </div>
-              </div>
-            </div>
-            <hr />
-          </React.Fragment>
-        ))}
+                <hr />
+              </React.Fragment>
+            ))
+          ) : (
+            <p>Not joining</p>
+          )
+        }
 
         <h2 className="fw-600 h3">Signing Authority</h2>
         <div className="row margin-bottom-30">
