@@ -48,12 +48,7 @@ const useStyles = makeStyles(() => ({
 let hasOrgData = false;
 let hasMembershipLevelData = false;
 
-const CompanyInformation = ({
-  formik,
-  isStartNewForm,
-  redirectTo,
-  handleLoginExpired,
-}) => {
+const CompanyInformation = ({ formik, isStartNewForm }) => {
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
@@ -114,8 +109,8 @@ const CompanyInformation = ({
             res.map((r) => {
               if (r.ok) return r.json();
 
-              requestErrorHandler(r.status, redirectTo, handleLoginExpired);
-              throw new Error(`${r.status} ${r.statusText}`);
+              requestErrorHandler(r.status);
+              throw r.status;
             })
           )
         )
@@ -174,8 +169,8 @@ const CompanyInformation = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           if (data) {
@@ -197,8 +192,8 @@ const CompanyInformation = ({
           setLoading(false);
         })
         .catch((err) => {
-          requestErrorHandler(0, redirectTo, handleLoginExpired);
           console.log(err);
+          requestErrorHandler(err);
         });
     };
 
@@ -212,7 +207,7 @@ const CompanyInformation = ({
       if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
       if (hasOrgData && hasMembershipLevelData) setLoading(false);
     }
-  }, [isStartNewForm, setFieldValue, currentFormId, redirectTo, handleLoginExpired]);
+  }, [isStartNewForm, setFieldValue, currentFormId]);
 
   // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
@@ -222,12 +217,12 @@ const CompanyInformation = ({
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h1 className="fw-600 h2">Company Information</h1>
-      <p>
-        Please complete your company information below. This should be the legal
-        name and address of your organization.
-      </p>
       <div className="align-center">
+        <h1 className="fw-600 h2">Company Information</h1>
+        <p>
+          Please complete your company information below. This should be the
+          legal name and address of your organization.
+        </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
         <CompanyInformationVAT formik={formik} useStyles={useStyles} />

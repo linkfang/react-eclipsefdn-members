@@ -25,7 +25,7 @@ import io.restassured.filter.session.SessionFilter;
  */
 @QuarkusTest
 @QuarkusTestResource(OidcWiremockTestResource.class)
-public class OIDCResourceTest {
+class OIDCResourceTest {
 
     @Test
     void ensureCSRFEndpoint() {

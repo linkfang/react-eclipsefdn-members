@@ -12,7 +12,7 @@ const SubmitSuccess = () => {
   }, []);
   return (
     <>
-      <h2>Confirmation message on submission: </h2>
+      <h1 className="fw-600 h2">Confirmation message on submission: </h1>
       <p>We thank you for completing the membership application.</p>
       <p>
         Our membership coordination team will send a ready to sign membership

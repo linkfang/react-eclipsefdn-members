@@ -92,6 +92,17 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                   getOptionSelected={(option, value) =>
                     option.value === value.value
                   }
+                  getOptionDisabled={(option) => {
+                    // getOptionDisabled need a boolen,
+                    // so here we use !! for the result of array.find
+                    // selectedWG will be true if the WG is already selected
+                    // In this way, all selected WGs will be disabled
+                    const selectedWG = !!formik.values.workingGroups.find(
+                      (selectedWG) =>
+                        selectedWG.workingGroup.label === option.label
+                    );
+                    return selectedWG;
+                  }}
                   fullWidth={true}
                   onChange={(ev, value) => {
                     // this to clear the participation level when user selects another working group

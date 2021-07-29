@@ -13,7 +13,7 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  *  - Props:
  *    -  otherProps: any other props passing down from FormikStepper components, including formik props of formik library (such as "formik.values", "formik.setFieldValue");
  *    - formField: the form field in formModels/formFieldModel.js;
- */
+ */ 
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -36,10 +36,11 @@ const MembershipLevel = ({ formik }) => {
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
-          Please Indicate the class of membership for which you are applying
+          Please indicate the class of membership for which you are applying
         </p>
-        <h2 className="fw-600 h3" id={membershipLevel.name}>
+        <h2 className="fw-600 h4" id={membershipLevel.name}>
           What is your intended Membership Level?
+          <span className="orange-star margin-left-5">*</span>
         </h2>
         <div className="row">
           <div className="col-md-12">

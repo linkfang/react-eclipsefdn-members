@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 import java.util.Objects;
 
@@ -22,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -53,9 +54,12 @@ public class Address extends BareNode implements TargetedClone<Address> {
     @JoinColumn(name = "organization_id", unique = true)
     private FormOrganization organization;
 
+    @NotBlank(message = "Street cannot be blank")
     private String street;
+    @NotBlank(message = "City cannot be blank")
     private String city;
     private String provinceState;
+    @NotBlank(message = "Country cannot be blank")
     private String country;
     private String postalCode;
 

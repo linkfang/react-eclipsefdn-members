@@ -25,13 +25,13 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
 
   return (
     <>
-      <h4
-        className="fw-600 section-header"
+      <h2
+        className="fw-600 h4 section-header"
         id={`${purchasingProcess.name}-ctn`}
       >
         Purchasing Process
         <span className="orange-star margin-left-5">*</span>
-      </h4>
+      </h2>
       <p>
         Does your organization require a Purchase Order to facilitate payment of
         your membership dues?
@@ -83,9 +83,9 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
         </div>
       </div>
 
-      <h4 className="fw-600" id="vatRegistration">
+      <h2 className="fw-600 h4" id="vatRegistration">
         VAT Registration
-      </h4>
+      </h2>
       <FormControlLabel
         control={
           <Checkbox

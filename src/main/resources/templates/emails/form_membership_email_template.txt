@@ -1,4 +1,4 @@
-A NEW CHALLENGER APPROACHES,
+New form submission by: {name} ({form.userID})
 
 Organization
 Name: {org.legalName}

@@ -129,6 +129,12 @@ paths:
          responses:
             200:
                description: Success
+            400:
+               description: Bad request
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/ConstraintViolations'
             403:
                description: Unauthorized
             404:
@@ -785,5 +791,24 @@ components:
                      type: number
                   company_size:
                      type: number
-
+                     
+      ConstraintViolations:
+         type: array
+         items:
+            $ref: '#/components/schemas/ConstraintViolation'
+      ConstraintViolation:
+         type: object
+         properties:
+            root_id:
+               $ref: '#/components/schemas/ObjectID'
+               description: ID of the object that was validated.
+            path:
+               type: string
+               description: path to the property that had an error.
+            type:
+               type: string
+               description: name of the type of object that had errors (i.e, Contact, FormOrganization, MembershipForm etc.).
+            value:
+               type: object
+               description: the bad value in question.
 
