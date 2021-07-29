@@ -14,10 +14,20 @@ package org.eclipsefoundation.react.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.react.model.MemberOrganization;
 
 public interface OrganizationsService {
-    public List<MemberOrganization> get();
+    List<MemberOrganization> get();
 
-    public Optional<MemberOrganization> getByID(String id);
+    Optional<MemberOrganization> getByID(String id);
+
+    Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, Optional<String> mail,
+            Optional<String> role, Optional<String> fName, Optional<String> lName);
+
+    Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, String userName);
+
+    boolean organizationContactHasRole(String orgID, String userName, String role);
+    
+    void removeOrganizationContact(String orgID, String userName, String role);
 }

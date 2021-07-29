@@ -23,13 +23,16 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.ServerErrorException;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.graphql.NonNull;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.eclipsefoundation.api.APIMiddleware;
 import org.eclipsefoundation.api.OrganizationAPI;
 import org.eclipsefoundation.api.SysAPI;
 import org.eclipsefoundation.api.model.Organization;
+import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.api.model.OrganizationMembership;
 import org.eclipsefoundation.api.model.SysRelation;
 import org.eclipsefoundation.core.service.CachingService;
@@ -45,20 +48,16 @@ import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
- * Builds a list of working group definitions from an embedded list of working group definitions. This is an interim
- * solution to accelerate this project and should be replaced with a call to the foundation API to retrieve this data.
+ * Builds a list of working group definitions from the FoundationDB, making use of some data from the FoundationDB
+ * system API to retrieve common values such as relation descriptions.
  * 
  * @author Martin Lowe
  */
 @ApplicationScoped
-public class DefaultOrganizationsService implements OrganizationsService {
-    public static final Logger LOGGER = LoggerFactory.getLogger(DefaultOrganizationsService.class);
+public class FoundationDBOrganizationService implements OrganizationsService {
+    public static final Logger LOGGER = LoggerFactory.getLogger(FoundationDBOrganizationService.class);
 
     private static final String ALL_LIST_CACHE_KEY = "allEntries";
-
-    // Use middleware to handle the pagination
-    @Inject
-    APIMiddleware mw;
 
     @RestClient
     @Inject
@@ -74,13 +73,14 @@ public class DefaultOrganizationsService implements OrganizationsService {
 
     @PostConstruct
     void init() {
+        FoundationDBOrganizationService parent = this;
         loadingCache = Caffeine.newBuilder().buildAsync(new AsyncCacheLoader<String, List<MemberOrganization>>() {
             @Override
             public @NonNull CompletableFuture<List<MemberOrganization>> asyncLoad(String key,
                     @NonNull Executor executor) {
                 CompletableFuture<List<MemberOrganization>> future = new CompletableFuture<>();
                 if (key.equals(ALL_LIST_CACHE_KEY)) {
-                    return future.completeAsync(() -> getAll());
+                    return future.completeAsync(parent::getAll);
                 } else {
                     return future.completeAsync(null);
                 }
@@ -98,9 +98,9 @@ public class DefaultOrganizationsService implements OrganizationsService {
             return new ArrayList<>(orgs.get());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            throw new ServerErrorException("Could not retrieve member organizations", Status.INTERNAL_SERVER_ERROR);
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            throw new ServerErrorException("Could not retrieve member organizations", Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -114,31 +114,69 @@ public class DefaultOrganizationsService implements OrganizationsService {
         return Optional.of(convertToMemberOrganization(org.get()));
     }
 
-    private List<MemberOrganization> getAll() {
-        return mw.getAll(page -> orgAPI.getOrganizationsResponse(page), Organization.class).stream()
-                .map(this::convertToMemberOrganization).collect(Collectors.toList());
+    @Override
+    public Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, Optional<String> mail,
+            Optional<String> role, Optional<String> fName, Optional<String> lName) {
+        // create param map to properly generate a cache key
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
+        params.add("mail", mail.isPresent() ? mail.get() : null);
+        params.add("relation", role.isPresent() ? role.get() : null);
+        params.add("fName", fName.isPresent() ? fName.get() : null);
+        params.add("lName", lName.isPresent() ? lName.get() : null);
+        return cache.get(orgID, params, OrganizationContact.class,
+                () -> orgAPI.getOrganizationContactsWithSearch(orgID, mail.isPresent() ? mail.get() : null,
+                        role.isPresent() ? role.get() : null, fName.isPresent() ? fName.get() : null,
+                        lName.isPresent() ? lName.get() : null));
     }
 
-    private List<OrganizationMembership> getAllMemberships(String id) {
-        return mw.getAll(page -> orgAPI.getOrganizationMembershipResponse(id, page), OrganizationMembership.class);
+    @Override
+    public Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, String userName) {
+        return cache.get(orgID, new MultivaluedMapImpl<>(), OrganizationContact.class,
+                () -> orgAPI.getOrganizationContacts(orgID, userName));
+    }
+
+    @Override
+    public boolean organizationContactHasRole(String orgID, String userName, String role) {
+        Optional<List<OrganizationContact>> contacts = cache.get(orgID, new MultivaluedMapImpl<>(),
+                OrganizationContact.class, () -> orgAPI.getOrganizationContacts(orgID, userName, role));
+        // if we have results, then the relation exists for user
+        return contacts.isPresent() && !contacts.get().isEmpty();
+    }
+
+    @Override
+    public void removeOrganizationContact(String orgID, String userName, String role) {
+        // if there as an error, it will throw up
+        orgAPI.removeOrganizationContacts(orgID, userName, role);
+    }
+
+    protected List<MemberOrganization> getAll() {
+        return orgAPI.getOrganizations().stream().map(this::convertToMemberOrganization).collect(Collectors.toList());
     }
 
     private List<SysRelation> getRelations() {
-        return cache
-                .get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class,
-                        () -> mw.getAll(p -> sysAPI.getSysRelationsResponse(p), SysRelation.class))
+        return cache.get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class, sysAPI::getSysRelations)
                 .orElseGet(Collections::emptyList);
-
     }
 
+    /**
+     * Using SysRelation data and the passed organization, creates a member organization object that can be returned
+     * which includes multiple tables of data.
+     * 
+     * @param org base organization of the member organization.
+     * @return a member organization object containing additional contextual data about the org
+     */
     private MemberOrganization convertToMemberOrganization(Organization org) {
-        List<SysRelation> rels = getRelations();
         MemberOrganization out = new MemberOrganization();
         out.setOrganizationID(org.getOrganizationID());
+        out.setName(org.getName1());
+
+        // retrieve organization membership and create membership levels when possible
         Optional<List<OrganizationMembership>> memberships = cache.get(Integer.toString(org.getOrganizationID()),
                 new MultivaluedMapImpl<>(), MemberOrganization.class,
-                () -> getAllMemberships(Integer.toString(org.getOrganizationID())));
+                () -> orgAPI.getOrganizationMembership(Integer.toString(org.getOrganizationID())));
         if (memberships.isPresent()) {
+            // using the system relations, create membership levels
+            List<SysRelation> rels = getRelations();
             out.setLevels(memberships.get().stream().map(membership -> {
                 MembershipLevel l = new MembershipLevel();
                 l.setDescription(getRelationDesc(membership.getCompositeId().getRelation(), rels));
@@ -149,8 +187,16 @@ public class DefaultOrganizationsService implements OrganizationsService {
         return out;
     }
 
+    /**
+     * Using the relation code, searches the SysRelation entries to find the description of a relation.
+     * 
+     * @param relation relation code to retrieve a description for
+     * @param rels the list of system relations so search for matching relation code.
+     * @return the name/description of the relation if it can be found, otherwise null.
+     */
     private String getRelationDesc(String relation, List<SysRelation> rels) {
         return rels.stream().filter(rel -> rel.getRelation().equals(relation)).findFirst().orElse(new SysRelation())
                 .getDescription();
     }
+
 }

@@ -8,23 +8,34 @@ import java.util.function.IntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.spi.LinkHeader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ApplicationScoped
+/**
+ * Serves as a middleware for the FoundationDB api. This generalizes retrieving multiple pages of data using the Link
+ * header rather than manually iterating over the data or using less robust checks (such as no data in response).
+ * 
+ * @author Martin Lowe
+ *
+ */
 public class APIMiddleware {
     private static final Pattern PAGE_QUERY_STRING_PARAM_MATCHER = Pattern.compile(".*[\\?&]?page=(\\d+).*");
 
-    // JSONb doesn't handle list roots well, so using Jackson
-    @Inject
-    ObjectMapper objectMapper;
-
-    public <T> List<T> getAll(IntFunction<Response> supplier, Class<T> type) {
+    /**
+     * Returns the full list of data for the given API call, using a function that accepts the page number to iterate
+     * over the pages of data. The Link header is scraped off of the first request and is used to determine how many
+     * calls need to be made to get the full data set.
+     * 
+     * @param <T> the type of data that is retrieved
+     * @param supplier function that accepts a page number and makes an API call for the given page.
+     * @param type class for the entity type returned for the response.
+     * @return the full list of results for the given endpoint.
+     */
+    public static <T> List<T> getAll(IntFunction<Response> supplier, Class<T> type) {
+        ObjectMapper objectMapper = new ObjectMapper();
         // get initial response
         int count = 1;
         Response r = supplier.apply(count);
@@ -48,7 +59,7 @@ public class APIMiddleware {
         return out;
     }
 
-    private int getLastPageIndex(Response r) {
+    private static int getLastPageIndex(Response r) {
         List<Object> links = r.getHeaders().get("Link");
         // convert it to retrieve the index of the last page
         if (links != null && !links.isEmpty()) {
@@ -61,5 +72,8 @@ public class APIMiddleware {
             }
         }
         return 0;
+    }
+
+    private APIMiddleware() {
     }
 }

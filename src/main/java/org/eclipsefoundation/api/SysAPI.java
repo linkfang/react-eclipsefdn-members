@@ -17,10 +17,11 @@ import org.eclipsefoundation.api.model.SysRelation;
 @RegisterRestClient(configKey = "fdndb-api")
 public interface SysAPI {
 
+    public default List<SysRelation> getSysRelations() {
+        return APIMiddleware.getAll(this::getSysRelations, SysRelation.class);
+    }
+
     @GET
     @Path("relations")
-    public List<SysRelation> getSysRelations(@QueryParam("page") Integer page);
-    @GET
-    @Path("relations")
-    public Response getSysRelationsResponse(@QueryParam("page") Integer page);
+    public Response getSysRelations(@QueryParam("page") Integer page);
 }
