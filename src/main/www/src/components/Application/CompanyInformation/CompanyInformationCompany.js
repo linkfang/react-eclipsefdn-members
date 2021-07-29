@@ -95,7 +95,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
               // this is only for display
               formik.setFieldValue(
                 `${organizationAddress.country.name}-label`,
-                value ? value : null
+                value || null
               );
 
               // this is the data will be actually used

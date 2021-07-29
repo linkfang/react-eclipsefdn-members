@@ -74,6 +74,23 @@ export const validationSchema = [
   yup.object().shape({
     workingGroups: yup.array().of(
       yup.object().shape({
+        workingGroup: yup
+          .object()
+          .nullable()
+          .test(
+            'workingGroup',
+            'Please enter/select a valid working group',
+            function (selectedWG) {
+              const allWorkingGroups = this.options.parent?.allWorkingGroups;
+              const typedWG = this.options.parent?.['workingGroup-label'];
+              const isValid =
+                allWorkingGroups?.includes(typedWG) && selectedWG?.label
+                  ? true
+                  : false;
+
+              return typedWG ? isValid : true;
+            }
+          ),
         workingGroupRepresentative: yup.object().shape({
           email: yup.string().email('Please enter a valid email'),
         }),

@@ -169,7 +169,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
           <div className="col-md-8">
             <label>Require Purchasing Process</label>
             <div className="preview-field">
-              {values.purchasingAndVAT['purchasingProcess-label']['label']}
+              {values.purchasingAndVAT.purchasingProcess}
             </div>
           </div>
 

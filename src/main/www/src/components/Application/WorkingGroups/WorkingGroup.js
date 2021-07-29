@@ -65,6 +65,26 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
     );
   };
 
+  const updateValidationSchema = (workingGroupsLabel, index) => {
+    const allWorkingGroups = fullWorkingGroupList.map((item) => item.label);
+    const savedAllWorkingGroups =
+      formik.values.workingGroups?.[index]?.['allWorkingGroups'];
+    if (
+      (!savedAllWorkingGroups || savedAllWorkingGroups.length === 0) &&
+      allWorkingGroups.length > 0
+    ) {
+      // using setTimeout here will avoid a React warning:
+      // "Cannot update a component (`Application`) while rendering a different component (`FieldArrayInner`)"
+      // with setTimeout, formik.setFieldValue will run after FieldArrayInner finishes rendering
+      setTimeout(() => {
+        formik.setFieldValue(
+          `${workingGroupsLabel}.${index}.allWorkingGroups`,
+          allWorkingGroups
+        );
+      }, 0);
+    }
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -75,6 +95,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
           {formik.values.workingGroups?.length > 0 &&
             formik.values.workingGroups.map((workingGroup, index) => (
               <div key={index}>
+                {updateValidationSchema(workingGroupsLabel, index)}
                 <h2
                   className="h4 fw-600"
                   id={`${formik.values.workingGroups}.${index}.workingGroup`}
@@ -102,30 +123,24 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                     return selectedWG;
                   }}
                   fullWidth={true}
-                  noOptionsText="Invalid working group"
+                  freeSolo={true}
                   openOnFocus={true}
                   onChange={(ev, value) => {
-                    // this to clear the participation level when user selects another working group
+                    const currentValue = formik.values.workingGroups[index];
+                    const updatedValue = {
+                      ...currentValue,
+                      // this to clear the participation level when user selects another working group
+                      participationLevel: '',
+                      'workingGroup-label': value?.label || null,
+                      workingGroup: value || null,
+                    };
                     formik.setFieldValue(
-                      `workingGroups.${index}.participationLevel`,
-                      ''
-                    );
-                    // this is only for display
-                    formik.setFieldValue(
-                      `${workingGroupsLabel}.${index}.workingGroup-label`,
-                      value ? value.label : null
-                    );
-
-                    // this is the data will be actually used
-                    formik.setFieldValue(
-                      `${workingGroupsLabel}.${index}.workingGroup`,
-                      value ? value : null
+                      `workingGroups.${index}`,
+                      updatedValue
                     );
                   }}
                   value={
-                    formik.values.workingGroups[index]['workingGroup']
-                      ? formik.values.workingGroups[index]['workingGroup']
-                      : null
+                    formik.values.workingGroups[index]['workingGroup'] || null
                   }
                   renderInput={(params) => {
                     params.inputProps = {
@@ -136,12 +151,49 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                     return (
                       <TextField
                         {...params}
+                        onChange={(ev) => {
+                          const inputValue = ev.target.value;
+                          const wgLabelPropery = `${workingGroupsLabel}.${index}.workingGroup-label`;
+
+                          // if array.find returns a wg obejct, then it means it's already selected
+                          const selectedWGValue =
+                            formik.values.workingGroups.find((item) => {
+                              if (
+                                item.workingGroup?.label === inputValue &&
+                                item['workingGroup-label'] === inputValue
+                              ) {
+                                return true;
+                              } else {
+                                return false;
+                              }
+                            });
+
+                          // if the wg user types is already selected somewhere else,
+                          // then make the validation fail and show error message
+                          if (selectedWGValue) {
+                            formik.setFieldValue(
+                              wgLabelPropery,
+                              `${inputValue} already selected`
+                            );
+                          } else {
+                            formik.setFieldValue(
+                              wgLabelPropery,
+                              inputValue || null
+                            );
+                          }
+                        }}
                         label={WORKING_GROUPS}
                         placeholder="Select a group"
                         variant="outlined"
                         size="small"
                         required={true}
                         className={classes.textField}
+                        error={Boolean(
+                          formik.errors.workingGroups?.[index]?.['workingGroup']
+                        )}
+                        helperText={
+                          formik.errors.workingGroups?.[index]?.['workingGroup']
+                        }
                       />
                     );
                   }}

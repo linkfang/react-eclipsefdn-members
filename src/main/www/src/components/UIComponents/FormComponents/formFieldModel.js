@@ -68,7 +68,6 @@ export const initialValues = {
   // Step1: purchasing and VAT
   purchasingAndVAT: {
     purchasingProcess: '',
-    'purchasingProcess-label': '',
     isRegistered: false,
     vatNumber: '',
     countryOfRegistration: '',
