@@ -3,13 +3,7 @@ import './App.css';
 import AppTemplate from './components/UIComponents/Templates/AppTemplate';
 import MembershipContext from './Context/MembershipContext';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import {
-  HashRouter,
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { HashRouter, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Application from './components/Application/Application';
 import Portal from './components/Portal/Portal';
 import NotFound404 from './components/ErrorPages/NotFound404';
@@ -49,8 +43,10 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/portal">
-              <Portal />
+            <Route path="/portal">
+              <BrowserRouter hashType="noslash">
+                <Portal />
+              </BrowserRouter>
             </Route>
 
             <Route exact path="/application">
@@ -81,7 +77,6 @@ const App = () => {
 
             {/* Redirect user to 404 page for all the unknown pathnames/urls */}
             <Redirect to="404" />
-
           </Switch>
         </BrowserRouter>
       </ThemeProvider>
