@@ -115,8 +115,9 @@ export default function DashboardFAQs() {
   return (
     <div
       style={{
-        margin: '10px 0 80px',
+        paddingTop: 90,
       }}
+      id="faqs"
     >
       <Typography variant="h4">FAQs</Typography>
       <Container className={classes.faqContainer}>

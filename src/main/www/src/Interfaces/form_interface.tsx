@@ -40,7 +40,6 @@ export interface FormValue {
   };
   purchasingAndVAT: {
     purchasingProcess: string;
-    'purchasingProcess-label': { label: string; value: string };
     vatNumber: number | string;
     countryOfRegistration: string;
   };

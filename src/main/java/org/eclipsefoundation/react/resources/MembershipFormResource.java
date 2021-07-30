@@ -9,11 +9,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.request;
+package org.eclipsefoundation.react.resources;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,16 +28,28 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
+import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
+import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory;
+import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory.ConstraintViolationWrap;
+import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
+import org.eclipsefoundation.react.service.MailerService;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.security.Authenticated;
 
@@ -46,6 +63,12 @@ import io.quarkus.security.Authenticated;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MembershipFormResource extends AbstractRESTResource {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MembershipFormResource.class);
+
+    @Inject
+    Validator validator;
+    @Inject
+    MailerService mailer;
 
     @GET
     public Response getAll(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
@@ -123,16 +146,23 @@ public class MembershipFormResource extends AbstractRESTResource {
         if (r != null) {
             return r;
         }
+        // standard form params
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
 
+        // FK dependents params
+        MultivaluedMap<String, String> depParams = new MultivaluedMapImpl<>();
+        depParams.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), depParams));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(Contact.class), depParams));
+        dao.delete(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), depParams));
         dao.delete(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         return Response.ok().build();
     }
 
     @POST
     @Path("{id}/complete")
-    public Response completeForm(@PathParam("id") String formID) {
+    public Response completeForm(@PathParam("id") String formID, @QueryParam("force") boolean force) {
         // check if user is allowed to modify these resources
         Response r = checkAccess(formID);
         if (r != null) {
@@ -142,16 +172,50 @@ public class MembershipFormResource extends AbstractRESTResource {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
 
-        // retrieve the possible cached object
+        // retrieve the membership form for the current post
         List<MembershipForm> results = dao.get(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         if (results == null) {
             return Response.serverError().build();
         } else if (results.isEmpty()) {
             return Response.status(404).build();
+        } else if (!force && (FormState.SUBMITTED.equals(results.get(0).getState())
+                || FormState.COMPLETE.equals(results.get(0).getState()))) {
+            // dont send email if force param is not true and form already submitted
+            return Response.status(204).build();
+        }
+        MembershipForm mf = results.get(0);
+
+        // retrieve all of the info needed to post the form email
+        MultivaluedMap<String, String> extraparams = new MultivaluedMapImpl<>();
+        extraparams.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
+        List<FormOrganization> orgs = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), extraparams));
+        List<FormWorkingGroup> wgs = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), extraparams));
+        List<Contact> contacts = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), extraparams));
+
+        // validate form elements
+        Set<ConstraintViolationWrap> violations = new LinkedHashSet<>();
+        violations.addAll(recordViolations(results));
+        violations.addAll(recordViolations(orgs));
+        violations.addAll(recordViolations(wgs));
+        violations.addAll(recordViolations(contacts));
+        // check that there are no validation violations for form elements
+        if (!violations.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST.getStatusCode()).entity(violations).build();
         }
 
-        // TODO actual action here
+        // send the forms to the mailing service
+        mailer.sendToFormAuthor(mf);
+        mailer.sendToMembershipTeam(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
 
-        return Response.ok().build();
+        // update the state and push the update
+        mf.setState(FormState.SUBMITTED);
+        return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mf)))
+                .build();
+    }
+
+    private <T extends BareNode> Set<ConstraintViolationWrap> recordViolations(List<T> items) {
+        ConstraintViolationWrapFactory factory = new ConstraintViolationWrapFactory();
+        return items.stream().flatMap(item -> factory.build(validator.validate(item)).stream())
+                .collect(Collectors.toSet());
     }
 }

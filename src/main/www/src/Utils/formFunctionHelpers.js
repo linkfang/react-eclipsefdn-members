@@ -7,9 +7,9 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  OPTIONS_FOR_PURCHASING_PROCES,
   PATH_NAME_ARRAY,
   api_prefix,
+  HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
 /**
@@ -87,7 +87,7 @@ export function matchCompanyFields(existingOrganizationData) {
       },
       postalCode: existingOrganizationData?.address?.postal_code || '',
     },
-    twitterHandle: existingOrganizationData?.twitter_handle || '',
+    twitterHandle: existingOrganizationData?.twitter || '',
   };
 }
 
@@ -96,35 +96,13 @@ export function matchCompanyFields(existingOrganizationData) {
  * Existing purchasing process and VAT data, fetched from server
  */
 export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
-  const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
-    (item) =>
-      item.value === existingPurchasingAndVATData?.purchase_order_required
-  );
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
-    legalName: existingPurchasingAndVATData?.legal_name || '',
-
+    isRegistered: !!existingPurchasingAndVATData?.registration_country,
     purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
-    'purchasingProcess-label': currentOption,
     vatNumber: existingPurchasingAndVATData?.vat_number,
     countryOfRegistration: existingPurchasingAndVATData?.registration_country,
-  };
-}
-
-/**
- * @param membershipLevel -
- * Existing membershipLevel data, fetched from server
- * @param membership_levels
- * Options of membership levels, created in Constants file, passed from membership level step
- */
-export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
-  let membership = membership_levels.find(
-    (el) => el.value === existingMembershipLevel
-  );
-  return {
-    label: membership?.label,
-    value: existingMembershipLevel,
   };
 }
 
@@ -250,7 +228,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
-    twitter_handle: organizationData.twitterHandle || '',
+    twitter: organizationData.twitterHandle || '',
   };
 
   if (organizationData.address.id) {
@@ -280,6 +258,7 @@ export function matchMembershipLevelFieldsToBackend(
     vat_number: membershipLevelFormData.purchasingAndVAT.vatNumber,
     registration_country:
       membershipLevelFormData.purchasingAndVAT.countryOfRegistration,
+    state: 'INPROGRESS',
   };
 }
 
@@ -350,8 +329,6 @@ export async function executeSendDataByStep(
   formData,
   formId,
   userId,
-  redirectTo,
-  handleLoginExpired,
   goToNextStep,
   setFieldValueObj
 ) {
@@ -367,8 +344,6 @@ export async function executeSendDataByStep(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj,
         {
           fieldName: setFieldValueObj.fieldName.organization,
@@ -383,8 +358,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.COMPANY,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.member,
@@ -399,8 +372,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.MARKETING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.marketing,
@@ -415,8 +386,6 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.ACCOUNTING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         '',
         {
           fieldName: setFieldValueObj.fieldName.accounting,
@@ -427,8 +396,6 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo,
-        handleLoginExpired,
         ''
       );
       break;
@@ -438,8 +405,6 @@ export async function executeSendDataByStep(
         formId,
         '',
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj
       );
       break;
@@ -450,8 +415,6 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          redirectTo,
-          handleLoginExpired,
           goToNextStepObj,
           setFieldValueObj,
           index
@@ -468,12 +431,20 @@ export async function executeSendDataByStep(
           CONTACT_TYPE.SIGNING,
           formId
         ),
-        redirectTo,
-        handleLoginExpired,
         goToNextStepObj,
         setFieldValueObj
       );
-      return;
+      break;
+
+    case 5:
+      callSendData(
+        formId,
+        END_POINT.complete,
+        false,
+        goToNextStepObj,
+        setFieldValueObj
+      );
+      break;
 
     default:
       return;
@@ -492,8 +463,6 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
-  redirectTo,
-  handleLoginExpired,
   goToNextStepObj,
   setFieldValueObj,
   index
@@ -528,10 +497,14 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (res.ok) return res.json();
+        if (goToNextStepObj.stepNum === 5) {
+          if (res.ok) return res;
+        } else {
+          if (res.ok) return res.json();
+        }
 
-        requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-        throw new Error(`${res.status} ${res.statusText}`);
+        requestErrorHandler(res.status);
+        throw res.status;
       })
       .then((data) => {
         if (setFieldValueObj && method === 'POST') {
@@ -603,7 +576,12 @@ function callSendData(
           );
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        // This will make sure when "then" is skipped, we could still handle the error
+        // And because this "err" is just an error message without error/status code, so we use 0 here.
+        requestErrorHandler(err);
+      });
   }
 }
 
@@ -658,20 +636,22 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
  * @param setCurrentFormId - setCurrentFormId function from membership context
  * @param formData - Filled whole form data stored in formik context
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
- * @param defaultBehaviour - Go to the next step and add this step to complete set, passed from FormikStepper Component
+ * @param goToCompanyInfoStep - Go to the next step and add this step to complete set, passed from FormikStepper Component
  *
  * The logic:
  * - POST a new form and returned the new form Id
  * - Store the returned new form Id in my FormId Context
  * - Send the API calls to organizations and contacts
  * **/
-export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
-  defaultBehaviour();
+export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
+  goToCompanyInfoStep();
 
   if (getCurrentMode() === MODE_REACT_API) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
+      purchase_order_required: 'na',
+      state: 'INPROGRESS',
     };
 
     fetch(API_PREFIX_FORM, {
@@ -679,7 +659,12 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
       headers: FETCH_HEADER,
       body: JSON.stringify(dataBody),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) return res.json();
+
+        requestErrorHandler(res.status);
+        throw res.status;
+      })
       .then((data) => {
         console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
@@ -690,12 +675,9 @@ export async function handleNewForm(setCurrentFormId, defaultBehaviour) {
   // Probably Also need to delete the old form Id, or keep in the db for 30 days
 }
 
-export function requestErrorHandler(
-  statusCode,
-  redirectTo,
-  handleLoginExpired
-) {
+export function requestErrorHandler(statusCode) {
   const origin = window.location.origin;
+
   switch (statusCode) {
     case 404:
       window.location.assign(origin + '/404');
@@ -704,8 +686,12 @@ export function requestErrorHandler(
       window.location.assign(origin + '/50x');
       break;
     case 401:
-      redirectTo('/');
-      handleLoginExpired();
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
+      window.location.assign(origin + '/');
+      break;
+    case 499:
+      sessionStorage.setItem(HAS_TOKEN_EXPIRED, 'true');
+      window.location.assign(origin + '/');
       break;
     default:
       window.location.assign(origin + '/50x');

@@ -20,39 +20,46 @@ const SigningAuthority = ({ formik }) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h1 className="fw-600 h2" id={sectionName}>
-        Signing Authority
-      </h1>
-      <p>
-        Please Indicate the individual who has the signing authority for the
-        agreement
-      </p>
+      <div className="align-center">
+        <h1 className="fw-600 h2" id={sectionName}>
+          Signing Authority
+        </h1>
+        <p>
+          Please Indicate the individual who has the signing authority for the
+          agreement
+        </p>
 
-      <div className="row">
-        {signingAuthorityRepresentative.map((el, index) => (
-          <div key={index} className="col-md-12">
-            <Input
-              name={`signingAuthorityRepresentative.${el.name}`}
-              labelName={el.label}
-              placeholder={el.placeholder}
-              requiredMark={true}
-              onChange={formik.handleChange}
-              value={formik.values.signingAuthorityRepresentative[`${el.name}`]}
-              error={
-                formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
-                Boolean(
+        <div className="row">
+          {signingAuthorityRepresentative.map((el, index) => (
+            <div key={index} className="col-md-12">
+              <Input
+                name={`signingAuthorityRepresentative.${el.name}`}
+                labelName={el.label}
+                placeholder={el.placeholder}
+                requiredMark={true}
+                onChange={formik.handleChange}
+                value={
+                  formik.values.signingAuthorityRepresentative[`${el.name}`]
+                }
+                error={
+                  formik.touched.signingAuthorityRepresentative?.[
+                    `${el.name}`
+                  ] &&
+                  Boolean(
+                    formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
+                  )
+                }
+                helperText={
+                  formik.touched.signingAuthorityRepresentative?.[
+                    `${el.name}`
+                  ] &&
                   formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-                )
-              }
-              helperText={
-                formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
-                formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-              }
-            />
-          </div>
-        ))}
+                }
+              />
+            </div>
+          ))}
+        </div>
       </div>
-
       <CustomStepButton
         previousPage="/working-groups"
         nextPage="/review"

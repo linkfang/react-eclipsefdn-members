@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.request;
+package org.eclipsefoundation.react.resources;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -47,8 +47,7 @@ public class OIDCResource extends AbstractRESTResource {
     }
 
     /**
-     * While OIDC plugin takes care of actual logout, a route is needed to properly
-     * reroute anon user to home page.
+     * While OIDC plugin takes care of actual logout, a route is needed to properly reroute anon user to home page.
      *
      * @throws URISyntaxException
      */
@@ -63,7 +62,7 @@ public class OIDCResource extends AbstractRESTResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserInfo(@HeaderParam(value = CSRFHelper.CSRF_HEADER_NAME) String csrf) {
         // require CSRF to protect user info (could contain PII)
-        csrfHelper.compareCSRF(aud, csrf);
+        //csrfHelper.compareCSRF(aud, csrf);
         if (!ident.isAnonymous()) {
             // cast the principal to a JWT token (which is the type for OIDC)
             DefaultJWTCallerPrincipal defaultPrin = (DefaultJWTCallerPrincipal) ident.getPrincipal();
@@ -72,6 +71,7 @@ public class OIDCResource extends AbstractRESTResource {
             uiw.name = defaultPrin.getName();
             uiw.givenName = defaultPrin.getClaim("given_name");
             uiw.familyName = defaultPrin.getClaim("family_name");
+            uiw.email = defaultPrin.getClaim("email");
             return Response.ok(uiw).build();
         } else {
             return Response.noContent().build();
@@ -92,6 +92,7 @@ public class OIDCResource extends AbstractRESTResource {
         String name;
         String givenName;
         String familyName;
+        String email;
 
         /**
          * @return the name
@@ -133,6 +134,20 @@ public class OIDCResource extends AbstractRESTResource {
          */
         public void setFamilyName(String familyName) {
             this.familyName = familyName;
+        }
+
+        /**
+         * @return the email
+         */
+        public String getEmail() {
+            return email;
+        }
+
+        /**
+         * @param email the email to set
+         */
+        public void setEmail(String email) {
+            this.email = email;
         }
 
     }

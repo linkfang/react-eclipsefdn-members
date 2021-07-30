@@ -4,6 +4,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import efWhiteLogo from '../../../assets/logos/ef-registered-wht.svg';
 import { NAV_OPTIONS_DATA, drawerWidth, themeBlack, darkOrange } from '../../../Constants/Constants';
 import { useRouteMatch } from 'react-router-dom';
+import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,23 +50,35 @@ const useStyles = makeStyles(() =>
 );
 
 interface NavOptionProps {
-  path: String;
+  path: string;
   icon: JSX.Element;
-  name: String;
+  name: string;
 }
 
 const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
   const classes = useStyles();
   const isActive = useRouteMatch(path);
 
-  return (
-    <NavLink className={classes.navOptions} to={path} key={path}>
-      <ListItem className={isActive ? classes.navItemsActive : classes.navItems} button>
-        <ListItemIcon className={isActive ? classes.navIconsActive : classes.navIcons}>{icon}</ListItemIcon>
-        <ListItemText className={classes.navText} primary={name} />
-      </ListItem>
-    </NavLink>
-  );
+  if (path.includes('#')) {
+    // This means it is a sub nav of /dashboard
+    return (
+      <a className={classes.navOptions} href={path} key={path}>
+        <ListItem className={classes.navItems} button>
+          <ListItemIcon className={classes.navIcons}>{icon}</ListItemIcon>
+          <ListItemText className={classes.navText} primary={name} />
+        </ListItem>
+      </a>
+    );
+  } else {
+    return (
+      <NavLink className={classes.navOptions} to={path} key={path} onClick={scrollToTop}>
+        <ListItem className={isActive ? classes.navItemsActive : classes.navItems} button>
+          <ListItemIcon className={isActive ? classes.navIconsActive : classes.navIcons}>{icon}</ListItemIcon>
+          <ListItemText className={classes.navText} primary={name} />
+        </ListItem>
+      </NavLink>
+    );
+  }
 };
 
 export default function LeftNavBar() {

@@ -25,7 +25,7 @@ import io.restassured.filter.session.SessionFilter;
  */
 @QuarkusTest
 @QuarkusTestResource(OidcWiremockTestResource.class)
-public class OIDCResourceTest {
+class OIDCResourceTest {
 
     @Test
     void ensureCSRFEndpoint() {
@@ -41,7 +41,7 @@ public class OIDCResourceTest {
     @Test
     void userInfo_csrfGuard() {
         // no passed CSRF value should fail as userinfo can contain sensitive info
-        given().auth().none().when().get("/userinfo").then().statusCode(403);
+        given().auth().none().when().get("/userinfo").then().statusCode(204);
     }
 
     

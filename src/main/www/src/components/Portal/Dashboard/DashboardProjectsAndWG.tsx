@@ -4,8 +4,9 @@ export default function DashboardProjectsAndWG() {
   return (
     <div
       style={{
-        margin: '10px 0 80px',
+        paddingTop: 90,
       }}
+      id="projects-wg"
     >
       <Typography variant="h4">Projects and Working Groups</Typography>
 
@@ -15,7 +16,7 @@ export default function DashboardProjectsAndWG() {
       <div
         style={{
           display: 'flex',
-          margin: '40px 0',
+          marginTop: 40,
           justifyContent: 'space-between',
         }}
       >

@@ -4,7 +4,7 @@ export default function DashboardOverview() {
   return (
     <div
       style={{
-        margin: '10px 0 80px',
+        paddingTop: 90,
       }}
     >
       <Typography variant="h4">Overview</Typography>
@@ -14,7 +14,7 @@ export default function DashboardOverview() {
       <div
         style={{
           display: 'flex',
-          margin: '40px 0',
+          marginTop: 40,
           justifyContent: 'space-between',
         }}
       >

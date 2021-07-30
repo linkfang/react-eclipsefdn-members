@@ -38,12 +38,7 @@ import { FormikProvider } from 'formik';
 
 let hasWGData = false;
 
-const WorkingGroupsWrapper = ({
-  formik,
-  isStartNewForm,
-  redirectTo,
-  handleLoginExpired,
-}) => {
+const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
   const { currentFormId } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const [isLoading, setIsLoading] = useState(true);
@@ -77,22 +72,25 @@ const WorkingGroupsWrapper = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           let options = data.map((item) => ({
-            label: item.name,
-            value: item.name,
+            label: item.title,
+            value: item.title,
             participation_levels: item.levels,
           }));
           setFullWorkingGroupList(options);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(err);
+          console.log(err);
+        });
     };
 
     fetchAvailableFullWorkingGroupList();
-  }, [redirectTo, handleLoginExpired]);
+  }, []);
 
   useEffect(() => {
     // Fetch the working groups user has joined
@@ -123,8 +121,8 @@ const WorkingGroupsWrapper = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, redirectTo, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           if (data.length) {
@@ -142,7 +140,10 @@ const WorkingGroupsWrapper = ({
           }
           setIsLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(err);
+          console.log(err);
+        });
     };
 
     if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0) {
@@ -151,14 +152,7 @@ const WorkingGroupsWrapper = ({
     } else {
       setIsLoading(false);
     }
-  }, [
-    isStartNewForm,
-    currentFormId,
-    fullWorkingGroupList,
-    setFieldValue,
-    redirectTo,
-    handleLoginExpired,
-  ]);
+  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue]);
 
   if (isLoading) {
     return <Loading />;
@@ -167,12 +161,15 @@ const WorkingGroupsWrapper = ({
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormikProvider value={formik}>
-        <h1 className="fw-600 h2">Working Group</h1>
-        <p>Please complete the following details for joining a Working Group</p>
         <div
           id="working-groups-page"
           className="align-center margin-top-50 margin-bottom-30"
         >
+          <h1 className="fw-600 h2">Working Group</h1>
+          <p>
+            Please complete the following details for joining a Working Group
+          </p>
+
           <WorkingGroup
             formik={formik}
             workingGroupsUserJoined={workingGroupsUserJoined}

@@ -22,7 +22,6 @@ const FormChooser = ({
   setFurthestPage,
   history,
   setIsStartNewForm,
-  handleLoginExpired,
   resetSigningAuthorityForm,
   resetWorkingGroupForm,
   resetMembershipLevelForm,
@@ -42,8 +41,9 @@ const FormChooser = ({
   };
 
   const handleStartNewForm = () => {
+    if (getCurrentMode() === MODE_REACT_API) setCurrentFormId('');
     // reset the form if user has gone to a further page/step
-    if(furthestPage.index > 0){
+    if (furthestPage.index > 0) {
       resetCompanyInfoForm();
       resetMembershipLevelForm();
       resetWorkingGroupForm();
@@ -67,26 +67,29 @@ const FormChooser = ({
         .then((res) => {
           if (res.ok) return res.json();
 
-          requestErrorHandler(res.status, history.push, handleLoginExpired);
-          throw new Error(`${res.status} ${res.statusText}`);
+          requestErrorHandler(res.status);
+          throw res.status;
         })
         .then((data) => {
           console.log('existing forms:  ', data);
           if (data.length > 0) {
-            setHasExistingForm(data[data.length - 1]?.id);
-            setCurrentFormId(data[data.length - 1]?.id);
+            setHasExistingForm(data[0]?.id);
+            setCurrentFormId(data[0]?.id);
           } else {
-            setHasExistingForm(false);
+            setCurrentFormId('');
             handleNewForm(setCurrentFormId, goToCompanyInfoStep);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          requestErrorHandler(err);
+          console.log(err);
+        });
     };
 
     if (hasExistingForm === '') {
       fetchExistingForms();
     }
-  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm, history.push, handleLoginExpired]);
+  }, [goToCompanyInfoStep, setCurrentFormId, hasExistingForm]);
 
   return (
     <>

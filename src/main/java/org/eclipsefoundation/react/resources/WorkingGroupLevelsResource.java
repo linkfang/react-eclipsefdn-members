@@ -9,9 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.request;
-
-import java.util.Set;
+package org.eclipsefoundation.react.resources;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

@@ -3,7 +3,6 @@ package org.eclipsefoundation.react.resources;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import java.sql.Date;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -11,10 +10,9 @@ import javax.json.bind.Jsonb;
 
 import org.eclipsefoundation.core.config.JsonBConfig;
 import org.eclipsefoundation.core.helper.CSRFHelper;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
-import org.eclipsefoundation.react.namespace.ContactTypes;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
+import org.eclipsefoundation.react.test.helper.DtoHelper;
 import org.eclipsefoundation.react.test.helper.SchemaNamespaceHelper;
 import org.hamcrest.text.IsEmptyString;
 import org.junit.jupiter.api.Assertions;
@@ -374,18 +372,8 @@ public class FormWorkingGroupsResourceTest {
     }
 
     private FormWorkingGroup generateSampleRaw(Optional<String> id) {
-        FormWorkingGroup out = new FormWorkingGroup();
-        out.setEffectiveDate(new Date(System.currentTimeMillis()));
-        out.setParticipationLevel("participant");
-        out.setWorkingGroupID("internet-things-iot");
+        FormWorkingGroup out = DtoHelper.generateWorkingGroups(DtoHelper.generateForm(Optional.empty())).get(0);
         id.ifPresent(out::setId);
-        Contact c = new Contact();
-        c.setEmail("sample@sample.com");
-        c.setfName("First Name");
-        c.setlName("Last Name");
-        c.setTitle("sample title");
-        c.setType(ContactTypes.ACCOUNTING);
-        out.setContact(c);
         return out;
     }
 

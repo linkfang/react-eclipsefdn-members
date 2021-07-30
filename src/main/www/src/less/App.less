@@ -72,8 +72,8 @@ html {
   }
 }
 
-.toolbar-no-login{
-  a{
+.toolbar-no-login {
+  a {
     margin-left: 13px;
   }
 }
@@ -237,8 +237,7 @@ html {
     left: 15px;
   }
 
-  .step-title-container-active:extend(.eclipsefdn-membership-webform
-      .step-title-container) {
+  .step-title-container-active:extend(.eclipsefdn-membership-webform .step-title-container) {
     // &:extend(.step-title-container);
     background: @brand-secondary 50% no-repeat;
     color: @white;
@@ -256,7 +255,8 @@ html {
 
   .msg-popup {
     & {
-      position: absolute;
+      z-index: 1000;
+      position: fixed;
       top: -70px;
       left: calc(50vw - 200px);
       width: 400px;
@@ -291,6 +291,8 @@ html {
   }
 }
 
+.scrollup {
+  cursor: pointer;
+}
 
 // ********** Portal ********** //
-

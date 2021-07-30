@@ -9,23 +9,19 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -35,6 +31,7 @@ import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.persistence.model.SortableField;
+import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -50,20 +47,14 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     private String membershipLevel;
     private boolean signingAuthority;
+    @NotBlank(message = "Purchase order state cannot be blank")
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "form_id")
-    private List<Contact> contacts;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "form_id")
-    private List<FormWorkingGroup> workingGroups;
-    @OneToOne(mappedBy = "form", orphanRemoval = true)
-    private FormOrganization organization;
+    @NotNull(message = "The form state cannot be null")
+    private FormState state;
 
     /** @return the id */
     @Override
@@ -141,28 +132,12 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         this.dateCreated = dateCreated;
     }
 
-    /**
-     * @return the contacts
-     */
-    @JsonbTransient
-    public List<Contact> getContacts() {
-        return new ArrayList<>(contacts);
+    public FormState getState() {
+        return this.state;
     }
 
-    /**
-     * @return the workingGroups
-     */
-    @JsonbTransient
-    public List<FormWorkingGroup> getWorkingGroups() {
-        return new ArrayList<>(workingGroups);
-    }
-
-    /**
-     * @return the organization
-     */
-    @JsonbTransient
-    public FormOrganization getOrganization() {
-        return organization;
+    public void setState(FormState state) {
+        this.state = state;
     }
 
     @Override
@@ -173,6 +148,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         target.setPurchaseOrderRequired(getPurchaseOrderRequired());
         target.setRegistrationCountry(getRegistrationCountry());
         target.setVatNumber(getVatNumber());
+        target.setState(getState());
         if (getDateCreated() != null) {
             target.setDateCreated(getDateCreated());
         }
@@ -184,7 +160,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber,
-                registrationCountry, purchaseOrderRequired, dateCreated);
+                registrationCountry, purchaseOrderRequired, dateCreated, state);
         return result;
     }
 
@@ -201,7 +177,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
                 && signingAuthority == other.signingAuthority && Objects.equals(userID, other.userID)
                 && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(dateCreated, other.dateCreated)
                 && Objects.equals(registrationCountry, other.registrationCountry)
-                && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired);
+                && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired)
+                && Objects.equals(state, other.state);
     }
 
     @Override
@@ -223,6 +200,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         builder.append(vatNumber);
         builder.append(", dateCreated=");
         builder.append(dateCreated);
+        builder.append(", state=");
+        builder.append(state);
         builder.append("]");
         return builder.toString();
     }
@@ -248,6 +227,12 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
             if (userId != null) {
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".userID = ?",
                         new Object[] { userId }));
+            }
+            // form state check
+            String formState = params.getFirst(MembershipFormAPIParameterNames.FORM_STATE.getName());
+            if (formState != null) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".state = ?",
+                        new Object[] { FormState.valueOf(formState.toUpperCase()) }));
             }
             return stmt;
         }

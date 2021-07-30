@@ -43,10 +43,10 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/portal">
-              <HashRouter hashType="noslash">
+            <Route path="/portal">
+              <BrowserRouter hashType="noslash">
                 <Portal />
-              </HashRouter>
+              </BrowserRouter>
             </Route>
 
             <Route exact path="/application">

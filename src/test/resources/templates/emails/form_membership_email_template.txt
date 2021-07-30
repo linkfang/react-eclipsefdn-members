@@ -1,0 +1,33 @@
+A NEW CHALLENGER APPROACHES,
+
+Organization
+Name: {org.legalName}
+Twitter: {org.twitterHandle}
+
+Address
+{org.address.street}
+{org.address.city}, {org.address.provinceState}
+{org.address.country}
+{org.address.postalCode}
+  
+
+
+Contacts
+{#for contact in contacts.orEmpty}
+
+Name: {contact.fName} {contact.lName}
+Email: {contact.email}
+Title: {contact.title}
+Contact type: {contact.type}
+userID
+{/for}
+
+Working Groups
+
+{#for wg in wgs.orEmpty}
+Working Group: {wg.workingGroupID}
+Participation Level: {wg.participationLevel}
+Effective Date: {wg.effectiveDate}
+Contact Name: {wg.contact.fName} {wg.contact.lName}
+
+{/for}
