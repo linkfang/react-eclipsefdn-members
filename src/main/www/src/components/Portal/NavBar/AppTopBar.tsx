@@ -17,8 +17,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import demoAvatar from '../../../assets/demo-avatar.jpg';
-import { api_prefix, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
+import { api_prefix, darkOrange, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
 import { logout } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles(() =>
@@ -60,21 +59,26 @@ const useStyles = makeStyles(() =>
       width: 38,
       height: 38,
       marginLeft: 11,
-    },
-    avatar: {
-      width: 38,
+      backgroundColor: darkOrange,
     },
   })
 );
 
 interface UserInfo {
+  first_name: string;
+  last_name: string;
   full_name: string;
   picture: string;
 }
 
 export default function AppTopBar() {
   const classes = useStyles();
-  const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    first_name: '',
+    last_name: '',
+    full_name: '',
+    picture: '',
+  });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleDropdownBtnClicked = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -87,6 +91,13 @@ export default function AppTopBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const getInitials = (firstname: string, lastname: string) => {
+    const firstnameInitial = firstname.substring(0, 1).toUpperCase();
+    const lastnameInitial = lastname.substring(0, 1).toUpperCase();
+
+    return firstnameInitial + lastnameInitial;
   };
 
   const renderDropdownMenu = () => (
@@ -124,6 +135,8 @@ export default function AppTopBar() {
         .then((res) => res.json())
         .then((data) => {
           setUserInfo({
+            first_name: data.first_name,
+            last_name: data.last_name,
             full_name: data.full_name,
             picture: data.picture,
           });
@@ -153,7 +166,7 @@ export default function AppTopBar() {
       <Toolbar className={classes.toolbarCtn}>
         <div className={classes.verticalDivider}></div>
         <Typography paragraph className={classes.username}>
-          {userInfo?.full_name ? userInfo.full_name : 'John Doe'}
+          {userInfo?.full_name || 'Firstname Lastname'}
         </Typography>
 
         <Button className={classes.dropDownBtn} onClick={handleDropdownBtnClicked}>
@@ -161,12 +174,11 @@ export default function AppTopBar() {
         </Button>
 
         {renderDropdownMenu()}
-
-        <Avatar
-          className={classes.avatarCtn}
-          alt="user avatar"
-          src={userInfo?.picture ? userInfo.picture : demoAvatar}
-        />
+        {userInfo?.picture ? (
+          <Avatar className={classes.avatarCtn} alt="user avatar" src={userInfo.picture} />
+        ) : (
+          <Avatar className={classes.avatarCtn}>{getInitials(userInfo.first_name, userInfo.last_name) || 'FL'}</Avatar>
+        )}
       </Toolbar>
     </AppBar>
   );
