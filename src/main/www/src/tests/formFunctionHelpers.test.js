@@ -13,10 +13,6 @@ test('Map Purchasing and VAT data to match front-end form', () => {
     id: 'id',
     legalName: 'legal_name',
     purchasingProcess: 'yes',
-    'purchasingProcess-label': expect.objectContaining({
-      label: 'Yes',
-      value: 'yes',
-    }),
     vatNumber: 'vat_number',
     countryOfRegistration: 'registration_country',
   });

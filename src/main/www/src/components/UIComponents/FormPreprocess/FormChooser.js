@@ -41,7 +41,7 @@ const FormChooser = ({
   };
 
   const handleStartNewForm = () => {
-    setCurrentFormId('');
+    if (getCurrentMode() === MODE_REACT_API) setCurrentFormId('');
     // reset the form if user has gone to a further page/step
     if (furthestPage.index > 0) {
       resetCompanyInfoForm();

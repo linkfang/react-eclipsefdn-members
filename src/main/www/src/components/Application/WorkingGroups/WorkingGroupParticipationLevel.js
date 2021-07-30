@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, TextField } from '@material-ui/core';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 /**
  * Render Participation level selector component (React-Select)
@@ -11,14 +10,6 @@ import { makeStyles, TextField } from '@material-ui/core';
  *   - workingGroup: selected working group
  */
 
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginBottom: 14,
-    marginTop: 6,
-    backgroundColor: 'white',
-  },
-}));
-
 const ParticipationLevel = ({
   name,
   workingGroupUserJoined,
@@ -26,7 +17,6 @@ const ParticipationLevel = ({
   formik,
   index,
 }) => {
-  const classes = useStyles();
   const [participationLevelOptions, setParticipationLevelOptions] = useState(
     []
   );
@@ -41,53 +31,45 @@ const ParticipationLevel = ({
       );
 
       // extract all the participation_levels
-      const optionsForParticipationLevels = temp?.participation_levels
-        ? temp?.participation_levels.map((item) => item.description)
+      let optionsForParticipationLevels = temp?.participation_levels
+        ? temp?.participation_levels.map(
+            (item) => item.description || item.level
+          )
         : [];
 
       // the Set will deduplicate participation_levels options
-      setParticipationLevelOptions([...new Set(optionsForParticipationLevels)]);
+      optionsForParticipationLevels = [
+        ...new Set(optionsForParticipationLevels),
+      ];
+
+      optionsForParticipationLevels = optionsForParticipationLevels.map(
+        (item) => {
+          return { value: item, label: item };
+        }
+      );
+      setParticipationLevelOptions(optionsForParticipationLevels);
     }
   }, [workingGroupUserJoined, fullWorkingGroupList]);
 
   return (
     <>
-      <h3 className="fw-600 margin-top-30 h4" id={name}>
+      <h3 className="fw-600 margin-top-20 h4" id={name}>
         What is your intended participation level?
         <span className="orange-star margin-left-5">*</span>
       </h3>
       <div className="row">
         <div className="col-md-12">
-          <Autocomplete
-            options={participationLevelOptions || []}
-            getOptionLabel={(option) => (option ? option : '')}
-            fullWidth={true}
-            onChange={(ev, value) => {
-              formik.setFieldValue(name, value ? value : null);
-            }}
-            value={
-              formik.values.workingGroups[theIndex]['participationLevel']
-                ? formik.values.workingGroups[theIndex]['participationLevel']
-                : null
-            }
-            renderInput={(params) => {
-              params.inputProps = {
-                ...params.inputProps,
-                'aria-labelledby': name,
-              };
-              return (
-                <TextField
-                  {...params}
-                  label="Select a level"
-                  placeholder="Select a level"
-                  variant="outlined"
-                  size="small"
-                  required={true}
-                  className={classes.textField}
-                />
-              );
-            }}
-          />
+          {participationLevelOptions.length > 0 && (
+            <DropdownMenu
+              inputLabel="Select a level"
+              inputName={name}
+              inputValue={
+                formik.values.workingGroups[theIndex]['participationLevel']
+              }
+              optionsArray={participationLevelOptions}
+              handleChange={formik.handleChange}
+            />
+          )}
         </div>
       </div>
     </>

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
-  mapMembershipLevel,
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
@@ -18,7 +17,6 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  MEMBERSHIP_LEVELS,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -41,7 +39,9 @@ const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
     marginTop: 6,
-    backgroundColor: 'white',
+    '& > div': {
+      backgroundColor: 'white',
+    },
   },
 }));
 
@@ -174,16 +174,9 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         })
         .then((data) => {
           if (data) {
-            // mapMembershipLevel(): Call the the function to map
-            // the retrived membership level backend data to fit frontend, and
             // setFieldValue(): Prefill Data --> Call the setFieldValue of
             // Formik, to set membershipLevel field with the mapped data
-            const tempMembershipLevel = mapMembershipLevel(
-              data.membership_level,
-              MEMBERSHIP_LEVELS
-            );
-            setFieldValue('membershipLevel', tempMembershipLevel.value);
-            setFieldValue('membershipLevel-label', tempMembershipLevel);
+            setFieldValue('membershipLevel', data.membership_level);
 
             const tempPurchasingAndVAT = mapPurchasingAndVAT(data);
             setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
@@ -225,7 +218,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} />
-        <CompanyInformationVAT formik={formik} useStyles={useStyles} />
+        <CompanyInformationVAT formik={formik} />
       </div>
 
       <CustomStepButton

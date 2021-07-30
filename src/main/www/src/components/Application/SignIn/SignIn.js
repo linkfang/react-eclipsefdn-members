@@ -43,6 +43,7 @@ class SignIn extends React.Component {
 
   getFakeUser = (setFurthestPage) => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
+    this.context.setCurrentFormId('reactOnly');
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
       .then((data) => {
