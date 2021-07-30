@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 import java.util.Objects;
 
@@ -20,6 +20,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -45,11 +47,13 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     private String membershipLevel;
     private boolean signingAuthority;
+    @NotBlank(message = "Purchase order state cannot be blank")
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
+    @NotNull(message = "The form state cannot be null")
     private FormState state;
 
     /** @return the id */
@@ -223,6 +227,12 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
             if (userId != null) {
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".userID = ?",
                         new Object[] { userId }));
+            }
+            // form state check
+            String formState = params.getFirst(MembershipFormAPIParameterNames.FORM_STATE.getName());
+            if (formState != null) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".state = ?",
+                        new Object[] { FormState.valueOf(formState.toUpperCase()) }));
             }
             return stmt;
         }

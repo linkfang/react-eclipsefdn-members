@@ -1,4 +1,4 @@
-Dear {form.userID},
+Dear {name},
 Thank you for submitting the member enrollment form on behalf of your organization. Our team will review your application and follow up within 2 business days.
 Meanwhile, if you have any questions, please reach out to us at membership.coordination@eclipse-foundation.org.
 

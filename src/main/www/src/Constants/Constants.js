@@ -28,6 +28,7 @@ export const MEMBERSHIP_LEVEL = 'Membership Level';
 export const WORKING_GROUPS = 'Working Groups';
 export const SIGNING_AUTHORITY = 'Signing Authority';
 export const REVIEW = 'Review';
+export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
 
@@ -50,6 +51,7 @@ export const FETCH_METHOD = {
 export const FETCH_HEADER = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
+  'x-Requested-With': 'JavaScript',
 };
 
 export const MEMBERSHIP_LEVELS = [
@@ -77,7 +79,7 @@ export const CONTACT_TYPE = {
   SIGNING: 'SIGNING',
 };
 
-export const OPTIONS_FOR_PURCHASING_PROCES = [
+export const OPTIONS_FOR_PURCHASING_PROCESS = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
   { label: 'Not Applicable', value: 'na' },

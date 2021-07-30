@@ -1,11 +1,10 @@
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
-import { makeStyles, TextField } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
 import { useEffect } from 'react';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
@@ -15,17 +14,8 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginBottom: 14,
-    marginTop: 6,
-    backgroundColor: 'white',
-  },
-}));
-
 const MembershipLevel = ({ formik }) => {
   const { membershipLevel } = formField;
-  const classes = useStyles();
 
   useEffect(() => {
     scrollToTop();
@@ -36,56 +26,20 @@ const MembershipLevel = ({ formik }) => {
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
-          Please Indicate the class of membership for which you are applying
+          Please indicate the class of membership for which you are applying
         </p>
-        <h2 className="fw-600 h3" id={membershipLevel.name}>
+        <h2 className="fw-600 h4" id={membershipLevel.name}>
           What is your intended Membership Level?
+          <span className="orange-star margin-left-5">*</span>
         </h2>
         <div className="row">
           <div className="col-md-12">
-            <Autocomplete
-              id={membershipLevel.name}
-              options={MEMBERSHIP_LEVELS}
-              fullWidth={true}
-              getOptionLabel={(option) => (option?.label ? option.label : '')}
-              getOptionSelected={(option, value) => {
-                return option.value === value.value;
-              }}
-              onChange={(ev, value) => {
-                // this is only for display
-                formik.setFieldValue(
-                  `${membershipLevel.name}-label`,
-                  value ? value : null
-                );
-
-                // this is the data will be actually used
-                formik.setFieldValue(
-                  membershipLevel.name,
-                  value ? value.value : null
-                );
-              }}
-              value={
-                formik.values['membershipLevel-label']
-                  ? formik.values['membershipLevel-label']
-                  : null
-              }
-              renderInput={(params) => {
-                params.inputProps = {
-                  ...params.inputProps,
-                  'aria-labelledby': membershipLevel.name,
-                };
-                return (
-                  <TextField
-                    {...params}
-                    label="Select a level"
-                    placeholder="Select a level"
-                    variant="outlined"
-                    size="small"
-                    required={true}
-                    className={classes.textField}
-                  />
-                );
-              }}
+            <DropdownMenu
+              inputLabel="Select a level"
+              inputName={membershipLevel.name}
+              inputValue={formik.values.membershipLevel}
+              optionsArray={MEMBERSHIP_LEVELS}
+              handleChange={formik.handleChange}
             />
           </div>
         </div>

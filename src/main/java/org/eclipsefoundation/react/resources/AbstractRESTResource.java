@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.request;
+package org.eclipsefoundation.react.resources;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -21,7 +21,7 @@ import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.core.service.CachingService;
 import org.eclipsefoundation.persistence.dao.PersistenceDao;
 import org.eclipsefoundation.persistence.service.FilterService;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

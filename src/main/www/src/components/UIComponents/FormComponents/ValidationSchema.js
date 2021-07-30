@@ -30,11 +30,22 @@ import { requiredErrorMsg } from './formFieldModel';
  * the formik.errors is an object of {fieldName: "error message"},
  * please refer to: https://formik.org/docs/api/formik#errors--field-string-string-
  */
+
+const countryList = require('country-list')
+  .getNames()
+  .map((item) => item);
+
 export const validationSchema = [
   // First step - company Info
   yup.object().shape({
     // First step - representative contacts
     organization: yup.object().shape({
+      address: yup.object().shape({
+        country: yup
+          .mixed()
+          .oneOf(countryList, 'Please enter/select a valid country name'),
+      }),
+
       twitterHandle: yup
         .string()
         .min(2, 'Twitter handle is too short')
@@ -63,6 +74,23 @@ export const validationSchema = [
   yup.object().shape({
     workingGroups: yup.array().of(
       yup.object().shape({
+        workingGroup: yup
+          .object()
+          .nullable()
+          .test(
+            'workingGroup',
+            'Please enter/select a valid working group',
+            function (selectedWG) {
+              const allWorkingGroups = this.options.parent?.allWorkingGroups;
+              const typedWG = this.options.parent?.['workingGroup-label'];
+              const isValid =
+                allWorkingGroups?.includes(typedWG) && selectedWG?.label
+                  ? true
+                  : false;
+
+              return typedWG ? isValid : true;
+            }
+          ),
         workingGroupRepresentative: yup.object().shape({
           email: yup.string().email('Please enter a valid email'),
         }),

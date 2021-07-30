@@ -9,7 +9,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.model;
+package org.eclipsefoundation.react.dto;
 
 import java.util.Objects;
 
@@ -17,13 +17,17 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
@@ -32,29 +36,46 @@ import org.eclipsefoundation.persistence.dto.filter.DtoFilter;
 import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
+import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * A contact entity, representing a contact for an organization or working
+ * group.
+ * 
+ * @author Martin Lowe
+ */
 @Table
 @Entity
-public class FormOrganization extends BareNode implements TargetedClone<FormOrganization> {
-    public static final DtoTable TABLE = new DtoTable(FormOrganization.class, "o");
+public class Contact extends BareNode implements TargetedClone<Contact> {
+    public static final DtoTable TABLE = new DtoTable(Contact.class, "c");
 
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
-    private String legalName;
-    @JsonbProperty("twitter")
-    private String twitterHandle;
 
-    // form entity
-    @OneToOne(targetEntity = MembershipForm.class)
-    @JoinColumn(name = "form_id", unique = true)
+    // form entity for FK relation
+    @ManyToOne(targetEntity = MembershipForm.class)
+    @JoinColumn(name = "form_id")
     private MembershipForm form;
 
-    @OneToOne(cascade = { CascadeType.ALL }, mappedBy = "organization")
-    private Address address;
+
+    @NotBlank(message = "First name cannot be blank")
+    @JsonbProperty(value = "first_name")
+    private String fName;
+    @NotBlank(message = "Last name cannot be blank")
+    @JsonbProperty(value = "last_name")
+    private String lName;
+    @Email(message = "Email address is not valid")
+    private String email;
+    @NotBlank(message = "Job title cannot be blank")
+    @JsonbProperty(value = "job_title")
+    private String title;
+    @NotNull(message = "Contact type cannot be empty")
+    @Enumerated(EnumType.STRING)
+    private ContactTypes type;
 
     @Override
     public String getId() {
@@ -62,61 +83,78 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     }
 
     /** @param id the id to set */
-    @JsonbTransient
     public void setId(String id) {
         this.id = id;
     }
 
-    /** @return the formID */
+    /** @return the form */
     @JsonbTransient
     public MembershipForm getForm() {
         return form;
     }
 
     /** @param form the form to set */
-    @JsonbTransient
     public void setForm(MembershipForm form) {
         this.form = form;
     }
 
-    /** @return the legalName */
-    public String getLegalName() {
-        return legalName;
+    /** @return the fName */
+    public String getfName() {
+        return fName;
     }
 
-    /** @param legalName the legalName to set */
-    public void setLegalName(String legalName) {
-        this.legalName = legalName;
+    /** @param fName the fName to set */
+    public void setfName(String fName) {
+        this.fName = fName;
     }
 
-    /**
-     * @return the twitterHandle
-     */
-    public String getTwitterHandle() {
-        return twitterHandle;
+    /** @return the lName */
+    public String getlName() {
+        return lName;
     }
 
-    /**
-     * @param twitterHandle the twitterHandle to set
-     */
-    public void setTwitterHandle(String twitterHandle) {
-        this.twitterHandle = twitterHandle;
+    /** @param lName the lName to set */
+    public void setlName(String lName) {
+        this.lName = lName;
     }
 
-    /** @return the address */
-    public Address getAddress() {
-        return address;
+    /** @return the email */
+    public String getEmail() {
+        return email;
     }
 
-    /** @param address the address to set */
-    public void setAddress(Address address) {
-        this.address = address;
+    /** @param email the email to set */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /** @return the title */
+    public String getTitle() {
+        return title;
+    }
+
+    /** @param title the title to set */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /** @return the type */
+    public ContactTypes getType() {
+        return type;
+    }
+
+    /** @param type the type to set */
+    public void setType(ContactTypes type) {
+        this.type = type;
     }
 
     @Override
-    public FormOrganization cloneTo(FormOrganization target) {
-        target.setLegalName(getLegalName());
-        target.setTwitterHandle(getTwitterHandle());
+    public Contact cloneTo(Contact target) {
+        target.setEmail(getEmail());
+        target.setfName(getfName());
+        target.setlName(getlName());
+        target.setTitle(getTitle());
+        target.setType(getType());
         return target;
     }
 
@@ -124,7 +162,7 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(address, form, id, legalName, twitterHandle);
+        result = prime * result + Objects.hash(email, fName, form, id, lName, title, type);
         return result;
     }
 
@@ -136,31 +174,14 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FormOrganization other = (FormOrganization) obj;
-        return Objects.equals(address, other.address)
+        Contact other = (Contact) obj;
+        return Objects.equals(email, other.email) && Objects.equals(fName, other.fName)
                 && Objects.equals(form, other.form) && Objects.equals(id, other.id)
-                && Objects.equals(legalName, other.legalName) && Objects.equals(twitterHandle, other.twitterHandle);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Organization [id=");
-        builder.append(id);
-        builder.append(", legalName=");
-        builder.append(legalName);
-        builder.append(", twitterHandle=");
-        builder.append(twitterHandle);
-        builder.append(", form=");
-        builder.append(form);
-        builder.append(", address=");
-        builder.append(address);
-        builder.append("]");
-        return builder.toString();
+                && Objects.equals(lName, other.lName) && Objects.equals(title, other.title) && type == other.type;
     }
 
     @Singleton
-    public static class FormOrganizationFilter implements DtoFilter<FormOrganization> {
+    public static class ContactFilter implements DtoFilter<Contact> {
         @Inject
         ParameterizedSQLStatementBuilder builder;
 
@@ -185,8 +206,8 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         }
 
         @Override
-        public Class<FormOrganization> getType() {
-            return FormOrganization.class;
+        public Class<Contact> getType() {
+            return Contact.class;
         }
     }
 }

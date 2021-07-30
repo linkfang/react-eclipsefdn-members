@@ -14,7 +14,7 @@ const WorkingGroupRepresentative = ({ name, index, formik }) => {
   const theIndex = index;
   return (
     <>
-      <h3 className="fw-600 h4" id={name}>
+      <h3 className="fw-600 margin-top-30 h4" id={name}>
         Who is the working group representative?
         <span className="orange-star margin-left-5">*</span>
       </h3>

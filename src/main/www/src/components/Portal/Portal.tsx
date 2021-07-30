@@ -32,12 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       marginTop: 64,
       marginLeft: 280,
-      paddingLeft: 64,
-      paddingRight: 64,
+      padding: 64,
       minHeight: 'calc(100vh - 64px)',
       flexGrow: 1,
       backgroundColor: mainContentBGColor,
-      padding: theme.spacing(3),
     },
   })
 );
@@ -80,7 +78,6 @@ export default function MainPortal() {
           <Route path="/portal">
             <Redirect to="/portal/dashboard" />
           </Route>
-          
         </Switch>
       </main>
     </ThemeProvider>

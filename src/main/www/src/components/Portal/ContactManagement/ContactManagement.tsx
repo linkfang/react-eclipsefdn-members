@@ -2,11 +2,7 @@ import { Typography } from '@material-ui/core';
 
 export default function ContactManagement() {
   return (
-    <div
-      style={{
-        margin: '40px 0',
-      }}
-    >
+    <>
       <Typography variant="h4">Contact Management</Typography>
 
       {
@@ -61,6 +57,6 @@ export default function ContactManagement() {
       >
         <h5>Table</h5>
       </div>
-    </div>
+    </>
   );
 }

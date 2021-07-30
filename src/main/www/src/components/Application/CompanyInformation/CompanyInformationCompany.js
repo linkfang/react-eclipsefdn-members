@@ -25,7 +25,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
   return (
     <>
       <h2 className="fw-600 h4" id={organizationName.name}>
-        Organization <span className="orange-star">*</span>
+        Organization
       </h2>
 
       <Input
@@ -44,7 +44,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             labelName={organizationTwitter.label}
             placeholder={organizationTwitter.placeholder}
             ariaLabel={organizationName.name}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.twitterHandle}
             onChange={formik.handleChange}
             error={Boolean(formik.errors.organization?.twitterHandle)}
@@ -53,9 +53,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         </div>
       </div>
 
-      <h4 className="fw-600" id={`${organizationName.name}-address`}>
+      <h2 className="fw-600 h4" id={`${organizationName.name}-address`}>
         Address
-      </h4>
+      </h2>
       <div className="row">
         <div className="col-md-16">
           <Input
@@ -86,14 +86,16 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           <Autocomplete
             id={organizationAddress.country.name}
             options={countryList}
-            getOptionLabel={(option) => (option?.label ? option.label : '')}
+            getOptionLabel={(option) => option?.label || ''}
             getOptionSelected={(option, value) => option.value === value.value}
             fullWidth={true}
+            freeSolo={true}
+            openOnFocus={true}
             onChange={(ev, value) => {
               // this is only for display
               formik.setFieldValue(
                 `${organizationAddress.country.name}-label`,
-                value ? value : null
+                value || null
               );
 
               // this is the data will be actually used
@@ -102,11 +104,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
                 value ? value.value : null
               );
             }}
-            value={
-              formik.values.organization.address['country-label']
-                ? formik.values.organization.address['country-label']
-                : null
-            }
+            value={formik.values.organization.address['country-label'] || null}
             renderInput={(params) => {
               params.inputProps = {
                 ...params.inputProps,
@@ -115,12 +113,20 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
               return (
                 <TextField
                   {...params}
+                  onChange={(ev) => {
+                    formik.setFieldValue(
+                      organizationAddress.country.name,
+                      ev.target.value || null
+                    );
+                  }}
                   label="Country"
                   placeholder="Country"
                   variant="outlined"
                   size="small"
                   required={true}
                   className={classes.textField}
+                  error={Boolean(formik.errors.organization?.address?.country)}
+                  helperText={formik.errors.organization?.address?.country}
                 />
               );
             }}
@@ -132,7 +138,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             name={organizationAddress.provinceOrState.name}
             labelName={organizationAddress.provinceOrState.label}
             placeholder={organizationAddress.provinceOrState.placeholder}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.address.provinceOrState}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
@@ -144,7 +150,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             name={organizationAddress.postalCode.name}
             labelName={organizationAddress.postalCode.label}
             placeholder={organizationAddress.postalCode.placeholder}
-            requiredMark={true}
+            requiredMark={false}
             value={formik.values.organization.address.postalCode}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}

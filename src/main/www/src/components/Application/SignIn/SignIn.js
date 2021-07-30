@@ -43,6 +43,7 @@ class SignIn extends React.Component {
 
   getFakeUser = (setFurthestPage) => {
     setFurthestPage({ index: 1, pathName: '/company-info' });
+    this.context.setCurrentFormId('reactOnly');
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
       .then((data) => {
@@ -132,7 +133,6 @@ class SignIn extends React.Component {
             setFurthestPage={this.props.setFurthestPage}
             history={this.props.history}
             setIsStartNewForm={this.props.setIsStartNewForm}
-            handleLoginExpired={this.props.handleLoginExpired}
             resetCompanyInfoForm={this.props.resetCompanyInfoForm}
             resetMembershipLevelForm={this.props.resetMembershipLevelForm}
             resetWorkingGroupForm={this.props.resetWorkingGroupForm}
