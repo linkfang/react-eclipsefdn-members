@@ -122,40 +122,21 @@ export function getCurrentMode() {
 
 export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
   {
-    label: 'AsciiDoc',
-    value: 'AsciiDoc',
+    label: 'openMobility Working Group',
+    value: 'openMobility Working Group',
     participation_levels: [
-      {
-        company_size: 10,
-        document_id: '2',
-        level: 'Partner members',
-      },
-      {
-        document_id: '2',
-        level: 'Committer members',
-      },
-      {
-        document_id: '2',
-        level: 'Guest members',
-      },
+      { description: 'Participant Member', relation: 'WGAPS' },
+      { description: 'Committer Member', relation: 'WGFHA' },
     ],
   },
   {
-    label: 'Internet of Things - IoT',
-    value: 'Internet of Things - IoT',
+    label: 'Jakarta EE Working Group',
+    value: 'Jakarta EE Working Group',
     participation_levels: [
-      {
-        document_id: '1',
-        level: 'Strategic Member',
-      },
-      {
-        document_id: '1',
-        level: 'Participant Member',
-      },
-      {
-        document_id: '1',
-        level: 'Guest Member',
-      },
+      { description: 'Strategic Member', relation: 'WGSD' },
+      { description: 'Enterprise Member', relation: 'WGDSA' },
+      { description: 'Participant Member', relation: 'WGAPS' },
+      { description: 'Guest Member', relation: 'WGSAP' },
     ],
   },
 ];

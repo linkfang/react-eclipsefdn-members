@@ -604,7 +604,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
   }
 
   // If the not using java server, just remove it from frontend
-  if (getCurrentMode() === MODE_REACT_ONLY) {
+  if (getCurrentMode() === MODE_REACT_ONLY && index) {
     callback(index);
   }
 
@@ -619,14 +619,22 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
     }
     fetch(url, {
       method: FETCH_METHOD.DELETE,
-    }).then((res) => {
-      console.log(res.status);
-      // Remove from frontend
-      if (res.status === 200) {
-        callback(index);
-        return Promise.resolve(res);
-      }
-    });
+      headers: FETCH_HEADER,
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Remove from frontend
+          callback(index);
+          return Promise.resolve(res);
+        }
+
+        requestErrorHandler(res.status);
+        throw res.status;
+      })
+      .catch((err) => {
+        console.log(err);
+        requestErrorHandler(err);
+      });
   }
 }
 /**

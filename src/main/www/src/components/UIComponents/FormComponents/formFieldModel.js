@@ -93,6 +93,8 @@ export const initialValues = {
     },
   ],
 
+  isJoiningWG: false,
+
   signingAuthorityRepresentative: {
     firstName: '',
     lastName: '',
