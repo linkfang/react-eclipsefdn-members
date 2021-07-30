@@ -38,12 +38,14 @@ export default function Input(props) {
     onChange,
     error,
     helperText,
+    type,
   } = props;
   const classes = useStyles();
 
   return (
     <TextField
       name={name}
+      type={type || 'text'}
       required={requiredMark}
       disabled={disableInput}
       value={value}

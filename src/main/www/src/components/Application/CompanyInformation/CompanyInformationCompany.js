@@ -2,6 +2,8 @@ import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
+import { OPTIONS_FOR_REVENUE_CURRENCY } from '../../../Constants/Constants';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -14,30 +16,37 @@ import { TextField } from '@material-ui/core';
 
 const CompanyInformationCompany = ({ formik, useStyles }) => {
   const classes = useStyles();
-  const { organizationName, organizationTwitter, organizationAddress } =
-    formField;
+  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue } = formField;
 
   // get country list library and map as option pass to the React-Select
   const countryList = require('country-list')
     .getNames()
     .map((item) => ({ label: item, value: item }));
 
+  const handleRevenueChange = (value) => {
+    formik.setFieldValue('organization.revenue', value);
+  };
+
+  const handleCurrencyChange = (value) => {
+    formik.setFieldValue('organization.currency', value);
+  };
   return (
     <>
       <h2 className="fw-600 h4" id={organizationName.name}>
         Organization
       </h2>
-
-      <Input
-        name={organizationName.name}
-        labelName={organizationName.label}
-        placeholder={organizationName.placeholder}
-        ariaLabel={organizationName.name}
-        requiredMark={true}
-        value={formik.values.organization.legalName}
-        onChange={formik.handleChange}
-      />
       <div className="row">
+        <div className="col-md-16">
+          <Input
+            name={organizationName.name}
+            labelName={organizationName.label}
+            placeholder={organizationName.placeholder}
+            ariaLabel={organizationName.name}
+            requiredMark={true}
+            value={formik.values.organization.legalName}
+            onChange={formik.handleChange}
+          />
+        </div>
         <div className="col-md-8">
           <Input
             name={organizationTwitter.name}
@@ -49,6 +58,30 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             onChange={formik.handleChange}
             error={Boolean(formik.errors.organization?.twitterHandle)}
             helperText={formik.errors.organization?.twitterHandle}
+          />
+        </div>
+      </div>
+      <p>Let us know your corporate revenue from all the Affiliates.</p>
+      <div className="row">
+        <div className="col-md-8">
+          <Input
+            name={organizationRevenue.revenue.name}
+            labelName={organizationRevenue.revenue.label}
+            placeholder={organizationRevenue.revenue.placeholder}
+            requiredMark={true}
+            type={'number'}
+            value={formik.values.organization.revenue}
+            onChange={(ev) => handleRevenueChange(ev.target.value)}
+            ariaLabel={`${organizationRevenue.revenue.name}`}
+          />
+        </div>
+        <div className="col-md-4">
+          <DropdownMenu
+            inputLabel={organizationRevenue.currency.label}
+            inputName={organizationRevenue.currency.name}
+            inputValue={formik.values.organization.currency}
+            optionsArray={OPTIONS_FOR_REVENUE_CURRENCY}
+            handleChange={(ev) => handleCurrencyChange(ev.target.value)}
           />
         </div>
       </div>
@@ -93,16 +126,10 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             openOnFocus={true}
             onChange={(ev, value) => {
               // this is only for display
-              formik.setFieldValue(
-                `${organizationAddress.country.name}-label`,
-                value || null
-              );
+              formik.setFieldValue(`${organizationAddress.country.name}-label`, value || null);
 
               // this is the data will be actually used
-              formik.setFieldValue(
-                organizationAddress.country.name,
-                value ? value.value : null
-              );
+              formik.setFieldValue(organizationAddress.country.name, value?.value || null);
             }}
             value={formik.values.organization.address['country-label'] || null}
             renderInput={(params) => {
@@ -114,10 +141,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
                 <TextField
                   {...params}
                   onChange={(ev) => {
-                    formik.setFieldValue(
-                      organizationAddress.country.name,
-                      ev.target.value || null
-                    );
+                    formik.setFieldValue(organizationAddress.country.name, ev.target.value || null);
                   }}
                   label="Country"
                   placeholder="Country"

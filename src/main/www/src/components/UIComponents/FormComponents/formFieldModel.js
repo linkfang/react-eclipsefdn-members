@@ -14,6 +14,8 @@ const jobtitle = 'Job Title';
 const purchasingProcess = 'Require or Not';
 const vatNumber = 'VAT Number';
 const countryOfRegistration = 'Country of Registration';
+const REVENUE = 'Revenue';
+const CURRENCY = 'Currency';
 
 export const requiredErrorMsg = 'is required';
 
@@ -24,6 +26,8 @@ export const initialValues = {
   organization: {
     id: '',
     legalName: '',
+    revenue: '',
+    currency: '',
     address: {
       id: '',
       street: '',
@@ -127,6 +131,18 @@ export const formField = {
     label: orgName,
     placeholder: orgName,
     requiredErrorMsg: requiredErrorMsg,
+  },
+  organizationRevenue: {
+    revenue: {
+      name: 'revenue',
+      label: REVENUE,
+      placeholder: REVENUE,
+    },
+    currency: {
+      name: 'currency',
+      label: CURRENCY,
+      placeholder: CURRENCY,
+    },
   },
   organizationAddress: {
     address: {

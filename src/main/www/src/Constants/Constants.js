@@ -85,6 +85,11 @@ export const OPTIONS_FOR_PURCHASING_PROCESS = [
   { label: 'Not Applicable', value: 'na' },
 ];
 
+export const OPTIONS_FOR_REVENUE_CURRENCY = [
+  { label: 'USD', value: 'usd' },
+  { label: 'EUR', value: 'eur' },
+];
+
 export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
