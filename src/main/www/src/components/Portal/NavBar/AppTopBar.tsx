@@ -166,7 +166,7 @@ export default function AppTopBar() {
       <Toolbar className={classes.toolbarCtn}>
         <div className={classes.verticalDivider}></div>
         <Typography paragraph className={classes.username}>
-          {userInfo?.full_name || 'Firstname Lastname'}
+          {userInfo?.full_name || 'Anonymous'}
         </Typography>
 
         <Button className={classes.dropDownBtn} onClick={handleDropdownBtnClicked}>
@@ -177,7 +177,7 @@ export default function AppTopBar() {
         {userInfo?.picture ? (
           <Avatar className={classes.avatarCtn} alt="user avatar" src={userInfo.picture} />
         ) : (
-          <Avatar className={classes.avatarCtn}>{getInitials(userInfo.first_name, userInfo.last_name) || 'FL'}</Avatar>
+          <Avatar className={classes.avatarCtn}>{getInitials(userInfo.first_name, userInfo.last_name) || 'A'}</Avatar>
         )}
       </Toolbar>
     </AppBar>
