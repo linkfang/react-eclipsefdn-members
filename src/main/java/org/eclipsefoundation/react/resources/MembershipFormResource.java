@@ -9,13 +9,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.request;
+package org.eclipsefoundation.react.resources;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.persistence.NoResultException;
 import javax.inject.Inject;
+import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,14 +32,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.eclipsefoundation.core.helper.CSRFHelper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
+import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormOrganization;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
+import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory;
+import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory.ConstraintViolationWrap;
 import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.eclipsefoundation.react.service.MailerService;
@@ -58,6 +65,8 @@ import io.quarkus.security.Authenticated;
 public class MembershipFormResource extends AbstractRESTResource {
     public static final Logger LOGGER = LoggerFactory.getLogger(MembershipFormResource.class);
 
+    @Inject
+    Validator validator;
     @Inject
     MailerService mailer;
 
@@ -163,7 +172,7 @@ public class MembershipFormResource extends AbstractRESTResource {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), formID);
 
-        // retrieve the possible cached object
+        // retrieve the membership form for the current post
         List<MembershipForm> results = dao.get(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class), params));
         if (results == null) {
             return Response.serverError().build();
@@ -174,23 +183,39 @@ public class MembershipFormResource extends AbstractRESTResource {
             // dont send email if force param is not true and form already submitted
             return Response.status(204).build();
         }
-        // send the form to the mailing service
         MembershipForm mf = results.get(0);
-        mailer.sendToFormAuthor(mf);
 
         // retrieve all of the info needed to post the form email
         MultivaluedMap<String, String> extraparams = new MultivaluedMapImpl<>();
         extraparams.add(MembershipFormAPIParameterNames.FORM_ID.getName(), formID);
-        List<FormOrganization> org = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), extraparams));
+        List<FormOrganization> orgs = dao.get(new RDBMSQuery<>(wrap, filters.get(FormOrganization.class), extraparams));
         List<FormWorkingGroup> wgs = dao.get(new RDBMSQuery<>(wrap, filters.get(FormWorkingGroup.class), extraparams));
         List<Contact> contacts = dao.get(new RDBMSQuery<>(wrap, filters.get(Contact.class), extraparams));
-        // send the membership team email message
-        mailer.sendToMembershipTeam(mf, !org.isEmpty() ? org.get(0) : null, wgs, contacts);
+
+        // validate form elements
+        Set<ConstraintViolationWrap> violations = new LinkedHashSet<>();
+        violations.addAll(recordViolations(results));
+        violations.addAll(recordViolations(orgs));
+        violations.addAll(recordViolations(wgs));
+        violations.addAll(recordViolations(contacts));
+        // check that there are no validation violations for form elements
+        if (!violations.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST.getStatusCode()).entity(violations).build();
+        }
+
+        // send the forms to the mailing service
+        mailer.sendToFormAuthor(mf);
+        mailer.sendToMembershipTeam(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
 
         // update the state and push the update
         mf.setState(FormState.SUBMITTED);
-
         return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mf)))
                 .build();
+    }
+
+    private <T extends BareNode> Set<ConstraintViolationWrap> recordViolations(List<T> items) {
+        ConstraintViolationWrapFactory factory = new ConstraintViolationWrapFactory();
+        return items.stream().flatMap(item -> factory.build(validator.validate(item)).stream())
+                .collect(Collectors.toSet());
     }
 }

@@ -1,17 +1,15 @@
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { OPTIONS_FOR_PURCHASING_PROCES } from '../../../Constants/Constants';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
+import { OPTIONS_FOR_PURCHASING_PROCESS } from '../../../Constants/Constants';
 
 const { purchasingProcess, vatRegistration } = formField;
 
-export default function CompanyInformationVAT({ formik, useStyles }) {
-  const classes = useStyles();
-
+export default function CompanyInformationVAT({ formik }) {
   const handleIsRegistered = () => {
     const isRegistered = formik.values.purchasingAndVAT.isRegistered;
-    
+
     // use spread operator to avoid editing formik.values directly
     let purchasingAndVATValue = { ...formik.values.purchasingAndVAT };
     if (isRegistered) {
@@ -38,47 +36,12 @@ export default function CompanyInformationVAT({ formik, useStyles }) {
       </p>
       <div className="row">
         <div className="col-md-12 margin-bottom-40">
-          <Autocomplete
-            id={purchasingProcess.name}
-            options={OPTIONS_FOR_PURCHASING_PROCES}
-            getOptionLabel={(option) => (option?.label ? option.label : '')}
-            getOptionSelected={(option, value) => option.value === value.value}
-            fullWidth={true}
-            onChange={(ev, value) => {
-              // this is only for display
-              formik.setFieldValue(
-                `${purchasingProcess.name}-label`,
-                value ? value : null
-              );
-
-              // this is the data will be actually used
-              formik.setFieldValue(
-                purchasingProcess.name,
-                value ? value.value : null
-              );
-            }}
-            value={
-              formik.values.purchasingAndVAT['purchasingProcess-label']
-                ? formik.values.purchasingAndVAT['purchasingProcess-label']
-                : null
-            }
-            renderInput={(params) => {
-              params.inputProps = {
-                ...params.inputProps,
-                'aria-labelledby': `${purchasingProcess.name}-ctn`,
-              };
-              return (
-                <TextField
-                  {...params}
-                  label={purchasingProcess.label}
-                  placeholder={purchasingProcess.placeholder}
-                  variant="outlined"
-                  size="small"
-                  required={true}
-                  className={classes.textField}
-                />
-              );
-            }}
+          <DropdownMenu
+            inputLabel={purchasingProcess.label}
+            inputName={purchasingProcess.name}
+            inputValue={formik.values.purchasingAndVAT.purchasingProcess}
+            optionsArray={OPTIONS_FOR_PURCHASING_PROCESS}
+            handleChange={formik.handleChange}
           />
         </div>
       </div>

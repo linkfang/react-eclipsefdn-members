@@ -2,11 +2,13 @@ package org.eclipsefoundation.react.test.helper;
 
 import static io.restassured.RestAssured.given;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipsefoundation.core.helper.CSRFHelper;
 
 import io.restassured.filter.session.SessionFilter;
+import io.restassured.specification.RequestSpecification;
 import io.smallrye.jwt.build.Jwt;
 
 public class AuthHelper {
@@ -38,6 +40,12 @@ public class AuthHelper {
         return Jwt.preferredUserName(TEST_USER_NAME).claim(GIVEN_NAME_CLAIM_KEY, GIVEN_NAME_CLAIM_VALUE)
                 .claim(FAMILY_NAME_CLAIM_KEY, FAMILY_NAME_CLAIM_VALUE).groups(groups)
                 .issuer("https://server.example.com").audience("https://service.example.com").jws().keyId("1").sign();
+    }
+    
+    public static RequestSpecification getAuthorizedResteasyRequest() {
+        SessionFilter sessionFilter = new SessionFilter();
+        return given().filter(sessionFilter).auth().oauth2(AuthHelper.getAccessToken(Collections.emptySet()))
+                .header(CSRFHelper.CSRF_HEADER_NAME, AuthHelper.getCSRFValue(sessionFilter));
     }
 
     private AuthHelper() {

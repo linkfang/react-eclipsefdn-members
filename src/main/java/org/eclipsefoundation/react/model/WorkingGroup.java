@@ -14,7 +14,6 @@ package org.eclipsefoundation.react.model;
 import java.util.List;
 import java.util.Objects;
 
-
 public class WorkingGroup {
 
     private String documentID;
@@ -26,7 +25,6 @@ public class WorkingGroup {
         this.name = name;
         this.levels = levels;
     }
-
 
     public WorkingGroup() {
     }

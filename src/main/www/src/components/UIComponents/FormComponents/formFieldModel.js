@@ -68,14 +68,12 @@ export const initialValues = {
   // Step1: purchasing and VAT
   purchasingAndVAT: {
     purchasingProcess: '',
-    'purchasingProcess-label': '',
     isRegistered: false,
     vatNumber: '',
     countryOfRegistration: '',
   },
 
   // Step 2
-  'membershipLevel-label': { label: '', value: '' },
   membershipLevel: '',
 
   // Step 3: working groups

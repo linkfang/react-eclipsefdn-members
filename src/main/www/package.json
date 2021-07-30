@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.7",
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
     "@stoplight/json-ref-resolver": "^3.1.2",
     "decamelize": "^5.0.0",
@@ -65,6 +66,6 @@
   },
   "prettier": {
     "singleQuote": true,
-    "printWidth": 80
+    "printWidth": 120
   }
 }

@@ -7,7 +7,6 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  OPTIONS_FOR_PURCHASING_PROCES,
   PATH_NAME_ARRAY,
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
@@ -96,34 +95,13 @@ export function matchCompanyFields(existingOrganizationData) {
  * Existing purchasing process and VAT data, fetched from server
  */
 export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
-  const currentOption = OPTIONS_FOR_PURCHASING_PROCES.find(
-    (item) =>
-      item.value === existingPurchasingAndVATData?.purchase_order_required
-  );
   return {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     isRegistered: !!existingPurchasingAndVATData?.registration_country,
     purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
-    'purchasingProcess-label': currentOption,
     vatNumber: existingPurchasingAndVATData?.vat_number,
     countryOfRegistration: existingPurchasingAndVATData?.registration_country,
-  };
-}
-
-/**
- * @param membershipLevel -
- * Existing membershipLevel data, fetched from server
- * @param membership_levels
- * Options of membership levels, created in Constants file, passed from membership level step
- */
-export function mapMembershipLevel(existingMembershipLevel, membership_levels) {
-  let membership = membership_levels.find(
-    (el) => el.value === existingMembershipLevel
-  );
-  return {
-    label: membership?.label,
-    value: existingMembershipLevel,
   };
 }
 
@@ -279,6 +257,7 @@ export function matchMembershipLevelFieldsToBackend(
     vat_number: membershipLevelFormData.purchasingAndVAT.vatNumber,
     registration_country:
       membershipLevelFormData.purchasingAndVAT.countryOfRegistration,
+    state: 'INPROGRESS',
   };
 }
 
@@ -678,6 +657,8 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
+      purchase_order_required: 'na',
+      state: 'INPROGRESS',
     };
 
     fetch(API_PREFIX_FORM, {

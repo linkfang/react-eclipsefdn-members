@@ -7,10 +7,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipsefoundation.react.model.Contact;
-import org.eclipsefoundation.react.model.FormOrganization;
-import org.eclipsefoundation.react.model.FormWorkingGroup;
-import org.eclipsefoundation.react.model.MembershipForm;
+import org.eclipsefoundation.react.dto.Contact;
+import org.eclipsefoundation.react.dto.FormOrganization;
+import org.eclipsefoundation.react.dto.FormWorkingGroup;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.service.MailerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ public class DefaultMailerService implements MailerService {
             List<Contact> contacts) {
         if (form == null) {
             throw new IllegalStateException("A form is required to submit for mailing");
-        } else if (org == null || wgs == null || wgs.isEmpty() || contacts == null || contacts.isEmpty()) {
+        } else if (org == null || wgs == null || contacts == null || contacts.isEmpty()) {
             throw new IllegalStateException(
                     "Could not find a fully complete form for form with ID '" + form.getId() + "'");
         }
