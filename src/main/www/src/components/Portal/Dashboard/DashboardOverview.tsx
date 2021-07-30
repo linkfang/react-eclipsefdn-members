@@ -3,7 +3,7 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import { brightBlue, brightOrange, darkGray, darkOrange, iconGray, themeBlack } from '../../../Constants/Constants';
+import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
 
 const useStyles = makeStyles(() =>
   createStyles({
