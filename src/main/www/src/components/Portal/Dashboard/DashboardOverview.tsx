@@ -106,7 +106,7 @@ export default function DashboardOverview() {
   ];
 
   const renderOverviewItems = overviewItemData.map((item) => (
-    <Card className={classes.overviewCard}>
+    <Card key={item.title} className={classes.overviewCard}>
       <Link className={classes.overviewAnchor} href={item.href}>
         {item.icon}
         <Typography className={classes.overviewTitle} component="h6" variant="h6">
