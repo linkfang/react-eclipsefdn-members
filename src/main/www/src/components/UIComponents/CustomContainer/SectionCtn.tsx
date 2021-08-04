@@ -13,7 +13,14 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-export default function SectionCtn(props: any) {
+
+interface SectionCtnProps {
+  id: string;
+  title: string;
+  children: any;
+}
+
+export default function SectionCtn(props: SectionCtnProps) {
   const classes = useStyles();
 
   return (

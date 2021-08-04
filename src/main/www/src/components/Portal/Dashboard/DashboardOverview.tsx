@@ -121,5 +121,9 @@ export default function DashboardOverview() {
     </Card>
   ));
 
-  return <SectionCtn title="Overview">{renderOverviewItems}</SectionCtn>;
+  return (
+    <SectionCtn title="Overview" id="overview">
+      {renderOverviewItems}
+    </SectionCtn>
+  );
 }
