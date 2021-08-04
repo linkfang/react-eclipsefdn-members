@@ -1,7 +1,9 @@
-import { Typography, createStyles, makeStyles, Container } from '@material-ui/core';
+import { Typography, createStyles, makeStyles, Container, CircularProgress } from '@material-ui/core';
 import { brightOrange } from '../../../Constants/Constants';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CustomCard from '../../UIComponents/CustomCard/CustomCard';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -86,10 +88,25 @@ const resourcesDemoData = [
   },
 ];
 
+interface ResourcesData {
+  subtitle: string;
+  listItems: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
 export default function DashboardResources() {
   const classes = useStyles();
+  const [resourcesData, setResourcesData] = useState<Array<ResourcesData>>([]);
 
-  const renderResourcesItems = resourcesDemoData.map((item, index) => (
+  useEffect(() => {
+    // To do
+    // Add fetch here
+    setResourcesData(resourcesDemoData);
+  }, []);
+
+  const renderResourcesItems = resourcesData.map((item, index) => (
     <CustomCard
       key={item.subtitle + index}
       subtitle={item.subtitle}
@@ -102,7 +119,10 @@ export default function DashboardResources() {
   return (
     <Container className={classes.main} id="resources">
       <Typography variant="h4">Resources</Typography>
-      <Container className={classes.resourcesCtn}>{renderResourcesItems}</Container>
+
+      <Container className={classes.resourcesCtn}>
+        {resourcesData.length > 0 ? renderResourcesItems : <CircularProgress />}
+      </Container>
     </Container>
   );
 }
