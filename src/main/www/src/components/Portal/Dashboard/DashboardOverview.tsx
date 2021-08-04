@@ -7,9 +7,11 @@ import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../
 
 const useStyles = makeStyles(() =>
   createStyles({
-    main: { padding: '90px 0 0' },
+    main: { padding: '90px 0 0', margin: 0, maxWidth: '100%' },
     overviewCtn: {
+      maxWidth: '100%',
       display: 'flex',
+      flexWrap: 'wrap',
       marginTop: 40,
       padding: 0,
       justifyContent: 'space-between',
@@ -17,6 +19,8 @@ const useStyles = makeStyles(() =>
 
     overviewCard: {
       width: '22%',
+      minWidth: 220,
+      margin: '25px 10px 20px 10px',
       height: 90,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',

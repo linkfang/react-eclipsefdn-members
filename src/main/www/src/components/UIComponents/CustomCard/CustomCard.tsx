@@ -13,11 +13,12 @@ import { darkGray, iconGray } from '../../../Constants/Constants';
 const useStyles = makeStyles(() =>
   createStyles({
     resourcesCard: {
-      margin: 0,
+      margin: '25px 10px 20px 10px',
       padding: 0,
       position: 'relative',
       width: '22%',
-      height: 180,
+      minWidth: 220,
+      height: 200,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       borderRadius: 4,

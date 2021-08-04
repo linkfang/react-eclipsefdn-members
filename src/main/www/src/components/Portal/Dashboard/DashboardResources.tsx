@@ -7,9 +7,11 @@ import { useState } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    main: { padding: '90px 0 0' },
+    main: { padding: '90px 0 0', margin: 0, maxWidth: '100%' },
     resourcesCtn: {
+      maxWidth: '100%',
       display: 'flex',
+      flexWrap: 'wrap',
       marginTop: 40,
       padding: 0,
       justifyContent: 'space-between',
