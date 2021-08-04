@@ -1,9 +1,10 @@
-import { createStyles, makeStyles, Card, Container, Typography, Link } from '@material-ui/core';
+import { createStyles, makeStyles, Card, Typography, Link } from '@material-ui/core';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
+import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -120,10 +121,5 @@ export default function DashboardOverview() {
     </Card>
   ));
 
-  return (
-    <Container className={classes.main}>
-      <Typography variant="h4">Overview</Typography>
-      <Container className={classes.overviewCtn}>{renderOverviewItems}</Container>
-    </Container>
-  );
+  return <SectionCtn title="Overview">{renderOverviewItems}</SectionCtn>;
 }

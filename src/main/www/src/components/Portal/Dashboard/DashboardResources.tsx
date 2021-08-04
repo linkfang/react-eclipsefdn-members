@@ -1,23 +1,10 @@
-import { Typography, createStyles, makeStyles, Container, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { brightOrange } from '../../../Constants/Constants';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CustomCard from '../../UIComponents/CustomCard/CustomCard';
 import { useEffect } from 'react';
 import { useState } from 'react';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    main: { padding: '90px 0 0', margin: 0, maxWidth: '100%' },
-    resourcesCtn: {
-      maxWidth: '100%',
-      display: 'flex',
-      flexWrap: 'wrap',
-      marginTop: 40,
-      padding: 0,
-      justifyContent: 'space-between',
-    },
-  })
-);
+import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
 const resourcesDemoData = [
   {
@@ -99,7 +86,6 @@ interface ResourcesData {
 }
 
 export default function DashboardResources() {
-  const classes = useStyles();
   const [resourcesData, setResourcesData] = useState<Array<ResourcesData>>([]);
 
   useEffect(() => {
@@ -119,12 +105,8 @@ export default function DashboardResources() {
   ));
 
   return (
-    <Container className={classes.main} id="resources">
-      <Typography variant="h4">Resources</Typography>
-
-      <Container className={classes.resourcesCtn}>
-        {resourcesData.length > 0 ? renderResourcesItems : <CircularProgress />}
-      </Container>
-    </Container>
+    <SectionCtn title="Resources" id="resources">
+      {resourcesData.length > 0 ? renderResourcesItems : <CircularProgress />}
+    </SectionCtn>
   );
 }
