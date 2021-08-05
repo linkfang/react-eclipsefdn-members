@@ -1,5 +1,3 @@
-import React from 'react';
-// import { Field } from 'formik';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -21,9 +19,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: 14,
     marginTop: 6,
   },
-  input: {
-    backgroundColor: 'white',
-  },
 }));
 
 export default function Input(props) {
@@ -38,11 +33,16 @@ export default function Input(props) {
     onChange,
     error,
     helperText,
+    multiline,
+    rows,
+    backgroundColor,
+    type,
   } = props;
   const classes = useStyles();
 
   return (
     <TextField
+      type={type || 'text'}
       name={name}
       required={requiredMark}
       disabled={disableInput}
@@ -55,9 +55,11 @@ export default function Input(props) {
       className={classes.root}
       label={labelName}
       fullWidth={true}
+      multiline={multiline}
+      rows={rows}
       placeholder={placeholder}
       InputProps={{
-        className: classes.input,
+        style: { backgroundColor: backgroundColor || 'white' },
         inputProps: {
           'aria-labelledby': ariaLabel,
         },
