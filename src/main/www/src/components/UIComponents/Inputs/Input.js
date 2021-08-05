@@ -37,6 +37,7 @@ export default function Input(props) {
     rows,
     backgroundColor,
     type,
+    height,
   } = props;
   const classes = useStyles();
 
@@ -59,7 +60,7 @@ export default function Input(props) {
       rows={rows}
       placeholder={placeholder}
       InputProps={{
-        style: { backgroundColor: backgroundColor || 'white' },
+        style: { backgroundColor: backgroundColor || 'white', height: height },
         inputProps: {
           'aria-labelledby': ariaLabel,
         },
