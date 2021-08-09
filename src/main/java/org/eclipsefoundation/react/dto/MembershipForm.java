@@ -31,6 +31,7 @@ import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.persistence.model.SortableField;
+import org.eclipsefoundation.react.dto.ValidationGroups.Completion;
 import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
@@ -47,7 +48,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     private String membershipLevel;
     private boolean signingAuthority;
-    @NotBlank(message = "Purchase order state cannot be blank")
+    @NotBlank(message = "Purchase order state cannot be blank", groups = Completion.class)
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
