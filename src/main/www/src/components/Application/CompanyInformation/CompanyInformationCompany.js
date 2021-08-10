@@ -58,7 +58,18 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           />
         </div>
       </div>
-      <p>Let us know your corporate revenue from all the affiliates.</p>
+      <p>
+        Let us know your aggregated corporate revenue from all corporate affiliates. For more information, please see
+        our{' '}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://www.eclipse.org/org/documents/eclipse_affiliates_membership_guidelines.pdf"
+        >
+          Affiliates Membership Guidelines
+        </a>
+        .
+      </p>
       <div className="row">
         <div className="col-md-10">
           <Input
