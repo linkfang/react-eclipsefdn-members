@@ -50,6 +50,8 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     private String legalName;
     @JsonbProperty("twitter")
     private String twitterHandle;
+    private Integer employeeCount;
+    private String aggregateRevenue;
 
     // form entity
     @OneToOne(targetEntity = MembershipForm.class)
@@ -106,6 +108,34 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         this.twitterHandle = twitterHandle;
     }
 
+    /**
+     * @return the employeeCount
+     */
+    public Integer getEmployeeCount() {
+        return employeeCount;
+    }
+
+    /**
+     * @param employeeCount the employeeCount to set
+     */
+    public void setEmployeeCount(Integer employeeCount) {
+        this.employeeCount = employeeCount;
+    }
+
+    /**
+     * @return the aggregateRevenue
+     */
+    public String getAggregateRevenue() {
+        return aggregateRevenue;
+    }
+
+    /**
+     * @param aggregateRevenue the aggregateRevenue to set
+     */
+    public void setAggregateRevenue(String aggregateRevenue) {
+        this.aggregateRevenue = aggregateRevenue;
+    }
+
     /** @return the address */
     public Address getAddress() {
         return address;
@@ -120,6 +150,8 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     public FormOrganization cloneTo(FormOrganization target) {
         target.setLegalName(getLegalName());
         target.setTwitterHandle(getTwitterHandle());
+        target.setAggregateRevenue(getAggregateRevenue());
+        target.setEmployeeCount(getEmployeeCount());
         return target;
     }
 
@@ -140,9 +172,11 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         if (getClass() != obj.getClass())
             return false;
         FormOrganization other = (FormOrganization) obj;
-        return Objects.equals(address, other.address)
-                && Objects.equals(form, other.form) && Objects.equals(id, other.id)
-                && Objects.equals(legalName, other.legalName) && Objects.equals(twitterHandle, other.twitterHandle);
+        return Objects.equals(address, other.address) && Objects.equals(form, other.form)
+                && Objects.equals(id, other.id) && Objects.equals(legalName, other.legalName)
+                && Objects.equals(twitterHandle, other.twitterHandle)
+                && Objects.equals(aggregateRevenue, other.aggregateRevenue)
+                && Objects.equals(employeeCount, other.employeeCount);
     }
 
     @Override
@@ -154,6 +188,10 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         builder.append(legalName);
         builder.append(", twitterHandle=");
         builder.append(twitterHandle);
+        builder.append(", aggregateRevenue=");
+        builder.append(aggregateRevenue);
+        builder.append(", employeeCount=");
+        builder.append(employeeCount);
         builder.append(", form=");
         builder.append(form);
         builder.append(", address=");

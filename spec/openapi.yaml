@@ -588,6 +588,12 @@ components:
             twitter:
                type: string
                description: The Twitter handle of the organization
+            aggregate_revenue:
+               type: string
+               description: The aggregate revenue of the organization and its affiliates
+            employee_count:
+               type: number
+               description: The number of employees for the given organization
             address:
                type: object
                properties:
@@ -615,6 +621,12 @@ components:
             twitter:
                type: string
                description: The Twitter handle of the organization
+            aggregate_revenue:
+               type: string
+               description: The aggregate revenue of the organization and its affiliates
+            employee_count:
+               type: number
+               description: The number of employees for the given organization
             address:
                type: object
                properties:

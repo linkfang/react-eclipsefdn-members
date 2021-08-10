@@ -3,6 +3,8 @@ New form submission by: {name} ({form.userID})
 Organization
 Name: {org.legalName}
 Twitter: {org.twitterHandle}
+Aggregate Revenue: {org.aggregateRevenue}
+Employee count: {org.employeeCount}
 
 Address
 {org.address.street}
