@@ -2,6 +2,7 @@ import {
   AppBar,
   Avatar,
   Button,
+  Link,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -13,6 +14,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { useState } from 'react';
@@ -61,6 +63,14 @@ const useStyles = makeStyles(() =>
       marginLeft: 11,
       backgroundColor: darkOrange,
     },
+    anchorTag: {
+      textDecoration: 'none',
+      color: 'inherit',
+      '&:hover ': {
+        textDecoration: 'none',
+        color: 'inherit',
+      },
+    },
   })
 );
 
@@ -102,30 +112,48 @@ export default function AppTopBar() {
 
   const renderDropdownMenu = () => (
     <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-      <MenuItem onClick={() => handleOptionClicked('https://www.eclipse.org/user')}>
-        <ListItemIcon className={classes.dropDownItemIcon}>
-          <PersonIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="View Profile" />
-      </MenuItem>
-      <MenuItem onClick={() => handleOptionClicked('https://accounts.eclipse.org/user/edit')}>
-        <ListItemIcon className={classes.dropDownItemIcon}>
-          <EditIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Edit Profile" />
-      </MenuItem>
+      {userInfo?.full_name && (
+        <MenuItem onClick={() => handleOptionClicked('https://www.eclipse.org/user')}>
+          <ListItemIcon className={classes.dropDownItemIcon}>
+            <PersonIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="View Profile" />
+        </MenuItem>
+      )}
+
+      {userInfo?.full_name && (
+        <MenuItem onClick={() => handleOptionClicked('https://accounts.eclipse.org/user/edit')}>
+          <ListItemIcon className={classes.dropDownItemIcon}>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit Profile" />
+        </MenuItem>
+      )}
+
       <MenuItem className="toolbar-manage-cookies" onClick={handleClose}>
         <ListItemIcon className={classes.dropDownItemIcon}>
           <SettingsIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText primary="Manage Cookies" />
       </MenuItem>
-      <MenuItem onClick={logout}>
-        <ListItemIcon className={classes.dropDownItemIcon}>
-          <ExitToAppIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Log Out" />
-      </MenuItem>
+
+      {userInfo?.full_name ? (
+        <MenuItem onClick={logout}>
+          <ListItemIcon className={classes.dropDownItemIcon}>
+            <ExitToAppIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Log Out" />
+        </MenuItem>
+      ) : (
+        <Link href="/api/login" className={classes.anchorTag}>
+          <MenuItem>
+            <ListItemIcon className={classes.dropDownItemIcon}>
+              <AccountCircleIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Log In" />
+          </MenuItem>
+        </Link>
+      )}
     </Menu>
   );
 
