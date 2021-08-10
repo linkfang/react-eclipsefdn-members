@@ -220,14 +220,16 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     address: {
       city: organizationData.address.city,
       country: organizationData.address.country,
-      postal_code: organizationData.address.postalCode,
-      province_state: organizationData.address.provinceOrState,
+      postal_code: organizationData.address.postalCode  || '',
+      province_state: organizationData.address.provinceOrState  || '',
       street: organizationData.address.street,
     },
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
     twitter: organizationData.twitterHandle || '',
+    aggregate_revenue: `${organizationData.revenue} ${organizationData.currency}`,
+    employee_count: organizationData.employeeCount,
   };
 
   if (organizationData.address.id) {

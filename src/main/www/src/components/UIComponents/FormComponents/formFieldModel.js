@@ -16,6 +16,7 @@ const vatNumber = 'VAT Number';
 const countryOfRegistration = 'Country of Registration';
 const REVENUE = 'Revenue';
 const CURRENCY = 'Currency';
+const EMPLOYEE_COUNT = 'Employee Count';
 
 export const requiredErrorMsg = 'is required';
 
@@ -28,6 +29,7 @@ export const initialValues = {
     legalName: '',
     revenue: '',
     currency: '',
+    employeeCount: '',
     address: {
       id: '',
       street: '',
@@ -140,6 +142,11 @@ export const formField = {
       name: 'currency',
       label: CURRENCY,
       placeholder: CURRENCY,
+    },
+    employeeCount: {
+      name: 'employeeCount',
+      label: EMPLOYEE_COUNT,
+      placeholder: EMPLOYEE_COUNT,
     },
   },
   organizationAddress: {

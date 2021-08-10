@@ -23,13 +23,10 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
     .getNames()
     .map((item) => ({ label: item, value: item }));
 
-  const handleRevenueChange = (value) => {
-    formik.setFieldValue('organization.revenue', value);
+  const handleFieldChange = (value, fieldName) => {
+    formik.setFieldValue(fieldName, value);
   };
 
-  const handleCurrencyChange = (value) => {
-    formik.setFieldValue('organization.currency', value);
-  };
   return (
     <>
       <h2 className="fw-600 h4" id={organizationName.name}>
@@ -61,9 +58,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           />
         </div>
       </div>
-      <p>Let us know your corporate revenue from all the Affiliates.</p>
+      <p>Let us know your corporate revenue from all the affiliates.</p>
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-10">
           <Input
             name={organizationRevenue.revenue.name}
             labelName={organizationRevenue.revenue.label}
@@ -71,17 +68,29 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             requiredMark={true}
             type={'number'}
             value={formik.values.organization.revenue}
-            onChange={(ev) => handleRevenueChange(ev.target.value)}
+            onChange={(ev) => handleFieldChange(ev.target.value, 'organization.revenue')}
             ariaLabel={`${organizationRevenue.revenue.name}`}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <DropdownMenu
             inputLabel={organizationRevenue.currency.label}
             inputName={organizationRevenue.currency.name}
             inputValue={formik.values.organization.currency}
             optionsArray={OPTIONS_FOR_REVENUE_CURRENCY}
-            handleChange={(ev) => handleCurrencyChange(ev.target.value)}
+            handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.currency')}
+          />
+        </div>
+        <div className="col-md-8">
+          <Input
+            name={organizationRevenue.employeeCount.name}
+            labelName={organizationRevenue.employeeCount.label}
+            placeholder={organizationRevenue.employeeCount.placeholder}
+            requiredMark={true}
+            type={'number'}
+            value={formik.values.organization.employeeCount}
+            onChange={(ev) => handleFieldChange(ev.target.value, 'organization.employeeCount')}
+            ariaLabel={`${organizationRevenue.employeeCount.name}`}
           />
         </div>
       </div>
