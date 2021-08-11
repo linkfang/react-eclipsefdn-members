@@ -2,13 +2,28 @@ import React, { useEffect } from 'react';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
-
+import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { useState } from 'react';
 interface ReviewProps {
   values: FormValue;
   submitForm: () => void;
 }
 
 const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
+  const [isTermChecked, setIsTermChecked] = useState({ term1: false, term2: false, term3: false });
+  const [shouldDisableSubmit, setShouldDisableSubmit] = useState(true);
+
+  const handleIsTermChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newIsTermChecked = { ...isTermChecked, [event.target.name]: event.target.checked };
+    setIsTermChecked(newIsTermChecked);
+
+    if (newIsTermChecked.term1 && newIsTermChecked.term2 && newIsTermChecked.term3) {
+      setShouldDisableSubmit(false);
+    } else {
+      setShouldDisableSubmit(true);
+    }
+  };
+
   useEffect(() => {
     scrollToTop();
   }, []);
@@ -286,10 +301,30 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm }) => {
         </div>
       </div>
 
-      <CustomStepButton
-        previousPage="/signing-authority"
-        nextPage="/submitted"
+      <FormControlLabel
+        control={
+          <Checkbox name="term1" color="primary" checked={isTermChecked.term1} onChange={handleIsTermChecked} />
+        }
+        label="1. We will publicly support Eclipse Foundation and its purpose."
       />
+      <br />
+
+      <FormControlLabel
+        control={
+          <Checkbox name="term2" color="primary" checked={isTermChecked.term2} onChange={handleIsTermChecked} />
+        }
+        label="2. We will acknowledge our commitment in principle to comply with the Bylaws..."
+      />
+      <br />
+
+      <FormControlLabel
+        control={
+          <Checkbox name="term3" color="primary" checked={isTermChecked.term3} onChange={handleIsTermChecked} />
+        }
+        label="3. We will provide Eclipse Foundation with our logo..."
+      />
+
+      <CustomStepButton previousPage="/signing-authority" nextPage="/submitted" disableSubmit={shouldDisableSubmit} />
     </form>
   );
 };
