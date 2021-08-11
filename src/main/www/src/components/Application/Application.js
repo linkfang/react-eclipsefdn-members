@@ -164,18 +164,26 @@ export default function Application() {
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
       console.log('updated working groups: ', values);
 
-      const setFieldValueObj = {
-        fieldName: 'workingGroups',
-        method: formikWorkingGroups.setFieldValue,
-      };
-      executeSendDataByStep(
-        3,
-        values,
-        currentFormId,
-        currentUser.name,
-        goToNextStep,
-        setFieldValueObj
-      );
+      if (values.isJoiningWG){
+        // If the user is joining at least 1 wg, then make related API call
+        const setFieldValueObj = {
+          fieldName: 'workingGroups',
+          method: formikWorkingGroups.setFieldValue,
+        };
+
+        executeSendDataByStep(
+          3,
+          values,
+          currentFormId,
+          currentUser.name,
+          goToNextStep,
+          setFieldValueObj
+        );
+      } else {
+        // If the user is NOT joining any wg, then go to next page directly
+        goToNextStep(3, '/signing-authority')
+      }
+
     },
   });
 
