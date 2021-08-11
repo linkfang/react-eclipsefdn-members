@@ -1,11 +1,25 @@
+Eclipse Foundation AISBL Membership Application date submitted: {now}  
+
+{#if includePreamble}
+Dear {name},
+Thank you for submitting the member enrollment form on behalf of your organization. Our team will review your application and follow up within 2 business days.
+Meanwhile, if you have any questions, please reach out to us at membership.coordination@eclipse-foundation.org.
+
+Best regards,
+Eclipse Foundation Membership Coordination
+{/if}
+
 New form submission by: {name} ({form.userID})
 
 Organization
 Name: {org.legalName}
 Twitter: {org.twitterHandle}
+Requires purchase order: {form.purchaseOrderRequired}
+VAT number: {form.vatNumber}  
+VAT Registration country: {form.registrationCountry}  
 Aggregate Revenue: {org.aggregateRevenue}
 Employee count: {org.employeeCount}
-
+ 
 Address
 {org.address.street}
 {org.address.city}, {org.address.provinceState}
