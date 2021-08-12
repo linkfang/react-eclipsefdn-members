@@ -47,3 +47,8 @@ Effective Date: {wg.effectiveDate}
 Contact Name: {wg.contact.fName} {wg.contact.lName}
 
 {/for}
+
+----------
+
+This is an automatic message from https://membership.eclipse.org
+Twitter: @EclipseFdn
