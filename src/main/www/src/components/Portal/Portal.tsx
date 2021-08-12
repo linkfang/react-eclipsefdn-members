@@ -14,6 +14,7 @@ import AppTopBar from './NavBar/AppTopBar';
 // import FAQs from './FAQs/FAQs';
 import OrgProfile from './OrgProfile/OrgProfiles';
 import ContactManagement from './ContactManagement/ContactManagement';
+import { useState } from 'react';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,23 +32,32 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       marginTop: 64,
-      marginLeft: 280,
-      padding: 64,
-      minHeight: 'calc(100vh - 64px)',
       flexGrow: 1,
+      padding: '24px 14px',
       backgroundColor: mainContentBGColor,
+      [theme.breakpoints.up('sm')]: {
+        padding: 24,
+      },
+      [theme.breakpoints.up('md')]: {
+        marginLeft: 280,
+        padding: 64,
+      },
     },
   })
 );
 
 export default function MainPortal() {
   const classes = useStyles();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   return (
     <ThemeProvider theme={theme}>
-      <AppTopBar />
+      <AppTopBar handleDrawerToggle={handleDrawerToggle} />
 
-      <LeftNavBar />
+      <LeftNavBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 
       <main className={classes.content}>
         <Switch>

@@ -1,24 +1,27 @@
-import { AppBar, Avatar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Avatar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import demoAvatar from '../../../assets/demo-avatar.jpg';
-import { api_prefix, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
+import { api_prefix, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
 
 const useStyles = makeStyles(() =>
   createStyles({
     appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
       height: 70,
-      marginLeft: drawerWidth,
       backgroundColor: '#fff',
       boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
+      justifyContent: 'center',
     },
     toolbarCtn: {
       display: 'flex',
-      justifyContent: 'flex-end',
-      padding: '0 32px',
+      justifyContent: 'space-between',
+    },
+    userInfoCtn: {
+      display: 'flex',
+      alignItems: 'center',
     },
     verticalDivider: {
       backgroundColor: '#EBEBF2',
@@ -49,7 +52,11 @@ interface UserInfo {
   picture: string;
 }
 
-export default function AppTopBar() {
+interface AppTopBarProps {
+  handleDrawerToggle: () => void;
+}
+
+const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
   const classes = useStyles();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
@@ -86,17 +93,24 @@ export default function AppTopBar() {
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbarCtn}>
-        <div className={classes.verticalDivider}></div>
-        <Typography paragraph className={classes.username}>
-          {userInfo?.full_name ? userInfo.full_name : 'John Doe'}
-        </Typography>
-        <ExpandMoreIcon className={classes.dropDownIcon} />
-        <Avatar
-          className={classes.avatarCtn}
-          alt="user avatar"
-          src={userInfo?.picture ? userInfo.picture : demoAvatar}
-        />
+        <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle}>
+          <MenuIcon />
+        </IconButton>
+        <div className={classes.userInfoCtn}>
+          <div className={classes.verticalDivider}></div>
+          <Typography paragraph className={classes.username}>
+            {userInfo?.full_name ? userInfo.full_name : 'John Doe'}
+          </Typography>
+          <ExpandMoreIcon className={classes.dropDownIcon} />
+          <Avatar
+            className={classes.avatarCtn}
+            alt="user avatar"
+            src={userInfo?.picture ? userInfo.picture : demoAvatar}
+          />
+        </div>
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+export default AppTopBar;

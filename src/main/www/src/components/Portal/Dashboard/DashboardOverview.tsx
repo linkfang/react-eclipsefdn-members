@@ -10,7 +10,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     overviewCard: {
       width: '22%',
-      minWidth: 220,
+      minWidth: 230,
       margin: '25px 10px 20px 10px',
       height: 90,
       backgroundColor: '#fff',

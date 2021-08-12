@@ -1,16 +1,18 @@
 import { NavLink } from 'react-router-dom';
-import { ListItem, ListItemText, ListItemIcon, Container, Drawer, List } from '@material-ui/core';
+import { ListItem, ListItemText, ListItemIcon, Container, Drawer, List, Theme, Hidden } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import efWhiteLogo from '../../../assets/logos/ef-registered-wht.svg';
 import { NAV_OPTIONS_DATA, drawerWidth, themeBlack, darkOrange } from '../../../Constants/Constants';
 import { useRouteMatch } from 'react-router-dom';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
+      [theme.breakpoints.up('md')]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
     },
     drawerPaper: {
       width: drawerWidth,
@@ -55,6 +57,11 @@ interface NavOptionProps {
   name: string;
 }
 
+interface LeftNavBarProps {
+  mobileOpen: boolean;
+  handleDrawerToggle: () => void;
+}
+
 const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
   const classes = useStyles();
   const isActive = useRouteMatch(path);
@@ -81,7 +88,7 @@ const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
   }
 };
 
-export default function LeftNavBar() {
+const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle }) => {
   const classes = useStyles();
 
   const navOptions = NAV_OPTIONS_DATA.map((item) => (
@@ -89,18 +96,45 @@ export default function LeftNavBar() {
   ));
 
   return (
-    <Drawer
-      className={classes.drawer}
-      variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      anchor="left"
-    >
-      <Container className={classes.efLogoCtn}>
-        <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
-      </Container>
-      <List>{navOptions}</List>
-    </Drawer>
+    <>
+      <Hidden mdUp implementation="css">
+        <Drawer
+          className={classes.drawer}
+          variant="temporary"
+          open={mobileOpen}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          anchor="left"
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          <Container className={classes.efLogoCtn}>
+            <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
+          </Container>
+          <List>{navOptions}</List>
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="css">
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          open
+          anchor="left"
+        >
+          <Container className={classes.efLogoCtn}>
+            <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
+          </Container>
+          <List>{navOptions}</List>
+        </Drawer>
+      </Hidden>
+    </>
   );
-}
+};
+
+export default LeftNavBar

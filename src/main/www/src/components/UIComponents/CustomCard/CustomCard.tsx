@@ -17,7 +17,7 @@ const useStyles = makeStyles(() =>
       padding: 0,
       position: 'relative',
       width: '22%',
-      minWidth: 220,
+      minWidth: 230,
       height: 200,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
