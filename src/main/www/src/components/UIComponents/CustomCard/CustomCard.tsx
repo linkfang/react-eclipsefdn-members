@@ -7,21 +7,30 @@ import {
   ListItemProps,
   ListItem,
   ListItemText,
+  Theme,
 } from '@material-ui/core';
 import { darkGray, iconGray } from '../../../Constants/Constants';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     resourcesCard: {
-      margin: '25px 10px 20px 10px',
       padding: 0,
       position: 'relative',
-      width: '22%',
       minWidth: 230,
       height: 200,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       borderRadius: 4,
+      margin: '20px 0',
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        margin: '25px 10px 20px 10px',
+        width: '46%',
+      },
+      [theme.breakpoints.up(1200)]: {
+        margin: '25px 10px 20px 10px',
+        width: '22%',
+      },
     },
 
     resourcesIconCtn: {

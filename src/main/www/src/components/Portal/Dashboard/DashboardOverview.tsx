@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Card, Typography, Link } from '@material-ui/core';
+import { createStyles, makeStyles, Card, Typography, Link, Theme } from '@material-ui/core';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -6,21 +6,28 @@ import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
 import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     overviewCard: {
-      width: '22%',
       minWidth: 230,
-      margin: '25px 10px 20px 10px',
       height: 90,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       transition: 'all 0.2s ease-out',
-
       '&:hover': {
         boxShadow: '2px 2px 15px rgba(0,0,0,0.15)',
         transform: 'scale(1.03)',
         transition: 'all 0.2s ease-out',
+      },
+      margin: '20px 0',
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        margin: '25px 10px 20px 10px',
+        width: '46%',
+      },
+      [theme.breakpoints.up(1200)]: {
+        margin: '25px 10px 20px 10px',
+        width: '22%',
       },
     },
 

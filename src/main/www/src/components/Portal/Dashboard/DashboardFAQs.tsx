@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   List,
   Typography,
+  Theme,
 } from '@material-ui/core';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -38,17 +39,19 @@ const faqItems = [
   },
 ];
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     faqContainer: {
       position: 'relative',
       display: 'flex',
       marginTop: 40,
-      paddingLeft: 64,
-      paddingRight: 0,
+      padding: '0 10px',
       border: '2px #DCDFE5 solid',
       borderRadius: borderRadiusSize,
       maxWidth: '100%',
+      [theme.breakpoints.up('lg')]: {
+        paddingLeft: 64,
+      },
     },
     faqIcon: {
       position: 'absolute',
@@ -58,11 +61,21 @@ const useStyles = makeStyles(() =>
       backgroundColor: mainContentBGColor,
       fontSize: 60,
     },
+    faqTitle: {
+      textAlign: 'center',
+      [theme.breakpoints.up('sm')]: {
+        textAlign: 'left',
+      },
+    },
     faqIconForBG: {
       fontSize: 200,
       opacity: 0.15,
       color: iconGray,
       marginTop: 42,
+      display: 'none',
+      [theme.breakpoints.up('lg')]: {
+        display: 'block',
+      },
     },
     faqList: {
       marginTop: 30,
@@ -120,7 +133,9 @@ export default function DashboardFAQs() {
       }}
       id="faqs"
     >
-      <Typography variant="h4">FAQs</Typography>
+      <Typography className={classes.faqTitle} variant="h4">
+        FAQs
+      </Typography>
       <Container className={classes.faqContainer}>
         <ContactSupportIcon className={classes.faqIcon} />
         <Container className={classes.faqList}>{renderFAQs}</Container>

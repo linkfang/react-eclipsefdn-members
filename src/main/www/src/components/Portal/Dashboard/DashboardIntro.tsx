@@ -11,6 +11,7 @@ import {
   ListItemAvatar,
   ListItemText,
   makeStyles,
+  Theme,
   Typography,
 } from '@material-ui/core';
 import { Container } from '@material-ui/core';
@@ -34,20 +35,31 @@ const orgRepDataTest = [
   },
 ];
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     introCtn: {
       padding: 0,
       display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: 'space-between',
     },
     card: {
-      width: '30%',
       height: 260,
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      minWidth: 255,
+      width: '100%',
+      margin: '20px 0',
+      [theme.breakpoints.up(650)]: {
+        width: '45%',
+        margin: '25px 5px 0px 5px',
+      },
+      [theme.breakpoints.up(1280)]: {
+        width: '30%',
+        margin: '25px 10px 0px 10px',
+      },
     },
     companyLogoCard: {
       backgroundColor: '#8A94A8',
@@ -130,6 +142,8 @@ export default function DashboardIntro() {
       setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
       setOrgRepData(orgRepDataTest);
     } else {
+      setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
+      setOrgRepData(orgRepDataTest);
       // TO DO:
       // fetch the logo and set state
       // fetch the organization rep and set state

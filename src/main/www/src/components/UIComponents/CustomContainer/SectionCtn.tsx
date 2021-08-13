@@ -1,6 +1,6 @@
-import { Typography, createStyles, makeStyles, Container } from '@material-ui/core';
+import { Typography, createStyles, makeStyles, Container, Theme } from '@material-ui/core';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     main: { padding: '90px 0 0', margin: 0, maxWidth: '100%' },
     projectAndWGCtn: {
@@ -9,7 +9,16 @@ const useStyles = makeStyles(() =>
       flexWrap: 'wrap',
       marginTop: 40,
       padding: 0,
-      justifyContent: 'space-between',
+      justifyContent: 'center',
+      [theme.breakpoints.up('sm')]: {
+        justifyContent: 'space-between',
+      },
+    },
+    sectionTitle: {
+      textAlign: 'center',
+      [theme.breakpoints.up('sm')]: {
+        textAlign: 'left',
+      },
     },
   })
 );
@@ -25,7 +34,9 @@ export default function SectionCtn(props: SectionCtnProps) {
 
   return (
     <Container className={classes.main} id={props.id}>
-      <Typography variant="h4">{props.title}</Typography>
+      <Typography className={classes.sectionTitle} variant="h4">
+        {props.title}
+      </Typography>
 
       <Container className={classes.projectAndWGCtn}>{props.children}</Container>
     </Container>
