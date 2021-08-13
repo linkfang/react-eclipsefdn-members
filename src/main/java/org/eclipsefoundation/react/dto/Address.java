@@ -54,11 +54,12 @@ public class Address extends BareNode implements TargetedClone<Address> {
     @JoinColumn(name = "organization_id", unique = true)
     private FormOrganization organization;
 
-    @NotBlank(message = "Street cannot be blank")
-    private String street;
-    @NotBlank(message = "City cannot be blank")
-    private String city;
-    private String provinceState;
+    @NotBlank(message = "First address line cannot be blank")
+    private String addressLine1;
+    private String addressLine2;
+    @NotBlank(message = "Locality cannot be blank")
+    private String locality;
+    private String administrativeArea;
     @NotBlank(message = "Country cannot be blank")
     private String country;
     private String postalCode;
@@ -84,85 +85,126 @@ public class Address extends BareNode implements TargetedClone<Address> {
         this.organization = org;
     }
 
-    /** @return the steet */
-    public String getStreet() {
-        return street;
+    /**
+     * @return the addressLine1
+     */
+    public String getAddressLine1() {
+        return addressLine1;
     }
 
-    /** @param street the street to set */
-    public void setStreet(String street) {
-        this.street = street;
+    /**
+     * @param addressLine1 the addressLine1 to set
+     */
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
     }
 
-    /** @return the city */
-    public String getCity() {
-        return city;
+    /**
+     * @return the addressLine2
+     */
+    public String getAddressLine2() {
+        return addressLine2;
     }
 
-    /** @param city the city to set */
-    public void setCity(String city) {
-        this.city = city;
+    /**
+     * @param addressLine2 the addressLine2 to set
+     */
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
     }
 
-    /** @return the provinceState */
-    public String getProvinceState() {
-        return provinceState;
+    /**
+     * @return the locality
+     */
+    public String getLocality() {
+        return locality;
     }
 
-    /** @param provinceState the provinceState to set */
-    public void setProvinceState(String provinceState) {
-        this.provinceState = provinceState;
+    /**
+     * @param locality the locality to set
+     */
+    public void setLocality(String locality) {
+        this.locality = locality;
     }
 
-    /** @return the country */
+    /**
+     * @return the administrativeArea
+     */
+    public String getAdministrativeArea() {
+        return administrativeArea;
+    }
+
+    /**
+     * @param administrativeArea the administrativeArea to set
+     */
+    public void setAdministrativeArea(String administrativeArea) {
+        this.administrativeArea = administrativeArea;
+    }
+
+    /**
+     * @return the country
+     */
     public String getCountry() {
         return country;
     }
 
-    /** @param country the country to set */
+    /**
+     * @param country the country to set
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
-    /** @return the postalCode */
+    /**
+     * @return the postalCode
+     */
     public String getPostalCode() {
         return postalCode;
     }
 
-    /** @param postalCode the postalCode to set */
+    /**
+     * @param postalCode the postalCode to set
+     */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
     @Override
-    public Address cloneTo(Address target) {
-        target.setCity(getCity());
-        target.setCountry(getCountry());
-        target.setPostalCode(getPostalCode());
-        target.setProvinceState(getProvinceState());
-        target.setStreet(getStreet());
-        return target;
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hash(city, country, id, postalCode, provinceState, street);
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(addressLine1, addressLine2, administrativeArea, country, id, locality,
+                organization, postalCode);
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
         Address other = (Address) obj;
-        return Objects.equals(city, other.city) && Objects.equals(country, other.country)
-                && Objects.equals(id, other.id) && Objects.equals(postalCode, other.postalCode)
-                && Objects.equals(provinceState, other.provinceState) && Objects.equals(street, other.street);
+        return Objects.equals(addressLine1, other.addressLine1) && Objects.equals(addressLine2, other.addressLine2)
+                && Objects.equals(administrativeArea, other.administrativeArea)
+                && Objects.equals(country, other.country) && Objects.equals(id, other.id)
+                && Objects.equals(locality, other.locality) && Objects.equals(organization, other.organization)
+                && Objects.equals(postalCode, other.postalCode);
     }
 
+    @Override
+    public Address cloneTo(Address target) {
+        target.setAddressLine1(getAddressLine1());
+        target.setAddressLine2(getAddressLine2());
+        target.setLocality(getLocality());
+        target.setAdministrativeArea(getAdministrativeArea());
+        target.setCountry(getCountry());
+        target.setPostalCode(getPostalCode());
+        return target;
+    }
+    
     /**
      * Filter for selecting the address within the database.
      * 
@@ -192,4 +234,5 @@ public class Address extends BareNode implements TargetedClone<Address> {
             return Address.class;
         }
     }
+
 }

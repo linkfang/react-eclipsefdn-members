@@ -54,11 +54,11 @@ public class DtoHelper {
         o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
         o.setTwitterHandle("@" + RandomStringUtils.randomAlphabetic(4, 10));
         Address a = new Address();
-        a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
+        a.setLocality(RandomStringUtils.randomAlphabetic(4, 10));
         a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));
         a.setPostalCode(RandomStringUtils.randomAlphabetic(4, 10));
-        a.setProvinceState(RandomStringUtils.randomAlphabetic(2));
-        a.setStreet(RandomStringUtils.randomAlphabetic(4, 10));
+        a.setAdministrativeArea(RandomStringUtils.randomAlphabetic(2));
+        a.setAddressLine1(RandomStringUtils.randomAlphabetic(4, 10));
         o.setAddress(a);
         return o;
     }

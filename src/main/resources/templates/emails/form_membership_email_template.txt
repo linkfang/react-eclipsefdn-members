@@ -1,4 +1,5 @@
 Eclipse Foundation AISBL Membership Application date submitted: {now}  
+  
 
 {#if includePreamble}
 Dear {name},
@@ -7,6 +8,8 @@ Meanwhile, if you have any questions, please reach out to us at membership.coord
 
 Best regards,
 Eclipse Foundation Membership Coordination
+  
+  
 {/if}
 
 New form submission by: {name} ({data.form.userID})
@@ -21,8 +24,9 @@ Aggregate Revenue: {data.org.aggregateRevenue}
 Employee count: {data.org.employeeCount}
  
 Address
-{data.org.address.street}
-{data.org.address.city}, {org.address.provinceState}
+{data.org.address.addressLine1}
+{data.org.address.addressLine2}
+{data.org.address.locality}, {data.org.address.administrativeArea}
 {data.org.address.country}
 {data.org.address.postalCode}
   

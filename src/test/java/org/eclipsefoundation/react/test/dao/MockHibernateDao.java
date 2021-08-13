@@ -107,4 +107,10 @@ public class MockHibernateDao implements PersistenceDao {
         }
         return null;
     }
+
+    @Override
+    public <T extends BareNode> T getReference(Object id, Class<T> type, Optional<String> persistenceUnit) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -15,13 +15,13 @@
       <p style="margin-bottom: 0px; margin-top: 5px">Aggregate Revenue: {data.org.aggregateRevenue}</p>
       <p style="margin-bottom: 0px; margin-top: 5px">Employee count: {data.org.employeeCount}</p>
       <p style="margin-bottom: 0px; margin-top: 5px">Twitter: {data.org.twitterHandle}</p>
-      <p style="margin-bottom: 0px; margin-top: 5px"></p>Requires purchase order: {data.form.purchaseOrderRequired}</p>
-      <p style="margin-bottom: 0px; margin-top: 5px"></p>VAT number: {data.form.vatNumber}</p>
+      <p style="margin-bottom: 0px; margin-top: 5px">Requires purchase order: {data.form.purchaseOrderRequired}</p>
+      <p style="margin-bottom: 0px; margin-top: 5px">VAT number: {data.form.vatNumber}</p>
       <p style="margin-top: 5px">VAT Registration country: {data.form.registrationCountry}</p>
       <div>
         <h3>Address</h3>
         <p>
-          {data.org.address.street}<br /> {data.org.address.city}<br /> {data.org.address.provinceState}<br /> {data.org.address.country}<br /> {data.org.address.postalCode}
+          {data.org.address.addressLine1}<br />{data.org.address.addressLine2}<br />{data.org.address.locality}<br /> {data.org.address.administrativeArea}<br /> {data.org.address.country}<br /> {data.org.address.postalCode}
         </p>
       </div>
 
