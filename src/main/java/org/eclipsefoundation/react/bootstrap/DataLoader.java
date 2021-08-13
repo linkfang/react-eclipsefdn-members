@@ -114,11 +114,11 @@ public class DataLoader {
                 o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));
                 o.setOrganizationType(OrganizationTypes.OTHER);
                 Address a = new Address();
-                a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
+                a.setLocality(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setPostalCode(RandomStringUtils.randomAlphabetic(4, 10));
-                a.setProvinceState(RandomStringUtils.randomAlphabetic(2));
-                a.setStreet(RandomStringUtils.randomAlphabetic(4, 10));
+                a.setAdministrativeArea(RandomStringUtils.randomAlphabetic(2));
+                a.setAddressLine1(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setOrganization(o);
                 o.setAddress(a);
                 organizations.add(o);
