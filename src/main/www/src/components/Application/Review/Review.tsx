@@ -13,8 +13,7 @@ interface ReviewProps {
 
 const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setIsTermChecked }) => {
   const handleIsTermChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newIsTermChecked = event.target.checked;
-    setIsTermChecked(newIsTermChecked);
+    setIsTermChecked(event.target.checked);
   };
 
   useEffect(() => {
