@@ -28,9 +28,14 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.eclipsefoundation.api.SysAPI;
 import org.eclipsefoundation.api.model.OrganizationContact;
+import org.eclipsefoundation.eclipsedb.dto.OrganizationInformation;
+import org.eclipsefoundation.persistence.model.RDBMSQuery;
+import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.model.MemberOrganization;
 import org.eclipsefoundation.react.request.RolesAllowed;
 import org.eclipsefoundation.react.service.OrganizationsService;
+import org.jboss.resteasy.plugins.providers.MultiValuedParamConverterProvider;
+import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +64,14 @@ public class OrganizationResource extends AbstractRESTResource {
             return Response.noContent().build();
         }
         return Response.ok(new ArrayList<>(orgs)).build();
+    }
+    @GET
+    @Path("/eclipsedb")
+    public Response getEclipseDB() {
+        RDBMSQuery<OrganizationInformation> q = new RDBMSQuery<>(wrap, filters.get(OrganizationInformation.class), new MultivaluedMapImpl<>());
+        q.setPersistenceUnit("eclipsedb");
+        List<OrganizationInformation> r = dao.get(q);
+        return Response.ok(new ArrayList<>(r)).build();
     }
 
     @GET

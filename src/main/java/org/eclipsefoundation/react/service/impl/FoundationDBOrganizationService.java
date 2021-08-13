@@ -35,9 +35,18 @@ import org.eclipsefoundation.api.model.Organization;
 import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.api.model.OrganizationMembership;
 import org.eclipsefoundation.api.model.SysRelation;
+import org.eclipsefoundation.core.model.RequestWrapper;
+import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.core.service.CachingService;
+import org.eclipsefoundation.eclipsedb.dto.OrganizationInformation;
+import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.model.RDBMSQuery;
+import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.model.MemberOrganization;
+import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationDescription;
+import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationLogos;
 import org.eclipsefoundation.react.model.MembershipLevel;
+import org.eclipsefoundation.react.namespace.DatabaseTenants;
 import org.eclipsefoundation.react.service.OrganizationsService;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
@@ -58,6 +67,11 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(FoundationDBOrganizationService.class);
 
     private static final String ALL_LIST_CACHE_KEY = "allEntries";
+
+    @Inject
+    PersistenceDao dao;
+    @Inject
+    FilterService filters;
 
     @RestClient
     @Inject
@@ -170,6 +184,27 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         out.setOrganizationID(org.getOrganizationID());
         out.setName(org.getName1());
 
+        // Get org information from eclipse db
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
+        params.add(DefaultUrlParameterNames.ID.getName(), Integer.toString(org.getOrganizationID()));
+        RDBMSQuery<OrganizationInformation> q = new RDBMSQuery<>(new RequestWrapper(), filters.get(OrganizationInformation.class), params);
+        q.setPersistenceUnit(DatabaseTenants.ECLIPSE_DATABASE_TENANT);
+        List<OrganizationInformation> r = dao.get(q);
+        if (r.isEmpty()) {
+            // TODO no data available? is this a use case
+        }
+        OrganizationInformation info = r.get(0);
+        // retrieve the descriptions of the organization
+        MemberOrganizationDescription desc = new MemberOrganizationDescription();
+        desc.setLongDescription(info.getLongDescription());
+        desc.setShortDescription(info.getShortDescription());
+        out.setDescription(desc);
+        
+        //retrieve the logos of the organization
+        MemberOrganizationLogos logos = new MemberOrganizationLogos();
+        // TODO how do we want to handle byte arrays
+        // we need an imageservice that creates images or returns the links to the images.
+        
         // retrieve organization membership and create membership levels when possible
         Optional<List<OrganizationMembership>> memberships = cache.get(Integer.toString(org.getOrganizationID()),
                 new MultivaluedMapImpl<>(), MemberOrganization.class,

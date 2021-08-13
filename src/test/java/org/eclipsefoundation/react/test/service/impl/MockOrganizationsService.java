@@ -45,4 +45,10 @@ public class MockOrganizationsService implements OrganizationsService {
         return false;
     }
 
+    @Override
+    public void removeOrganizationContact(String orgID, String userName, String role) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
