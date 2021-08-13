@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     content: {
-      marginTop: 64,
       flexGrow: 1,
       padding: '24px 14px',
       backgroundColor: mainContentBGColor,
@@ -41,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         marginLeft: 280,
         padding: 64,
+        marginTop: 64,
       },
     },
   })
@@ -55,7 +55,7 @@ export default function MainPortal() {
   };
   return (
     <ThemeProvider theme={theme}>
-      <AppTopBar handleDrawerToggle={handleDrawerToggle} />
+      <AppTopBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 
       <LeftNavBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 

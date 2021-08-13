@@ -15,8 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     drawerPaper: {
-      width: drawerWidth,
       backgroundColor: themeBlack,
+      position: 'absolute',
+      [theme.breakpoints.up('md')]: {
+        position: 'fixed',
+      },
     },
     navOptions: {
       '&:hover': {
@@ -54,7 +57,9 @@ const useStyles = makeStyles((theme: Theme) =>
 interface NavOptionProps {
   path: string;
   icon: JSX.Element;
+  type: string | undefined;
   name: string;
+  handleDrawerToggle: (() => void) | null;
 }
 
 interface LeftNavBarProps {
@@ -62,14 +67,19 @@ interface LeftNavBarProps {
   handleDrawerToggle: () => void;
 }
 
-const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
+const NavOption: React.FC<NavOptionProps> = ({ path, icon, type, name, handleDrawerToggle }) => {
   const classes = useStyles();
   const isActive = useRouteMatch(path);
 
-  if (path.includes('#')) {
+  if (type === 'submenu') {
     // This means it is a sub nav of /dashboard
     return (
-      <a className={classes.navOptions} href={path} key={path}>
+      <a
+        className={classes.navOptions}
+        href={path}
+        onClick={() => handleDrawerToggle && handleDrawerToggle()}
+        key={path}
+      >
         <ListItem className={classes.navItems} button>
           <ListItemIcon className={classes.navIcons}>{icon}</ListItemIcon>
           <ListItemText className={classes.navText} primary={name} />
@@ -78,7 +88,15 @@ const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
     );
   } else {
     return (
-      <NavLink className={classes.navOptions} to={path} key={path} onClick={scrollToTop}>
+      <NavLink
+        className={classes.navOptions}
+        to={path}
+        key={path}
+        onClick={() => {
+          handleDrawerToggle && handleDrawerToggle();
+          scrollToTop();
+        }}
+      >
         <ListItem className={isActive ? classes.navItemsActive : classes.navItems} button>
           <ListItemIcon className={isActive ? classes.navIconsActive : classes.navIcons}>{icon}</ListItemIcon>
           <ListItemText className={classes.navText} primary={name} />
@@ -91,21 +109,29 @@ const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
 const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle }) => {
   const classes = useStyles();
 
-  const navOptions = NAV_OPTIONS_DATA.map((item) => (
-    <NavOption path={item.path} name={item.name} icon={item.icon} key={item.path} />
-  ));
+  const renderNavOptions = (isHambergerMenu: boolean) =>
+    NAV_OPTIONS_DATA.map((item) => (
+      <NavOption
+        path={item.path}
+        name={item.name}
+        type={item.type}
+        icon={item.icon}
+        handleDrawerToggle={isHambergerMenu ? handleDrawerToggle : null}
+        key={item.path}
+      />
+    ));
 
   return (
     <>
       <Hidden mdUp implementation="css">
         <Drawer
           className={classes.drawer}
-          variant="temporary"
+          variant="persistent"
           open={mobileOpen}
           classes={{
             paper: classes.drawerPaper,
           }}
-          anchor="left"
+          anchor="top"
           onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
@@ -114,7 +140,7 @@ const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle 
           <Container className={classes.efLogoCtn}>
             <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
           </Container>
-          <List>{navOptions}</List>
+          <List>{renderNavOptions(true)}</List>
         </Drawer>
       </Hidden>
       <Hidden smDown implementation="css">
@@ -130,11 +156,11 @@ const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle 
           <Container className={classes.efLogoCtn}>
             <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
           </Container>
-          <List>{navOptions}</List>
+          <List>{renderNavOptions(false)}</List>
         </Drawer>
       </Hidden>
     </>
   );
 };
 
-export default LeftNavBar
+export default LeftNavBar;
