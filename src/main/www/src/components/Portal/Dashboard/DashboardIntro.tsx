@@ -125,7 +125,7 @@ export default function DashboardIntro() {
   const [orgRepData, setOrgRepData] = useState<Array<OrgRep> | null>(null);
 
   const renderOrgRep = orgRepData?.map((rep) => (
-    <ListItem>
+    <ListItem key={rep.name}>
       <ListItemText
         classes={{
           primary: classes.repPrimary,
