@@ -1,7 +1,18 @@
 import { NavLink } from 'react-router-dom';
-import { ListItem, ListItemText, ListItemIcon, Container, Drawer, List, Theme, Hidden } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Container,
+  Drawer,
+  List,
+  Theme,
+  Hidden,
+  Button,
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import efWhiteLogo from '../../../assets/logos/ef-registered-wht.svg';
+import CloseIcon from '@material-ui/icons/Close';
 import { NAV_OPTIONS_DATA, drawerWidth, themeBlack, darkOrange } from '../../../Constants/Constants';
 import { useRouteMatch } from 'react-router-dom';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
@@ -16,10 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     drawerPaper: {
       backgroundColor: themeBlack,
-      position: 'absolute',
-      [theme.breakpoints.up('md')]: {
-        position: 'fixed',
-      },
     },
     navOptions: {
       '&:hover': {
@@ -50,6 +57,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     efLogo: {
       width: 174,
+    },
+    closeBtn: {
+      position: 'fixed',
+      top: 15,
+      right: 20,
+    },
+    closeIcon: {
+      color: 'white',
+      fontSize: 28,
     },
   })
 );
@@ -126,7 +142,7 @@ const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle 
       <Hidden mdUp implementation="css">
         <Drawer
           className={classes.drawer}
-          variant="persistent"
+          variant="temporary"
           open={mobileOpen}
           classes={{
             paper: classes.drawerPaper,
@@ -139,6 +155,9 @@ const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle 
         >
           <Container className={classes.efLogoCtn}>
             <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
+            <Button onClick={handleDrawerToggle} className={classes.closeBtn}>
+              <CloseIcon className={classes.closeIcon} />
+            </Button>
           </Container>
           <List>{renderNavOptions(true)}</List>
         </Drawer>

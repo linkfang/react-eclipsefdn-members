@@ -55,7 +55,7 @@ export default function MainPortal() {
   };
   return (
     <ThemeProvider theme={theme}>
-      <AppTopBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+      <AppTopBar handleDrawerToggle={handleDrawerToggle} />
 
       <LeftNavBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 

@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import demoAvatar from '../../../assets/demo-avatar.jpg';
 import efGRYLogo from '../../../assets/logos/ef-gry.svg';
 import { api_prefix, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
-import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,19 +15,12 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 110,
       backgroundColor: '#fff',
       boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
+      // Has to use !important to overwrite the padding-right 17px added by MUI when humbergur menu is open
+      // This can avoid making user dropdown and humbergur menu move left and right
+      padding: '0 !important',
       [theme.breakpoints.up('md')]: {
         height: 70,
         position: 'fixed',
-      },
-      transition: theme.transitions.create('height', {
-        easing: theme.transitions.easing.easeInOut,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      height: 520,
-      [theme.breakpoints.up('md')]: {
-        height: 70,
       },
       transition: theme.transitions.create('height', {
         easing: theme.transitions.easing.easeInOut,
@@ -107,11 +99,10 @@ interface UserInfo {
 }
 
 interface AppTopBarProps {
-  mobileOpen: boolean;
   handleDrawerToggle: () => void;
 }
 
-const AppTopBar: React.FC<AppTopBarProps> = ({ mobileOpen, handleDrawerToggle }) => {
+const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
   const classes = useStyles();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
@@ -146,12 +137,7 @@ const AppTopBar: React.FC<AppTopBarProps> = ({ mobileOpen, handleDrawerToggle })
   }, []);
 
   return (
-    <AppBar
-      position="fixed"
-      className={clsx(classes.appBar, {
-        [classes.appBarShift]: mobileOpen,
-      })}
-    >
+    <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbarCtn}>
         <div className={classes.iconCtn}>
           <img src={efGRYLogo} alt="Eclipse Foundation logo" className={classes.efLogo}></img>
