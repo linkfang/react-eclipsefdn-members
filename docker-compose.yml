@@ -10,6 +10,8 @@ services:
     environment:
       - VIRTUAL_HOST=nginx.rem.docker
       - VIRTUAL_PORT=8080
+    volumes:
+       - ./volumes/imagestore:/usr/share/nginx/html/images/organization
   nodejs:
     build: ./src/main/www
     image: eclipsefdn/membership-www:latest
@@ -35,6 +37,7 @@ services:
       - VIRTUAL_PORT=8090
     volumes:
       - ./config/secret.properties:/var/run/secrets/secret.properties
+      - ./volumes/imagestore:/app/organization/imagestore
     deploy:
       restart_policy:
         condition: on-failure
