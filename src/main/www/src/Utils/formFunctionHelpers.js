@@ -74,6 +74,9 @@ export function matchCompanyFields(existingOrganizationData) {
     // Step1: company Info
     id: existingOrganizationData?.id || '',
     legalName: existingOrganizationData?.legal_name || '',
+    revenue: Number(existingOrganizationData?.aggregate_revenue?.slice(0, -4)) || '',
+    currency: existingOrganizationData?.aggregate_revenue?.slice(-3) || '',
+    employeeCount: existingOrganizationData?.employee_count || '',
     address: {
       id: existingOrganizationData?.address?.id || '',
       street: existingOrganizationData?.address?.street || '',
