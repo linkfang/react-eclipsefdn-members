@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.graphql.NonNull;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipsefoundation.api.APIMiddleware;
 import org.eclipsefoundation.api.OrganizationAPI;
 import org.eclipsefoundation.api.SysAPI;
 import org.eclipsefoundation.api.model.Organization;
@@ -47,6 +48,7 @@ import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationDe
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationLogos;
 import org.eclipsefoundation.react.model.MembershipLevel;
 import org.eclipsefoundation.react.namespace.DatabaseTenants;
+import org.eclipsefoundation.react.service.LiveImageService;
 import org.eclipsefoundation.react.service.OrganizationsService;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
@@ -72,6 +74,8 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     PersistenceDao dao;
     @Inject
     FilterService filters;
+    @Inject
+    LiveImageService imageService;
 
     @RestClient
     @Inject
@@ -85,6 +89,10 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     // use a loading cache for HA of expensive getAll call
     private AsyncLoadingCache<String, List<MemberOrganization>> loadingCache;
 
+    /**
+     * On construct, start the loading cache for the full list of member organizations. This is a large call that we
+     * want to be highly available, as attempting to call it without a cache would result in timeouts.
+     */
     @PostConstruct
     void init() {
         FoundationDBOrganizationService parent = this;
@@ -120,12 +128,13 @@ public class FoundationDBOrganizationService implements OrganizationsService {
 
     @Override
     public Optional<MemberOrganization> getByID(String id) {
-        Optional<Organization> org = cache.get(id, new MultivaluedMapImpl<>(), Organization.class,
-                () -> orgAPI.getOrganization(id));
-        if (org.isEmpty()) {
-            return Optional.empty();
+        try {
+            return cache.get(id, new MultivaluedMapImpl<>(), MemberOrganization.class,
+                    () -> convertToMemberOrganization(orgAPI.getOrganization(id)));
+        } catch (Exception e) {
+            LOGGER.error("Error retrieving member organization: ", e);
         }
-        return Optional.of(convertToMemberOrganization(org.get()));
+        return Optional.empty();
     }
 
     @Override
@@ -133,26 +142,30 @@ public class FoundationDBOrganizationService implements OrganizationsService {
             Optional<String> role, Optional<String> fName, Optional<String> lName) {
         // create param map to properly generate a cache key
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
-        params.add("mail", mail.isPresent() ? mail.get() : null);
-        params.add("relation", role.isPresent() ? role.get() : null);
-        params.add("fName", fName.isPresent() ? fName.get() : null);
-        params.add("lName", lName.isPresent() ? lName.get() : null);
-        return cache.get(orgID, params, OrganizationContact.class,
-                () -> orgAPI.getOrganizationContactsWithSearch(orgID, mail.isPresent() ? mail.get() : null,
-                        role.isPresent() ? role.get() : null, fName.isPresent() ? fName.get() : null,
-                        lName.isPresent() ? lName.get() : null));
+        params.add("mail", mail.orElse(null));
+        params.add("relation", role.orElse(null));
+        params.add("fName", fName.orElse(null));
+        params.add("lName", lName.orElse(null));
+        return cache
+                .get(orgID, params, OrganizationContact.class,
+                        () -> APIMiddleware.getAll(
+                                i -> orgAPI.getOrganizationContactsWithSearch(orgID, i, mail.orElse(null),
+                                        role.orElse(null), fName.orElse(null), lName.orElse(null)),
+                                OrganizationContact.class));
     }
 
     @Override
     public Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, String userName) {
-        return cache.get(orgID, new MultivaluedMapImpl<>(), OrganizationContact.class,
-                () -> orgAPI.getOrganizationContacts(orgID, userName));
+        return cache.get(orgID, new MultivaluedMapImpl<>(), OrganizationContact.class, () -> APIMiddleware
+                .getAll(i -> orgAPI.getOrganizationContacts(orgID, i, userName), OrganizationContact.class));
     }
 
     @Override
     public boolean organizationContactHasRole(String orgID, String userName, String role) {
         Optional<List<OrganizationContact>> contacts = cache.get(orgID, new MultivaluedMapImpl<>(),
-                OrganizationContact.class, () -> orgAPI.getOrganizationContacts(orgID, userName, role));
+                OrganizationContact.class,
+                () -> APIMiddleware.getAll(i -> orgAPI.getOrganizationContacts(orgID, i, userName, role),
+                        OrganizationContact.class));
         // if we have results, then the relation exists for user
         return contacts.isPresent() && !contacts.get().isEmpty();
     }
@@ -163,12 +176,21 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         orgAPI.removeOrganizationContacts(orgID, userName, role);
     }
 
+    /**
+     * Used to populate the cache and is therefore uncached. This should not be called outside of the loading cache
+     * thread.
+     * 
+     * @return list of member organizations
+     */
     protected List<MemberOrganization> getAll() {
-        return orgAPI.getOrganizations().stream().map(this::convertToMemberOrganization).collect(Collectors.toList());
+        return APIMiddleware.getAll(orgAPI::getOrganizations, Organization.class).stream()
+                .map(this::convertToMemberOrganization).collect(Collectors.toList());
     }
 
     private List<SysRelation> getRelations() {
-        return cache.get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class, sysAPI::getSysRelations)
+        return cache
+                .get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class,
+                        () -> APIMiddleware.getAll(sysAPI::getSysRelations, SysRelation.class))
                 .orElseGet(Collections::emptyList);
     }
 
@@ -187,28 +209,35 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         // Get org information from eclipse db
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
         params.add(DefaultUrlParameterNames.ID.getName(), Integer.toString(org.getOrganizationID()));
-        RDBMSQuery<OrganizationInformation> q = new RDBMSQuery<>(new RequestWrapper(), filters.get(OrganizationInformation.class), params);
+        RDBMSQuery<OrganizationInformation> q = new RDBMSQuery<>(new RequestWrapper(),
+                filters.get(OrganizationInformation.class), params);
+        q.setRoot(false);
         q.setPersistenceUnit(DatabaseTenants.ECLIPSE_DATABASE_TENANT);
+        // retrieve and handle the org info data
         List<OrganizationInformation> r = dao.get(q);
-        if (r.isEmpty()) {
-            // TODO no data available? is this a use case
+        if (!r.isEmpty()) {
+            OrganizationInformation info = r.get(0);
+            // retrieve the descriptions of the organization
+            MemberOrganizationDescription desc = new MemberOrganizationDescription();
+            desc.setLongDescription(info.getLongDescription());
+            desc.setShortDescription(info.getShortDescription());
+            out.setDescription(desc);
+
+            // retrieve the logos of the organization
+            MemberOrganizationLogos logos = new MemberOrganizationLogos();
+            logos.setFull(imageService.retrieveImageUrl(info::getLargeLogo, Integer.toString(org.getOrganizationID()),
+                    info.getLargeMime(), Optional.of("full")));
+            logos.setSmall(imageService.retrieveImageUrl(info::getSmallLogo, Integer.toString(org.getOrganizationID()),
+                    info.getSmallMime(), Optional.of("small")));
+            out.setLogos(logos);
         }
-        OrganizationInformation info = r.get(0);
-        // retrieve the descriptions of the organization
-        MemberOrganizationDescription desc = new MemberOrganizationDescription();
-        desc.setLongDescription(info.getLongDescription());
-        desc.setShortDescription(info.getShortDescription());
-        out.setDescription(desc);
-        
-        //retrieve the logos of the organization
-        MemberOrganizationLogos logos = new MemberOrganizationLogos();
-        // TODO how do we want to handle byte arrays
-        // we need an imageservice that creates images or returns the links to the images.
-        
+
         // retrieve organization membership and create membership levels when possible
         Optional<List<OrganizationMembership>> memberships = cache.get(Integer.toString(org.getOrganizationID()),
                 new MultivaluedMapImpl<>(), MemberOrganization.class,
-                () -> orgAPI.getOrganizationMembership(Integer.toString(org.getOrganizationID())));
+                () -> APIMiddleware.getAll(
+                        i -> orgAPI.getOrganizationMembership(Integer.toString(org.getOrganizationID()), i),
+                        OrganizationMembership.class));
         if (memberships.isPresent()) {
             // using the system relations, create membership levels
             List<SysRelation> rels = getRelations();

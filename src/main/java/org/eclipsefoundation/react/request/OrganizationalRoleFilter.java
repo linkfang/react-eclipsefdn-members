@@ -16,6 +16,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipsefoundation.api.APIMiddleware;
 import org.eclipsefoundation.api.OrganizationAPI;
 import org.eclipsefoundation.api.model.OrganizationContact;
 import org.jboss.resteasy.microprofile.client.utils.ClientRequestContextUtils;
@@ -23,7 +24,7 @@ import org.jboss.resteasy.microprofile.client.utils.ClientRequestContextUtils;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;
 
-@Provider
+//@Provider
 public class OrganizationalRoleFilter implements ClientRequestFilter {
     private static final Pattern ORGANIZATION_ID_URL_PATTERN = Pattern.compile("/organizations/([^/]+)");
 
@@ -53,7 +54,9 @@ public class OrganizationalRoleFilter implements ClientRequestFilter {
 
     private boolean isAllowedToAccess(String orgId, RolesAllowed rolesAnnotation) {
         List<String> roles = Arrays.asList(rolesAnnotation.value());
-        List<OrganizationContact> contacts = orgAPI.getOrganizationContacts(orgId, identity.getPrincipal().getName());
+        List<OrganizationContact> contacts = APIMiddleware.getAll(
+                i -> orgAPI.getOrganizationContacts(orgId, i, identity.getPrincipal().getName()),
+                OrganizationContact.class);
         for (OrganizationContact contact : contacts) {
             if (roles.contains(contact.getCompositeID().getRelation())) {
                 return true;

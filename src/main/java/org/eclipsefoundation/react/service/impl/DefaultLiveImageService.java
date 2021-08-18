@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.service.impl;
 
 import java.io.IOException;
@@ -144,14 +155,37 @@ public class DefaultLiveImageService implements LiveImageService {
         }
     }
 
+    /**
+     * Fuzzy match used to check byte size of files. Used just in case there is some minor changes to the data done via
+     * metadata or the like.
+     * 
+     * @param arg0 first number to compare
+     * @param arg1 second number to compare
+     * @param maxDiff the max fuzziness of the match
+     * @return true if roughly match, otherwise false
+     */
     private boolean approximatelyMatch(long arg0, long arg1, int maxDiff) {
         return Math.abs(arg0 - arg1) < maxDiff;
     }
 
+    /**
+     * Used to get the web URL for the given file.
+     * 
+     * @param imagePath path of the image in the image store
+     * @return the public URL for the given image path
+     */
     private String getWebUrl(Path imagePath) {
         return webRoot + imagePath.getFileName();
     }
 
+    /**
+     * Calculates max age of an image before it should be rewritten. Helps keep sync if a file is broken or updated
+     * outside of this API, to prevent staleness.
+     * 
+     * @param attrView the file attribute object for the file to calculate.
+     * @return the max age of the file in UTC time, given local configuration.
+     * @throws IOException if there is an issue reading the files age from the file system
+     */
     private LocalDateTime getFileMaxAge(BasicFileAttributeView attrView) throws IOException {
         return LocalDateTime.ofInstant(attrView.readAttributes().creationTime().toInstant(), ZoneOffset.UTC);
     }

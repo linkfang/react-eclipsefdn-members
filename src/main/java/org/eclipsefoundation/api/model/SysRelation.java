@@ -1,5 +1,8 @@
 package org.eclipsefoundation.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SysRelation {
 
     private String relation;
@@ -61,6 +64,21 @@ public class SysRelation {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("SysRelation [relation=");
+        builder.append(relation);
+        builder.append(", description=");
+        builder.append(description);
+        builder.append(", isActive=");
+        builder.append(isActive);
+        builder.append(", type=");
+        builder.append(type);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

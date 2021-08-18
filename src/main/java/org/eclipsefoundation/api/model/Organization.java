@@ -2,11 +2,16 @@ package org.eclipsefoundation.api.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Organization {
 
+    @JsonProperty("organization_id")
     private int organizationID;
     private String name1;
     private String name2;
@@ -156,6 +161,33 @@ public class Organization {
      */
     public void setTs(Date ts) {
         this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Organization [organizationID=");
+        builder.append(organizationID);
+        builder.append(", name1=");
+        builder.append(name1);
+        builder.append(", name2=");
+        builder.append(name2);
+        builder.append(", phone=");
+        builder.append(phone);
+        builder.append(", fax=");
+        builder.append(fax);
+        builder.append(", comments=");
+        builder.append(comments);
+        builder.append(", memberSince=");
+        builder.append(memberSince);
+        builder.append(", latLong=");
+        builder.append(latLong);
+        builder.append(", scrmGUID=");
+        builder.append(scrmGUID);
+        builder.append(", ts=");
+        builder.append(ts);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

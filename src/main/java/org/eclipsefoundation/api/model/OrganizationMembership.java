@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-
 @RegisterForReflection
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrganizationMembership {
 
     @JsonProperty("composite_id")
@@ -136,6 +137,8 @@ public class OrganizationMembership {
 
     public static class OrganizationMembershipID implements Serializable {
         private static final long serialVersionUID = 1L;
+
+        @JsonProperty("organization_id")
         private Integer organizationID;
         private String relation;
 

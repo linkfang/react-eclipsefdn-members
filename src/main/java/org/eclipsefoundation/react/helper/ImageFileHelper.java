@@ -1,7 +1,26 @@
+/**
+ * Copyright (c) 2021 Eclipse Foundation
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * Author: Martin Lowe <martin.lowe@eclipse-foundation.org>
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipsefoundation.react.helper;
 
 import java.util.Optional;
 
+import org.eclipsefoundation.react.exception.UnsupportedImageFormatException;
+
+/**
+ * Helper class when handling Image files and their names.
+ * 
+ * @author Martin Lowe
+ *
+ */
 public final class ImageFileHelper {
     public static final String SEPARATOR = "-";
 
@@ -57,7 +76,8 @@ public final class ImageFileHelper {
                 ext = ".png";
                 break;
             default:
-                ext = ".jpg";
+                throw new UnsupportedImageFormatException(
+                        String.format("Format %s is not supported currently and will not be accepted", mime));
         }
         return ext;
     }
