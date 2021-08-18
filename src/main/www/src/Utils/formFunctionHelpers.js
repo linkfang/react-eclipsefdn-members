@@ -662,7 +662,7 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
-      purchase_order_required: 'na',
+      purchase_order_required: '',
       state: 'INPROGRESS',
     };
 
