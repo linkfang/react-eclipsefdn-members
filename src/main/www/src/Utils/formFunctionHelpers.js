@@ -528,21 +528,21 @@ function callSendData(
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
