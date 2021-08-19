@@ -72,7 +72,7 @@ const FormChooser = ({
         })
         .then((data) => {
           console.log('existing forms:  ', data);
-          if (data.length > 0) {
+          if (data.length > 0 && data[0].state !== 'SUBMITTED') {
             setHasExistingForm(data[0]?.id);
             setCurrentFormId(data[0]?.id);
           } else {
