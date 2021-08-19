@@ -24,6 +24,7 @@ export default function Application() {
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
   const [isStartNewForm, setIsStartNewForm] = useState(true);
   const [isLoginExpired, setIsLoginExpired] = useState(false);
+  const [isTermChecked, setIsTermChecked] = useState(false);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -337,7 +338,12 @@ export default function Application() {
         <Route path="/review">
           {renderStepper()}
           {furthestPage.index >= 5 ? (
-            <Review values={updatedFormValues} submitForm={submitForm} />
+            <Review 
+            values={updatedFormValues}
+            submitForm={submitForm}
+            isTermChecked={isTermChecked}
+            setIsTermChecked={setIsTermChecked}
+            />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}
