@@ -560,11 +560,11 @@ function callSendData(
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
