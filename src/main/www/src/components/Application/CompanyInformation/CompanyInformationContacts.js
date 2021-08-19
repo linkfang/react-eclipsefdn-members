@@ -44,6 +44,7 @@ const Contacts = ({ formik }) => {
     const newValues = {
       ...repInfo,
       sameAsCompany: isChecked,
+      id: formik.values.representative[fieldName].id
     };
     formik.setFieldValue(`representative.${fieldName}`, newValues);
   };
