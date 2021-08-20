@@ -77,6 +77,7 @@ export function matchCompanyFields(existingOrganizationData) {
     revenue: Number(existingOrganizationData?.aggregate_revenue?.slice(0, -4)) || '',
     currency: existingOrganizationData?.aggregate_revenue?.slice(-3) || '',
     employeeCount: existingOrganizationData?.employee_count || '',
+    type: existingOrganizationData?.organization_type || '',
     address: {
       id: existingOrganizationData?.address?.id || '',
       street: existingOrganizationData?.address?.street || '',
@@ -233,6 +234,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     twitter: organizationData.twitterHandle || '',
     aggregate_revenue: `${organizationData.revenue} ${organizationData.currency}`,
     employee_count: organizationData.employeeCount,
+    organization_type: organizationData.type
   };
 
   if (organizationData.address.id) {
