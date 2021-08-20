@@ -47,7 +47,18 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
           </div>
         </div>
 
-        <h3 className="fw-600 h4">Address</h3>
+        <div className="row margin-top-15">
+          <div className="col-md-8">
+            <label>Organization Revenue</label>
+            <div className="preview-field">{values.organization.revenue}</div>
+          </div>
+          <div className="col-md-8">
+            <label>Employee Count</label>
+            <div className="preview-field">{values.organization.employeeCount}</div>
+          </div>
+        </div>
+
+        <h3 className="fw-600 h4 margin-top-20">Address</h3>
         <div className="row margin-bottom-30">
           <div className="col-md-8">
             <label>Street</label>

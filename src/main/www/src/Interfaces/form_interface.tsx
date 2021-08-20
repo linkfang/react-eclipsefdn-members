@@ -2,6 +2,8 @@ export interface FormValue {
   organization: {
     id: string;
     legalName: string;
+    revenue: string;
+    employeeCount: string;
     address: {
       id: string;
       street: string;
