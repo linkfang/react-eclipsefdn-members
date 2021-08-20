@@ -17,6 +17,7 @@ const countryOfRegistration = 'Country of Registration';
 const REVENUE = 'Revenue';
 const CURRENCY = 'Currency';
 const EMPLOYEE_COUNT = 'Employee Count';
+const ORG_TYPE = 'Organization Type';
 
 export const requiredErrorMsg = 'is required';
 
@@ -30,6 +31,8 @@ export const initialValues = {
     revenue: '',
     currency: '',
     employeeCount: '',
+    type: '',
+    twitterHandle: '',
     address: {
       id: '',
       street: '',
@@ -39,7 +42,6 @@ export const initialValues = {
       'country-label': '',
       postalCode: '',
     },
-    twitterHandle: '',
   },
 
   // Step1: Representatives
@@ -150,6 +152,11 @@ export const formField = {
       label: EMPLOYEE_COUNT,
       placeholder: EMPLOYEE_COUNT,
     },
+  },
+  organizationType: {
+    name: 'organization.type',
+    label: ORG_TYPE,
+    placeholder: ORG_TYPE,
   },
   organizationAddress: {
     address: {
