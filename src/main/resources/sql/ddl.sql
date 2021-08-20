@@ -31,6 +31,7 @@ CREATE TABLE `FormOrganization` (
   `legalName` varchar(255) DEFAULT NULL,
   `twitterHandle` varchar(255) DEFAULT NULL,
   `aggregateRevenue` varchar(255) DEFAULT NULL,
+  `organizationType` varchar(255) DEFAULT NULL,
   `employeeCount` varchar(255) DEFAULT NULL,
   `form_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),

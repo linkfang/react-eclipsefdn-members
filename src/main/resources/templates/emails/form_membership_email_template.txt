@@ -19,6 +19,7 @@ VAT number: {data.form.vatNumber}
 VAT Registration country: {data.form.registrationCountry}  
 Aggregate Revenue: {data.org.aggregateRevenue}
 Employee count: {data.org.employeeCount}
+Organization Type: {data.org.organizationType}
  
 Address
 {data.org.address.street}

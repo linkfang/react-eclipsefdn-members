@@ -585,6 +585,10 @@ components:
             legal_name:
                type: string
                description: Legal Name of the Organization
+            organization_type:
+               type: string
+               description: The category of organization used for fee determination for current entity
+               enum: [NON_PROFIT_OPEN_SOURCE, ACADEMIC, STANDARDS, GOVERNMENT_ORGANIZATION_AGENCY_NGO, MEDIA_ORGANIZATION, RESEARCH, OTHER]
             twitter:
                type: string
                description: The Twitter handle of the organization
@@ -618,6 +622,10 @@ components:
             legal_name:
                type: string
                description: Legal Name of the Organization
+            organization_type:
+               type: string
+               description: The category of organization used for fee determination for current entity
+               enum: [NON_PROFIT_OPEN_SOURCE, ACADEMIC, STANDARDS, GOVERNMENT_ORGANIZATION_AGENCY_NGO, MEDIA_ORGANIZATION, RESEARCH, OTHER]
             twitter:
                type: string
                description: The Twitter handle of the organization

@@ -36,6 +36,7 @@ import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.namespace.FormState;
+import org.eclipsefoundation.react.namespace.OrganizationTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,8 +108,9 @@ public class DataLoader {
                 o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
                 o.setTwitterHandle(RandomStringUtils.randomAlphabetic(4, 10));
                 o.setAggregateRevenue(RandomStringUtils.randomNumeric(5, 10));
-                o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));
-                Address a = new Address();
+                o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));                
+                o.setOrganizationType(OrganizationTypes.OTHER);
+		Address a = new Address();
                 a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setPostalCode(RandomStringUtils.randomAlphabetic(4, 10));
