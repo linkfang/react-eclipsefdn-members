@@ -58,7 +58,7 @@ const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList
       <p>
         You can find additional information about {selectedWG?.label} in the{' '}
         <a target="_blank" rel="noreferrer" href={selectedWG?.charter}>
-          {selectedWG?.label} Charter
+          {selectedWG?.label} charter
         </a>
         .
       </p>
