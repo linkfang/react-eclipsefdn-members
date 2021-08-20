@@ -91,20 +91,20 @@ export const OPTIONS_FOR_REVENUE_CURRENCY = [
 ];
 
 export const OPTIONS_FOR_ORG_TYPE = [
-  { label: 'For Profit Organization', value: 'For Profit Organization' },
+  { label: 'For Profit Organization', value: 'FOR_PROFIT_ORGANIZATION' },
   {
     label: 'Non-Profit Open Source Organization/User Group',
-    value: 'Non-Profit Open Source Organization/User Group',
+    value: 'NON_PROFIT_OPEN_SOURCE',
   },
-  { label: 'Academic Organization', value: 'Academic Organization' },
-  { label: 'Standards Organization', value: 'Standards Organization' },
+  { label: 'Academic Organization', value: 'ACADEMIC' },
+  { label: 'Standards Organization', value: 'STANDARDS' },
   {
     label: 'Government Organization, Government Agency, or NGO',
-    value: 'eGovernment Organization, Government Agency, or NGO',
+    value: 'GOVERNMENT_ORGANIZATION_AGENCY_NGO',
   },
-  { label: 'Publishing/Media Organization', value: 'Publishing/Media Organization' },
-  { label: 'Research Institute', value: 'Research Institute' },
-  { label: 'All others', value: 'All others' },
+  { label: 'Publishing/Media Organization', value: 'MEDIA_ORGANIZATION' },
+  { label: 'Research Institute', value: 'RESEARCH' },
+  { label: 'All others', value: 'OTHER' },
 ];
 
 export const END_POINT = {
