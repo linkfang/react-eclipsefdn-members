@@ -90,6 +90,23 @@ export const OPTIONS_FOR_REVENUE_CURRENCY = [
   { label: 'EUR', value: 'eur' },
 ];
 
+export const OPTIONS_FOR_ORG_TYPE = [
+  { label: 'For Profit Organization', value: 'For Profit Organization' },
+  {
+    label: 'Non-Profit Open Source Organization/User Group',
+    value: 'Non-Profit Open Source Organization/User Group',
+  },
+  { label: 'Academic Organization', value: 'Academic Organization' },
+  { label: 'Standards Organization', value: 'Standards Organization' },
+  {
+    label: 'Government Organization, Government Agency, or NGO',
+    value: 'eGovernment Organization, Government Agency, or NGO',
+  },
+  { label: 'Publishing/Media Organization', value: 'Publishing/Media Organization' },
+  { label: 'Research Institute', value: 'Research Institute' },
+  { label: 'All others', value: 'All others' },
+];
+
 export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
@@ -144,7 +161,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Guest Member', relation: 'WGSAP' },
     ],
-    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php'
+    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php',
   },
 ];
 
