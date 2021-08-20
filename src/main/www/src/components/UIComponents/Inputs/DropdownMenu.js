@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { FormControl, FormHelperText, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange }) {
+export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange, helperText }) {
   const classes = useStyles();
 
   return (
@@ -33,6 +33,7 @@ export default function DropdownMenu({ inputLabel, inputName, inputValue, option
           </MenuItem>
         ))}
       </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 }
