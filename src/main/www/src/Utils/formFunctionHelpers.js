@@ -305,9 +305,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
-  const theDate = eachWorkingGroupData?.effectiveDate
-    ? new Date(eachWorkingGroupData?.effectiveDate)
-    : new Date();
+  const theDate = new Date();
 
   return {
     id: eachWorkingGroupData?.id,

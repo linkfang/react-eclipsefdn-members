@@ -165,7 +165,10 @@ export default function Application() {
       setUpdatedFormValues({ ...updatedFormValues, workingGroups });
       console.log('updated working groups: ', values);
 
-      if (values.isJoiningWG){
+      if (values.skipJoiningWG){
+        // If the user is NOT joining any wg, then go to next page directly
+        goToNextStep(3, '/signing-authority')
+      } else {
         // If the user is joining at least 1 wg, then make related API call
         const setFieldValueObj = {
           fieldName: 'workingGroups',
@@ -180,9 +183,6 @@ export default function Application() {
           goToNextStep,
           setFieldValueObj
         );
-      } else {
-        // If the user is NOT joining any wg, then go to next page directly
-        goToNextStep(3, '/signing-authority')
       }
 
     },
@@ -316,6 +316,7 @@ export default function Application() {
           {furthestPage.index >= 3 ? (
             <WorkingGroupsWrapper
               formik={formikWorkingGroups}
+              formikOrgValue={formikCompanyInfo.values}
               isStartNewForm={isStartNewForm}
             />
           ) : (

@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
-import WorkingGroupEffectiveDate from './WorkingGroupEffectiveDate';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
@@ -51,7 +50,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading, formikOrgValue }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
 
@@ -211,13 +210,8 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                       fullWorkingGroupList={fullWorkingGroupList}
                       formik={formik}
                     />
-                    <WorkingGroupEffectiveDate
-                      name={`${workingGroupsLabel}.${index}.effectiveDate`}
-                      index={index}
-                      label="Effective Date"
-                      formik={formik}
-                    />
                     <WorkingGroupsRepresentative
+                      formikOrgValue={formikOrgValue}
                       name={`${workingGroupsLabel}.${index}.workingGroupRepresentative`}
                       index={index}
                       label="Working Group Representative"

@@ -99,7 +99,7 @@ export const initialValues = {
     },
   ],
 
-  isJoiningWG: false,
+  skipJoiningWG: false,
 
   signingAuthorityRepresentative: {
     firstName: '',

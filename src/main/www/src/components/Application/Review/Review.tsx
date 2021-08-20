@@ -173,7 +173,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
                   </div>
                   <div className="col-md-8">
                     <label>Effective Date</label>
-                    <div className="preview-field">{new Date(el.effectiveDate).toLocaleDateString()}</div>
+                    <div className="preview-field">{new Date().toLocaleDateString()}</div>
                   </div>
 
                   <div className="col-md-24">
