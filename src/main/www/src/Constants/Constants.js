@@ -133,6 +133,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Committer Member', relation: 'WGFHA' },
     ],
+    charter: 'https://www.eclipse.org/org/workinggroups/openmobility_charter.php',
   },
   {
     label: 'Jakarta EE Working Group',
@@ -143,6 +144,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Guest Member', relation: 'WGSAP' },
     ],
+    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php'
   },
 ];
 

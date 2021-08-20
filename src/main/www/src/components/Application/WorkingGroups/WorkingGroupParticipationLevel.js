@@ -12,17 +12,18 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList, formik, index }) => {
   const [participationLevelOptions, setParticipationLevelOptions] = useState([]);
+  const [selectedWG, setSelectedWG] = useState();
 
   const theIndex = index;
   useEffect(() => {
     // If have selected working group, find this working group's
     // participation levels, and pass to the react-select option
     if (fullWorkingGroupList) {
-      let temp = fullWorkingGroupList?.find((item) => workingGroupUserJoined.value === item.value);
-
+      let selectedWG = fullWorkingGroupList?.find((item) => workingGroupUserJoined.value === item.value);
+      setSelectedWG(selectedWG);
       // extract all the participation_levels
-      let optionsForParticipationLevels = temp?.participation_levels
-        ? temp?.participation_levels.map((item) => item.description || item.level)
+      let optionsForParticipationLevels = selectedWG?.participation_levels
+        ? selectedWG?.participation_levels.map((item) => item.description)
         : [];
 
       // the Set will deduplicate participation_levels options
@@ -54,6 +55,13 @@ const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList
           )}
         </div>
       </div>
+      <p>
+        You can find additional information about {selectedWG?.label} in the{' '}
+        <a target="_blank" rel="noreferrer" href={selectedWG?.charter}>
+          {selectedWG?.label} charter
+        </a>
+        .
+      </p>
     </>
   );
 };
