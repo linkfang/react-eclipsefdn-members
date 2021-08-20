@@ -50,7 +50,7 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     private String legalName;
     @JsonbProperty("twitter")
     private String twitterHandle;
-    private Integer employeeCount;
+    private String employeeCount;
     private String aggregateRevenue;
 
     // form entity
@@ -111,14 +111,14 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     /**
      * @return the employeeCount
      */
-    public Integer getEmployeeCount() {
+    public String getEmployeeCount() {
         return employeeCount;
     }
 
     /**
      * @param employeeCount the employeeCount to set
      */
-    public void setEmployeeCount(Integer employeeCount) {
+    public void setEmployeeCount(String employeeCount) {
         this.employeeCount = employeeCount;
     }
 

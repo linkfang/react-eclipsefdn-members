@@ -53,6 +53,8 @@ public class DtoHelper {
         o.setForm(mf);
         o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
         o.setTwitterHandle("@" + RandomStringUtils.randomAlphabetic(4, 10));
+        o.setAggregateRevenue(RandomStringUtils.randomNumeric(5, 10));
+        o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));
         Address a = new Address();
         a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
         a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));

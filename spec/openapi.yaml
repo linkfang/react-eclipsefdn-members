@@ -592,7 +592,7 @@ components:
                type: string
                description: The aggregate revenue of the organization and its affiliates
             employee_count:
-               type: number
+               type: string
                description: The number of employees for the given organization
             address:
                type: object
@@ -625,7 +625,7 @@ components:
                type: string
                description: The aggregate revenue of the organization and its affiliates
             employee_count:
-               type: number
+               type: string
                description: The number of employees for the given organization
             address:
                type: object
