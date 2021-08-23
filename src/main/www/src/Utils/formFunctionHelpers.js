@@ -419,7 +419,7 @@ export async function executeSendDataByStep(
             formId,
             END_POINT.working_groups,
             matchWGFieldsToBackend(item, formId),
-            goToNextStepObj,
+            '',
             setFieldValueObj,
             index
           );
@@ -442,7 +442,7 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          goToNextStepObj,
+          index === 0 ? goToNextStepObj : '',
           setFieldValueObj,
           index
         );

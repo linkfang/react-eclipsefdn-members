@@ -326,9 +326,7 @@ export default function Application() {
               formikOrgValue={formikCompanyInfo.values}
               isStartNewForm={isStartNewForm}
               fullWorkingGroupList={fullWorkingGroupList}
-              setFullWorkingGroupList={setFullWorkingGroupList}
               workingGroupsUserJoined={workingGroupsUserJoined}
-              setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />
