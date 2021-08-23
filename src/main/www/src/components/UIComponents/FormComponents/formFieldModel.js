@@ -95,6 +95,7 @@ export const initialValues = {
         jobtitle: '',
         email: '',
         id: '',
+        sameAsCompany: false,
       },
     },
   ],

@@ -25,6 +25,8 @@ export default function Application() {
   const [isStartNewForm, setIsStartNewForm] = useState(true);
   const [isLoginExpired, setIsLoginExpired] = useState(false);
   const [isTermChecked, setIsTermChecked] = useState(false);
+  const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
+  const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -82,6 +84,7 @@ export default function Application() {
         membershipLevel,
         'membershipLevel-label': membershipLevelLabel,
         signingAuthorityRepresentative: signingAuthorityRepresentative,
+        workingGroups: formikWorkingGroups.values.workingGroups,
       };
       setUpdatedFormValues(theNewValue);
       console.log('updated company info: ', values);
@@ -293,6 +296,10 @@ export default function Application() {
               <CompanyInformation
                 formik={formikCompanyInfo}
                 isStartNewForm={isStartNewForm}
+                formikWG={formikWorkingGroups}
+                fullWorkingGroupList={fullWorkingGroupList}
+                setFullWorkingGroupList={setFullWorkingGroupList}
+                setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
               />
             ) : (
               // if uses are not allowed to visit this page,
@@ -318,6 +325,10 @@ export default function Application() {
               formik={formikWorkingGroups}
               formikOrgValue={formikCompanyInfo.values}
               isStartNewForm={isStartNewForm}
+              fullWorkingGroupList={fullWorkingGroupList}
+              setFullWorkingGroupList={setFullWorkingGroupList}
+              workingGroupsUserJoined={workingGroupsUserJoined}
+              setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />

@@ -4,6 +4,7 @@ import {
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
+  matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
 } from '../../../Utils/formFunctionHelpers';
@@ -17,6 +18,8 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY,
+  api_prefix,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -35,6 +38,8 @@ import { makeStyles } from '@material-ui/core';
  *  - formField: the form field in formModels/formFieldModel.js
  */
 
+ let hasWGData = false;
+
 const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
@@ -48,10 +53,19 @@ const useStyles = makeStyles(() => ({
 let hasOrgData = false;
 let hasMembershipLevelData = false;
 
-const CompanyInformation = ({ formik, isStartNewForm }) => {
+const CompanyInformation = ({
+  formik,
+  isStartNewForm,
+  formikWG,
+  fullWorkingGroupList,
+  setFullWorkingGroupList,
+  setWorkingGroupsUserJoined,
+}) => {
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
+  const setWGFieldValue = formikWG.setFieldValue;
+  const companyRep = formik.values.representative.member;
 
   useEffect(() => {
     scrollToTop();
@@ -202,6 +216,109 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
     }
   }, [isStartNewForm, setFieldValue, currentFormId]);
 
+  useEffect(() => {
+    // Fetch the full availabe working group list that user can join
+    const fetchAvailableFullWorkingGroupList = () => {
+      let url_prefix_local;
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        setFullWorkingGroupList(FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY);
+        return;
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = api_prefix() + '/';
+      }
+
+      fetch(url_prefix_local + END_POINT.working_groups, {
+        headers: FETCH_HEADER,
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+
+          requestErrorHandler(res.status);
+          throw res.status;
+        })
+        .then((data) => {
+          let options = data.map((item) => ({
+            label: item.title,
+            value: item.title,
+            participation_levels: item.levels,
+            charter: item.resources.charter,
+          }));
+          setFullWorkingGroupList(options);
+        })
+        .catch((err) => {
+          requestErrorHandler(err);
+          console.log(err);
+        });
+    };
+
+    fetchAvailableFullWorkingGroupList();
+  }, [setFullWorkingGroupList]);
+
+  useEffect(() => {
+    // Fetch the working groups user has joined
+    const fetchWorkingGroupsUserJoined = () => {
+      // All pre-process: if running without server,
+      // use fake json data; if running with API, use API
+
+      let url_prefix_local;
+      let url_suffix_local = '';
+      if (getCurrentMode() === MODE_REACT_ONLY) {
+        url_prefix_local = 'membership_data';
+        url_suffix_local = '.json';
+      }
+
+      if (getCurrentMode() === MODE_REACT_API) {
+        url_prefix_local = API_PREFIX_FORM;
+      }
+
+      fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.working_groups + url_suffix_local, {
+        headers: FETCH_HEADER,
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+
+          requestErrorHandler(res.status);
+          throw res.status;
+        })
+        .then((data) => {
+          if (data.length) {
+            // matchWorkingGroupFields(): Call the the function to map
+            // the retrived working groups backend data to fit frontend, and
+            // setFieldValue(): Prefill Data --> Call the setFieldValue
+            // of Formik, to set workingGroups field with the mapped data
+            const theGroupsUserJoined = matchWorkingGroupFields(data, fullWorkingGroupList, companyRep);
+            setWorkingGroupsUserJoined(theGroupsUserJoined);
+            setWGFieldValue('skipJoiningWG', false);
+            setWGFieldValue('workingGroups', theGroupsUserJoined);
+            hasWGData = true;
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          requestErrorHandler(err);
+          console.log(err);
+        });
+    };
+
+    if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0 && companyRep.firstName) {
+      // continue with an existing one and there is no working group data
+      fetchWorkingGroupsUserJoined();
+    } else {
+      setLoading(false);
+    }
+  }, [
+    isStartNewForm,
+    currentFormId,
+    fullWorkingGroupList,
+    setFieldValue,
+    companyRep,
+    setWGFieldValue,
+    setWorkingGroupsUserJoined,
+  ]);
+
   // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
   if (loading || !currentFormId) {
@@ -217,7 +334,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
           legal name and address of your organization.
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
-        <CompanyInformationContacts formik={formik} />
+        <CompanyInformationContacts formik={formik} formikWG={formikWG} />
         <CompanyInformationVAT formik={formik} />
       </div>
 
