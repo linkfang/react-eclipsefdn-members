@@ -91,7 +91,6 @@ export const OPTIONS_FOR_REVENUE_CURRENCY = [
 ];
 
 export const OPTIONS_FOR_ORG_TYPE = [
-  { label: 'For Profit Organization', value: 'FOR_PROFIT_ORGANIZATION' },
   {
     label: 'Non-Profit Open Source Organization/User Group',
     value: 'NON_PROFIT_OPEN_SOURCE',
