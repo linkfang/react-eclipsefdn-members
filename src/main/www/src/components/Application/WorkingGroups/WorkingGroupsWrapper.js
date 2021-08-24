@@ -53,10 +53,8 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
 
   const handleSkipJoiningWG = () => {
     const skipJoiningWG = formik.values.skipJoiningWG;
-
     if (skipJoiningWG) {
       formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
-      formik.setFieldValue('workingGroups', initialValues.workingGroups);
     } else {
       setShouldOpen(true);
     }
@@ -67,12 +65,13 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
   };
 
   const handleClearData = () => {
-    // if user uncheck it, then we need to reset WG form
+    // if user check it, we need to delete all wgs in formik and db
     formik.values.workingGroups.map((item) => {
-      deleteData(currentFormId, END_POINT.working_groups, item.id, formik.resetForm, '');
+      deleteData(currentFormId, END_POINT.working_groups, item.id, console.log, `Deleted ${item.workingGroup.label}`);
       return null;
     });
-    formik.setFieldValue('skipJoiningWG', !formik.values.skipJoiningWG);
+    formik.setFieldValue('skipJoiningWG', true);
+    formik.setFieldValue('workingGroups', initialValues.workingGroups);
     closeModal();
   };
 
@@ -185,7 +184,6 @@ export const fetchWorkingGroupsUserJoined = (
         // of Formik, to set workingGroups field with the mapped data
         const theGroupsUserJoined = matchWorkingGroupFields(data, fullWorkingGroupList, companyRep);
         setWorkingGroupsUserJoined(theGroupsUserJoined);
-        setWGFieldValue('skipJoiningWG', false);
         setWGFieldValue('workingGroups', theGroupsUserJoined);
       }
       setLoading(false);
