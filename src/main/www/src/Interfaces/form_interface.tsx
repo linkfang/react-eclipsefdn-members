@@ -4,6 +4,8 @@ export interface FormValue {
     legalName: string;
     type: string;
     twitterHandle: string;
+    revenue: string;
+    employeeCount: string;
     address: {
       id: string;
       street: string;

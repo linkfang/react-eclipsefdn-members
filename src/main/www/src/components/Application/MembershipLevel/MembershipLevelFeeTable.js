@@ -5,7 +5,19 @@
 const MembershipLevelFeeTable = () => {
   return (
     <>
-      <div className="vertical-align margin-top-50">
+      <p className="margin-top-50">
+        Eclipse Foundation charges annual membership fees based on your annual revenues, your type of organization, and
+        your class of membership. The following table is shown for illustrative purposes. Please review the{' '}
+        <a
+          href="https://www.eclipse.org/org/documents/eclipse-foundation-membership-agreement.pdf"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Eclipse Foundation Membership Agreement
+        </a>{' '}
+        for full details.
+      </p>
+      <div className="vertical-align">
         <table className="table table-stripped" cellSpacing="0">
           <thead>
             <tr>

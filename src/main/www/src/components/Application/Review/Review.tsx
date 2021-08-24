@@ -29,7 +29,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
     >
       <h1 className="fw-600 h2">Review and Submit your Completed Application</h1>
       <p>
-        Please review your completed membership application form. If you would like to make changes to the information,
+        Please review your completed Membership Application Form. If you would like to make changes to the information,
         please click the back button.
       </p>
       <p>
@@ -45,13 +45,24 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
             <label>Organization Type</label>
             <div className="preview-field">{values.organization.type}</div>
           </div>
-          <div className="col-md-6">
-            <label>twitter</label>
+          <div className="col-md-8">
+            <label>Twitter</label>
             <div className="preview-field">{values.organization.twitterHandle}</div>
           </div>
         </div>
 
-        <h3 className="fw-600 h4">Address</h3>
+        <div className="row margin-top-15">
+          <div className="col-md-8">
+            <label>Organization Revenue</label>
+            <div className="preview-field">{values.organization.revenue}</div>
+          </div>
+          <div className="col-md-8">
+            <label>Employee Count</label>
+            <div className="preview-field">{values.organization.employeeCount}</div>
+          </div>
+        </div>
+
+        <h3 className="fw-600 h4 margin-top-20">Address</h3>
         <div className="row margin-bottom-30">
           <div className="col-md-8">
             <label>Street</label>
@@ -62,7 +73,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
             <div className="preview-field">{values.organization.address.city}</div>
           </div>
           <div className="col-md-4">
-            <label>province/State</label>
+            <label>Province/State</label>
             <div className="preview-field">{values.organization.address.provinceOrState}</div>
           </div>
           <div className="col-md-4">
@@ -181,7 +192,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
                   </div>
 
                   <div className="col-md-24">
-                    <p className="h4 fw-600 margin-top-25">The working Group Representative</p>
+                    <p className="h4 fw-600 margin-top-25">The Working Group Representative</p>
                   </div>
                   <div className="col-md-6">
                     <label>First Name</label>

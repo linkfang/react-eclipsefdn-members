@@ -3,7 +3,7 @@ import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
-import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_REVENUE_CURRENCY } from '../../../Constants/Constants';
+import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_REVENUE, OPTIONS_FOR_EMPLOYEE_COUNT, HELPERTEXT_FOR_REVENUE } from '../../../Constants/Constants';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -83,37 +83,23 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         .
       </p>
       <div className="row">
-        <div className="col-md-10">
-          <Input
-            name={organizationRevenue.revenue.name}
-            labelName={organizationRevenue.revenue.label}
-            placeholder={organizationRevenue.revenue.placeholder}
-            requiredMark={true}
-            type={'number'}
-            value={formik.values.organization.revenue}
-            onChange={(ev) => handleFieldChange(ev.target.value, 'organization.revenue')}
-            ariaLabel={`${organizationRevenue.revenue.name}`}
-          />
-        </div>
-        <div className="col-md-6">
+        <div className="col-md-16">
           <DropdownMenu
-            inputLabel={organizationRevenue.currency.label}
-            inputName={organizationRevenue.currency.name}
-            inputValue={formik.values.organization.currency}
-            optionsArray={OPTIONS_FOR_REVENUE_CURRENCY}
-            handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.currency')}
+            inputLabel={organizationRevenue.revenue.label}
+            inputName={organizationRevenue.revenue.name}
+            inputValue={formik.values.organization.revenue}
+            optionsArray={OPTIONS_FOR_REVENUE}
+            helperText={HELPERTEXT_FOR_REVENUE}
+            handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.revenue')}
           />
         </div>
         <div className="col-md-8">
-          <Input
-            name={organizationRevenue.employeeCount.name}
-            labelName={organizationRevenue.employeeCount.label}
-            placeholder={organizationRevenue.employeeCount.placeholder}
-            requiredMark={true}
-            type={'number'}
-            value={formik.values.organization.employeeCount}
-            onChange={(ev) => handleFieldChange(ev.target.value, 'organization.employeeCount')}
-            ariaLabel={`${organizationRevenue.employeeCount.name}`}
+          <DropdownMenu
+            inputLabel={organizationRevenue.employeeCount.label}
+            inputName={organizationRevenue.employeeCount.name}
+            inputValue={formik.values.organization.employeeCount}
+            optionsArray={OPTIONS_FOR_EMPLOYEE_COUNT}
+            handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.employeeCount')}
           />
         </div>
       </div>

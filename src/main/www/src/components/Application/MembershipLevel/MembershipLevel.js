@@ -26,7 +26,8 @@ const MembershipLevel = ({ formik }) => {
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
-          Please indicate the class of membership for which you are applying
+          Please indicate the class of membership for which you are applying. Note that most new members choose
+          Contributing.
         </p>
         <h2 className="fw-600 h4" id={membershipLevel.name}>
           What is your intended Membership Level?
@@ -46,11 +47,7 @@ const MembershipLevel = ({ formik }) => {
         <MembershipLevelFeeTable />
       </div>
 
-      <CustomStepButton
-        previousPage="/company-info"
-        nextPage="/working-groups"
-        pageIndex={2}
-      />
+      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" pageIndex={2} />
     </form>
   );
 };

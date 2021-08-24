@@ -25,8 +25,8 @@ const SigningAuthority = ({ formik }) => {
           Signing Authority
         </h1>
         <p>
-          Please Indicate the individual who has the signing authority for the
-          agreement
+          Please indicate the individual who has the signing authority for the
+          agreement.
         </p>
 
         <div className="row">

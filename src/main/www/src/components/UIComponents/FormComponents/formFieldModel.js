@@ -15,7 +15,6 @@ const purchasingProcess = 'Require or Not';
 const vatNumber = 'VAT Number';
 const countryOfRegistration = 'Country of Registration';
 const REVENUE = 'Revenue';
-const CURRENCY = 'Currency';
 const EMPLOYEE_COUNT = 'Employee Count';
 const ORG_TYPE = 'Organization Type';
 
@@ -29,7 +28,6 @@ export const initialValues = {
     id: '',
     legalName: '',
     revenue: '',
-    currency: '',
     employeeCount: '',
     type: '',
     twitterHandle: '',
@@ -141,11 +139,6 @@ export const formField = {
       name: 'revenue',
       label: REVENUE,
       placeholder: REVENUE,
-    },
-    currency: {
-      name: 'currency',
-      label: CURRENCY,
-      placeholder: CURRENCY,
     },
     employeeCount: {
       name: 'employeeCount',
