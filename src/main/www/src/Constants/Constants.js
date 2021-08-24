@@ -112,6 +112,22 @@ export const OPTIONS_FOR_EMPLOYEE_COUNT = [
   { label: '> 10,000', value: '> 10,000' },
 ];
 
+export const OPTIONS_FOR_ORG_TYPE = [
+  {
+    label: 'Non-Profit Open Source Organization/User Group',
+    value: 'NON_PROFIT_OPEN_SOURCE',
+  },
+  { label: 'Academic Organization', value: 'ACADEMIC' },
+  { label: 'Standards Organization', value: 'STANDARDS' },
+  {
+    label: 'Government Organization, Government Agency, or NGO',
+    value: 'GOVERNMENT_ORGANIZATION_AGENCY_NGO',
+  },
+  { label: 'Publishing/Media Organization', value: 'MEDIA_ORGANIZATION' },
+  { label: 'Research Institute', value: 'RESEARCH' },
+  { label: 'All others', value: 'OTHER' },
+];
+
 export const END_POINT = {
   organizations: 'organizations',
   contacts: 'contacts',
@@ -166,7 +182,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Guest Member', relation: 'WGSAP' },
     ],
-    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php'
+    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php',
   },
 ];
 

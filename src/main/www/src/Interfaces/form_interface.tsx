@@ -2,6 +2,8 @@ export interface FormValue {
   organization: {
     id: string;
     legalName: string;
+    type: string;
+    twitterHandle: string;
     revenue: string;
     employeeCount: string;
     address: {
@@ -13,7 +15,6 @@ export interface FormValue {
       'country-label': string;
       postalCode: string;
     };
-    twitterHandle: string;
   };
   representative: {
     member: {

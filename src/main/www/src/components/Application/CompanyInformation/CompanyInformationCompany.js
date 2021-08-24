@@ -3,7 +3,7 @@ import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
-import { OPTIONS_FOR_REVENUE, OPTIONS_FOR_EMPLOYEE_COUNT, HELPERTEXT_FOR_REVENUE } from '../../../Constants/Constants';
+import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_REVENUE, OPTIONS_FOR_EMPLOYEE_COUNT, HELPERTEXT_FOR_REVENUE } from '../../../Constants/Constants';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -16,7 +16,8 @@ import { OPTIONS_FOR_REVENUE, OPTIONS_FOR_EMPLOYEE_COUNT, HELPERTEXT_FOR_REVENUE
 
 const CompanyInformationCompany = ({ formik, useStyles }) => {
   const classes = useStyles();
-  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue } = formField;
+  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue, organizationType } =
+    formField;
 
   // get country list library and map as option pass to the React-Select
   const countryList = require('country-list')
@@ -33,7 +34,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         Organization
       </h2>
       <div className="row">
-        <div className="col-md-16">
+        <div className="col-md-24">
           <Input
             name={organizationName.name}
             labelName={organizationName.label}
@@ -42,6 +43,17 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             requiredMark={true}
             value={formik.values.organization.legalName}
             onChange={formik.handleChange}
+          />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-16">
+          <DropdownMenu
+            inputLabel={organizationType.label}
+            inputName={organizationType.name}
+            inputValue={formik.values.organization.type}
+            optionsArray={OPTIONS_FOR_ORG_TYPE}
+            handleChange={formik.handleChange}
           />
         </div>
         <div className="col-md-8">
