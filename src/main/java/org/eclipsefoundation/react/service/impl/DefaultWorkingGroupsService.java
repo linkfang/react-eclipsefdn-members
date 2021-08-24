@@ -13,12 +13,16 @@ package org.eclipsefoundation.react.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 
@@ -42,6 +46,8 @@ import io.quarkus.runtime.Startup;
 public class DefaultWorkingGroupsService implements WorkingGroupsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(DefaultWorkingGroupsService.class);
 
+    @ConfigProperty(name = "eclipse.working-groups.deny-list", defaultValue = "")
+    Instance<List<String>> denyList;
     @ConfigProperty(name = "eclipse.working-groups.filepath")
     String filepath;
 
@@ -62,7 +68,10 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
         LOGGER.info("Starting init of working group levels static members");
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath)) {
             WorkingGroupMap map = json.fromJson(is, WorkingGroupMap.class);
-            this.wgs = map.getWorkingGroups();
+            this.wgs = new HashMap<>();
+            // iterate over wg map entries and only retain entries not in denyList
+            map.getWorkingGroups().entrySet().stream().filter(entry -> !denyList().contains(entry.getKey()))
+                    .forEach(e -> wgs.put(e.getKey(), e.getValue()));
             LOGGER.info("Initialized {} working group", wgs.size());
         }
     }
@@ -75,5 +84,9 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
     @Override
     public WorkingGroup getByName(String name) {
         return wgs.get(name);
+    }
+
+    private List<String> denyList() {
+        return denyList.stream().flatMap(List::stream).collect(Collectors.toList());
     }
 }
