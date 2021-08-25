@@ -64,11 +64,11 @@ export const MEMBERSHIP_LEVELS = [
 ];
 
 export const PAGE_STEP = [
-  { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
-  { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
-  { props: { label: WORKING_GROUPS, pathName: '/working-groups' } },
-  { props: { label: SIGNING_AUTHORITY, pathName: '/signing-authority' } },
-  { props: { label: REVIEW, pathName: '/review' } },
+  { label: COMPANY_INFORMATION, pathName: '/company-info' },
+  { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' },
+  { label: WORKING_GROUPS, pathName: '/working-groups' },
+  { label: SIGNING_AUTHORITY, pathName: '/signing-authority' },
+  { label: REVIEW, pathName: '/review' },
 ];
 
 export const CONTACT_TYPE = {

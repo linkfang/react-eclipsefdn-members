@@ -337,11 +337,13 @@ export async function executeSendDataByStep(
   goToNextStep,
   setFieldValueObj
 ) {
-  const goToNextStepObj = {
-    method: goToNextStep,
-    stepNum: step,
-    pathName: PATH_NAME_ARRAY[step],
-  };
+  const goToNextStepObj = goToNextStep
+    ? {
+        method: goToNextStep,
+        stepNum: step,
+        pathName: PATH_NAME_ARRAY[step],
+      }
+    : '';
   switch (step) {
     case 1:
       // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
