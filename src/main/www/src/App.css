@@ -23,6 +23,9 @@ html {
 .toolbar-no-login a {
   margin-left: 13px;
 }
+.eclipsefdn-membership-webform {
+  /* Stepper */
+}
 .eclipsefdn-membership-webform .input-group .form-control {
   z-index: unset;
 }

@@ -58,6 +58,7 @@ export default function Application() {
       currentUser.name,
       ''
     );
+    goToNextStep(5, '/submitted');
   };
 
   const submitCompanyInfo = (isUsingStepper) => {
