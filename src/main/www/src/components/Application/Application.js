@@ -56,7 +56,6 @@ export default function Application() {
       '',
       currentFormId,
       currentUser.name,
-      goToNextStep,
       ''
     );
   };
@@ -112,19 +111,9 @@ export default function Application() {
       method: formikCompanyInfo.setFieldValue,
     };
 
-    executeSendDataByStep(
-      1,
-      theNewValue,
-      currentFormId,
-      currentUser.name,
-      isUsingStepper ? '' : '',
-      setFieldValueObj
-    );
-
-    if (!isUsingStepper) {
-      goToNextStep(1, '/membership-level')
-    }
-
+    executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj);
+    // Only need to call goToNextStep when is not using stepper
+    !isUsingStepper && goToNextStep(1, '/membership-level');
   };
   const formikCompanyInfo = useFormik({
     initialValues: initialValues,
@@ -151,7 +140,8 @@ export default function Application() {
     // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
     updateCompanyInfoForm(valueToUpdateFormik);
 
-    executeSendDataByStep(2, values, currentFormId, currentUser.name, isUsingStepper ? '' : goToNextStep);
+    executeSendDataByStep(2, values, currentFormId, currentUser.name);
+    !isUsingStepper && goToNextStep(2, '/working-groups');
   };
   const formikMembershipLevel = useFormik({
     initialValues: initialValues,
@@ -173,14 +163,8 @@ export default function Application() {
         method: formikWorkingGroups.setFieldValue,
       };
 
-      executeSendDataByStep(
-        3,
-        values,
-        currentFormId,
-        currentUser.name,
-        isUsingStepper ? '' : goToNextStep,
-        setFieldValueObj
-      );
+      executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj);
+      !isUsingStepper && goToNextStep(3, '/signing-authority');
     } else if (!isUsingStepper) {
       // If the user is NOT using stepper and NOT joining any wg, then go to next page directly
       goToNextStep(3, '/signing-authority');
@@ -217,14 +201,8 @@ export default function Application() {
         companyInfo: formikCompanyInfo.setFieldValue,
       },
     };
-    executeSendDataByStep(
-      4,
-      values,
-      currentFormId,
-      currentUser.name,
-      isUsingStepper ? '' : goToNextStep,
-      setFieldValueObj
-    );
+    executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj);
+    !isUsingStepper && goToNextStep(4, '/review');
   };
   const formikSigningAuthority = useFormik({
     initialValues: initialValues,
