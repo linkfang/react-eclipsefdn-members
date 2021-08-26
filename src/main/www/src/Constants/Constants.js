@@ -57,18 +57,18 @@ export const FETCH_HEADER = {
 export const MEMBERSHIP_LEVELS = [
   { label: 'Strategic Member', value: 'Strategic Member' },
   {
-    label: 'Contributing Member (formerly referred to as Solutions Members)',
+    label: 'Contributing Member',
     value: 'Contributing Member',
   },
   { label: 'Associate Member', value: 'Associate Member' },
 ];
 
 export const PAGE_STEP = [
-  { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
-  { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
-  { props: { label: WORKING_GROUPS, pathName: '/working-groups' } },
-  { props: { label: SIGNING_AUTHORITY, pathName: '/signing-authority' } },
-  { props: { label: REVIEW, pathName: '/review' } },
+  { label: COMPANY_INFORMATION, pathName: '/company-info' },
+  { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' },
+  { label: WORKING_GROUPS, pathName: '/working-groups' },
+  { label: SIGNING_AUTHORITY, pathName: '/signing-authority' },
+  { label: REVIEW, pathName: '/review' },
 ];
 
 export const CONTACT_TYPE = {
@@ -85,9 +85,47 @@ export const OPTIONS_FOR_PURCHASING_PROCESS = [
   { label: 'Not Applicable', value: 'na' },
 ];
 
-export const OPTIONS_FOR_REVENUE_CURRENCY = [
-  { label: 'USD', value: 'usd' },
-  { label: 'EUR', value: 'eur' },
+export const OPTIONS_FOR_REVENUE = [
+  { label: '> €1 billion', value: '> €1 billion' },
+  { label: '€250 million - €1 billion', value: '€250 million - €1 billion' },
+  { label: '€100 million - €250 million', value: '€100 million - €250 million' },
+  { label: '€50 million - €100 million', value: '€50 million - €100 million' },
+  { label: '€10 million - €50 million', value: '€10 million - €50 million' },
+  { label: '€1 million - €10 million', value: '€1 million - €10 million' },
+  { label: '< €1 million', value: '< €1 million' },
+  { label: 'Not Applicable', value: 'Not Applicable' },
+];
+
+export const HELPERTEXT_FOR_REVENUE = (
+  <>
+    Choose Not Applicable if your organization is: <br />
+    Govt, Govt agencies, Research Organizations, NGOs, etc. <br />
+    Academic, Publishing Organizations, User Groups, etc.
+  </>
+);
+
+export const OPTIONS_FOR_EMPLOYEE_COUNT = [
+  { label: '1 - 10', value: '1 - 10' },
+  { label: '10 - 100', value: '10 - 100' },
+  { label: '100 - 1000', value: '100 - 1000' },
+  { label: '1000 - 10,000', value: '1000 - 10,000' },
+  { label: '> 10,000', value: '> 10,000' },
+];
+
+export const OPTIONS_FOR_ORG_TYPE = [
+  {
+    label: 'Non-Profit Open Source Organization/User Group',
+    value: 'NON_PROFIT_OPEN_SOURCE',
+  },
+  { label: 'Academic Organization', value: 'ACADEMIC' },
+  { label: 'Standards Organization', value: 'STANDARDS' },
+  {
+    label: 'Government Organization, Government Agency, or NGO',
+    value: 'GOVERNMENT_ORGANIZATION_AGENCY_NGO',
+  },
+  { label: 'Publishing/Media Organization', value: 'MEDIA_ORGANIZATION' },
+  { label: 'Research Institute', value: 'RESEARCH' },
+  { label: 'All others', value: 'OTHER' },
 ];
 
 export const END_POINT = {
@@ -144,7 +182,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Guest Member', relation: 'WGSAP' },
     ],
-    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php'
+    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php',
   },
 ];
 

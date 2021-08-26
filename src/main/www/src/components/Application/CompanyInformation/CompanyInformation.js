@@ -250,7 +250,10 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage="/membership-level" pageIndex={1} />
+      <CustomStepButton
+        previousPage=""
+        nextPage="/membership-level"
+      />
     </form>
   );
 };

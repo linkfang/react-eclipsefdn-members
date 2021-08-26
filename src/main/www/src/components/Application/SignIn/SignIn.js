@@ -60,26 +60,21 @@ class SignIn extends React.Component {
     this.context.needLoadingSignIn ? (
       <Loading />
     ) : (
-      <div className="text-center margin-bottom-20">
+      <div className="text-center margin-bottom-30">
+        <p className="h4 text-center margin-bottom-10">
+          Get started by logging in with your Eclipse Foundation account:
+        </p>
         {getCurrentMode() === MODE_REACT_ONLY && (
           <NavLink to="/company-info">
-            <button
-              type="button"
-              onClick={() => this.getFakeUser(setFurthestPage)}
-              className="btn btn-secondary"
-            >
+            <button type="button" onClick={() => this.getFakeUser(setFurthestPage)} className="btn btn-secondary">
               React Only Login
             </button>
           </NavLink>
         )}
 
         {getCurrentMode() === MODE_REACT_API && (
-          <a
-            href="/api/login"
-            className="btn btn-secondary"
-            onClick={this.handleSignIn}
-          >
-            Sign In
+          <a href="/api/login" className="btn btn-secondary" onClick={this.handleSignIn}>
+            Log in
           </a>
         )}
         <a href="https://accounts.eclipse.org/" className="btn btn-secondary">
