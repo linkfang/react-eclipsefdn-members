@@ -51,7 +51,10 @@ export const validationSchema = [
     // First step - representative contacts
     organization: yup.object().shape({
       address: yup.object().shape({
-        country: yup.mixed().oneOf(countryList, 'Please enter/select a valid country name'),
+        country: yup
+          .mixed()
+          .required('Please enter/select a valid country name')
+          .oneOf(countryList, 'Please enter/select a valid country name'),
         street: REQUIRED_MAX_YUP,
         provinceOrState: MAX_YUP,
         postalCode: MAX_YUP,
