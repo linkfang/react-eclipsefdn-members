@@ -80,6 +80,7 @@ export default function Application() {
       purchasingAndVAT,
       membershipLevel,
       'membershipLevel-label': membershipLevelLabel,
+      workingGroups: formikWorkingGroups.values.workingGroups,
       signingAuthorityRepresentative: signingAuthorityRepresentative,
     };
     setUpdatedFormValues(theNewValue);
