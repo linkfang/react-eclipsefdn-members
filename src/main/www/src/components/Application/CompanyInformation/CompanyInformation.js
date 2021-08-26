@@ -245,15 +245,20 @@ const CompanyInformation = ({
           Please complete your company information below. This should be the legal name and address of your
           organization.
         </p>
+        <p>
+          **** NOTE: Committers wishing to complete the Eclipse Foundation membership process should not use this form,
+          but instead should visit{' '}
+          <a href="https://www.eclipse.org/membership/#tab-membership" target="_blank" rel="noreferrer">
+            here
+          </a>
+          .
+        </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
         <CompanyInformationContacts formik={formik} formikWG={formikWG} />
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton
-        previousPage=""
-        nextPage="/membership-level"
-      />
+      <CustomStepButton previousPage="" nextPage="/membership-level" />
     </form>
   );
 };
