@@ -62,7 +62,7 @@ export default function Input(props) {
         className: classes.input,
         inputProps: {
           'aria-labelledby': ariaLabel,
-          maxLength: 256,
+          maxLength: 255,
         },
       }}
     />
