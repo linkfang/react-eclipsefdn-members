@@ -143,30 +143,20 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
                           const wgLabelPropery = `${workingGroupsLabel}.${index}.workingGroup-label`;
 
                           // if array.find returns a wg obejct, then it means it's already selected
-                          const selectedWGValue =
-                            formik.values.workingGroups.find((item) => {
-                              if (
-                                item.workingGroup?.label === inputValue &&
-                                item['workingGroup-label'] === inputValue
-                              ) {
-                                return true;
-                              } else {
-                                return false;
-                              }
-                            });
+                          const selectedWGValue = formik.values.workingGroups.find((item) => {
+                            if (item.workingGroup?.label === inputValue && item['workingGroup-label'] === inputValue) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          });
 
                           // if the wg user types is already selected somewhere else,
                           // then make the validation fail and show error message
                           if (selectedWGValue) {
-                            formik.setFieldValue(
-                              wgLabelPropery,
-                              `${inputValue} already selected`
-                            );
+                            formik.setFieldValue(wgLabelPropery, `${inputValue} already selected`);
                           } else {
-                            formik.setFieldValue(
-                              wgLabelPropery,
-                              inputValue || null
-                            );
+                            formik.setFieldValue(wgLabelPropery, inputValue || null);
                           }
                         }}
                         label={WORKING_GROUPS}
@@ -176,9 +166,11 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
                         required={true}
                         className={classes.textField}
                         error={Boolean(
-                          formik.errors.workingGroups?.[index]?.['workingGroup']
+                          formik.touched.workingGroups?.[index]?.['workingGroup'] &&
+                            formik.errors.workingGroups?.[index]?.['workingGroup']
                         )}
                         helperText={
+                          formik.touched.workingGroups?.[index]?.['workingGroup'] &&
                           formik.errors.workingGroups?.[index]?.['workingGroup']
                         }
                       />

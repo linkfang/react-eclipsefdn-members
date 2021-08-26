@@ -3,7 +3,12 @@ import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
-import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_REVENUE, OPTIONS_FOR_EMPLOYEE_COUNT, HELPERTEXT_FOR_REVENUE } from '../../../Constants/Constants';
+import {
+  OPTIONS_FOR_ORG_TYPE,
+  OPTIONS_FOR_REVENUE,
+  OPTIONS_FOR_EMPLOYEE_COUNT,
+  HELPERTEXT_FOR_REVENUE,
+} from '../../../Constants/Constants';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -43,6 +48,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             requiredMark={true}
             value={formik.values.organization.legalName}
             onChange={formik.handleChange}
+            error={formik.touched.organization?.legalName && Boolean(formik.errors.organization?.legalName)}
+            helperText={formik.errors.organization?.legalName}
           />
         </div>
       </div>
@@ -54,6 +61,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             inputValue={formik.values.organization.type}
             optionsArray={OPTIONS_FOR_ORG_TYPE}
             handleChange={formik.handleChange}
+            error={formik.touched.organization?.type && Boolean(formik.errors.organization?.type)}
+            helperText={formik.errors.organization?.type}
           />
         </div>
         <div className="col-md-8">
@@ -89,8 +98,10 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             inputName={organizationRevenue.revenue.name}
             inputValue={formik.values.organization.revenue}
             optionsArray={OPTIONS_FOR_REVENUE}
-            helperText={HELPERTEXT_FOR_REVENUE}
+            explanationHelperText={HELPERTEXT_FOR_REVENUE}
             handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.revenue')}
+            error={formik.touched.organization?.revenue && Boolean(formik.errors.organization?.revenue)}
+            helperText={formik.errors.organization?.revenue}
           />
         </div>
         <div className="col-md-8">
@@ -100,6 +111,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             inputValue={formik.values.organization.employeeCount}
             optionsArray={OPTIONS_FOR_EMPLOYEE_COUNT}
             handleChange={(ev) => handleFieldChange(ev.target.value, 'organization.employeeCount')}
+            error={formik.touched.organization?.employeeCount && Boolean(formik.errors.organization?.employeeCount)}
+            helperText={formik.errors.organization?.employeeCount}
           />
         </div>
       </div>
@@ -117,6 +130,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             value={formik.values.organization.address.street}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
+            error={formik.touched.organization?.address?.street && Boolean(formik.errors.organization?.address?.street)}
+            helperText={formik.errors.organization?.address?.street}
           />
         </div>
         <div className="col-md-8">
@@ -128,6 +143,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             value={formik.values.organization.address.city}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
+            error={formik.touched.organization?.address?.city && Boolean(formik.errors.organization?.address?.city)}
+            helperText={formik.errors.organization?.address?.city}
           />
         </div>
       </div>
@@ -184,6 +201,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             value={formik.values.organization.address.provinceOrState}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
+            error={Boolean(formik.errors.organization?.address?.provinceOrState)}
+            helperText={formik.errors.organization?.address?.provinceOrState}
           />
         </div>
 
@@ -196,6 +215,8 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             value={formik.values.organization.address.postalCode}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
+            error={Boolean(formik.errors.organization?.address?.postalCode)}
+            helperText={formik.errors.organization?.address?.postalCode}
           />
         </div>
       </div>

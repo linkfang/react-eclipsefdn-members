@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { MAX_LENGTH_HELPER_TEXT } from '../../../Constants/Constants';
 import { requiredErrorMsg } from './formFieldModel';
 
 /**
@@ -35,17 +36,31 @@ const countryList = require('country-list')
   .getNames()
   .map((item) => item);
 
+const REQUIRED_MAX_YUP = yup.string().required(requiredErrorMsg).max(255, MAX_LENGTH_HELPER_TEXT);
+const MAX_YUP = yup.string().max(255, MAX_LENGTH_HELPER_TEXT);
+const CONTACT_YUP = yup.object().shape({
+  email: yup.string().required(requiredErrorMsg).email('Please enter a valid email'),
+  firstName: REQUIRED_MAX_YUP,
+  lastName: REQUIRED_MAX_YUP,
+  jobtitle: REQUIRED_MAX_YUP,
+});
+
 export const validationSchema = [
   // First step - company Info
   yup.object().shape({
     // First step - representative contacts
     organization: yup.object().shape({
       address: yup.object().shape({
-        country: yup
-          .mixed()
-          .oneOf(countryList, 'Please enter/select a valid country name'),
+        country: yup.mixed().oneOf(countryList, 'Please enter/select a valid country name'),
+        street: REQUIRED_MAX_YUP,
+        provinceOrState: MAX_YUP,
+        postalCode: MAX_YUP,
+        city: REQUIRED_MAX_YUP,
       }),
-
+      legalName: REQUIRED_MAX_YUP,
+      revenue: REQUIRED_MAX_YUP,
+      employeeCount: REQUIRED_MAX_YUP,
+      type: REQUIRED_MAX_YUP,
       twitterHandle: yup
         .string()
         .min(2, 'Twitter handle is too short')
@@ -53,21 +68,20 @@ export const validationSchema = [
         .matches(/^@([A-Za-z0-9_])*$/, 'Please enter a valid Twitter handle'),
     }),
     representative: yup.object().shape({
-      member: yup.object().shape({
-        email: yup.string().email('Please enter a valid email'),
-      }),
-      marketing: yup.object().shape({
-        email: yup.string().email('Please enter a valid email'),
-      }),
-      accounting: yup.object().shape({
-        email: yup.string().email('Please enter a valid email'),
-      }),
+      member: CONTACT_YUP,
+      marketing: CONTACT_YUP,
+      accounting: CONTACT_YUP,
+    }),
+    purchasingAndVAT: yup.object().shape({
+      purchasingProcess: REQUIRED_MAX_YUP,
+      vatNumber: MAX_YUP,
+      countryOfRegistration: MAX_YUP,
     }),
   }),
 
   // Second step - membership level
   yup.object().shape({
-    'membershipLevel-label': yup.mixed(),
+    membershipLevel: REQUIRED_MAX_YUP,
   }),
 
   // Third step - working groups
@@ -77,34 +91,21 @@ export const validationSchema = [
         workingGroup: yup
           .object()
           .nullable()
-          .test(
-            'workingGroup',
-            'Please enter/select a valid working group',
-            function (selectedWG) {
-              const allWorkingGroups = this.options.parent?.allWorkingGroups;
-              const typedWG = this.options.parent?.['workingGroup-label'];
-              const isValid =
-                allWorkingGroups?.includes(typedWG) && selectedWG?.label
-                  ? true
-                  : false;
-
-              return typedWG ? isValid : true;
-            }
-          ),
-        workingGroupRepresentative: yup.object().shape({
-          email: yup.string().email('Please enter a valid email'),
-        }),
+          .required('Please enter/select a valid working group')
+          .test('workingGroup', 'Please enter/select a valid working group', function (selectedWG) {
+            const allWorkingGroups = this.options.parent?.allWorkingGroups;
+            const typedWG = this.options.parent?.['workingGroup-label'];
+            const isValid = allWorkingGroups?.includes(typedWG) && selectedWG?.label ? true : false;
+            return typedWG ? isValid : true;
+          }),
+        participationLevel: REQUIRED_MAX_YUP,
+        workingGroupRepresentative: CONTACT_YUP,
       })
     ),
   }),
 
   // Forth, signing Authority
   yup.object().shape({
-    signingAuthorityRepresentative: yup.object().shape({
-      firstName: yup.string().required(`${requiredErrorMsg}`),
-      lastName: yup.string().required(`${requiredErrorMsg}`),
-      jobtitle: yup.string().required(`${requiredErrorMsg}`),
-      email: yup.string().email('Please enter a valid email'),
-    }),
+    signingAuthorityRepresentative: CONTACT_YUP,
   }),
 ];

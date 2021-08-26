@@ -51,7 +51,7 @@ export default function Input(props) {
       value={value}
       onChange={onChange}
       error={error}
-      helperText={helperText}
+      helperText={error && helperText}
       size="small"
       variant="outlined"
       className={classes.root}
@@ -62,6 +62,7 @@ export default function Input(props) {
         className: classes.input,
         inputProps: {
           'aria-labelledby': ariaLabel,
+          maxLength: 256,
         },
       }}
     />
