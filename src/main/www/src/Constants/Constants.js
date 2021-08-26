@@ -57,7 +57,7 @@ export const FETCH_HEADER = {
 export const MEMBERSHIP_LEVELS = [
   { label: 'Strategic Member', value: 'Strategic Member' },
   {
-    label: 'Contributing Member (formerly referred to as Solutions Members)',
+    label: 'Contributing Member',
     value: 'Contributing Member',
   },
   { label: 'Associate Member', value: 'Associate Member' },
