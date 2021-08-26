@@ -14,11 +14,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange, helperText }) {
+export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange, explanationHelperText, error, helperText }) {
   const classes = useStyles();
 
   return (
-    <FormControl margin="dense" variant="outlined" required={true} className={classes.formControl}>
+    <FormControl margin="dense" variant="outlined" required={true} className={classes.formControl} error={error}>
       <InputLabel>{inputLabel}</InputLabel>
       <Select
         name={inputName}
@@ -33,7 +33,8 @@ export default function DropdownMenu({ inputLabel, inputName, inputValue, option
           </MenuItem>
         ))}
       </Select>
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {error && <FormHelperText>{helperText}</FormHelperText>}
+      {explanationHelperText && <FormHelperText>{explanationHelperText}</FormHelperText>}
     </FormControl>
   );
 }

@@ -41,6 +41,8 @@ const MembershipLevel = ({ formik }) => {
               inputValue={formik.values.membershipLevel}
               optionsArray={MEMBERSHIP_LEVELS}
               handleChange={formik.handleChange}
+              error={formik.touched.membershipLevel && Boolean(formik.errors.membershipLevel)}
+              helperText={formik.errors.membershipLevel}
             />
           </div>
         </div>
