@@ -3,6 +3,7 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { OPTIONS_FOR_ORG_TYPE } from '../../../Constants/Constants';
 
 interface ReviewProps {
   values: FormValue;
@@ -39,24 +40,27 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         <h2 className="fw-600 h3">Company Information</h2>
         <div className="row">
           <div className="col-md-12">
-            <div className="margin-top-25 preview-field">{values.organization.legalName}</div>
+            <label>Organization Name</label>
+            <div className="preview-field">{values.organization.legalName}</div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-12">
             <label>Organization Type</label>
-            <div className="preview-field">{values.organization.type}</div>
-          </div>
-          <div className="col-md-8">
-            <label>Twitter</label>
-            <div className="preview-field">{values.organization.twitterHandle}</div>
+            <div className="preview-field">
+              {OPTIONS_FOR_ORG_TYPE.find((item) => item.value === values.organization.type)?.label}
+            </div>
           </div>
         </div>
 
         <div className="row margin-top-15">
-          <div className="col-md-8">
+          <div className="col-md-6">
+            <label>Twitter</label>
+            <div className="preview-field">{values.organization.twitterHandle}</div>
+          </div>
+          <div className="col-md-6">
             <label>Organization Revenue</label>
             <div className="preview-field">{values.organization.revenue}</div>
           </div>
-          <div className="col-md-8">
+          <div className="col-md-4">
             <label>Employee Count</label>
             <div className="preview-field">{values.organization.employeeCount}</div>
           </div>
