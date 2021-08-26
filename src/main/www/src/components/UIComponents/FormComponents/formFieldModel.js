@@ -95,11 +95,12 @@ export const initialValues = {
         jobtitle: '',
         email: '',
         id: '',
+        sameAsCompany: false,
       },
     },
   ],
 
-  isJoiningWG: false,
+  skipJoiningWG: false,
 
   signingAuthorityRepresentative: {
     firstName: '',

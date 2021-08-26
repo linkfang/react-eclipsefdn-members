@@ -7,7 +7,6 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  PATH_NAME_ARRAY,
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
@@ -179,7 +178,8 @@ export function matchContactFields(existingContactData) {
  */
 export function matchWorkingGroupFields(
   existingworkingGroupData,
-  workingGroupsOptions
+  workingGroupsOptions,
+  existingCompanyContact,
 ) {
   var res = [];
   // Array
@@ -187,6 +187,12 @@ export function matchWorkingGroupFields(
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
+    const basicRepInfo = {
+      firstName: item?.contact?.first_name || '',
+      lastName: item?.contact?.last_name || '',
+      jobtitle: item?.contact?.job_title || '',
+      email: item?.contact?.email || '',
+    };
     res.push({
       id: item?.id || '',
       workingGroup:
@@ -198,11 +204,12 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact?.first_name || '',
-        lastName: item?.contact?.last_name || '',
-        jobtitle: item?.contact?.job_title || '',
-        email: item?.contact?.email || '',
+        ...basicRepInfo,
         id: item?.contact?.id || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          basicRepInfo
+        ),
       },
     });
   });
@@ -306,9 +313,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
-  const theDate = eachWorkingGroupData?.effectiveDate
-    ? new Date(eachWorkingGroupData?.effectiveDate)
-    : new Date();
+  const theDate = new Date();
 
   return {
     id: eachWorkingGroupData?.id,
@@ -329,27 +334,14 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(
-  step,
-  formData,
-  formId,
-  userId,
-  goToNextStep,
-  setFieldValueObj
-) {
-  const goToNextStepObj = {
-    method: goToNextStep,
-    stepNum: step,
-    pathName: PATH_NAME_ARRAY[step],
-  };
+export async function executeSendDataByStep(step, formData, formId, userId, setFieldValueObj) {
   switch (step) {
     case 1:
-      // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
       callSendData(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        goToNextStepObj,
+        step,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -358,12 +350,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.member,
-          CONTACT_TYPE.COMPANY,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.member, CONTACT_TYPE.COMPANY, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -372,12 +360,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.marketing,
-          CONTACT_TYPE.MARKETING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.marketing, CONTACT_TYPE.MARKETING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -386,12 +370,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.accounting,
-          CONTACT_TYPE.ACCOUNTING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.accounting, CONTACT_TYPE.ACCOUNTING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -403,15 +383,27 @@ export async function executeSendDataByStep(
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
         ''
       );
+      let isWGRepSameAsCompany = false;
+      formData.workingGroups.map(
+        (wg) => (isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany)
+      );
+      // only do this API call when there is at least 1 WG rep is same as company rep
+      if (isWGRepSameAsCompany) {
+        formData.workingGroups.forEach((item, index) => {
+          callSendData(
+            formId,
+            END_POINT.working_groups,
+            matchWGFieldsToBackend(item, formId),
+            '',
+            setFieldValueObj,
+            index
+          );
+        });
+      }
       break;
 
     case 2:
-      callSendData(
-        formId,
-        '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        goToNextStepObj
-      );
+      callSendData(formId, '', matchMembershipLevelFieldsToBackend(formData, formId, userId), step);
       break;
 
     case 3:
@@ -420,7 +412,7 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          goToNextStepObj,
+          step,
           setFieldValueObj,
           index
         );
@@ -431,24 +423,14 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.signingAuthorityRepresentative,
-          CONTACT_TYPE.SIGNING,
-          formId
-        ),
-        goToNextStepObj,
+        matchContactFieldsToBackend(formData.signingAuthorityRepresentative, CONTACT_TYPE.SIGNING, formId),
+        step,
         setFieldValueObj
       );
       break;
 
     case 5:
-      callSendData(
-        formId,
-        END_POINT.complete,
-        false,
-        goToNextStepObj,
-        setFieldValueObj
-      );
+      callSendData(formId, END_POINT.complete, false, step, setFieldValueObj);
       break;
 
     default:
@@ -468,7 +450,7 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
-  goToNextStepObj,
+  stepNum,
   setFieldValueObj,
   index
 ) {
@@ -490,9 +472,6 @@ function callSendData(
   if (getCurrentMode() === MODE_REACT_ONLY) {
     console.log(`You called ${url} with Method ${method} and data body is:`);
     console.log(JSON.stringify(dataBody));
-    if (goToNextStepObj) {
-      goToNextStepObj.method(goToNextStepObj.stepNum, goToNextStepObj.pathName);
-    }
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -502,7 +481,7 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (goToNextStepObj.stepNum === 5) {
+        if (stepNum === 5) {
           if (res.ok) return res;
         } else {
           if (res.ok) return res.json();
@@ -572,13 +551,6 @@ function callSendData(
             default:
               break;
           }
-        }
-
-        if (goToNextStepObj) {
-          goToNextStepObj.method(
-            goToNextStepObj.stepNum,
-            goToNextStepObj.pathName
-          );
         }
       })
       .catch((err) => {

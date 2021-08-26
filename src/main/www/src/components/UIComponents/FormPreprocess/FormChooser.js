@@ -14,7 +14,7 @@ import {
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
 const styles = {
-  marginBottom: '20px',
+  marginBottom: '30px',
   textAlign: 'center',
 };
 
@@ -100,7 +100,7 @@ const FormChooser = ({
           <Loading />
         ) : (
           <div style={styles}>
-            <h1 className="h3 padding-bottom-10">
+            <h1 className="h4">
               Welcome back! You can continue the application you previously
               started or start a new application.
             </h1>

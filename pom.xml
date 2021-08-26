@@ -19,6 +19,7 @@
 		<quarkus-plugin.version>1.13.7.Final</quarkus-plugin.version>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+		<openhtml.version>1.0.9</openhtml.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -97,6 +98,28 @@
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-hibernate-validator</artifactId>
 		</dependency>
+
+    <dependency>
+      <!-- ALWAYS required, usually included transitively. -->
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-core</artifactId>
+      <version>${openhtml.version}</version>
+    </dependency>
+    
+    <dependency>
+      <!-- Required for PDF output. -->
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-pdfbox</artifactId>
+      <version>${openhtml.version}</version>
+    </dependency>
+    
+    <dependency>
+      <!-- Required for image output only. -->    
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-java2d</artifactId>
+      <version>${openhtml.version}</version>
+    </dependency>
+
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-junit5</artifactId>

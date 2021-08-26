@@ -13,8 +13,8 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList, formik, index }) => {
   const [participationLevelOptions, setParticipationLevelOptions] = useState([]);
   const [selectedWG, setSelectedWG] = useState();
-
   const theIndex = index;
+
   useEffect(() => {
     // If have selected working group, find this working group's
     // participation levels, and pass to the react-select option
@@ -61,11 +61,16 @@ const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList
         </div>
       </div>
       <p>
-        You can find additional information about {selectedWG?.label} in the{' '}
+        Each Working Group has different participation levels and restrictions on who can join at those levels (e.g.,
+        Guest Member level is typically restricted to non-profit organizations). See the{' '}
         <a target="_blank" rel="noreferrer" href={selectedWG?.charter}>
-          {selectedWG?.label} charter
-        </a>
-        .
+          charter
+        </a>{' '}
+        for full details on which choice is best for you, and to see the working group fees associated with joining this
+        working group. Note: working group fees are in addition to the membership fees associated with joining the
+        Eclipse Foundation. Please{' '}
+        <a href="mailto:membership.coordination@eclipse-foundation.org">contact our membership team</a> with any
+        questions.
       </p>
     </>
   );

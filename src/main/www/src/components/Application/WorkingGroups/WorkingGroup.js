@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
-import WorkingGroupEffectiveDate from './WorkingGroupEffectiveDate';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
@@ -12,7 +11,7 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
 import { FieldArray } from 'formik';
-import Loading from '../../UIComponents/Loading/Loading';
+import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Wrapper for Working Group Selector,
@@ -27,19 +26,7 @@ import Loading from '../../UIComponents/Loading/Loading';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const each_workingGroupField = {
-  id: '',
-  workingGroup: '',
-  participationLevel: '',
-  effectiveDate: '',
-  workingGroupRepresentative: {
-    firstName: '',
-    lastName: '',
-    jobtitle: '',
-    email: '',
-    id: '',
-  },
-};
+const each_workingGroupField = initialValues.workingGroups[0];
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -51,7 +38,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
 
@@ -87,9 +74,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
     }
   };
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <FieldArray
       name={workingGroupsLabel}
       render={(arrayHelpers) => (
@@ -200,13 +185,8 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                       fullWorkingGroupList={fullWorkingGroupList}
                       formik={formik}
                     />
-                    <WorkingGroupEffectiveDate
-                      name={`${workingGroupsLabel}.${index}.effectiveDate`}
-                      index={index}
-                      label="Effective Date"
-                      formik={formik}
-                    />
                     <WorkingGroupsRepresentative
+                      formikOrgValue={formikOrgValue}
                       name={`${workingGroupsLabel}.${index}.workingGroupRepresentative`}
                       index={index}
                       label="Working Group Representative"
