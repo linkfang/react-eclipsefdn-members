@@ -89,22 +89,25 @@ export const validationSchema = [
 
   // Third step - working groups
   yup.object().shape({
-    workingGroups: yup.array().of(
-      yup.object().shape({
-        workingGroup: yup
-          .object()
-          .nullable()
-          .required('Please enter/select a valid working group')
-          .test('workingGroup', 'Please enter/select a valid working group', function (selectedWG) {
-            const allWorkingGroups = this.options.parent?.allWorkingGroups;
-            const typedWG = this.options.parent?.['workingGroup-label'];
-            const isValid = allWorkingGroups?.includes(typedWG) && selectedWG?.label ? true : false;
-            return typedWG ? isValid : true;
-          }),
-        participationLevel: REQUIRED_MAX_YUP,
-        workingGroupRepresentative: CONTACT_YUP,
-      })
-    ),
+    workingGroups: yup.array().when('skipJoiningWG', {
+      is: false,
+      then: yup.array().of(
+        yup.object().shape({
+          workingGroup: yup
+            .object()
+            .nullable()
+            .required('Please enter/select a valid working group')
+            .test('workingGroup', 'Please enter/select a valid working group', function (selectedWG) {
+              const allWorkingGroups = this.options.parent?.allWorkingGroups;
+              const typedWG = this.options.parent?.['workingGroup-label'];
+              const isValid = allWorkingGroups?.includes(typedWG) && selectedWG?.label ? true : false;
+              return typedWG ? isValid : true;
+            }),
+          participationLevel: REQUIRED_MAX_YUP,
+          workingGroupRepresentative: CONTACT_YUP,
+        })
+      ),
+    }),
   }),
 
   // Forth, signing Authority
