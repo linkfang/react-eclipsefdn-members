@@ -21,6 +21,10 @@ import {
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
 import { makeStyles } from '@material-ui/core';
+import {
+  fetchAvailableFullWorkingGroupList,
+  fetchWorkingGroupsUserJoined,
+} from '../WorkingGroups/WorkingGroupsWrapper';
 
 /**
  * Wrapper for Contacts and Company components
@@ -35,6 +39,8 @@ import { makeStyles } from '@material-ui/core';
  *  - formField: the form field in formModels/formFieldModel.js
  */
 
+let hasWGData = false;
+
 const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
@@ -48,10 +54,19 @@ const useStyles = makeStyles(() => ({
 let hasOrgData = false;
 let hasMembershipLevelData = false;
 
-const CompanyInformation = ({ formik, isStartNewForm }) => {
+const CompanyInformation = ({
+  formik,
+  isStartNewForm,
+  formikWG,
+  fullWorkingGroupList,
+  setFullWorkingGroupList,
+  setWorkingGroupsUserJoined,
+}) => {
   const { currentFormId } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
+  const setWGFieldValue = formikWG.setFieldValue;
+  const companyRep = formik.values.representative.member;
 
   useEffect(() => {
     scrollToTop();
@@ -84,24 +99,12 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // Using promise pool, because in first step,
       // need to get company data, and contacts data
       let pool = [
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            END_POINT.organizations +
-            url_suffix_local,
-          {
-            headers: FETCH_HEADER,
-          }
-        ),
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            END_POINT.contacts +
-            url_suffix_local,
-          {
-            headers: FETCH_HEADER,
-          }
-        ),
+        fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.organizations + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
+        fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.contacts + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
       ];
       Promise.all(pool)
         .then((res) =>
@@ -140,10 +143,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
             // if nested, it will automatically map the properties and values
             setFieldValue('representative', tempContacts.organizationContacts);
 
-            setFieldValue(
-              'signingAuthorityRepresentative',
-              tempContacts.signingAuthorityRepresentative
-            );
+            setFieldValue('signingAuthorityRepresentative', tempContacts.signingAuthorityRepresentative);
             hasOrgData = true;
           }
           setLoading(false);
@@ -202,6 +202,35 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
     }
   }, [isStartNewForm, setFieldValue, currentFormId]);
 
+  useEffect(() => {
+    fetchAvailableFullWorkingGroupList(setFullWorkingGroupList);
+  }, [setFullWorkingGroupList]);
+
+  useEffect(() => {
+    if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0 && companyRep.firstName) {
+      // continue with an existing one and there is no working group data
+      fetchWorkingGroupsUserJoined(
+        currentFormId,
+        fullWorkingGroupList,
+        setWorkingGroupsUserJoined,
+        setWGFieldValue,
+        companyRep,
+        setLoading
+      );
+      hasWGData = true;
+    } else {
+      setLoading(false);
+    }
+  }, [
+    isStartNewForm,
+    currentFormId,
+    fullWorkingGroupList,
+    setFieldValue,
+    companyRep,
+    setWGFieldValue,
+    setWorkingGroupsUserJoined,
+  ]);
+
   // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
   if (loading || !currentFormId) {
@@ -213,11 +242,11 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       <div className="align-center">
         <h1 className="fw-600 h2">Company Information</h1>
         <p>
-          Please complete your company information below. This should be the
-          legal name and address of your organization.
+          Please complete your company information below. This should be the legal name and address of your
+          organization.
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
-        <CompanyInformationContacts formik={formik} />
+        <CompanyInformationContacts formik={formik} formikWG={formikWG} />
         <CompanyInformationVAT formik={formik} />
       </div>
 

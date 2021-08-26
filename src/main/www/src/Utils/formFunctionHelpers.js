@@ -178,7 +178,8 @@ export function matchContactFields(existingContactData) {
  */
 export function matchWorkingGroupFields(
   existingworkingGroupData,
-  workingGroupsOptions
+  workingGroupsOptions,
+  existingCompanyContact,
 ) {
   var res = [];
   // Array
@@ -186,6 +187,12 @@ export function matchWorkingGroupFields(
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
+    const basicRepInfo = {
+      firstName: item?.contact?.first_name || '',
+      lastName: item?.contact?.last_name || '',
+      jobtitle: item?.contact?.job_title || '',
+      email: item?.contact?.email || '',
+    };
     res.push({
       id: item?.id || '',
       workingGroup:
@@ -197,11 +204,12 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact?.first_name || '',
-        lastName: item?.contact?.last_name || '',
-        jobtitle: item?.contact?.job_title || '',
-        email: item?.contact?.email || '',
+        ...basicRepInfo,
         id: item?.contact?.id || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          basicRepInfo
+        ),
       },
     });
   });
@@ -305,9 +313,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
-  const theDate = eachWorkingGroupData?.effectiveDate
-    ? new Date(eachWorkingGroupData?.effectiveDate)
-    : new Date();
+  const theDate = new Date();
 
   return {
     id: eachWorkingGroupData?.id,
@@ -371,7 +377,29 @@ export async function executeSendDataByStep(step, formData, formId, userId, setF
           method: setFieldValueObj.method,
         }
       );
-      callSendData(formId, '', matchMembershipLevelFieldsToBackend(formData, formId, userId), '');
+      callSendData(
+        formId,
+        '',
+        matchMembershipLevelFieldsToBackend(formData, formId, userId),
+        ''
+      );
+      let isWGRepSameAsCompany = false;
+      formData.workingGroups.map(
+        (wg) => (isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany)
+      );
+      // only do this API call when there is at least 1 WG rep is same as company rep
+      if (isWGRepSameAsCompany) {
+        formData.workingGroups.forEach((item, index) => {
+          callSendData(
+            formId,
+            END_POINT.working_groups,
+            matchWGFieldsToBackend(item, formId),
+            '',
+            setFieldValueObj,
+            index
+          );
+        });
+      }
       break;
 
     case 2:

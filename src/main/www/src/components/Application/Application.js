@@ -25,6 +25,8 @@ export default function Application() {
   const [isStartNewForm, setIsStartNewForm] = useState(true);
   const [isLoginExpired, setIsLoginExpired] = useState(false);
   const [isTermChecked, setIsTermChecked] = useState(false);
+  const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
+  const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
 
   const goToNextStep = (pageIndex, nextPage) => {
     if (furthestPage.index <= pageIndex)
@@ -280,6 +282,10 @@ export default function Application() {
               <CompanyInformation
                 formik={formikCompanyInfo}
                 isStartNewForm={isStartNewForm}
+                formikWG={formikWorkingGroups}
+                fullWorkingGroupList={fullWorkingGroupList}
+                setFullWorkingGroupList={setFullWorkingGroupList}
+                setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
               />
             ) : (
               // if uses are not allowed to visit this page,
@@ -303,7 +309,10 @@ export default function Application() {
           {furthestPage.index >= 3 ? (
             <WorkingGroupsWrapper
               formik={formikWorkingGroups}
+              formikOrgValue={formikCompanyInfo.values}
               isStartNewForm={isStartNewForm}
+              fullWorkingGroupList={fullWorkingGroupList}
+              workingGroupsUserJoined={workingGroupsUserJoined}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />

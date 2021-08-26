@@ -17,7 +17,7 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  *
  * @returns
  */
-const Contacts = ({ formik }) => {
+const Contacts = ({ formik, formikWG }) => {
   // the boolean form value of "is marketing Rep. the same as company Rep.?"
   const isMarketingSameAsCompany =
     formik.values.representative.marketing.sameAsCompany;
@@ -88,6 +88,23 @@ const Contacts = ({ formik }) => {
     }
 
     formik.setFieldValue('representative', newRepresentativeValue);
+
+    let isWGRepSameAsCompany = false;
+    const newWG = formikWG.values.workingGroups.map((wg) => {
+      isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany;
+      return wg.workingGroupRepresentative?.sameAsCompany
+        ? {
+            ...wg,
+            workingGroupRepresentative: {
+              ...memberRepInfo,
+              id: wg.workingGroupRepresentative.id || '',
+              sameAsCompany: wg.workingGroupRepresentative.sameAsCompany,
+            },
+          }
+        : wg;
+    });
+    // only call setFieldValue when there is at least 1 wg rep has sameAsCompany: true
+    isWGRepSameAsCompany && formikWG.setFieldValue('workingGroups', newWG);
   };
 
   const generateContacts = (
