@@ -158,13 +158,10 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                           const wgLabelPropery = `${workingGroupsLabel}.${index}.workingGroup-label`;
 
                           // if array.find returns a wg obejct, then it means it's already selected
-                          const selectedWGValue = formik.values.workingGroups.find((item) => {
-                            if (item.workingGroup?.label === inputValue && item['workingGroup-label'] === inputValue) {
-                              return true;
-                            } else {
-                              return false;
-                            }
-                          });
+                          const selectedWGValue = formik.values.workingGroups.find(
+                            (item) =>
+                              item.workingGroup?.label === inputValue && item['workingGroup-label'] === inputValue
+                          );
 
                           // if the wg user types is already selected somewhere else,
                           // then make the validation fail and show error message
