@@ -90,12 +90,7 @@ const Contacts = ({ formik }) => {
     formik.setFieldValue('representative', newRepresentativeValue);
   };
 
-  const generateContacts = (
-    representativeFields,
-    prefix,
-    type,
-    disableInput
-  ) => (
+  const generateContacts = (representativeFields, prefix, type, disableInput) => (
     <>
       {representativeFields.map((el, index) => (
         <div key={prefix + index} className="col-md-12">
@@ -107,12 +102,13 @@ const Contacts = ({ formik }) => {
             requiredMark={true}
             disableInput={disableInput}
             onChange={
-              type === 'member'
-                ? (ev) => handleMemberInputChange(ev.target.value, el.name)
-                : formik.handleChange
+              type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange
             }
             value={formik.values.representative?.[type]?.[el.name]}
-            error={Boolean(formik.errors.representative?.[type]?.[el.name])}
+            error={
+              formik.touched.representative?.[type]?.[el.name] &&
+              Boolean(formik.errors.representative?.[type]?.[el.name])
+            }
             helperText={formik.errors.representative?.[type]?.[el.name]}
           />
         </div>

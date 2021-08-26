@@ -31,6 +31,7 @@ export const REVIEW = 'Review';
 export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
+export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters'
 
 export const PATH_NAME_ARRAY = [
   '/company-info',

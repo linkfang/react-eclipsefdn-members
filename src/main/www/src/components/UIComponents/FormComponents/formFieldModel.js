@@ -18,7 +18,7 @@ const REVENUE = 'Revenue';
 const EMPLOYEE_COUNT = 'Employee Count';
 const ORG_TYPE = 'Organization Type';
 
-export const requiredErrorMsg = 'is required';
+export const requiredErrorMsg = 'Required field';
 
 // Initial values passed to Formik, this defines
 // the form fields, names, and nesting relations of the whole form

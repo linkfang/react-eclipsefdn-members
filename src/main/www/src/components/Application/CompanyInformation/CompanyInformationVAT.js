@@ -23,17 +23,11 @@ export default function CompanyInformationVAT({ formik }) {
 
   return (
     <>
-      <h2
-        className="fw-600 h4 section-header"
-        id={`${purchasingProcess.name}-ctn`}
-      >
+      <h2 className="fw-600 h4 section-header" id={`${purchasingProcess.name}-ctn`}>
         Purchasing Process
         <span className="orange-star margin-left-5">*</span>
       </h2>
-      <p>
-        Does your organization require a Purchase Order to facilitate payment of
-        your membership dues?
-      </p>
+      <p>Does your organization require a Purchase Order to facilitate payment of your membership dues?</p>
       <div className="row">
         <div className="col-md-12 margin-bottom-40">
           <DropdownMenu
@@ -42,6 +36,11 @@ export default function CompanyInformationVAT({ formik }) {
             inputValue={formik.values.purchasingAndVAT.purchasingProcess}
             optionsArray={OPTIONS_FOR_PURCHASING_PROCESS}
             handleChange={formik.handleChange}
+            error={
+              formik.touched.purchasingAndVAT?.purchasingProcess &&
+              Boolean(formik.errors.purchasingAndVAT?.purchasingProcess)
+            }
+            helperText={formik.errors.purchasingAndVAT?.purchasingProcess}
           />
         </div>
       </div>
@@ -72,6 +71,11 @@ export default function CompanyInformationVAT({ formik }) {
               value={formik.values.purchasingAndVAT.vatNumber}
               onChange={formik.handleChange}
               ariaLabel={`vatRegistration`}
+              error={
+                formik.touched.purchasingAndVAT?.vatNumber &&
+                Boolean(formik.errors.purchasingAndVAT?.vatNumber)
+              }
+              helperText={formik.errors.purchasingAndVAT?.vatNumber}
             />
           </div>
 
@@ -84,6 +88,11 @@ export default function CompanyInformationVAT({ formik }) {
               value={formik.values.purchasingAndVAT.countryOfRegistration}
               onChange={formik.handleChange}
               ariaLabel={`vatRegistration`}
+              error={
+                formik.touched.purchasingAndVAT?.countryOfRegistration &&
+                Boolean(formik.errors.purchasingAndVAT?.countryOfRegistration)
+              }
+              helperText={formik.errors.purchasingAndVAT?.countryOfRegistration}
             />
           </div>
         </div>

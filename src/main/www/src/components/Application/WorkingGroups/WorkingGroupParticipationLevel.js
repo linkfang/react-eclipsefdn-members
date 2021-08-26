@@ -51,6 +51,11 @@ const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList
               inputValue={formik.values.workingGroups[theIndex]['participationLevel']}
               optionsArray={participationLevelOptions}
               handleChange={formik.handleChange}
+              error={
+                formik.touched.workingGroups?.[theIndex]?.['participationLevel'] &&
+                Boolean(formik.errors.workingGroups?.[theIndex]?.['participationLevel'])
+              }
+              helperText={formik.errors.workingGroups?.[theIndex]?.['participationLevel']}
             />
           )}
         </div>
