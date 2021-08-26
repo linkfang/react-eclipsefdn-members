@@ -224,7 +224,6 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       <CustomStepButton
         previousPage=""
         nextPage="/membership-level"
-        pageIndex={1}
       />
     </form>
   );
