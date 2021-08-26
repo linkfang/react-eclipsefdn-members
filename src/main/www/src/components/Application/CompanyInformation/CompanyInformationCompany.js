@@ -186,7 +186,6 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
                   className={classes.textField}
                   error={formik.touched.organization?.address?.city && Boolean(formik.errors.organization?.address?.country)}
                   helperText={formik.touched.organization?.address?.city && formik.errors.organization?.address?.country}
-                  oncha
                 />
               );
             }}
