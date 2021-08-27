@@ -80,6 +80,7 @@ export default function Application() {
       purchasingAndVAT,
       membershipLevel,
       'membershipLevel-label': membershipLevelLabel,
+      workingGroups: formikWorkingGroups.values.workingGroups,
       signingAuthorityRepresentative: signingAuthorityRepresentative,
     };
     setUpdatedFormValues(theNewValue);
@@ -159,7 +160,7 @@ export default function Application() {
     setUpdatedFormValues({ ...updatedFormValues, workingGroups });
     console.log('updated working groups: ', values);
 
-    if (values.isJoiningWG) {
+    if (!values.skipJoiningWG) {
       // If the user is joining at least 1 wg, then make related API call
       const setFieldValueObj = {
         fieldName: 'workingGroups',
