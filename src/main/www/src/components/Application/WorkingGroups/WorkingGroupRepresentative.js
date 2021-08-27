@@ -27,6 +27,29 @@ const WorkingGroupRepresentative = ({ name, index, formik, formikOrgValue }) => 
     formik.setFieldValue(`workingGroups[${theIndex}].workingGroupRepresentative`, newValues);
   };
 
+  const generateSingleContact = (el) => (
+    <div key={el.name} className="col-md-12" id={`${name}.${el.name}`}>
+      <Input
+        name={`${name}.${el.name}`}
+        labelName={el.label}
+        placeholder={el.placeholder}
+        ariaLabel={`${name} ${name}.${el.name}`}
+        onChange={formik.handleChange}
+        requiredMark={true}
+        disableInput={formik.values.workingGroups[theIndex].workingGroupRepresentative.sameAsCompany}
+        value={formik.values.workingGroups[theIndex].workingGroupRepresentative[`${el.name}`]}
+        error={
+          formik.touched.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`] &&
+          Boolean(formik.errors.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`])
+        }
+        helperText={
+          formik.touched.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`] &&
+          formik.errors.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`]
+        }
+      />
+    </div>
+  );
+
   return (
     <>
       <h3 className="fw-600 margin-top-30 h4" id={name}>
@@ -44,30 +67,8 @@ const WorkingGroupRepresentative = ({ name, index, formik, formikOrgValue }) => 
         }
         label="Same as Member Representative"
       />
-      <div className="row">
-        {workingGroupRepresentative.map((el) => (
-          <div key={el.name} className="col-md-12" id={`${name}.${el.name}`}>
-            <Input
-              name={`${name}.${el.name}`}
-              labelName={el.label}
-              placeholder={el.placeholder}
-              ariaLabel={`${name} ${name}.${el.name}`}
-              onChange={formik.handleChange}
-              requiredMark={true}
-              disableInput={formik.values.workingGroups[theIndex].workingGroupRepresentative.sameAsCompany}
-              value={formik.values.workingGroups[theIndex].workingGroupRepresentative[`${el.name}`]}
-              error={
-                formik.touched.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`] &&
-                Boolean(formik.errors.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`])
-              }
-              helperText={
-                formik.touched.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`] &&
-                formik.errors.workingGroups?.[theIndex]?.workingGroupRepresentative?.[`${el.name}`]
-              }
-            />
-          </div>
-        ))}
-      </div>
+      <div className="row">{workingGroupRepresentative.map((el, index) => index < 2 && generateSingleContact(el))}</div>
+      <div className="row">{workingGroupRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}</div>
     </>
   );
 };

@@ -117,29 +117,40 @@ const Contacts = ({ formik, formikWG }) => {
     }
   };
 
+  const generateSingleContact = (el, index, prefix, type, disableInput) => (
+    <div key={prefix + index} className="col-md-12">
+      <Input
+        name={`representative.${type}.${el.name}`}
+        labelName={el.label}
+        ariaLabel={prefix + el.name}
+        placeholder={el.placeholder}
+        requiredMark={true}
+        disableInput={disableInput}
+        onChange={type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange}
+        value={formik.values.representative?.[type]?.[el.name]}
+        error={
+          formik.touched.representative?.[type]?.[el.name] && Boolean(formik.errors.representative?.[type]?.[el.name])
+        }
+        helperText={formik.errors.representative?.[type]?.[el.name]}
+      />
+    </div>
+  );
+
   const generateContacts = (representativeFields, prefix, type, disableInput) => (
     <>
-      {representativeFields.map((el, index) => (
-        <div key={prefix + index} className="col-md-12">
-          <Input
-            name={`representative.${type}.${el.name}`}
-            labelName={el.label}
-            ariaLabel={prefix + el.name}
-            placeholder={el.placeholder}
-            requiredMark={true}
-            disableInput={disableInput}
-            onChange={
-              type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange
-            }
-            value={formik.values.representative?.[type]?.[el.name]}
-            error={
-              formik.touched.representative?.[type]?.[el.name] &&
-              Boolean(formik.errors.representative?.[type]?.[el.name])
-            }
-            helperText={formik.errors.representative?.[type]?.[el.name]}
-          />
-        </div>
-      ))}
+      {
+        // Create 2 rows to prevent a strange layout issue when validation for firstname fails.
+      }
+      <div className="row">
+        {representativeFields.map(
+          (el, index) => index < 2 && generateSingleContact(el, index, prefix, type, disableInput)
+        )}
+      </div>
+      <div className="row">
+        {representativeFields.map(
+          (el, index) => index > 1 && generateSingleContact(el, index, prefix, type, disableInput)
+        )}
+      </div>
     </>
   );
 
@@ -157,13 +168,8 @@ const Contacts = ({ formik, formikWG }) => {
         organization, and shall have the authority to update information
         provided to Eclipse Foundation.
       </p>
-      <p>
-        All formal communications from the Eclipse Foundation will be sent to
-        the Member Representative.
-      </p>
-      <div className="row">
-        {generateContacts(companyRep, 'company-rep', 'member', false)}
-      </div>
+      <p>All formal communications from the Eclipse Foundation will be sent to the Member Representative.</p>
+      {generateContacts(companyRep, 'company-rep', 'member', false)}
 
       <h2 className="fw-600 h4" id="marketing-rep">
         Company Marketing Representative
@@ -183,14 +189,7 @@ const Contacts = ({ formik, formikWG }) => {
         label="Same as Member Representative"
       />
 
-      <div className="row">
-        {generateContacts(
-          companyRep,
-          'marketing-rep',
-          'marketing',
-          isMarketingSameAsCompany
-        )}
-      </div>
+      {generateContacts(companyRep, 'marketing-rep', 'marketing', isMarketingSameAsCompany)}
 
       <h2 className="fw-600 h4" id="accounting-rep">
         Company Accounting Representative
@@ -210,13 +209,8 @@ const Contacts = ({ formik, formikWG }) => {
         label="Same as Member Representative"
       />
 
-      <div className="row margin-bottom-40">
-        {generateContacts(
-          companyRep,
-          'accounting-rep',
-          'accounting',
-          isAccountingSameAsCompany
-        )}
+      <div className="margin-bottom-40">
+        {generateContacts(companyRep, 'accounting-rep', 'accounting', isAccountingSameAsCompany)}
       </div>
     </>
   );

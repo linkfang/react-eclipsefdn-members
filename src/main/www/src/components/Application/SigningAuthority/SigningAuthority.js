@@ -14,6 +14,29 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 const sectionName = 'signing-authority';
 const SigningAuthority = ({ formik, formikOrgValue }) => {
   const { signingAuthorityRepresentative } = formField;
+  const name = 'signingAuthorityRepresentative';
+  const generateSingleContact = (el) => (
+    <div key={el.name} className="col-md-12">
+      <Input
+        name={`${name}.${el.name}`}
+        labelName={el.label}
+        placeholder={el.placeholder}
+        requiredMark={true}
+        disableInput={formik.values.signingAuthorityRepresentative.sameAsCompany}
+        ariaLabel={`${name}.${el.name}`}
+        onChange={formik.handleChange}
+        value={formik.values.signingAuthorityRepresentative[`${el.name}`]}
+        error={
+          formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
+          Boolean(formik.errors.signingAuthorityRepresentative?.[`${el.name}`])
+        }
+        helperText={
+          formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
+          formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
+        }
+      />
+    </div>
+  );
 
   const handleCheckboxChange = (isChecked) => {
     const repInfo = isChecked
@@ -53,34 +76,13 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
         />
 
         <div className="row">
-          {signingAuthorityRepresentative.map((el, index) => (
-            <div key={index} className="col-md-12">
-              <Input
-                name={`signingAuthorityRepresentative.${el.name}`}
-                labelName={el.label}
-                placeholder={el.placeholder}
-                requiredMark={true}
-                disableInput={formik.values.signingAuthorityRepresentative.sameAsCompany}
-                onChange={formik.handleChange}
-                value={formik.values.signingAuthorityRepresentative[`${el.name}`]}
-                error={
-                  formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
-                  Boolean(formik.errors.signingAuthorityRepresentative?.[`${el.name}`])
-                }
-                helperText={
-                  formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
-                  formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-                }
-              />
-            </div>
-          ))}
+          {signingAuthorityRepresentative.map((el, index) => index < 2 && generateSingleContact(el))}
+        </div>
+        <div className="row">
+          {signingAuthorityRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}
         </div>
       </div>
-      <CustomStepButton
-        previousPage="/working-groups"
-        nextPage="/review"
-        pageIndex={4}
-      />
+      <CustomStepButton previousPage="/working-groups" nextPage="/review" />
     </form>
   );
 };
