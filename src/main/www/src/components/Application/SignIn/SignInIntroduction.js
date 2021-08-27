@@ -8,20 +8,16 @@ const SignInIntroduction = () => {
         <h1>Membership Application Form</h1>
         <p>
           Please complete the Membership Application Form as part of the overall membership application and enrolment
-          process. Completion of this Form is a required formal step in the{' '}
+          process. Completion of this form is a required formal step in the{' '}
           <a href="https://www.eclipse.org/membership/#tab-membership" target="_blank" rel="noreferrer">
             Membership Application Process
           </a>
-          .
-        </p>
-        <p>
-          Once you complete and submit this Application Form, we will forward the various legal agreements for
-          electronic execution, so please be sure to review these legal documents in advance. For more information,
-          please see{' '}
+          . Once you complete and submit the application form, we will forward the legal agreements for electronic
+          execution, so please be sure to{' '}
           <a href="https://www.eclipse.org/membership/#tab-membership" target="_blank" rel="noreferrer">
-            here
-          </a>
-          .
+            review these legal documents
+          </a>{' '}
+          in advance.
         </p>
       </div>
     </div>
