@@ -136,7 +136,7 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
             </>
           )}
         </div>
-        <CustomStepButton previousPage="/membership-level" nextPage="/signing-authority" pageIndex={3} />
+        <CustomStepButton previousPage="/membership-level" nextPage="/signing-authority" />
       </FormikProvider>
     </form>
   );
