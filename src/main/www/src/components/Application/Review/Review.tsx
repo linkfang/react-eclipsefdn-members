@@ -3,7 +3,9 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { OPTIONS_FOR_ORG_TYPE } from '../../../Constants/Constants';
+import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_PURCHASING_PROCESS } from '../../../Constants/Constants';
+import ReadOnlyInput from '../../UIComponents/Inputs/ReadOnlyInput';
+import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 
 interface ReviewProps {
   values: FormValue;
@@ -28,7 +30,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         submitForm();
       }}
     >
-      <h1 className="fw-600 h2">Review and Submit your Completed Application</h1>
+      <h1 className="fw-600 h2">Review and Submit Your Completed Application</h1>
       <p>
         Please review your completed Membership Application Form. If you would like to make changes to the information,
         please click the back button.
@@ -40,206 +42,317 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         <h2 className="fw-600 h3">Company Information</h2>
         <div className="row">
           <div className="col-md-12">
-            <label>Organization Name</label>
-            <div className="preview-field">{values.organization.legalName}</div>
+            <ReadOnlyInput
+              value={values.organization.legalName}
+              label={formField.organizationName.label}
+              required={true}
+            />
           </div>
           <div className="col-md-12">
-            <label>Organization Type</label>
-            <div className="preview-field">
-              {OPTIONS_FOR_ORG_TYPE.find((item) => item.value === values.organization.type)?.label}
-            </div>
+            <ReadOnlyInput
+              value={OPTIONS_FOR_ORG_TYPE.find((item) => item.value === values.organization.type)?.label}
+              label={formField.organizationType.label}
+              required={true}
+            />
           </div>
         </div>
 
         <div className="row margin-top-15">
           <div className="col-md-6">
-            <label>Twitter</label>
-            <div className="preview-field">{values.organization.twitterHandle}</div>
+            <ReadOnlyInput
+              value={values.organization.twitterHandle}
+              label={formField.organizationTwitter.label}
+              required={false}
+            />
           </div>
           <div className="col-md-6">
-            <label>Organization Revenue</label>
-            <div className="preview-field">{values.organization.revenue}</div>
+            <ReadOnlyInput
+              value={values.organization.revenue}
+              label={formField.organizationRevenue.revenue.label}
+              required={true}
+            />
           </div>
           <div className="col-md-4">
-            <label>Employee Count</label>
-            <div className="preview-field">{values.organization.employeeCount}</div>
+            <ReadOnlyInput
+              value={values.organization.employeeCount}
+              label={formField.organizationRevenue.employeeCount.label}
+              required={true}
+            />
           </div>
         </div>
 
         <h3 className="fw-600 h4 margin-top-20">Address</h3>
         <div className="row margin-bottom-30">
           <div className="col-md-8">
-            <label>Street</label>
-            <div className="preview-field">{values.organization.address.street}</div>
+            <ReadOnlyInput
+              value={values.organization.address.street}
+              label={formField.organizationAddress.street.label}
+              required={true}
+            />
           </div>
           <div className="col-md-4">
-            <label>City</label>
-            <div className="preview-field">{values.organization.address.city}</div>
+            <ReadOnlyInput
+              value={values.organization.address.city}
+              label={formField.organizationAddress.city.label}
+              required={true}
+            />
           </div>
           <div className="col-md-4">
-            <label>Province/State</label>
-            <div className="preview-field">{values.organization.address.provinceOrState}</div>
+            <ReadOnlyInput
+              value={values.organization.address.provinceOrState}
+              label={formField.organizationAddress.provinceOrState.label}
+              required={false}
+            />
           </div>
           <div className="col-md-4">
-            <label>Country</label>
-            <div className="preview-field">{values.organization.address.country}</div>
+            <ReadOnlyInput
+              value={values.organization.address.country}
+              label={formField.organizationAddress.country.label}
+              required={true}
+            />
           </div>
           <div className="col-md-4">
-            <label>PostalCode</label>
-            <div className="preview-field">{values.organization.address.postalCode}</div>
+            <ReadOnlyInput
+              value={values.organization.address.postalCode}
+              label={formField.organizationAddress.postalCode.label}
+              required={false}
+            />
           </div>
         </div>
 
         <h2 className="fw-600 h3">Company Representative Contact</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-6">
-            <label>First Name</label>
-            <div className="preview-field">{values.representative.member.firstName}</div>
+            <ReadOnlyInput
+              value={values.representative.member.firstName}
+              label={formField.companyRep[0].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Last Name</label>
-            <div className="preview-field">{values.representative.member.lastName}</div>
+            <ReadOnlyInput
+              value={values.representative.member.lastName}
+              label={formField.companyRep[1].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Job Title</label>
-            <div className="preview-field">{values.representative.member.jobtitle}</div>
+            <ReadOnlyInput
+              value={values.representative.member.jobtitle}
+              label={formField.companyRep[2].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Email</label>
-            <div className="preview-field">{values.representative.member.email}</div>
+            <ReadOnlyInput
+              value={values.representative.member.email}
+              label={formField.companyRep[3].label}
+              required={true}
+            />
           </div>
         </div>
 
         <h2 className="fw-600 h3">Company Marketing Contact</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-6">
-            <label>First Name</label>
-            <div className="preview-field">{values.representative.marketing.firstName}</div>
+            <ReadOnlyInput
+              value={values.representative.marketing.firstName}
+              label={formField.companyRep[0].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Last Name</label>
-            <div className="preview-field">{values.representative.marketing.lastName}</div>
+            <ReadOnlyInput
+              value={values.representative.marketing.lastName}
+              label={formField.companyRep[1].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Job Title</label>
-            <div className="preview-field">{values.representative.marketing.jobtitle}</div>
+            <ReadOnlyInput
+              value={values.representative.marketing.jobtitle}
+              label={formField.companyRep[2].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Email</label>
-            <div className="preview-field">{values.representative.marketing.email}</div>
+            <ReadOnlyInput
+              value={values.representative.marketing.email}
+              label={formField.companyRep[3].label}
+              required={true}
+            />
           </div>
         </div>
 
         <h2 className="fw-600 h3">Company Accounting Contact</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-6">
-            <label>First Name</label>
-            <div className="preview-field">{values.representative.accounting.firstName}</div>
+            <ReadOnlyInput
+              value={values.representative.accounting.firstName}
+              label={formField.companyRep[0].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Last Name</label>
-            <div className="preview-field">{values.representative.accounting.lastName}</div>
+            <ReadOnlyInput
+              value={values.representative.accounting.lastName}
+              label={formField.companyRep[1].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Job Title</label>
-            <div className="preview-field">{values.representative.accounting.jobtitle}</div>
+            <ReadOnlyInput
+              value={values.representative.accounting.jobtitle}
+              label={formField.companyRep[2].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Email</label>
-            <div className="preview-field">{values.representative.accounting.email}</div>
+            <ReadOnlyInput
+              value={values.representative.accounting.email}
+              label={formField.companyRep[3].label}
+              required={true}
+            />
           </div>
         </div>
 
         <h2 className="fw-600 h3">Purchasing Process and VAT</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-8">
-            <label>Require Purchasing Process</label>
-            <div className="preview-field">{values.purchasingAndVAT.purchasingProcess}</div>
+            <ReadOnlyInput
+              value={
+                OPTIONS_FOR_PURCHASING_PROCESS.find((item) => item.value === values.purchasingAndVAT.purchasingProcess)
+                  ?.label
+              }
+              label={formField.purchasingProcess.label}
+              required={true}
+            />
           </div>
 
           <div className="col-md-8">
-            <label>VAT Number</label>
-            <div className="preview-field">{values.purchasingAndVAT.vatNumber}</div>
+            <ReadOnlyInput
+              value={values.purchasingAndVAT.vatNumber}
+              label={formField.vatRegistration.vatNumber.label}
+              required={false}
+            />
           </div>
 
           <div className="col-md-8">
-            <label>Country of Registration</label>
-            <div className="preview-field">{values.purchasingAndVAT.countryOfRegistration}</div>
+            <ReadOnlyInput
+              value={values.purchasingAndVAT.countryOfRegistration}
+              label={formField.vatRegistration.countryOfRegistration.label}
+              required={false}
+            />
           </div>
         </div>
 
         <h2 className="fw-600 h3">Intended Membership Level</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-10">
-            <div className="preview-field">{values.membershipLevel}</div>
+            <ReadOnlyInput value={values.membershipLevel} label={formField.membershipLevel.label} required={true} />
           </div>
         </div>
 
-        <h2 className="fw-600 h3">Working Group(s) to Join</h2>
-        {
-          // Check if the user joins at least 1 WG, if so, display all. If not, display 'Not joining'
-          values.workingGroups[0].workingGroup.label ? (
-            values.workingGroups.map((el, index) => (
-              <React.Fragment key={index}>
-                <div className="row margin-bottom-30">
-                  <div className="col-md-8">
-                    <label>Working group</label>
-                    <div className="preview-field">{el['workingGroup']['label']}</div>
-                  </div>
-                  <div className="col-md-8">
-                    <label>Intended Participation Level</label>
-                    <div className="preview-field">{el.participationLevel}</div>
-                  </div>
-                  <div className="col-md-8">
-                    <label>Effective Date</label>
-                    <div className="preview-field">{new Date().toLocaleDateString()}</div>
-                  </div>
+        <h2 className="fw-600 h3">Working Group{values.workingGroups.length > 1 && 's'} to Join</h2>
+        <div className="margin-bottom-40">
+          {
+            // Check if the user joins at least 1 WG, if so, display all. If not, display 'Not joining'
+            values.workingGroups[0].workingGroup.label ? (
+              values.workingGroups.map((el, index) => (
+                <React.Fragment key={index}>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <ReadOnlyInput
+                        value={el['workingGroup']['label']}
+                        label={formField.workingGroup.label}
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-8">
+                      <ReadOnlyInput
+                        value={el['workingGroup']['label']}
+                        label={formField.participationLevel.label}
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-8">
+                      <ReadOnlyInput
+                        value={new Date().toLocaleDateString()}
+                        label={formField.effectiveDate.label}
+                        required={true}
+                      />
+                    </div>
 
-                  <div className="col-md-24">
-                    <p className="h4 fw-600 margin-top-25">The Working Group Representative</p>
+                    <div className="col-md-24">
+                      <p className="h4 fw-600 margin-top-15">The Working Group Representative</p>
+                    </div>
+                    <div className="col-md-6">
+                      <ReadOnlyInput
+                        value={el.workingGroupRepresentative.firstName}
+                        label={formField.workingGroupRepresentative[0].label}
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <ReadOnlyInput
+                        value={el.workingGroupRepresentative.lastName}
+                        label={formField.workingGroupRepresentative[1].label}
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <ReadOnlyInput
+                        value={el.workingGroupRepresentative.jobtitle}
+                        label={formField.workingGroupRepresentative[2].label}
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <ReadOnlyInput
+                        value={el.workingGroupRepresentative.email}
+                        label={formField.workingGroupRepresentative[3].label}
+                        required={true}
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <label>First Name</label>
-                    <div className="preview-field">{el.workingGroupRepresentative.firstName}</div>
-                  </div>
-                  <div className="col-md-6">
-                    <label>Last Name</label>
-                    <div className="preview-field">{el.workingGroupRepresentative.lastName}</div>
-                  </div>
-                  <div className="col-md-6">
-                    <label>Job Title</label>
-                    <div className="preview-field">{el.workingGroupRepresentative.jobtitle}</div>
-                  </div>
-                  <div className="col-md-6">
-                    <label>Email</label>
-                    <div className="preview-field">{el.workingGroupRepresentative.email}</div>
-                  </div>
-                </div>
-                <hr />
-              </React.Fragment>
-            ))
-          ) : (
-            <p>Not joining</p>
-          )
-        }
+                  <hr className="margin-top-10" />
+                </React.Fragment>
+              ))
+            ) : (
+              <p>Not joining</p>
+            )
+          }
+        </div>
 
         <h2 className="fw-600 h3">Signing Authority</h2>
         <div className="row margin-bottom-30">
           <div className="col-md-6">
-            <label>First Name</label>
-            <div className="preview-field">{values.signingAuthorityRepresentative.firstName}</div>
+            <ReadOnlyInput
+              value={values.signingAuthorityRepresentative.firstName}
+              label={formField.signingAuthorityRepresentative[0].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Last Name</label>
-            <div className="preview-field">{values.signingAuthorityRepresentative.lastName}</div>
+            <ReadOnlyInput
+              value={values.signingAuthorityRepresentative.lastName}
+              label={formField.signingAuthorityRepresentative[1].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Job Title</label>
-            <div className="preview-field">{values.signingAuthorityRepresentative.jobtitle}</div>
+            <ReadOnlyInput
+              value={values.signingAuthorityRepresentative.jobtitle}
+              label={formField.signingAuthorityRepresentative[2].label}
+              required={true}
+            />
           </div>
           <div className="col-md-6">
-            <label>Email</label>
-            <div className="preview-field">{values.signingAuthorityRepresentative.email}</div>
+            <ReadOnlyInput
+              value={values.signingAuthorityRepresentative.email}
+              label={formField.signingAuthorityRepresentative[3].label}
+              required={true}
+            />
           </div>
         </div>
       </div>
