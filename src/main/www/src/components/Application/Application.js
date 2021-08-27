@@ -217,7 +217,6 @@ export default function Application() {
   const handleLoginExpired = useCallback(() => {
     if (sessionStorage.getItem(HAS_TOKEN_EXPIRED)) {
       sessionStorage.setItem(HAS_TOKEN_EXPIRED, '');
-
       // using setTimeout here is to make the pop up message more noticeable
       setTimeout(() => {
         setIsLoginExpired(true);
@@ -235,8 +234,6 @@ export default function Application() {
   // generate the step options above the form
   const renderStepper = () => (
     <div className="stepper">
-      <Step title="Sign In" index={-1} pathName="/sign-in" />
-
       {PAGE_STEP.map((pageStep, index) => {
         return (
           <Step
@@ -244,10 +241,26 @@ export default function Application() {
             title={pageStep.label}
             index={index}
             pathName={pageStep.pathName}
-            submitCompanyInfo={submitCompanyInfo}
-            submitMembershipLevel={submitMembershipLevel}
-            submitWorkingGroups={submitWorkingGroups}
-            submitSigningAuthority={submitSigningAuthority}
+            formikCompanyInfo={{
+              submitForm: submitCompanyInfo,
+              validate: formikCompanyInfo.validateForm,
+              setTouched: formikCompanyInfo.setTouched,
+            }}
+            formikMembershipLevel={{
+              submitForm: submitMembershipLevel,
+              validate: formikMembershipLevel.validateForm,
+              setTouched: formikMembershipLevel.setTouched,
+            }}
+            formikWorkingGroups={{
+              submitForm: submitWorkingGroups,
+              validate: formikWorkingGroups.validateForm,
+              setTouched: formikWorkingGroups.setTouched,
+            }}
+            formikSigningAuthority={{
+              submitForm: submitSigningAuthority,
+              validate: formikSigningAuthority.validateForm,
+              setTouched: formikSigningAuthority.setTouched,
+            }}
           />
         );
       })}

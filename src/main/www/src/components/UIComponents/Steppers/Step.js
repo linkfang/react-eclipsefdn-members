@@ -22,37 +22,55 @@ const Step = ({
   index,
   title,
   pathName,
-  submitCompanyInfo,
-  submitMembershipLevel,
-  submitWorkingGroups,
-  submitSigningAuthority,
+  formikCompanyInfo,
+  formikMembershipLevel,
+  formikWorkingGroups,
+  formikSigningAuthority,
 }) => {
   const isActive = useRouteMatch(pathName);
   const history = useHistory();
-  const { furthestPage } = useContext(MembershipContext);
-  const handleSubmit = () => {
+  const { furthestPage, setFurthestPage } = useContext(MembershipContext);
+
+  const navigateTo = (result, currentIndex, destinatedPath, formik) => {
+    // If validation result is NOT empty, it means something fail to pass validation
+    if (Object.keys(result).length > 0) {
+      formik.setTouched(result);
+      return;
+    }
     // Only call submit func when user can navigate using stepper
+    furthestPage.index >= currentIndex && formik.submitForm(true);
+    furthestPage.index <= currentIndex && setFurthestPage({ index: currentIndex + 1, pathName: destinatedPath });
+    history.push(pathName);
+  };
+
+  const handleSubmit = () => {
     switch (window.location.hash) {
       case '#company-info':
-        furthestPage.index > 1 && submitCompanyInfo(true);
+        formikCompanyInfo.validate().then((result) => navigateTo(result, 1, '/membership-level', formikCompanyInfo));
         break;
       case '#membership-level':
-        furthestPage.index > 2 && submitMembershipLevel(true);
+        formikMembershipLevel
+          .validate()
+          .then((result) => navigateTo(result, 2, '/working-groups', formikMembershipLevel));
         break;
       case '#working-groups':
-        furthestPage.index > 3 && submitWorkingGroups(true);
+        formikWorkingGroups
+          .validate()
+          .then((result) => navigateTo(result, 3, '/signing-authority', formikWorkingGroups));
         break;
       case '#signing-authority':
-        furthestPage.index > 4 && submitSigningAuthority(true);
+        formikSigningAuthority.validate().then((result) => navigateTo(result, 4, '/review', formikSigningAuthority));
+        break;
+      case '#review':
+        history.push(pathName);
         break;
       default:
         break;
     }
-    history.push(pathName);
   };
   return (
     <div className="step" onClick={handleSubmit}>
-      <span className="step-span-index">{index + 2}</span>
+      <span className="step-span-index">{index + 1}</span>
       <div className="step-span">
         <div className={isActive ? 'step-title-container-active' : 'step-title-container'}>
           <span className="step-title">{title}</span>
