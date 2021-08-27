@@ -96,13 +96,6 @@ html {
 .eclipsefdn-membership-webform input[type='checkbox']:focus {
   outline: none !important;
 }
-.eclipsefdn-membership-webform .preview-field {
-  padding: 5px;
-  border: 1px solid hsl(0, 0%, 80%);
-  border-radius: 5px;
-  background: #fff;
-  min-height: 32px;
-}
 .eclipsefdn-membership-webform .stepper {
   display: flex;
   flex-wrap: wrap;
