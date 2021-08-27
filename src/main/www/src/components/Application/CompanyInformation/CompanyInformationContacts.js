@@ -105,6 +105,16 @@ const Contacts = ({ formik, formikWG }) => {
     });
     // only call setFieldValue when there is at least 1 wg rep has sameAsCompany: true
     isWGRepSameAsCompany && formikWG.setFieldValue('workingGroups', newWG);
+    const isSigningAuthoritySameAsCompany = formik.values.signingAuthorityRepresentative.sameAsCompany;
+    
+    if (isSigningAuthoritySameAsCompany) {
+      const newSigningAuthorityRepValues = {
+        ...memberRepInfo,
+        id: formik.values.signingAuthorityRepresentative.id || '',
+        sameAsCompany: isSigningAuthoritySameAsCompany,
+      };
+      formik.setFieldValue('signingAuthorityRepresentative', newSigningAuthorityRepValues);
+    }
   };
 
   const generateContacts = (representativeFields, prefix, type, disableInput) => (
