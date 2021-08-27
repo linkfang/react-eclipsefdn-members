@@ -3,6 +3,7 @@ import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useEffect } from 'react';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 /**
  * Have not added any API calls here,
@@ -11,8 +12,21 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik }) => {
+const SigningAuthority = ({ formik, formikOrgValue }) => {
   const { signingAuthorityRepresentative } = formField;
+
+  const handleCheckboxChange = (isChecked) => {
+    const repInfo = isChecked
+      ? formikOrgValue.representative.member
+      : formik.values.signingAuthorityRepresentative;
+
+    const newValues = {
+      ...repInfo,
+      sameAsCompany: isChecked,
+      id: formik.values.signingAuthorityRepresentative.id,
+    };
+    formik.setFieldValue('signingAuthorityRepresentative', newValues);
+  };
 
   useEffect(() => {
     scrollToTop();
@@ -24,10 +38,19 @@ const SigningAuthority = ({ formik }) => {
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
         </h1>
-        <p>
-          Please indicate the individual who has the signing authority for the
-          agreement.
-        </p>
+        <p>Please indicate the individual who has the signing authority for the agreement.</p>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="signingAuthorityRepresentative.sameAsCompany"
+              color="primary"
+              checked={formik.values.signingAuthorityRepresentative.sameAsCompany}
+              onChange={(ev) => handleCheckboxChange(ev.target.checked)}
+            />
+          }
+          label="Same as Member Representative"
+        />
 
         <div className="row">
           {signingAuthorityRepresentative.map((el, index) => (
@@ -37,22 +60,15 @@ const SigningAuthority = ({ formik }) => {
                 labelName={el.label}
                 placeholder={el.placeholder}
                 requiredMark={true}
+                disableInput={formik.values.signingAuthorityRepresentative.sameAsCompany}
                 onChange={formik.handleChange}
-                value={
-                  formik.values.signingAuthorityRepresentative[`${el.name}`]
-                }
+                value={formik.values.signingAuthorityRepresentative[`${el.name}`]}
                 error={
-                  formik.touched.signingAuthorityRepresentative?.[
-                    `${el.name}`
-                  ] &&
-                  Boolean(
-                    formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-                  )
+                  formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
+                  Boolean(formik.errors.signingAuthorityRepresentative?.[`${el.name}`])
                 }
                 helperText={
-                  formik.touched.signingAuthorityRepresentative?.[
-                    `${el.name}`
-                  ] &&
+                  formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
                   formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
                 }
               />
