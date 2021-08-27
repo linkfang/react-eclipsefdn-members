@@ -107,6 +107,25 @@ const Contacts = ({ formik, formikWG }) => {
     isWGRepSameAsCompany && formikWG.setFieldValue('workingGroups', newWG);
   };
 
+  const generateSingleContact = (el, index, prefix, type, disableInput) => (
+    <div key={prefix + index} className="col-md-12">
+      <Input
+        name={`representative.${type}.${el.name}`}
+        labelName={el.label}
+        ariaLabel={prefix + el.name}
+        placeholder={el.placeholder}
+        requiredMark={true}
+        disableInput={disableInput}
+        onChange={type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange}
+        value={formik.values.representative?.[type]?.[el.name]}
+        error={
+          formik.touched.representative?.[type]?.[el.name] && Boolean(formik.errors.representative?.[type]?.[el.name])
+        }
+        helperText={formik.errors.representative?.[type]?.[el.name]}
+      />
+    </div>
+  );
+
   const generateContacts = (representativeFields, prefix, type, disableInput) => (
     <>
       {
@@ -114,54 +133,12 @@ const Contacts = ({ formik, formikWG }) => {
       }
       <div className="row">
         {representativeFields.map(
-          (el, index) =>
-            index < 2 && (
-              <div key={prefix + index} className="col-md-12">
-                <Input
-                  name={`representative.${type}.${el.name}`}
-                  labelName={el.label}
-                  ariaLabel={prefix + el.name}
-                  placeholder={el.placeholder}
-                  requiredMark={true}
-                  disableInput={disableInput}
-                  onChange={
-                    type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange
-                  }
-                  value={formik.values.representative?.[type]?.[el.name]}
-                  error={
-                    formik.touched.representative?.[type]?.[el.name] &&
-                    Boolean(formik.errors.representative?.[type]?.[el.name])
-                  }
-                  helperText={formik.errors.representative?.[type]?.[el.name]}
-                />
-              </div>
-            )
+          (el, index) => index < 2 && generateSingleContact(el, index, prefix, type, disableInput)
         )}
       </div>
       <div className="row">
         {representativeFields.map(
-          (el, index) =>
-            index > 1 && (
-              <div key={prefix + index} className="col-md-12">
-                <Input
-                  name={`representative.${type}.${el.name}`}
-                  labelName={el.label}
-                  ariaLabel={prefix + el.name}
-                  placeholder={el.placeholder}
-                  requiredMark={true}
-                  disableInput={disableInput}
-                  onChange={
-                    type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange
-                  }
-                  value={formik.values.representative?.[type]?.[el.name]}
-                  error={
-                    formik.touched.representative?.[type]?.[el.name] &&
-                    Boolean(formik.errors.representative?.[type]?.[el.name])
-                  }
-                  helperText={formik.errors.representative?.[type]?.[el.name]}
-                />
-              </div>
-            )
+          (el, index) => index > 1 && generateSingleContact(el, index, prefix, type, disableInput)
         )}
       </div>
     </>

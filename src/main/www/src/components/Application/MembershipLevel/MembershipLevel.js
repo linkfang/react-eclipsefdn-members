@@ -49,7 +49,7 @@ const MembershipLevel = ({ formik }) => {
         <MembershipLevelFeeTable />
       </div>
 
-      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" pageIndex={2} />
+      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" />
     </form>
   );
 };
