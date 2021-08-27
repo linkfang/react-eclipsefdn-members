@@ -7,7 +7,7 @@ const twitterLabel = 'Twitter Handle';
 const twitter = '@username';
 const street = 'Street';
 const city = 'City';
-const provinceOrState = 'Province Or State';
+const provinceOrState = 'Province or State';
 const postalCode = 'Postal Code';
 const country = 'Country';
 const jobtitle = 'Job Title';
@@ -17,6 +17,11 @@ const countryOfRegistration = 'Country of Registration';
 const REVENUE = 'Revenue';
 const EMPLOYEE_COUNT = 'Employee Count';
 const ORG_TYPE = 'Organization Type';
+const MEMBERSHIP_LEVEL = 'Membership Level';
+const WORKING_GROUP = 'Working Group';
+const PARTICIPATION_LEVEL = 'Participation Level';
+const EFFECTTIVE_DATE = 'Effective Date';
+const VAT_REGISTRATION = 'Your organization is registered for VAT in the European Union';
 
 export const requiredErrorMsg = 'Required field';
 
@@ -227,7 +232,7 @@ export const formField = {
   vatRegistration: {
     isRegistered: {
       name: 'purchasingAndVAT.isRegistered',
-      label: 'Your organization is registered for VAT in the European Union',
+      label: VAT_REGISTRATION,
     },
     vatNumber: {
       name: 'purchasingAndVAT.vatNumber',
@@ -242,21 +247,21 @@ export const formField = {
   },
   membershipLevel: {
     name: 'membershipLevel',
-    label: 'Membership Level',
+    label: MEMBERSHIP_LEVEL,
     requiredErrorMsg: requiredErrorMsg,
   },
   workingGroup: {
     name: 'workingGroup',
-    label: 'Working Group',
+    label: WORKING_GROUP,
     requiredErrorMsg: requiredErrorMsg,
   },
   participationLevel: {
     name: 'participationLevel',
-    label: 'Participation Level',
+    label: PARTICIPATION_LEVEL,
   },
   effectiveDate: {
     name: 'effectiveDate',
-    label: 'Effective Date',
+    label: EFFECTTIVE_DATE,
     requiredErrorMsg: requiredErrorMsg,
   },
 
