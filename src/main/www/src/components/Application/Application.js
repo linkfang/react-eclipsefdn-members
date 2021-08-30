@@ -19,8 +19,7 @@ import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
 export default function Application() {
   const history = useHistory();
-  const { currentFormId, furthestPage, setFurthestPage, currentUser } =
-    useContext(MembershipContext);
+  const { currentFormId, furthestPage, setFurthestPage, currentUser } = useContext(MembershipContext);
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
   const [isStartNewForm, setIsStartNewForm] = useState(true);
   const [isLoginExpired, setIsLoginExpired] = useState(false);
@@ -29,8 +28,7 @@ export default function Application() {
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
 
   const goToNextStep = (pageIndex, nextPage) => {
-    if (furthestPage.index <= pageIndex)
-      setFurthestPage({ index: pageIndex + 1, pathName: nextPage });
+    if (furthestPage.index <= pageIndex) setFurthestPage({ index: pageIndex + 1, pathName: nextPage });
     history.push(nextPage);
   };
 
@@ -53,13 +51,7 @@ export default function Application() {
   };
 
   const submitForm = () => {
-    executeSendDataByStep(
-      5,
-      '',
-      currentFormId,
-      currentUser.name,
-      ''
-    );
+    executeSendDataByStep(5, '', currentFormId, currentUser.name, '');
     goToNextStep(5, '/submitted');
   };
 
@@ -116,6 +108,16 @@ export default function Application() {
     };
 
     executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj);
+    // Only make the API call when signingAuthorityRepresentative has an id
+    // If not, it means there is nothing in the db, so no need to update.
+    values.signingAuthorityRepresentative.id &&
+      executeSendDataByStep(
+        4,
+        values,
+        currentFormId,
+        currentUser.name,
+        setFieldValueObj
+      );
     // Only need to call goToNextStep when is not using stepper
     !isUsingStepper && goToNextStep(1, '/membership-level');
   };
@@ -323,10 +325,7 @@ export default function Application() {
         <Route path="/signing-authority">
           {renderStepper()}
           {furthestPage.index >= 4 ? (
-            <SigningAuthority
-              formik={formikSigningAuthority}
-              updatedFormValues={updatedFormValues}
-            />
+            <SigningAuthority formik={formikSigningAuthority} formikOrgValue={formikCompanyInfo.values} />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}
@@ -335,11 +334,11 @@ export default function Application() {
         <Route path="/review">
           {renderStepper()}
           {furthestPage.index >= 5 ? (
-            <Review 
-            values={updatedFormValues}
-            submitForm={submitForm}
-            isTermChecked={isTermChecked}
-            setIsTermChecked={setIsTermChecked}
+            <Review
+              values={updatedFormValues}
+              submitForm={submitForm}
+              isTermChecked={isTermChecked}
+              setIsTermChecked={setIsTermChecked}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />
@@ -347,20 +346,13 @@ export default function Application() {
         </Route>
 
         <Route path="/submitted">
-          {furthestPage.index >= 6 ? (
-            <SubmitSuccess />
-          ) : (
-            <Redirect to={furthestPage.pathName} />
-          )}
+          {furthestPage.index >= 6 ? <SubmitSuccess /> : <Redirect to={furthestPage.pathName} />}
         </Route>
 
         <Redirect to="/" />
       </Switch>
 
-      <TopSlideMsg
-        shouldShowUp={isLoginExpired}
-        msgContent={LOGIN_EXPIRED_MSG}
-      />
+      <TopSlideMsg shouldShowUp={isLoginExpired} msgContent={LOGIN_EXPIRED_MSG} />
     </>
   );
 }

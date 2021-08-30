@@ -166,6 +166,10 @@ export function matchContactFields(existingContactData) {
       lastName: existingSigningContact?.last_name || '',
       jobtitle: existingSigningContact?.job_title || '',
       email: existingSigningContact?.email || '',
+      sameAsCompany: checkSameContact(
+        existingCompanyContact,
+        existingSigningContact
+      ),
     },
   };
 }
