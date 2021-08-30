@@ -12,7 +12,7 @@ const SubmitSuccess = () => {
   }, []);
   return (
     <>
-      <h1 className="fw-600 h2">Confirmation message on submission: </h1>
+      <h1 className="fw-600 h2">Thank you for completing the Eclipse Foundation membership application process!</h1>
       <p>We thank you for completing the application process.</p>
       <p>As next steps,</p>
       <ol>
