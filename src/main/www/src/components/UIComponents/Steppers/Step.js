@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
+import { isObjectEmpty } from '../../../Utils/formFunctionHelpers';
 
 /**
  * Props:
@@ -46,7 +47,14 @@ const Step = ({
   const handleSubmit = () => {
     switch (window.location.hash) {
       case '#company-info':
-        formikCompanyInfo.validate().then((result) => navigateTo(result, 1, '/membership-level', formikCompanyInfo));
+        // const a = isObjectEmpty(formikCompanyInfo.values.organization);
+        console.log(formikCompanyInfo.values)
+        // const a = isObjectEmpty(formikCompanyInfo.values.representative);
+        const a = isObjectEmpty(formikCompanyInfo.values.purchasingAndVAT);
+
+        console.log('is empty: ', a);
+
+        // formikCompanyInfo.validate().then((result) => navigateTo(result, 1, '/membership-level', formikCompanyInfo));
         break;
       case '#membership-level':
         formikMembershipLevel

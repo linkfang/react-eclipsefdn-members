@@ -245,6 +245,7 @@ export default function Application() {
               submitForm: submitCompanyInfo,
               validate: formikCompanyInfo.validateForm,
               setTouched: formikCompanyInfo.setTouched,
+              values: formikCompanyInfo.values,
             }}
             formikMembershipLevel={{
               submitForm: submitMembershipLevel,

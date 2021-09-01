@@ -687,3 +687,18 @@ export function requestErrorHandler(statusCode) {
 export function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+export function isObjectEmpty(obj) {
+  for (const key in obj) {
+    // Do not need to check the value of id
+    if (key === 'id') continue;
+
+    const element = obj[key];
+    if (typeof element === 'object') {
+      if (!isObjectEmpty(element)) return false;
+    } else if (element !== '' && element !== false) {
+      return false;
+    }
+  }
+  return true;
+}
