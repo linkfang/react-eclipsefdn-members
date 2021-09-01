@@ -241,26 +241,34 @@ export default function Application() {
             title={pageStep.label}
             index={index}
             pathName={pageStep.pathName}
+            updatedFormValues={updatedFormValues}
             formikCompanyInfo={{
               submitForm: submitCompanyInfo,
               validate: formikCompanyInfo.validateForm,
               setTouched: formikCompanyInfo.setTouched,
               values: formikCompanyInfo.values,
+              setValues: formikCompanyInfo.setValues,
             }}
             formikMembershipLevel={{
               submitForm: submitMembershipLevel,
               validate: formikMembershipLevel.validateForm,
               setTouched: formikMembershipLevel.setTouched,
+              values: formikMembershipLevel.values,
+              setValues: formikMembershipLevel.setValues,
             }}
             formikWorkingGroups={{
               submitForm: submitWorkingGroups,
               validate: formikWorkingGroups.validateForm,
               setTouched: formikWorkingGroups.setTouched,
+              values: formikWorkingGroups.values,
+              setValues: formikWorkingGroups.setValues,
             }}
             formikSigningAuthority={{
               submitForm: submitSigningAuthority,
               validate: formikSigningAuthority.validateForm,
               setTouched: formikSigningAuthority.setTouched,
+              values: formikSigningAuthority.values,
+              setValues: formikSigningAuthority.setValues,
             }}
           />
         );

@@ -101,9 +101,9 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     isRegistered: !!existingPurchasingAndVATData?.registration_country,
-    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
-    vatNumber: existingPurchasingAndVATData?.vat_number,
-    countryOfRegistration: existingPurchasingAndVATData?.registration_country,
+    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required || '',
+    vatNumber: existingPurchasingAndVATData?.vat_number || '',
+    countryOfRegistration: existingPurchasingAndVATData?.registration_country || '',
   };
 }
 
@@ -690,8 +690,8 @@ export function scrollToTop() {
 
 export function isObjectEmpty(obj) {
   for (const key in obj) {
-    // Do not need to check the value of id
-    if (key === 'id') continue;
+    // Do not need to check the value of id or allWorkingGroups, as they are not provided by users
+    if (key === 'id' || key === 'allWorkingGroups') continue;
 
     const element = obj[key];
     if (typeof element === 'object') {
