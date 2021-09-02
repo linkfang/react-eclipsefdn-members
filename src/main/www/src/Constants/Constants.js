@@ -33,14 +33,12 @@ export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
 export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters'
 
-export const PATH_NAME_ARRAY = [
-  '/company-info',
-  '/membership-level',
-  '/working-groups',
-  '/signing-authority',
-  '/review',
-  '/submitted',
-];
+export const ROUTE_COMPANY = '/company-info';
+export const ROUTE_MEMBERSHIP = '/membership-level';
+export const ROUTE_WGS = '/working-groups';
+export const ROUTE_SIGNING = '/signing-authority';
+export const ROUTE_REVIEW = '/review';
+export const ROUTE_SUBMITTED = '/submitted';
 
 export const FETCH_METHOD = {
   POST: 'POST',
@@ -65,11 +63,11 @@ export const MEMBERSHIP_LEVELS = [
 ];
 
 export const PAGE_STEP = [
-  { label: COMPANY_INFORMATION, pathName: '/company-info' },
-  { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' },
-  { label: WORKING_GROUPS, pathName: '/working-groups' },
-  { label: SIGNING_AUTHORITY, pathName: '/signing-authority' },
-  { label: REVIEW, pathName: '/review' },
+  { label: COMPANY_INFORMATION, pathName: ROUTE_COMPANY },
+  { label: MEMBERSHIP_LEVEL, pathName: ROUTE_MEMBERSHIP },
+  { label: WORKING_GROUPS, pathName: ROUTE_WGS },
+  { label: SIGNING_AUTHORITY, pathName: ROUTE_SIGNING },
+  { label: REVIEW, pathName: ROUTE_REVIEW },
 ];
 
 export const CONTACT_TYPE = {
