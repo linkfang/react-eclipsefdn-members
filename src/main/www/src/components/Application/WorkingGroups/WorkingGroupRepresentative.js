@@ -59,10 +59,10 @@ const WorkingGroupRepresentative = ({ name, index, formik, formikOrgValue }) => 
       <FormControlLabel
         control={
           <Checkbox
-            name="representative.marketing.sameAsCompany"
+            name={`workingGroups[${theIndex}].workingGroupRepresentative.sameAsCompany`}
             color="primary"
             checked={formik.values.workingGroups[theIndex].workingGroupRepresentative.sameAsCompany}
-            onChange={(ev) => handleCheckboxChange(ev.target.checked, 'marketing')}
+            onChange={(ev) => handleCheckboxChange(ev.target.checked)}
           />
         }
         label="Same as Member Representative"

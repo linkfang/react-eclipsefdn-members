@@ -113,6 +113,10 @@ export default function Application() {
     };
 
     executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
+    // Only make the API call when signingAuthorityRepresentative has an id
+    // If not, it means there is nothing in the db, so no need to update.
+    values.signingAuthorityRepresentative.id &&
+      executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
     // Only need to call goToNextStep when is not using stepper
     !isUsingStepper && goToNextStep(1, '/membership-level');
   };
@@ -352,7 +356,7 @@ export default function Application() {
         <Route path="/signing-authority">
           {renderStepper()}
           {furthestPage.index >= 4 ? (
-            <SigningAuthority formik={formikSigningAuthority} />
+            <SigningAuthority formik={formikSigningAuthority} formikOrgValue={formikCompanyInfo.values} />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}
