@@ -3,6 +3,7 @@ import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
   deleteData,
+  isObjectEmpty,
   matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
@@ -19,16 +20,7 @@ import {
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
 
@@ -48,7 +40,13 @@ import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, workingGroupsUserJoined }) => {
+const WorkingGroupsWrapper = ({
+  formik,
+  formikOrgValue,
+  fullWorkingGroupList,
+  workingGroupsUserJoined,
+  updatedFormValues,
+}) => {
   const { currentFormId } = useContext(MembershipContext);
   const [shouldOpen, setShouldOpen] = useState(false);
 
@@ -70,6 +68,14 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
     formik.setFieldValue('skipJoiningWG', true);
     formik.setFieldValue('workingGroups', initialValues.workingGroups);
     setShouldOpen(false);
+  };
+
+  const checkIsEmpty = () => {
+    const workingGroups = formik.values.workingGroups;
+    for (let i = 0; i < workingGroups.length; i++) {
+      if (!isObjectEmpty(workingGroups[i])) return false;
+    }
+    return true;
   };
 
   useEffect(() => {
@@ -121,7 +127,13 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
             </>
           )}
         </div>
-        <CustomStepButton previousPage="/membership-level" nextPage="/signing-authority" />
+        <CustomStepButton
+          previousPage="/membership-level"
+          nextPage="/signing-authority"
+          formik={formik}
+          checkIsEmpty={checkIsEmpty}
+          updatedFormValues={updatedFormValues}
+        />
       </FormikProvider>
     </form>
   );

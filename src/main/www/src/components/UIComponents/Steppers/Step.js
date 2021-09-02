@@ -1,9 +1,7 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
-import { isObjectEmpty } from '../../../Utils/formFunctionHelpers';
+import { isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
 
 /**
@@ -40,19 +38,7 @@ const Step = ({
   const navigateTo = (result, currentIndex, destinatedPath, formik, isEmpty) => {
     if (index < currentIndex) {
       // means go back
-
-      // Save values on current step if it's NOT empty and passes validation
-      if (!isEmpty && Object.keys(result).length <= 0) formik.submitForm(true);
-
-      if (!isEmpty && Object.keys(result).length > 0) {
-        // Open modal window if it's NOT empty and fails to pass validation
-        setCurrentFormik(formik);
-        formik.setTouched(result);
-        setShouldOpen(true);
-        return;
-      }
-
-      history.push(pathName);
+      validateGoBack(isEmpty, result, formik, setShouldOpen, () => history.push(pathName), setCurrentFormik);
       return;
     }
 
@@ -62,7 +48,7 @@ const Step = ({
       return;
     }
 
-    formik.submitForm(true);
+    formik.submitForm();
     furthestPage.index <= currentIndex && setFurthestPage({ index: currentIndex + 1, pathName: destinatedPath });
     history.push(pathName);
   };
@@ -83,14 +69,14 @@ const Step = ({
           isObjectEmpty(formikCompanyInfo.values.purchasingAndVAT);
 
         formikCompanyInfo
-          .validate()
+          .validateForm()
           .then((result) => navigateTo(result, 1, '/membership-level', formikCompanyInfo, isEmpty));
         break;
 
       case '#membership-level':
         isEmpty = isObjectEmpty(formikMembershipLevel.values.membershipLevel);
         formikMembershipLevel
-          .validate()
+          .validateForm()
           .then((result) => navigateTo(result, 2, '/working-groups', formikMembershipLevel, isEmpty));
         break;
 
@@ -104,14 +90,14 @@ const Step = ({
           }
         }
         formikWorkingGroups
-          .validate()
+          .validateForm()
           .then((result) => navigateTo(result, 3, '/signing-authority', formikWorkingGroups, isEmpty));
         break;
 
       case '#signing-authority':
         isEmpty = isObjectEmpty(formikSigningAuthority.values.signingAuthorityRepresentative);
         formikSigningAuthority
-          .validate()
+          .validateForm()
           .then((result) => navigateTo(result, 4, '/review', formikSigningAuthority, isEmpty));
         break;
       case '#review':

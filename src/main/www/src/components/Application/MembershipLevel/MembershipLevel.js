@@ -2,7 +2,7 @@ import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
@@ -14,7 +14,7 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const MembershipLevel = ({ formik }) => {
+const MembershipLevel = ({ formik, updatedFormValues }) => {
   const { membershipLevel } = formField;
 
   useEffect(() => {
@@ -49,7 +49,13 @@ const MembershipLevel = ({ formik }) => {
         <MembershipLevelFeeTable />
       </div>
 
-      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" />
+      <CustomStepButton
+        previousPage="/company-info"
+        nextPage="/working-groups"
+        checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
+      />
     </form>
   );
 };
