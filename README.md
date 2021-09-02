@@ -197,6 +197,8 @@ Clients tab allows you to manage list of allowed applications.
 
 To create a client, click on `Clients` in the left menu. You can set the client_id to `rem_app` and the `Root URL` to `http://localhost:3000`. Make sure that the `Client Protocol` is set to `openid-connect`  and the `Access Type` is set to `confidential`.
 
+An additional client will be required for the FoundationDB API access. Information on setting up this client should be defined under the FoundationDB API README file. Once the client is acquired, it will need to have its client ID and secret set in the secret.properties file. They will be respectively set under the properties `quarkus.oidc-client.client-id` and `quarkus.oidc-client.credentials.secret`. The URL of the client within the FoundationDB API realm will need to also be set within the secret.properties under the `quarkus.oidc-client.auth-server-url` property.
+
 [^ Top](#react-eclipsefdn-members)
 ## Contributing
 

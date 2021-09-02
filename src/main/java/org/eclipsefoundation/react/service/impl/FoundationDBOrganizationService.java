@@ -14,6 +14,8 @@ package org.eclipsefoundation.react.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.graphql.NonNull;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.eclipsefoundation.api.APIMiddleware;
@@ -34,22 +38,25 @@ import org.eclipsefoundation.api.OrganizationAPI;
 import org.eclipsefoundation.api.SysAPI;
 import org.eclipsefoundation.api.model.Organization;
 import org.eclipsefoundation.api.model.OrganizationContact;
+import org.eclipsefoundation.api.model.OrganizationDocument;
 import org.eclipsefoundation.api.model.OrganizationMembership;
 import org.eclipsefoundation.api.model.SysRelation;
 import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.core.service.CachingService;
+import org.eclipsefoundation.eclipsedb.dao.EclipseDBPersistenceDAO;
 import org.eclipsefoundation.eclipsedb.dto.OrganizationInformation;
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.model.MemberOrganization;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationDescription;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationLogos;
 import org.eclipsefoundation.react.model.MembershipLevel;
-import org.eclipsefoundation.react.namespace.DatabaseTenants;
+import org.eclipsefoundation.react.model.OrganizationWorkingGroupPA;
 import org.eclipsefoundation.react.service.LiveImageService;
 import org.eclipsefoundation.react.service.OrganizationsService;
+import org.eclipsefoundation.react.service.WorkingGroupsService;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,12 +65,15 @@ import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import io.quarkus.runtime.Startup;
+
 /**
  * Builds a list of working group definitions from the FoundationDB, making use of some data from the FoundationDB
  * system API to retrieve common values such as relation descriptions.
  * 
  * @author Martin Lowe
  */
+@Startup
 @ApplicationScoped
 public class FoundationDBOrganizationService implements OrganizationsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(FoundationDBOrganizationService.class);
@@ -71,11 +81,15 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     private static final String ALL_LIST_CACHE_KEY = "allEntries";
 
     @Inject
-    PersistenceDao dao;
+    DefaultHibernateDao dao;
+    @Inject
+    EclipseDBPersistenceDAO eDBdao;
     @Inject
     FilterService filters;
     @Inject
     LiveImageService imageService;
+    @Inject
+    WorkingGroupsService wgService;
 
     @RestClient
     @Inject
@@ -178,20 +192,15 @@ public class FoundationDBOrganizationService implements OrganizationsService {
 
     /**
      * Used to populate the cache and is therefore uncached. This should not be called outside of the loading cache
-     * thread.
+     * thread. AS this is typically called outside of the request context, a new context should be invoked around this
+     * call to generate the JPA session.
      * 
      * @return list of member organizations
      */
+    @ActivateRequestContext
     protected List<MemberOrganization> getAll() {
         return APIMiddleware.getAll(orgAPI::getOrganizations, Organization.class).stream()
                 .map(this::convertToMemberOrganization).collect(Collectors.toList());
-    }
-
-    private List<SysRelation> getRelations() {
-        return cache
-                .get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class,
-                        () -> APIMiddleware.getAll(sysAPI::getSysRelations, SysRelation.class))
-                .orElseGet(Collections::emptyList);
     }
 
     /**
@@ -212,9 +221,8 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         RDBMSQuery<OrganizationInformation> q = new RDBMSQuery<>(new RequestWrapper(),
                 filters.get(OrganizationInformation.class), params);
         q.setRoot(false);
-        q.setPersistenceUnit(DatabaseTenants.ECLIPSE_DATABASE_TENANT);
         // retrieve and handle the org info data
-        List<OrganizationInformation> r = dao.get(q);
+        List<OrganizationInformation> r = eDBdao.get(q);
         if (!r.isEmpty()) {
             OrganizationInformation info = r.get(0);
             // retrieve the descriptions of the organization
@@ -225,30 +233,91 @@ public class FoundationDBOrganizationService implements OrganizationsService {
 
             // retrieve the logos of the organization
             MemberOrganizationLogos logos = new MemberOrganizationLogos();
-            logos.setFull(imageService.retrieveImageUrl(info::getLargeLogo, Integer.toString(org.getOrganizationID()),
-                    info.getLargeMime(), Optional.of("full")));
-            logos.setSmall(imageService.retrieveImageUrl(info::getSmallLogo, Integer.toString(org.getOrganizationID()),
-                    info.getSmallMime(), Optional.of("small")));
+            if (StringUtils.isNotBlank(info.getLargeMime())) {
+                logos.setFull(imageService.retrieveImageUrl(info::getLargeLogo,
+                        Integer.toString(org.getOrganizationID()), info.getLargeMime(), Optional.of("full")));
+            }
+            if (StringUtils.isNotBlank(info.getSmallMime())) {
+                logos.setSmall(imageService.retrieveImageUrl(info::getSmallLogo,
+                        Integer.toString(org.getOrganizationID()), info.getSmallMime(), Optional.of("small")));
+            }
             out.setLogos(logos);
         }
 
         // retrieve organization membership and create membership levels when possible
-        Optional<List<OrganizationMembership>> memberships = cache.get(Integer.toString(org.getOrganizationID()),
-                new MultivaluedMapImpl<>(), MemberOrganization.class,
+        List<OrganizationMembership> memberships = getCachedOrganizationMemberships(org);
+        // using the system relations, create membership levels
+        List<SysRelation> rels = getCachedRelations();
+        out.setLevels(memberships.stream().map(membership -> {
+            MembershipLevel l = new MembershipLevel();
+            l.setDescription(getRelationDesc(membership.getCompositeId().getRelation(), rels));
+            l.setLevel(membership.getCompositeId().getRelation());
+            return l;
+        }).collect(Collectors.toList()));
+
+        // get org WGPA documents and convert to model to be returned with extra context
+        Map<String, List<String>> wgpaDocIDs = wgService.getWGPADocumentIDs();
+        List<OrganizationDocument> docs = getCachedOrganizationDocuments(org, wgpaDocIDs);
+        out.setWgpas(docs.stream().map(wgpa -> generateOrganizationWorkingGroupPA(wgpa, wgpaDocIDs))
+                .collect(Collectors.toList()));
+        return out;
+    }
+
+    /**
+     * Retrieves cached organization WGPA documents via a caching layer, returning an empty list if none are found.
+     * 
+     * @param org the organization to retrieve documents for.
+     * @param wgpaDocIDs mapping representing the working group aliases to their working group participation agreement
+     * document IDs
+     * @return the list of WGPA documents for current working group or an empty list.
+     */
+    private List<OrganizationDocument> getCachedOrganizationDocuments(Organization org,
+            Map<String, List<String>> wgpaDocIDs) {
+        return cache
+                .get(Integer.toString(org.getOrganizationID()), new MultivaluedMapImpl<>(), OrganizationDocument.class,
+                        () -> APIMiddleware.getAll(
+                                i -> orgAPI.getOrganizationDocuments(Integer.toString(org.getOrganizationID()), i,
+                                        wgpaDocIDs.values().stream().flatMap(List::stream)
+                                                .collect(Collectors.toList())),
+                                OrganizationDocument.class))
+                .orElseGet(Collections::emptyList);
+    }
+
+    private List<OrganizationMembership> getCachedOrganizationMemberships(Organization org) {
+        return cache.get(Integer.toString(org.getOrganizationID()), new MultivaluedMapImpl<>(),
+                OrganizationMembership.class,
                 () -> APIMiddleware.getAll(
                         i -> orgAPI.getOrganizationMembership(Integer.toString(org.getOrganizationID()), i),
-                        OrganizationMembership.class));
-        if (memberships.isPresent()) {
-            // using the system relations, create membership levels
-            List<SysRelation> rels = getRelations();
-            out.setLevels(memberships.get().stream().map(membership -> {
-                MembershipLevel l = new MembershipLevel();
-                l.setDescription(getRelationDesc(membership.getCompositeId().getRelation(), rels));
-                l.setLevel(membership.getCompositeId().getRelation());
-                return l;
-            }).collect(Collectors.toList()));
-        }
-        return out;
+                        OrganizationMembership.class))
+                .orElseGet(Collections::emptyList);
+    }
+
+    private List<SysRelation> getCachedRelations() {
+        return cache
+                .get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class,
+                        () -> APIMiddleware.getAll(sysAPI::getSysRelations, SysRelation.class))
+                .orElseGet(Collections::emptyList);
+    }
+
+    /**
+     * Converts an organization document to a organization WGPA model with extra context.
+     * 
+     * @param wgpa the document to transform
+     * @param wgpaDocIDs mapping representing the working group aliases to their working group participation agreement
+     * document IDs
+     * @return an enhanced document model with extra contextual data.
+     */
+    private OrganizationWorkingGroupPA generateOrganizationWorkingGroupPA(OrganizationDocument wgpa,
+            Map<String, List<String>> wgpaDocIDs) {
+        OrganizationWorkingGroupPA owgpa = new OrganizationWorkingGroupPA();
+        owgpa.setDocumentID(wgpa.getCompositeID().getDocumentID());
+        owgpa.setLevel(wgpa.getRelation());
+        // find the first entry that has a matching ID for current document
+        Optional<Entry<String, List<String>>> wgID = wgpaDocIDs.entrySet().stream()
+                .filter(e -> e.getValue().contains(owgpa.getDocumentID())).findFirst();
+        // if this is missing then we have a document that wasn't in the list of IDs passed to fetch
+        owgpa.setWorkingGroup(wgID.get().getKey());
+        return owgpa;
     }
 
     /**

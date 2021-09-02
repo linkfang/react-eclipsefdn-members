@@ -22,6 +22,7 @@ public class MemberOrganization {
     private MemberOrganizationLogos logos;
     private String website;
     private List<MembershipLevel> levels;
+    private List<OrganizationWorkingGroupPA> wgpas;
 
     /**
      * @return the organizationID
@@ -105,6 +106,20 @@ public class MemberOrganization {
      */
     public void setLevels(List<MembershipLevel> levels) {
         this.levels = levels;
+    }
+
+    /**
+     * @return the wgpas
+     */
+    public List<OrganizationWorkingGroupPA> getWgpas() {
+        return wgpas;
+    }
+
+    /**
+     * @param wgpas the wgpas to set
+     */
+    public void setWgpas(List<OrganizationWorkingGroupPA> wgpas) {
+        this.wgpas = wgpas;
     }
 
     public static class MemberOrganizationDescription {

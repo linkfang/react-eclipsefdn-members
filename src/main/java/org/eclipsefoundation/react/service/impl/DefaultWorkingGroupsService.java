@@ -13,10 +13,12 @@ package org.eclipsefoundation.react.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ import javax.json.bind.Jsonb;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipsefoundation.react.model.WorkingGroup;
 import org.eclipsefoundation.react.model.WorkingGroupMap;
+import org.eclipsefoundation.react.model.WorkingGroupParticipationAgreement;
 import org.eclipsefoundation.react.service.WorkingGroupsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,17 +71,15 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
         LOGGER.info("Starting init of working group levels static members");
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath)) {
             WorkingGroupMap map = json.fromJson(is, WorkingGroupMap.class);
-            this.wgs = new HashMap<>();
-            // iterate over wg map entries and only retain entries not in denyList
-            map.getWorkingGroups().entrySet().stream().filter(entry -> !denyList().contains(entry.getKey()))
-                    .forEach(e -> wgs.put(e.getKey(), e.getValue()));
+            this.wgs = new HashMap<>(map.getWorkingGroups());
             LOGGER.info("Initialized {} working group", wgs.size());
         }
     }
 
     @Override
     public Set<WorkingGroup> get() {
-        return new HashSet<>(wgs.values());
+        return new HashSet<>(wgs.entrySet().stream().filter(entry -> !denyList().contains(entry.getKey()))
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue)).values());
     }
 
     @Override
@@ -86,7 +87,27 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
         return wgs.get(name);
     }
 
+    @Override
+    public Map<String, List<String>> getWGPADocumentIDs() {
+        Map<String, List<String>> wgToDocument = new HashMap<>();
+        wgs.values().stream().forEach(wg -> wgToDocument.put(wg.getAlias(), extractWGPADocumentIDs(wg)));
+        return wgToDocument;
+    }
+
     private List<String> denyList() {
         return denyList.stream().flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    private List<String> extractWGPADocumentIDs(WorkingGroup wg) {
+        List<String> ids = new ArrayList<>();
+        WorkingGroupParticipationAgreement iwgpa = wg.getResources().getParticipationAgreements().getIndividual();
+        if (iwgpa != null) {
+            ids.add(iwgpa.getDocumentId());
+        }
+        WorkingGroupParticipationAgreement wgpa = wg.getResources().getParticipationAgreements().getOrganization();
+        if (wgpa != null) {
+            ids.add(wgpa.getDocumentId());
+        }
+        return ids;
     }
 }
