@@ -17,7 +17,7 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  *
  * @returns
  */
-const Contacts = ({ formik }) => {
+const Contacts = ({ formik, formikWG }) => {
   // the boolean form value of "is marketing Rep. the same as company Rep.?"
   const isMarketingSameAsCompany =
     formik.values.representative.marketing.sameAsCompany;
@@ -44,6 +44,7 @@ const Contacts = ({ formik }) => {
     const newValues = {
       ...repInfo,
       sameAsCompany: isChecked,
+      id: formik.values.representative[fieldName].id
     };
     formik.setFieldValue(`representative.${fieldName}`, newValues);
   };
@@ -87,35 +88,69 @@ const Contacts = ({ formik }) => {
     }
 
     formik.setFieldValue('representative', newRepresentativeValue);
+
+    let isWGRepSameAsCompany = false;
+    const newWG = formikWG.values.workingGroups.map((wg) => {
+      isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany;
+      return wg.workingGroupRepresentative?.sameAsCompany
+        ? {
+            ...wg,
+            workingGroupRepresentative: {
+              ...memberRepInfo,
+              id: wg.workingGroupRepresentative.id || '',
+              sameAsCompany: wg.workingGroupRepresentative.sameAsCompany,
+            },
+          }
+        : wg;
+    });
+    // only call setFieldValue when there is at least 1 wg rep has sameAsCompany: true
+    isWGRepSameAsCompany && formikWG.setFieldValue('workingGroups', newWG);
+    const isSigningAuthoritySameAsCompany = formik.values.signingAuthorityRepresentative.sameAsCompany;
+    
+    if (isSigningAuthoritySameAsCompany) {
+      const newSigningAuthorityRepValues = {
+        ...memberRepInfo,
+        id: formik.values.signingAuthorityRepresentative.id || '',
+        sameAsCompany: isSigningAuthoritySameAsCompany,
+      };
+      formik.setFieldValue('signingAuthorityRepresentative', newSigningAuthorityRepValues);
+    }
   };
 
-  const generateContacts = (
-    representativeFields,
-    prefix,
-    type,
-    disableInput
-  ) => (
+  const generateSingleContact = (el, index, prefix, type, disableInput) => (
+    <div key={prefix + index} className="col-md-12">
+      <Input
+        name={`representative.${type}.${el.name}`}
+        labelName={el.label}
+        ariaLabel={prefix + el.name}
+        placeholder={el.placeholder}
+        requiredMark={true}
+        disableInput={disableInput}
+        onChange={type === 'member' ? (ev) => handleMemberInputChange(ev.target.value, el.name) : formik.handleChange}
+        value={formik.values.representative?.[type]?.[el.name]}
+        error={
+          formik.touched.representative?.[type]?.[el.name] && Boolean(formik.errors.representative?.[type]?.[el.name])
+        }
+        helperText={formik.errors.representative?.[type]?.[el.name]}
+      />
+    </div>
+  );
+
+  const generateContacts = (representativeFields, prefix, type, disableInput) => (
     <>
-      {representativeFields.map((el, index) => (
-        <div key={prefix + index} className="col-md-12">
-          <Input
-            name={`representative.${type}.${el.name}`}
-            labelName={el.label}
-            ariaLabel={prefix + el.name}
-            placeholder={el.placeholder}
-            requiredMark={true}
-            disableInput={disableInput}
-            onChange={
-              type === 'member'
-                ? (ev) => handleMemberInputChange(ev.target.value, el.name)
-                : formik.handleChange
-            }
-            value={formik.values.representative?.[type]?.[el.name]}
-            error={Boolean(formik.errors.representative?.[type]?.[el.name])}
-            helperText={formik.errors.representative?.[type]?.[el.name]}
-          />
-        </div>
-      ))}
+      {
+        // Create 2 rows to prevent a strange layout issue when validation for firstname fails.
+      }
+      <div className="row">
+        {representativeFields.map(
+          (el, index) => index < 2 && generateSingleContact(el, index, prefix, type, disableInput)
+        )}
+      </div>
+      <div className="row">
+        {representativeFields.map(
+          (el, index) => index > 1 && generateSingleContact(el, index, prefix, type, disableInput)
+        )}
+      </div>
     </>
   );
 
@@ -133,13 +168,8 @@ const Contacts = ({ formik }) => {
         organization, and shall have the authority to update information
         provided to Eclipse Foundation.
       </p>
-      <p>
-        All formal communications from the Eclipse Foundation will be sent to
-        the Member Representative.
-      </p>
-      <div className="row">
-        {generateContacts(companyRep, 'company-rep', 'member', false)}
-      </div>
+      <p>All formal communications from the Eclipse Foundation will be sent to the Member Representative.</p>
+      {generateContacts(companyRep, 'company-rep', 'member', false)}
 
       <h2 className="fw-600 h4" id="marketing-rep">
         Company Marketing Representative
@@ -159,14 +189,7 @@ const Contacts = ({ formik }) => {
         label="Same as Member Representative"
       />
 
-      <div className="row">
-        {generateContacts(
-          companyRep,
-          'marketing-rep',
-          'marketing',
-          isMarketingSameAsCompany
-        )}
-      </div>
+      {generateContacts(companyRep, 'marketing-rep', 'marketing', isMarketingSameAsCompany)}
 
       <h2 className="fw-600 h4" id="accounting-rep">
         Company Accounting Representative
@@ -186,13 +209,8 @@ const Contacts = ({ formik }) => {
         label="Same as Member Representative"
       />
 
-      <div className="row margin-bottom-40">
-        {generateContacts(
-          companyRep,
-          'accounting-rep',
-          'accounting',
-          isAccountingSameAsCompany
-        )}
+      <div className="margin-bottom-40">
+        {generateContacts(companyRep, 'accounting-rep', 'accounting', isAccountingSameAsCompany)}
       </div>
     </>
   );

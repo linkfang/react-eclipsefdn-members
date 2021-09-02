@@ -31,6 +31,13 @@ The project maintains the following source code repositories:
 
 ## Third-party Content
 
+### OPEN HTML TO PDF (1.09)  
+
+https://github.com/danfickle/openhtmltopdf/  
+License: GNU Lesser General Public License (LGPL)  
+SPDX-License-Identifier: LGPL-2.1-only  
+No modifications or additions to the library have been made. License text provided through library distribution.  
+
 ### Drupal-Bootstrap (7.x-3.20)
 
 * License: The GPL License (GPL)

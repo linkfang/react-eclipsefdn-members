@@ -1,54 +1,213 @@
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  createStyles,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import classNames from 'classnames';
+import ImageIcon from '@material-ui/icons/Image';
+import { useEffect, useState } from 'react';
+import { getCurrentMode, MODE_REACT_ONLY } from '../../../Constants/Constants';
+
+const orgRepDataTest = [
+  {
+    name: 'John Demo',
+    type: 'Company Rep',
+  },
+  {
+    name: 'Tom Demo',
+    type: 'Marketing Rep',
+  },
+  {
+    name: 'Bob Demo',
+    type: 'Accouting Rep',
+  },
+];
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    introCtn: {
+      padding: 0,
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+    card: {
+      width: '30%',
+      height: 260,
+      boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    companyLogoCard: {
+      backgroundColor: '#8A94A8',
+    },
+    companyLogo: {
+      width: '90%',
+      maxWidth: 250,
+    },
+    companyRepCard: {
+      backgroundColor: '#D0D0D0',
+    },
+    repPrimary: {
+      fontSize: 18,
+    },
+    repSecondary: {
+      fontSize: 14,
+    },
+    companyContentCard: {
+      flexDirection: 'column',
+      justifyContent: 'start',
+      alignItems: 'start',
+      padding: '20px 30px',
+      backgroundColor: '#fff',
+    },
+    contentTitle: {
+      marginBottom: 5,
+    },
+    divider: {
+      width: '100%',
+      margin: '5px 0',
+    },
+    contentList: {
+      width: '100%',
+    },
+    contentItemCtn: {
+      padding: '8px 0',
+    },
+    contentAvatar: {
+      width: 35,
+      height: 35,
+    },
+    contentItemText: {
+      display: 'flex',
+      padding: 0,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    contentItemTextSub: {
+      color: 'hsl(0, 0%, 75%)',
+    },
+  })
+);
+
+interface OrgRep {
+  name: string;
+  type: string;
+}
+
 export default function DashboardIntro() {
-  // below are placeholders
+  const classes = useStyles();
+
+  const [logoURL, setLogo] = useState('');
+  const [orgRepData, setOrgRepData] = useState<Array<OrgRep> | null>(null);
+
+  const renderOrgRep = orgRepData?.map((rep) => (
+    <ListItem>
+      <ListItemText
+        classes={{
+          primary: classes.repPrimary,
+          secondary: classes.repSecondary,
+        }}
+        primary={rep.name}
+        secondary={rep.type}
+      />
+    </ListItem>
+  ));
+
+  useEffect(() => {
+    if (getCurrentMode() === MODE_REACT_ONLY) {
+      setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
+      setOrgRepData(orgRepDataTest);
+    } else {
+      // TO DO:
+      // fetch the logo and set state
+      // fetch the organization rep and set state
+    }
+  }, []);
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
-      <div
-        style={{
-          width: '30%',
-          height: 260,
-          backgroundColor: '#DCDFE5',
-          boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <h5>Your Company Logo</h5>
-      </div>
+    <Container className={classes.introCtn}>
+      <Card className={classNames(classes.card, classes.companyLogoCard)}>
+        {logoURL ? (
+          <CardMedia component="img" className={classes.companyLogo} image={logoURL} alt="Company Logo" />
+        ) : (
+          <CircularProgress />
+        )}
+      </Card>
 
-      <div
-        style={{
-          width: '30%',
-          height: 260,
-          backgroundColor: '#A09C9C',
-          boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <h5>Your Company Rep</h5>
-      </div>
+      <Card className={classNames(classes.card, classes.companyRepCard)}>
+        <CardContent>
+          <List>{renderOrgRep || <CircularProgress />}</List>
+        </CardContent>
+      </Card>
 
-      <div
-        style={{
-          width: '30%',
-          height: 260,
-          backgroundColor: '#fff',
-          boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <h5>Lorem Ipsum</h5>
-      </div>
-    
-    </div>
+      <Card className={classNames(classes.card, classes.companyContentCard)}>
+        <Typography component="h5" variant="h5" className={classes.contentTitle}>
+          Lorem Ipsum
+        </Typography>
+        <List className={classes.contentList}>
+          <ListItem className={classes.contentItemCtn}>
+            <ListItemAvatar>
+              <Avatar className={classes.contentAvatar}>
+                <ImageIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <Container className={classes.contentItemText}>
+              <Typography component="p" variant="body1">
+                Lorem Ipsum
+              </Typography>
+              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
+                Last 24 hours
+              </Typography>
+            </Container>
+          </ListItem>
+          <Divider className={classes.divider} />
+
+          <ListItem className={classes.contentItemCtn}>
+            <ListItemAvatar>
+              <Avatar className={classes.contentAvatar}>
+                <ImageIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <Container className={classes.contentItemText}>
+              <Typography component="p" variant="body1">
+                Lorem Ipsum
+              </Typography>
+              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
+                Processing
+              </Typography>
+            </Container>
+          </ListItem>
+          <Divider className={classes.divider} />
+
+          <ListItem className={classes.contentItemCtn}>
+            <ListItemAvatar>
+              <Avatar className={classes.contentAvatar}>
+                <ImageIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <Container className={classes.contentItemText}>
+              <Typography component="p" variant="body1">
+                Lorem Ipsum
+              </Typography>
+              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
+                On hold
+              </Typography>
+            </Container>
+          </ListItem>
+        </List>
+      </Card>
+    </Container>
   );
 }

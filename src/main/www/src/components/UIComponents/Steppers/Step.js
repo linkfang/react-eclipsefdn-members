@@ -1,4 +1,7 @@
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Props:
@@ -15,24 +18,46 @@ import { NavLink, useRouteMatch } from 'react-router-dom';
  *    - formRef: Passed from FormikStepper. Can use Formik API
  * **/
 
-const Step = (props) => {
-  const { index, title, pathName } = props;
+const Step = ({
+  index,
+  title,
+  pathName,
+  submitCompanyInfo,
+  submitMembershipLevel,
+  submitWorkingGroups,
+  submitSigningAuthority,
+}) => {
   const isActive = useRouteMatch(pathName);
-
+  const history = useHistory();
+  const { furthestPage } = useContext(MembershipContext);
+  const handleSubmit = () => {
+    // Only call submit func when user can navigate using stepper
+    switch (window.location.hash) {
+      case '#company-info':
+        furthestPage.index > 1 && submitCompanyInfo(true);
+        break;
+      case '#membership-level':
+        furthestPage.index > 2 && submitMembershipLevel(true);
+        break;
+      case '#working-groups':
+        furthestPage.index > 3 && submitWorkingGroups(true);
+        break;
+      case '#signing-authority':
+        furthestPage.index > 4 && submitSigningAuthority(true);
+        break;
+      default:
+        break;
+    }
+    history.push(pathName);
+  };
   return (
-    <div className="step">
-      <NavLink to={pathName}>
-        <span className="step-span-index">{index + 2}</span>
-        <div className="step-span">
-          <div
-            className={
-              isActive ? 'step-title-container-active' : 'step-title-container'
-            }
-          >
-            <span className="step-title">{title}</span>
-          </div>
+    <div className="step" onClick={handleSubmit}>
+      <span className="step-span-index">{index + 2}</span>
+      <div className="step-span">
+        <div className={isActive ? 'step-title-container-active' : 'step-title-container'}>
+          <span className="step-title">{title}</span>
         </div>
-      </NavLink>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
-import WorkingGroupEffectiveDate from './WorkingGroupEffectiveDate';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
 import { deleteData } from '../../../Utils/formFunctionHelpers';
 import {
@@ -12,7 +11,7 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
 import { FieldArray } from 'formik';
-import Loading from '../../UIComponents/Loading/Loading';
+import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Wrapper for Working Group Selector,
@@ -27,19 +26,7 @@ import Loading from '../../UIComponents/Loading/Loading';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const each_workingGroupField = {
-  id: '',
-  workingGroup: '',
-  participationLevel: '',
-  effectiveDate: '',
-  workingGroupRepresentative: {
-    firstName: '',
-    lastName: '',
-    jobtitle: '',
-    email: '',
-    id: '',
-  },
-};
+const each_workingGroupField = initialValues.workingGroups[0];
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -51,7 +38,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
 
@@ -87,9 +74,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
     }
   };
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <FieldArray
       name={workingGroupsLabel}
       render={(arrayHelpers) => (
@@ -158,30 +143,17 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                           const wgLabelPropery = `${workingGroupsLabel}.${index}.workingGroup-label`;
 
                           // if array.find returns a wg obejct, then it means it's already selected
-                          const selectedWGValue =
-                            formik.values.workingGroups.find((item) => {
-                              if (
-                                item.workingGroup?.label === inputValue &&
-                                item['workingGroup-label'] === inputValue
-                              ) {
-                                return true;
-                              } else {
-                                return false;
-                              }
-                            });
+                          const selectedWGValue = formik.values.workingGroups.find(
+                            (item) =>
+                              item.workingGroup?.label === inputValue && item['workingGroup-label'] === inputValue
+                          );
 
                           // if the wg user types is already selected somewhere else,
                           // then make the validation fail and show error message
                           if (selectedWGValue) {
-                            formik.setFieldValue(
-                              wgLabelPropery,
-                              `${inputValue} already selected`
-                            );
+                            formik.setFieldValue(wgLabelPropery, `${inputValue} already selected`);
                           } else {
-                            formik.setFieldValue(
-                              wgLabelPropery,
-                              inputValue || null
-                            );
+                            formik.setFieldValue(wgLabelPropery, inputValue || null);
                           }
                         }}
                         label={WORKING_GROUPS}
@@ -191,9 +163,11 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                         required={true}
                         className={classes.textField}
                         error={Boolean(
-                          formik.errors.workingGroups?.[index]?.['workingGroup']
+                          formik.touched.workingGroups?.[index]?.['workingGroup'] &&
+                            formik.errors.workingGroups?.[index]?.['workingGroup']
                         )}
                         helperText={
+                          formik.touched.workingGroups?.[index]?.['workingGroup'] &&
                           formik.errors.workingGroups?.[index]?.['workingGroup']
                         }
                       />
@@ -211,13 +185,8 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, isLoading }) => {
                       fullWorkingGroupList={fullWorkingGroupList}
                       formik={formik}
                     />
-                    <WorkingGroupEffectiveDate
-                      name={`${workingGroupsLabel}.${index}.effectiveDate`}
-                      index={index}
-                      label="Effective Date"
-                      formik={formik}
-                    />
                     <WorkingGroupsRepresentative
+                      formikOrgValue={formikOrgValue}
                       name={`${workingGroupsLabel}.${index}.workingGroupRepresentative`}
                       index={index}
                       label="Working Group Representative"

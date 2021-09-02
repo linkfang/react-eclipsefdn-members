@@ -16,6 +16,7 @@ import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.namespace.FormState;
+import org.eclipsefoundation.react.namespace.OrganizationTypes;
 
 /**
  * Helper for creating valid random DTO objects for use in testing.
@@ -52,7 +53,10 @@ public class DtoHelper {
         FormOrganization o = new FormOrganization();
         o.setForm(mf);
         o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
+        o.setOrganizationType(OrganizationTypes.OTHER);
         o.setTwitterHandle("@" + RandomStringUtils.randomAlphabetic(4, 10));
+        o.setAggregateRevenue(RandomStringUtils.randomNumeric(5, 10));
+        o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));
         Address a = new Address();
         a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
         a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));

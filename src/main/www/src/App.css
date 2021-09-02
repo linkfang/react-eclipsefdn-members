@@ -41,6 +41,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.eclipsefdn-membership-webform .loadingIcon {
   margin-top: 5rem;
   margin-bottom: 3rem;
 }
@@ -56,7 +58,7 @@ html {
   border-color: #ff0000;
 }
 .eclipsefdn-membership-webform .btn {
-  margin: 0 10px;
+  margin: 10px;
   border-radius: 5px;
 }
 .eclipsefdn-membership-webform .button-container {
@@ -94,13 +96,6 @@ html {
 .eclipsefdn-membership-webform input[type='checkbox']:focus {
   outline: none !important;
 }
-.eclipsefdn-membership-webform .preview-field {
-  padding: 5px;
-  border: 1px solid hsl(0, 0%, 80%);
-  border-radius: 5px;
-  background: #fff;
-  min-height: 32px;
-}
 .eclipsefdn-membership-webform .stepper {
   display: flex;
   flex-wrap: wrap;
@@ -116,6 +111,7 @@ html {
   justify-content: center;
   position: relative;
   padding-top: 30px;
+  cursor: pointer;
 }
 .eclipsefdn-membership-webform .step a {
   text-decoration: none;

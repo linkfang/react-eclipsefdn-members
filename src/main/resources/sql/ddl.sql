@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Address, FormWorkingGroup, Contact, FormOrganization, Membe
 CREATE TABLE `MembershipForm` (
   `id` varchar(255) NOT NULL,
   `dateCreated` bigint(20) DEFAULT NULL,
+  `dateSubmitted` bigint(20) DEFAULT NULL,
   `membershipLevel` varchar(255) DEFAULT NULL,
   `purchaseOrderRequired` varchar(255) DEFAULT NULL,
   `registrationCountry` varchar(255) DEFAULT NULL,
@@ -29,6 +30,9 @@ CREATE TABLE `FormOrganization` (
   `id` varchar(255) NOT NULL,
   `legalName` varchar(255) DEFAULT NULL,
   `twitterHandle` varchar(255) DEFAULT NULL,
+  `aggregateRevenue` varchar(255) DEFAULT NULL,
+  `organizationType` varchar(255) DEFAULT NULL,
+  `employeeCount` varchar(255) DEFAULT NULL,
   `form_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_27vg3uhbmy3ev7ote4fjd4evl` (`form_id`),

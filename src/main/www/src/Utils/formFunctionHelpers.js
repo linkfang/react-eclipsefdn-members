@@ -7,7 +7,6 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  PATH_NAME_ARRAY,
   api_prefix,
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
@@ -75,6 +74,9 @@ export function matchCompanyFields(existingOrganizationData) {
     // Step1: company Info
     id: existingOrganizationData?.id || '',
     legalName: existingOrganizationData?.legal_name || '',
+    revenue: existingOrganizationData?.aggregate_revenue || '',
+    employeeCount: existingOrganizationData?.employee_count || '',
+    type: existingOrganizationData?.organization_type || '',
     address: {
       id: existingOrganizationData?.address?.id || '',
       street: existingOrganizationData?.address?.street || '',
@@ -165,6 +167,10 @@ export function matchContactFields(existingContactData) {
       lastName: existingSigningContact?.last_name || '',
       jobtitle: existingSigningContact?.job_title || '',
       email: existingSigningContact?.email || '',
+      sameAsCompany: checkSameContact(
+        existingCompanyContact,
+        existingSigningContact
+      ),
     },
   };
 }
@@ -177,7 +183,8 @@ export function matchContactFields(existingContactData) {
  */
 export function matchWorkingGroupFields(
   existingworkingGroupData,
-  workingGroupsOptions
+  workingGroupsOptions,
+  existingCompanyContact,
 ) {
   var res = [];
   // Array
@@ -185,6 +192,12 @@ export function matchWorkingGroupFields(
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
+    const basicRepInfo = {
+      firstName: item?.contact?.first_name || '',
+      lastName: item?.contact?.last_name || '',
+      jobtitle: item?.contact?.job_title || '',
+      email: item?.contact?.email || '',
+    };
     res.push({
       id: item?.id || '',
       workingGroup:
@@ -196,11 +209,12 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact?.first_name || '',
-        lastName: item?.contact?.last_name || '',
-        jobtitle: item?.contact?.job_title || '',
-        email: item?.contact?.email || '',
+        ...basicRepInfo,
         id: item?.contact?.id || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          basicRepInfo
+        ),
       },
     });
   });
@@ -221,14 +235,17 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     address: {
       city: organizationData.address.city,
       country: organizationData.address.country,
-      postal_code: organizationData.address.postalCode,
-      province_state: organizationData.address.provinceOrState,
+      postal_code: organizationData.address.postalCode  || '',
+      province_state: organizationData.address.provinceOrState  || '',
       street: organizationData.address.street,
     },
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
     twitter: organizationData.twitterHandle || '',
+    aggregate_revenue: organizationData.revenue,
+    employee_count: organizationData.employeeCount,
+    organization_type: organizationData.type
   };
 
   if (organizationData.address.id) {
@@ -301,9 +318,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
-  const theDate = eachWorkingGroupData?.effectiveDate
-    ? new Date(eachWorkingGroupData?.effectiveDate)
-    : new Date();
+  const theDate = new Date();
 
   return {
     id: eachWorkingGroupData?.id,
@@ -324,27 +339,14 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(
-  step,
-  formData,
-  formId,
-  userId,
-  goToNextStep,
-  setFieldValueObj
-) {
-  const goToNextStepObj = {
-    method: goToNextStep,
-    stepNum: step,
-    pathName: PATH_NAME_ARRAY[step],
-  };
+export async function executeSendDataByStep(step, formData, formId, userId, setFieldValueObj) {
   switch (step) {
     case 1:
-      // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
       callSendData(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        goToNextStepObj,
+        step,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
@@ -353,12 +355,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.member,
-          CONTACT_TYPE.COMPANY,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.member, CONTACT_TYPE.COMPANY, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
@@ -367,12 +365,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.marketing,
-          CONTACT_TYPE.MARKETING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.marketing, CONTACT_TYPE.MARKETING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
@@ -381,12 +375,8 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.accounting,
-          CONTACT_TYPE.ACCOUNTING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.accounting, CONTACT_TYPE.ACCOUNTING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
@@ -398,15 +388,27 @@ export async function executeSendDataByStep(
         matchMembershipLevelFieldsToBackend(formData, formId, userId),
         ''
       );
+      let isWGRepSameAsCompany = false;
+      formData.workingGroups.map(
+        (wg) => (isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany)
+      );
+      // only do this API call when there is at least 1 WG rep is same as company rep
+      if (isWGRepSameAsCompany) {
+        formData.workingGroups.forEach((item, index) => {
+          callSendData(
+            formId,
+            END_POINT.working_groups,
+            matchWGFieldsToBackend(item, formId),
+            '',
+            setFieldValueObj,
+            index
+          );
+        });
+      }
       break;
 
     case 2:
-      callSendData(
-        formId,
-        '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        goToNextStepObj
-      );
+      callSendData(formId, '', matchMembershipLevelFieldsToBackend(formData, formId, userId), step);
       break;
 
     case 3:
@@ -415,7 +417,7 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          goToNextStepObj,
+          step,
           setFieldValueObj,
           index
         );
@@ -426,24 +428,14 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.signingAuthorityRepresentative,
-          CONTACT_TYPE.SIGNING,
-          formId
-        ),
-        goToNextStepObj,
+        matchContactFieldsToBackend(formData.signingAuthorityRepresentative, CONTACT_TYPE.SIGNING, formId),
+        step,
         setFieldValueObj
       );
       break;
 
     case 5:
-      callSendData(
-        formId,
-        END_POINT.complete,
-        false,
-        goToNextStepObj,
-        setFieldValueObj
-      );
+      callSendData(formId, END_POINT.complete, false, step, setFieldValueObj);
       break;
 
     default:
@@ -463,7 +455,7 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
-  goToNextStepObj,
+  stepNum,
   setFieldValueObj,
   index
 ) {
@@ -485,9 +477,6 @@ function callSendData(
   if (getCurrentMode() === MODE_REACT_ONLY) {
     console.log(`You called ${url} with Method ${method} and data body is:`);
     console.log(JSON.stringify(dataBody));
-    if (goToNextStepObj) {
-      goToNextStepObj.method(goToNextStepObj.stepNum, goToNextStepObj.pathName);
-    }
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -497,7 +486,7 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (goToNextStepObj.stepNum === 5) {
+        if (stepNum === 5) {
           if (res.ok) return res;
         } else {
           if (res.ok) return res.json();
@@ -524,21 +513,21 @@ function callSendData(
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
@@ -556,24 +545,17 @@ function callSendData(
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               break;
 
             default:
               break;
           }
-        }
-
-        if (goToNextStepObj) {
-          goToNextStepObj.method(
-            goToNextStepObj.stepNum,
-            goToNextStepObj.pathName
-          );
         }
       })
       .catch((err) => {
@@ -605,7 +587,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
   }
 
   // If the not using java server, just remove it from frontend
-  if (getCurrentMode() === MODE_REACT_ONLY) {
+  if (getCurrentMode() === MODE_REACT_ONLY && index) {
     callback(index);
   }
 
@@ -620,14 +602,22 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
     }
     fetch(url, {
       method: FETCH_METHOD.DELETE,
-    }).then((res) => {
-      console.log(res.status);
-      // Remove from frontend
-      if (res.status === 200) {
-        callback(index);
-        return Promise.resolve(res);
-      }
-    });
+      headers: FETCH_HEADER,
+    })
+      .then((res) => {
+        if (res.ok) {
+          // Remove from frontend
+          callback(index);
+          return Promise.resolve(res);
+        }
+
+        requestErrorHandler(res.status);
+        throw res.status;
+      })
+      .catch((err) => {
+        console.log(err);
+        requestErrorHandler(err);
+      });
   }
 }
 /**
@@ -650,7 +640,7 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
-      purchase_order_required: 'na',
+      purchase_order_required: '',
       state: 'INPROGRESS',
     };
 

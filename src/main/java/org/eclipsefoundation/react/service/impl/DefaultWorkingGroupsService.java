@@ -13,20 +13,22 @@ package org.eclipsefoundation.react.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipsefoundation.react.model.WorkingGroup;
-import org.eclipsefoundation.react.model.WorkingGroupList;
+import org.eclipsefoundation.react.model.WorkingGroupMap;
 import org.eclipsefoundation.react.service.WorkingGroupsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +36,8 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.runtime.Startup;
 
 /**
- * Builds a list of working group definitions from an embedded list of working
- * group definitions. This is an interim solution to accelerate this project and
- * should be replaced with a call to the foundation API to retrieve this data.
+ * Builds a list of working group definitions from an embedded list of working group definitions. This is an interim
+ * solution to accelerate this project and should be replaced with a call to the foundation API to retrieve this data.
  * 
  * @author Martin Lowe
  */
@@ -45,6 +46,8 @@ import io.quarkus.runtime.Startup;
 public class DefaultWorkingGroupsService implements WorkingGroupsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(DefaultWorkingGroupsService.class);
 
+    @ConfigProperty(name = "eclipse.working-groups.deny-list", defaultValue = "")
+    Instance<List<String>> denyList;
     @ConfigProperty(name = "eclipse.working-groups.filepath")
     String filepath;
 
@@ -53,12 +56,22 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
 
     private Map<String, WorkingGroup> wgs;
 
+    /**
+     * At startup, will load the working groups and store them locally to be used throughout the servers life time. As
+     * this resource is embedded within the Jar, we do not need to look for changes to the resource, as that would not
+     * happen with a production server.
+     * 
+     * @throws IOException if there is an issue loading the working groups resource from within the Jar resources.
+     */
     @PostConstruct
     void init() throws IOException {
         LOGGER.info("Starting init of working group levels static members");
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath)) {
-            WorkingGroupList list = json.fromJson(is, WorkingGroupList.class);
-            this.wgs = list.getWorkingGroups().stream().collect(Collectors.toMap(WorkingGroup::getName, Function.identity()));
+            WorkingGroupMap map = json.fromJson(is, WorkingGroupMap.class);
+            this.wgs = new HashMap<>();
+            // iterate over wg map entries and only retain entries not in denyList
+            map.getWorkingGroups().entrySet().stream().filter(entry -> !denyList().contains(entry.getKey()))
+                    .forEach(e -> wgs.put(e.getKey(), e.getValue()));
             LOGGER.info("Initialized {} working group", wgs.size());
         }
     }
@@ -71,5 +84,9 @@ public class DefaultWorkingGroupsService implements WorkingGroupsService {
     @Override
     public WorkingGroup getByName(String name) {
         return wgs.get(name);
+    }
+
+    private List<String> denyList() {
+        return denyList.stream().flatMap(List::stream).collect(Collectors.toList());
     }
 }

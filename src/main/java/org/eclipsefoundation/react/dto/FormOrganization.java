@@ -19,6 +19,8 @@ import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -35,6 +37,7 @@ import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
+import org.eclipsefoundation.react.namespace.OrganizationTypes;
 import org.hibernate.annotations.GenericGenerator;
 
 @Table
@@ -50,6 +53,11 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     private String legalName;
     @JsonbProperty("twitter")
     private String twitterHandle;
+    private String employeeCount;
+    private String aggregateRevenue;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "An organization requires a defined type")
+    private OrganizationTypes organizationType;
 
     // form entity
     @OneToOne(targetEntity = MembershipForm.class)
@@ -106,6 +114,48 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         this.twitterHandle = twitterHandle;
     }
 
+    /**
+     * @return the employeeCount
+     */
+    public String getEmployeeCount() {
+        return employeeCount;
+    }
+
+    /**
+     * @param employeeCount the employeeCount to set
+     */
+    public void setEmployeeCount(String employeeCount) {
+        this.employeeCount = employeeCount;
+    }
+
+    /**
+     * @return the aggregateRevenue
+     */
+    public String getAggregateRevenue() {
+        return aggregateRevenue;
+    }
+
+    /**
+     * @param aggregateRevenue the aggregateRevenue to set
+     */
+    public void setAggregateRevenue(String aggregateRevenue) {
+        this.aggregateRevenue = aggregateRevenue;
+    }
+
+    /**
+     * @return the organizationType
+     */
+    public OrganizationTypes getOrganizationType() {
+        return organizationType;
+    }
+
+    /**
+     * @param organizationType the organizationType to set
+     */
+    public void setOrganizationType(OrganizationTypes organizationType) {
+        this.organizationType = organizationType;
+    }
+
     /** @return the address */
     public Address getAddress() {
         return address;
@@ -120,6 +170,9 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
     public FormOrganization cloneTo(FormOrganization target) {
         target.setLegalName(getLegalName());
         target.setTwitterHandle(getTwitterHandle());
+        target.setAggregateRevenue(getAggregateRevenue());
+        target.setEmployeeCount(getEmployeeCount());
+        target.setOrganizationType(getOrganizationType());
         return target;
     }
 
@@ -140,9 +193,12 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         if (getClass() != obj.getClass())
             return false;
         FormOrganization other = (FormOrganization) obj;
-        return Objects.equals(address, other.address)
-                && Objects.equals(form, other.form) && Objects.equals(id, other.id)
-                && Objects.equals(legalName, other.legalName) && Objects.equals(twitterHandle, other.twitterHandle);
+        return Objects.equals(address, other.address) && Objects.equals(form, other.form)
+                && Objects.equals(id, other.id) && Objects.equals(legalName, other.legalName)
+                && Objects.equals(twitterHandle, other.twitterHandle)
+                && Objects.equals(aggregateRevenue, other.aggregateRevenue)
+                && Objects.equals(employeeCount, other.employeeCount)
+                && Objects.equals(organizationType, other.organizationType);
     }
 
     @Override
@@ -154,6 +210,12 @@ public class FormOrganization extends BareNode implements TargetedClone<FormOrga
         builder.append(legalName);
         builder.append(", twitterHandle=");
         builder.append(twitterHandle);
+        builder.append(", aggregateRevenue=");
+        builder.append(aggregateRevenue);
+        builder.append(", employeeCount=");
+        builder.append(employeeCount);
+        builder.append(", organizationType=");
+        builder.append(organizationType);
         builder.append(", form=");
         builder.append(form);
         builder.append(", address=");

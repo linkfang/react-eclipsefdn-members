@@ -2,11 +2,11 @@ import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
+  deleteData,
   matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
 } from '../../../Utils/formFunctionHelpers';
-import Loading from '../../UIComponents/Loading/Loading';
 import {
   END_POINT,
   API_PREFIX_FORM,
@@ -19,6 +19,17 @@ import {
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+} from '@material-ui/core';
+import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
 
 /**
  * Wrapper for FieldArray of WorkingGroup component,
@@ -36,156 +47,186 @@ import { FormikProvider } from 'formik';
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-let hasWGData = false;
-
-const WorkingGroupsWrapper = ({ formik, isStartNewForm }) => {
+const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, workingGroupsUserJoined }) => {
   const { currentFormId } = useContext(MembershipContext);
-  const { setFieldValue } = formik;
-  const [isLoading, setIsLoading] = useState(true);
-  const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
-  const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
+  const [shouldOpen, setShouldOpen] = useState(false);
+
+  const handleSkipJoiningWG = () => {
+    const skipJoiningWG = formik.values.skipJoiningWG;
+    if (skipJoiningWG) {
+      formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
+    } else {
+      setShouldOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setShouldOpen(false);
+  };
+
+  const handleClearData = () => {
+    // if user check it, we need to delete all wgs in formik and db
+    formik.values.workingGroups.map((item) => {
+      deleteData(currentFormId, END_POINT.working_groups, item.id, console.log, `Deleted ${item?.workingGroup?.label}`);
+      return null;
+    });
+    formik.setFieldValue('skipJoiningWG', true);
+    formik.setFieldValue('workingGroups', initialValues.workingGroups);
+    closeModal();
+  };
 
   useEffect(() => {
     scrollToTop();
   }, []);
 
-  // Fetch data only once and prefill data, as long as
-  // fetchWorkingGroupsData Function does not change,
-  // will not cause re-render again
-  useEffect(() => {
-    // Fetch the full availabe working group list that user can join
-    const fetchAvailableFullWorkingGroupList = () => {
-      let url_prefix_local;
-      if (getCurrentMode() === MODE_REACT_ONLY) {
-        url_prefix_local = 'membership_data';
-        setFullWorkingGroupList(FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY);
-        return;
-      }
-
-      if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = api_prefix() + '/';
-      }
-
-      fetch(url_prefix_local + END_POINT.working_groups, {
-        headers: FETCH_HEADER,
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-
-          requestErrorHandler(res.status);
-          throw res.status;
-        })
-        .then((data) => {
-          let options = data.map((item) => ({
-            label: item.title,
-            value: item.title,
-            participation_levels: item.levels,
-          }));
-          setFullWorkingGroupList(options);
-        })
-        .catch((err) => {
-          requestErrorHandler(err);
-          console.log(err);
-        });
-    };
-
-    fetchAvailableFullWorkingGroupList();
-  }, []);
-
-  useEffect(() => {
-    // Fetch the working groups user has joined
-    const fetchWorkingGroupsUserJoined = () => {
-      // All pre-process: if running without server,
-      // use fake json data; if running with API, use API
-
-      let url_prefix_local;
-      let url_suffix_local = '';
-      if (getCurrentMode() === MODE_REACT_ONLY) {
-        url_prefix_local = 'membership_data';
-        url_suffix_local = '.json';
-      }
-
-      if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = API_PREFIX_FORM;
-      }
-
-      fetch(
-        url_prefix_local +
-          `/${currentFormId}/` +
-          END_POINT.working_groups +
-          url_suffix_local,
-        {
-          headers: FETCH_HEADER,
-        }
-      )
-        .then((res) => {
-          if (res.ok) return res.json();
-
-          requestErrorHandler(res.status);
-          throw res.status;
-        })
-        .then((data) => {
-          if (data.length) {
-            // matchWorkingGroupFields(): Call the the function to map
-            // the retrived working groups backend data to fit frontend, and
-            // setFieldValue(): Prefill Data --> Call the setFieldValue
-            // of Formik, to set workingGroups field with the mapped data
-            const theGroupsUserJoined = matchWorkingGroupFields(
-              data,
-              fullWorkingGroupList
-            );
-            setWorkingGroupsUserJoined(theGroupsUserJoined);
-            setFieldValue('workingGroups', theGroupsUserJoined);
-            hasWGData = true;
-          }
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          requestErrorHandler(err);
-          console.log(err);
-        });
-    };
-
-    if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0) {
-      // continue with an existing one and there is no working group data
-      fetchWorkingGroupsUserJoined();
-    } else {
-      setIsLoading(false);
-    }
-  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormikProvider value={formik}>
-        <div
-          id="working-groups-page"
-          className="align-center margin-top-50 margin-bottom-30"
-        >
+        <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
+          <Dialog
+            open={shouldOpen}
+            onClose={closeModal}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{'Skip Joining a Working Group'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                This will clear all saved data in this step. Proceed to uncheck?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeModal}>Cancel</Button>
+              <Button onClick={handleClearData} color="primary" autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+
           <h1 className="fw-600 h2">Working Group</h1>
           <p>
-            Please complete the following details for joining a Working Group
+            Eclipse Foundation hosts a number of industry collaboration initiatives called Working Groups. While not
+            required, most Member organizations participate in one or more working groups. See a full list of Eclipse
+            Foundation working groups.
           </p>
-
-          <WorkingGroup
-            formik={formik}
-            workingGroupsUserJoined={workingGroupsUserJoined}
-            fullWorkingGroupList={fullWorkingGroupList}
-            isLoading={isLoading}
+          <p>
+            Please complete the following details for joining a Working Group or you can skip joining a Working Group.
+          </p>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="skipJoiningWG"
+                color="primary"
+                checked={formik.values.skipJoiningWG}
+                onChange={() => handleSkipJoiningWG()}
+              />
+            }
+            label="Skip joining a Working Group"
           />
-        </div>
+          {!formik.values.skipJoiningWG && (
+            <>
+              <p className="margin-top-5">Please complete the following details for joining a Working Group</p>
 
-        <CustomStepButton
-          previousPage="/membership-level"
-          nextPage="/signing-authority"
-          pageIndex={3}
-        />
+              <WorkingGroup
+                formik={formik}
+                formikOrgValue={formikOrgValue}
+                workingGroupsUserJoined={workingGroupsUserJoined}
+                fullWorkingGroupList={fullWorkingGroupList}
+              />
+            </>
+          )}
+        </div>
+        <CustomStepButton previousPage="/membership-level" nextPage="/signing-authority" />
       </FormikProvider>
     </form>
   );
 };
 
 export default WorkingGroupsWrapper;
+
+// Fetch the working groups user has joined
+export const fetchWorkingGroupsUserJoined = (
+  currentFormId,
+  fullWorkingGroupList,
+  setWorkingGroupsUserJoined,
+  setWGFieldValue,
+  companyRep,
+  setLoading
+) => {
+  // All pre-process: if running without server,
+  // use fake json data; if running with API, use API
+
+  let url_prefix_local;
+  let url_suffix_local = '';
+  if (getCurrentMode() === MODE_REACT_ONLY) {
+    url_prefix_local = 'membership_data';
+    url_suffix_local = '.json';
+  }
+
+  if (getCurrentMode() === MODE_REACT_API) {
+    url_prefix_local = API_PREFIX_FORM;
+  }
+
+  fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.working_groups + url_suffix_local, {
+    headers: FETCH_HEADER,
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+
+      requestErrorHandler(res.status);
+      throw res.status;
+    })
+    .then((data) => {
+      if (data.length) {
+        // matchWorkingGroupFields(): Call the the function to map
+        // the retrived working groups backend data to fit frontend, and
+        // setFieldValue(): Prefill Data --> Call the setFieldValue
+        // of Formik, to set workingGroups field with the mapped data
+        const theGroupsUserJoined = matchWorkingGroupFields(data, fullWorkingGroupList, companyRep);
+        setWorkingGroupsUserJoined(theGroupsUserJoined);
+        setWGFieldValue('workingGroups', theGroupsUserJoined);
+      }
+      setLoading(false);
+    })
+    .catch((err) => {
+      requestErrorHandler(err);
+      console.log(err);
+    });
+};
+
+// Fetch the full availabe working group list that user can join
+export const fetchAvailableFullWorkingGroupList = (setFullWorkingGroupList) => {
+  let url_prefix_local;
+  if (getCurrentMode() === MODE_REACT_ONLY) {
+    url_prefix_local = 'membership_data';
+    setFullWorkingGroupList(FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY);
+    return;
+  }
+
+  if (getCurrentMode() === MODE_REACT_API) {
+    url_prefix_local = api_prefix() + '/';
+  }
+
+  fetch(url_prefix_local + END_POINT.working_groups, {
+    headers: FETCH_HEADER,
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+
+      requestErrorHandler(res.status);
+      throw res.status;
+    })
+    .then((data) => {
+      let options = data.map((item) => ({
+        label: item.title,
+        value: item.title,
+        participation_levels: item.levels,
+        charter: item.resources.charter,
+      }));
+      setFullWorkingGroupList(options);
+    })
+    .catch((err) => {
+      requestErrorHandler(err);
+      console.log(err);
+    });
+};

@@ -1,19 +1,36 @@
-New form submission by: {name} ({form.userID})
+Eclipse Foundation AISBL Membership Application date submitted: {now}  
+
+{#if includePreamble}
+Dear {name},
+Thank you for submitting the Membership Application Form on behalf of your organization. Our team will review your application and follow up within 2 business days.
+Meanwhile, if you have any questions, please reach out to us at membership.coordination@eclipse-foundation.org.
+
+Best regards,
+Eclipse Foundation Membership Coordination
+{/if}
+
+New form submission by: {name} ({data.form.userID})
 
 Organization
-Name: {org.legalName}
-Twitter: {org.twitterHandle}
-
+Name: {data.org.legalName}
+Twitter: {data.org.twitterHandle}
+Requires purchase order: {data.form.purchaseOrderRequired}
+VAT number: {data.form.vatNumber}  
+VAT Registration country: {data.form.registrationCountry}  
+Aggregate Revenue: {data.org.aggregateRevenue}
+Employee count: {data.org.employeeCount}
+Organization Type: {data.org.organizationType}
+ 
 Address
-{org.address.street}
-{org.address.city}, {org.address.provinceState}
-{org.address.country}
-{org.address.postalCode}
+{data.org.address.street}
+{data.org.address.city}, {org.address.provinceState}
+{data.org.address.country}
+{data.org.address.postalCode}
   
 
 
 Contacts
-{#for contact in contacts.orEmpty}
+{#for contact in data.contacts.orEmpty}
 
 Name: {contact.fName} {contact.lName}
 Email: {contact.email}
@@ -24,10 +41,15 @@ userID
 
 Working Groups
 
-{#for wg in wgs.orEmpty}
+{#for wg in data.wgs.orEmpty}
 Working Group: {wg.workingGroupID}
 Participation Level: {wg.participationLevel}
 Effective Date: {wg.effectiveDate}
 Contact Name: {wg.contact.fName} {wg.contact.lName}
 
 {/for}
+
+----------
+
+This is an automatic message from https://membership.eclipse.org
+Twitter: @EclipseFdn

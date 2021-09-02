@@ -11,7 +11,7 @@
  */
 package org.eclipsefoundation.react.model;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -19,25 +19,25 @@ import java.util.Objects;
  * 
  * @author Martin Lowe <martin.lowe@eclipse-foundation.org>
  */
-public class WorkingGroupList {
-    private List<WorkingGroup> workingGroups;
+public class WorkingGroupMap {
+    private Map<String, WorkingGroup> workingGroups;
 
-    public WorkingGroupList() {
+    public WorkingGroupMap() {
     }
 
-    public WorkingGroupList(List<WorkingGroup> workingGroups) {
+    public WorkingGroupMap(Map<String, WorkingGroup> workingGroups) {
         this.workingGroups = workingGroups;
     }
 
-    public List<WorkingGroup> getWorkingGroups() {
+    public Map<String, WorkingGroup> getWorkingGroups() {
         return this.workingGroups;
     }
 
-    public void setWorkingGroups(List<WorkingGroup> workingGroups) {
+    public void setWorkingGroups(Map<String, WorkingGroup> workingGroups) {
         this.workingGroups = workingGroups;
     }
 
-    public WorkingGroupList workingGroups(List<WorkingGroup> workingGroups) {
+    public WorkingGroupMap workingGroups(Map<String, WorkingGroup> workingGroups) {
         setWorkingGroups(workingGroups);
         return this;
     }
@@ -46,10 +46,10 @@ public class WorkingGroupList {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof WorkingGroupList)) {
+        if (!(o instanceof WorkingGroupMap)) {
             return false;
         }
-        WorkingGroupList workingGroupList = (WorkingGroupList) o;
+        WorkingGroupMap workingGroupList = (WorkingGroupMap) o;
         return Objects.equals(workingGroups, workingGroupList.workingGroups);
     }
 

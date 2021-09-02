@@ -31,6 +31,7 @@ import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
 import org.eclipsefoundation.persistence.model.SortableField;
+import org.eclipsefoundation.react.dto.ValidationGroups.Completion;
 import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
@@ -47,12 +48,14 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String userID;
     private String membershipLevel;
     private boolean signingAuthority;
-    @NotBlank(message = "Purchase order state cannot be blank")
+    @NotBlank(message = "Purchase order state cannot be blank", groups = Completion.class)
     private String purchaseOrderRequired;
     private String vatNumber;
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
+    @SortableField
+    private Long dateSubmitted;
     @NotNull(message = "The form state cannot be null")
     private FormState state;
 
@@ -132,6 +135,15 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         this.dateCreated = dateCreated;
     }
 
+    public Long getDateSubmitted() {
+        return this.dateSubmitted;
+    }
+
+    @JsonbTransient
+    public void setDateSubmitted(Long dateSubmitted) {
+        this.dateSubmitted = dateSubmitted;
+    }
+
     public FormState getState() {
         return this.state;
     }
@@ -152,6 +164,9 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         if (getDateCreated() != null) {
             target.setDateCreated(getDateCreated());
         }
+        if (getDateSubmitted() != null) {
+            target.setDateSubmitted(getDateSubmitted());
+        }
         return target;
     }
 
@@ -160,7 +175,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber,
-                registrationCountry, purchaseOrderRequired, dateCreated, state);
+                registrationCountry, purchaseOrderRequired, dateCreated, dateSubmitted, state);
         return result;
     }
 
@@ -178,7 +193,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
                 && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(dateCreated, other.dateCreated)
                 && Objects.equals(registrationCountry, other.registrationCountry)
                 && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired)
-                && Objects.equals(state, other.state);
+                && Objects.equals(state, other.state) && Objects.equals(dateSubmitted, other.dateSubmitted);
     }
 
     @Override
@@ -200,6 +215,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         builder.append(vatNumber);
         builder.append(", dateCreated=");
         builder.append(dateCreated);
+        builder.append(", dateSubmitted=");
+        builder.append(dateSubmitted);
         builder.append(", state=");
         builder.append(state);
         builder.append("]");
