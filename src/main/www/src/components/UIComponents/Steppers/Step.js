@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
 import { isObjectEmpty } from '../../../Utils/formFunctionHelpers';
+import ModalWindow from '../Notifications/ModalWindow';
 
 /**
  * Props:
@@ -68,7 +69,6 @@ const Step = ({
 
   const handleGoBack = () => {
     setShouldOpen(false);
-    console.log('check: ', updatedFormValues);
     currentFormik.setValues(updatedFormValues);
     history.push(pathName);
   };
@@ -123,25 +123,13 @@ const Step = ({
   };
   return (
     <>
-      <Dialog
-        open={shouldOpen}
-        onClose={() => setShouldOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'Go Back to Previous Step'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            You will lose all the new changes in this step without finishing it. Proceed to go back?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShouldOpen(false)}>Cancel</Button>
-          <Button onClick={handleGoBack} color="primary" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ModalWindow
+        title={'Go Back to Previous Step'}
+        content={'You will lose all the new changes in this step without finishing it. Proceed to go back?'}
+        handleProceed={handleGoBack}
+        shouldOpen={shouldOpen}
+        setShouldOpen={setShouldOpen}
+      />
       <div className="step" onClick={handleSubmit}>
         <span className="step-span-index">{index + 1}</span>
         <div className="step-span">

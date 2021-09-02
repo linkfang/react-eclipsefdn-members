@@ -30,6 +30,7 @@ import {
   FormControlLabel,
 } from '@material-ui/core';
 import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
+import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
 
 /**
  * Wrapper for FieldArray of WorkingGroup component,
@@ -60,10 +61,6 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
     }
   };
 
-  const closeModal = () => {
-    setShouldOpen(false);
-  };
-
   const handleClearData = () => {
     // if user check it, we need to delete all wgs in formik and db
     formik.values.workingGroups.map((item) => {
@@ -72,7 +69,7 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
     });
     formik.setFieldValue('skipJoiningWG', true);
     formik.setFieldValue('workingGroups', initialValues.workingGroups);
-    closeModal();
+    setShouldOpen(false);
   };
 
   useEffect(() => {
@@ -83,25 +80,13 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
     <form onSubmit={formik.handleSubmit}>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
-          <Dialog
-            open={shouldOpen}
-            onClose={closeModal}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{'Skip Joining a Working Group'}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                This will clear all saved data in this step. Proceed to uncheck?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeModal}>Cancel</Button>
-              <Button onClick={handleClearData} color="primary" autoFocus>
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <ModalWindow
+            title={'Skip Joining a Working Group'}
+            content={'This will clear all saved data in this step. Proceed to uncheck?'}
+            handleProceed={handleClearData}
+            shouldOpen={shouldOpen}
+            setShouldOpen={setShouldOpen}
+          />
 
           <h1 className="fw-600 h2">Working Group</h1>
           <p>
