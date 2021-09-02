@@ -9,6 +9,7 @@ import {
 } from '../../../Constants/Constants';
 import {
   handleNewForm,
+  isProd,
   requestErrorHandler,
 } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -72,7 +73,7 @@ const FormChooser = ({
           throw res.status;
         })
         .then((data) => {
-          console.log('existing forms:  ', data);
+          !isProd && console.log('existing forms:  ', data);
           if (data.length > 0 && data[0].state !== 'SUBMITTED') {
             setHasExistingForm(data[0]?.id);
             setCurrentFormId(data[0]?.id);
@@ -83,7 +84,7 @@ const FormChooser = ({
         })
         .catch((err) => {
           requestErrorHandler(err);
-          console.log(err);
+          !isProd && console.log(err);
         });
     };
 

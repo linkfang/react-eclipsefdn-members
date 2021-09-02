@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
+  isProd,
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
@@ -148,7 +149,7 @@ const CompanyInformation = ({
           }
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => !isProd && console.log(err));
     };
 
     const detectModeAndFetchMembershipLevel = () => {
@@ -185,7 +186,7 @@ const CompanyInformation = ({
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
+          !isProd && console.log(err);
           requestErrorHandler(err);
         });
     };

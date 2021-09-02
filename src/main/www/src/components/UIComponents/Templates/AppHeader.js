@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { api_prefix } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -12,7 +13,7 @@ export default function AppHeader() {
         window.location.assign('/');
       })
       .catch((err) => {
-        console.log(err);
+        !isProd && console.log(err);
         window.location.assign('/');
       });
   };

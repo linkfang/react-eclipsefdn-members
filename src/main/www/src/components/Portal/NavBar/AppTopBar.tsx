@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import demoAvatar from '../../../assets/demo-avatar.jpg';
 import { api_prefix, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -64,7 +65,7 @@ export default function AppTopBar() {
           });
         })
         .catch((err) => {
-          console.log(err);
+          !isProd && console.log(err);
         });
     };
 
@@ -72,11 +73,11 @@ export default function AppTopBar() {
       fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
-          console.log('user info: ', data);
+          !isProd && console.log('user info: ', data);
           getUserFullInfo(data.name);
         })
         .catch((err) => {
-          console.log(err);
+          !isProd && console.log(err);
         });
     };
 

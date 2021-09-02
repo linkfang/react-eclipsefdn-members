@@ -11,6 +11,7 @@ import {
 } from '../../../Constants/Constants';
 import { NavLink } from 'react-router-dom';
 import Loading from '../../UIComponents/Loading/Loading';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
@@ -87,12 +88,12 @@ class SignIn extends React.Component {
     fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
       .then((res) => res.json())
       .then((data) => {
-        console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
+        !isProd && console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
         this.context.setCurrentUser(data);
         this.context.setNeedLoadingSignIn(false);
       })
       .catch((err) => {
-        console.log(err);
+        !isProd && console.log(err);
         this.context.setNeedLoadingSignIn(false);
       });
   };

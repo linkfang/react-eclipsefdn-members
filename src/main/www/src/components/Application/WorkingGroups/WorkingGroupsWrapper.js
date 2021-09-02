@@ -3,6 +3,7 @@ import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
   deleteData,
+  isProd,
   matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
@@ -67,7 +68,7 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
   const handleClearData = () => {
     // if user check it, we need to delete all wgs in formik and db
     formik.values.workingGroups.map((item) => {
-      deleteData(currentFormId, END_POINT.working_groups, item.id, console.log, `Deleted ${item?.workingGroup?.label}`);
+      deleteData(currentFormId, END_POINT.working_groups, item.id, '', `Deleted ${item?.workingGroup?.label}`);
       return null;
     });
     formik.setFieldValue('skipJoiningWG', true);
@@ -190,7 +191,7 @@ export const fetchWorkingGroupsUserJoined = (
     })
     .catch((err) => {
       requestErrorHandler(err);
-      console.log(err);
+      !isProd && console.log(err);
     });
 };
 
@@ -227,6 +228,6 @@ export const fetchAvailableFullWorkingGroupList = (setFullWorkingGroupList) => {
     })
     .catch((err) => {
       requestErrorHandler(err);
-      console.log(err);
+      !isProd && console.log(err);
     });
 };
