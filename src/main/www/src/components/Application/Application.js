@@ -160,7 +160,11 @@ export default function Application() {
   const submitWorkingGroups = () => {
     const values = formikWorkingGroups.values;
     // update the workingGroups values
-    const theNewValue = { ...updatedFormValues, workingGroups: values.workingGroups };
+    const theNewValue = {
+      ...updatedFormValues,
+      workingGroups: values.workingGroups,
+      skipJoiningWG: values.skipJoiningWG,
+    };
     setUpdatedFormValues(theNewValue);
     console.log('updated working groups: ', values);
 
@@ -342,6 +346,7 @@ export default function Application() {
               fullWorkingGroupList={fullWorkingGroupList}
               workingGroupsUserJoined={workingGroupsUserJoined}
               updatedFormValues={updatedFormValues}
+              setUpdatedFormValues={setUpdatedFormValues}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />

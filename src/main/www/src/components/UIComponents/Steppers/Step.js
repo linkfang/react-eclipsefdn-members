@@ -38,7 +38,15 @@ const Step = ({
   const navigateTo = (result, currentIndex, destinatedPath, formik, isEmpty) => {
     if (index < currentIndex) {
       // means go back
-      validateGoBack(isEmpty, result, formik, setShouldOpen, () => history.push(pathName), setCurrentFormik);
+      validateGoBack(
+        isEmpty,
+        result,
+        formik,
+        setShouldOpen,
+        () => history.push(pathName),
+        updatedFormValues,
+        setCurrentFormik
+      );
       return;
     }
 

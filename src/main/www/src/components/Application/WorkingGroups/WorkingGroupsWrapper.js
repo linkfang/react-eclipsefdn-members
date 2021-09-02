@@ -46,6 +46,7 @@ const WorkingGroupsWrapper = ({
   fullWorkingGroupList,
   workingGroupsUserJoined,
   updatedFormValues,
+  setUpdatedFormValues,
 }) => {
   const { currentFormId } = useContext(MembershipContext);
   const [shouldOpen, setShouldOpen] = useState(false);
@@ -54,6 +55,7 @@ const WorkingGroupsWrapper = ({
     const skipJoiningWG = formik.values.skipJoiningWG;
     if (skipJoiningWG) {
       formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
+    setUpdatedFormValues({ ...updatedFormValues, skipJoiningWG: false });
     } else {
       setShouldOpen(true);
     }
@@ -67,6 +69,7 @@ const WorkingGroupsWrapper = ({
     });
     formik.setFieldValue('skipJoiningWG', true);
     formik.setFieldValue('workingGroups', initialValues.workingGroups);
+    setUpdatedFormValues({ ...updatedFormValues, workingGroups: initialValues.workingGroups, skipJoiningWG: true });
     setShouldOpen(false);
   };
 
@@ -123,6 +126,8 @@ const WorkingGroupsWrapper = ({
                 formikOrgValue={formikOrgValue}
                 workingGroupsUserJoined={workingGroupsUserJoined}
                 fullWorkingGroupList={fullWorkingGroupList}
+                updatedFormValues={updatedFormValues}
+                setUpdatedFormValues={setUpdatedFormValues}
               />
             </>
           )}

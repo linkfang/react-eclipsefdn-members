@@ -726,7 +726,7 @@ export function isObjectEmpty(obj) {
   return true;
 }
 
-export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, setCurrentFormik) {
+export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, updatedFormValues, setCurrentFormik) {
   // Save values on current step if it's NOT empty and passes validation
   if (!isEmpty && Object.keys(result).length <= 0) formik.submitForm();
 
@@ -737,5 +737,8 @@ export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate,
     setShouldOpen(true);
     return;
   }
+
+  if (isEmpty) formik.setValues(updatedFormValues);
+
   navigate();
 }

@@ -24,9 +24,8 @@ const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit,
       return;
     }
     const isEmpty = checkIsEmpty();
-    console.log(isEmpty, ' ', previousPage);
     formik.validateForm().then((result) => {
-      validateGoBack(isEmpty, result, formik, setShouldOpen, () => history.push(previousPage));
+      validateGoBack(isEmpty, result, formik, setShouldOpen, () => history.push(previousPage), updatedFormValues);
     });
   };
 
