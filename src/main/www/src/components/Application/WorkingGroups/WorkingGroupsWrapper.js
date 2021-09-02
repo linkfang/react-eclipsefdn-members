@@ -76,7 +76,9 @@ const WorkingGroupsWrapper = ({
   const checkIsEmpty = () => {
     const workingGroups = formik.values.workingGroups;
     for (let i = 0; i < workingGroups.length; i++) {
-      if (!isObjectEmpty(workingGroups[i])) return false;
+      if (!isObjectEmpty(workingGroups[i])) {
+        return false;
+      }
     }
     return true;
   };

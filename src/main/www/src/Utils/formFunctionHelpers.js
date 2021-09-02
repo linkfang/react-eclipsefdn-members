@@ -714,11 +714,15 @@ export function scrollToTop() {
 export function isObjectEmpty(obj) {
   for (const key in obj) {
     // Do not need to check the value of id or allWorkingGroups, as they are not provided by users
-    if (key === 'id' || key === 'allWorkingGroups') continue;
+    if (key === 'id' || key === 'allWorkingGroups') {
+      continue;
+    }
 
     const element = obj[key];
     if (typeof element === 'object') {
-      if (!isObjectEmpty(element)) return false;
+      if (!isObjectEmpty(element)) {
+        return false;
+      }
     } else if (element !== '' && element !== false) {
       return false;
     }
@@ -726,19 +730,22 @@ export function isObjectEmpty(obj) {
   return true;
 }
 
-export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, updatedFormValues, setCurrentFormik) {
+export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, updatedFormValues) {
   // Save values on current step if it's NOT empty and passes validation
-  if (!isEmpty && Object.keys(result).length <= 0) formik.submitForm();
+  if (!isEmpty && Object.keys(result).length <= 0) {
+    formik.submitForm();
+  }
 
   // Open modal window if it's NOT empty and fails to pass validation
   if (!isEmpty && Object.keys(result).length > 0) {
-    setCurrentFormik && setCurrentFormik(formik);
     formik.setTouched(result);
     setShouldOpen(true);
     return;
   }
 
-  if (isEmpty) formik.setValues(updatedFormValues);
+  if (isEmpty) {
+    formik.setValues(updatedFormValues);
+  }
 
   navigate();
 }

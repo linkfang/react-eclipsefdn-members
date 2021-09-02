@@ -174,11 +174,11 @@ export default function Application() {
         fieldName: 'workingGroups',
         method: formikWorkingGroups.setFieldValue,
       };
-      const updateFormValuesObj = {
+
+      executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj, {
         theNewValue,
         setUpdatedFormValues,
-      };
-      executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
+      });
     }
   };
   const formikWorkingGroups = useFormik({
@@ -217,11 +217,10 @@ export default function Application() {
       },
     };
 
-    const updateFormValuesObj = {
+    executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, {
       theNewValue,
       setUpdatedFormValues,
-    };
-    executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
+    });
   };
   const formikSigningAuthority = useFormik({
     initialValues: initialValues,

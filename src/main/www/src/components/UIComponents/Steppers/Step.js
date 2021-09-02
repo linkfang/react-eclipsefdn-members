@@ -32,7 +32,6 @@ const Step = ({
   const isActive = useRouteMatch(pathName);
   const history = useHistory();
   const [shouldOpen, setShouldOpen] = useState(false);
-  const [currentFormik, setCurrentFormik] = useState(formikCompanyInfo);
   const { furthestPage, setFurthestPage } = useContext(MembershipContext);
 
   const navigateTo = (result, currentIndex, destinatedPath, formik, isEmpty) => {
@@ -44,8 +43,7 @@ const Step = ({
         formik,
         setShouldOpen,
         () => history.push(pathName),
-        updatedFormValues,
-        setCurrentFormik
+        updatedFormValues
       );
       return;
     }
@@ -63,7 +61,23 @@ const Step = ({
 
   const handleGoBack = () => {
     setShouldOpen(false);
-    currentFormik.setValues(updatedFormValues);
+    // Reset/roll back different formik based on current route
+    switch (window.location.hash) {
+      case '#company-info':
+        formikCompanyInfo.setValues(updatedFormValues);
+        break;
+      case '#membership-level':
+        formikMembershipLevel.setValues(updatedFormValues);
+        break;
+      case '#working-groups':
+        formikWorkingGroups.setValues(updatedFormValues);
+        break;
+      case '#signing-authority':
+        formikSigningAuthority.setValues(updatedFormValues);
+        break;
+      default:
+        break;
+    }
     history.push(pathName);
   };
 
