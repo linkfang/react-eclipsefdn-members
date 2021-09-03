@@ -1,8 +1,8 @@
 import { Button } from '@material-ui/core';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
-import { validateGoBack } from '../../../Utils/formFunctionHelpers';
+import { checkIsNotFurthestPage, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
 
 /**
@@ -14,9 +14,18 @@ import ModalWindow from '../Notifications/ModalWindow';
  *   - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
  *   - isLastStep: boolean, whether it's the final step (preview step) or not
  */
-const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit, formik, updatedFormValues }) => {
+const CustomStepButton = ({
+  previousPage,
+  currentIndex,
+  nextPage,
+  checkIsEmpty,
+  disableSubmit,
+  formik,
+  updatedFormValues,
+}) => {
   const history = useHistory();
   const [shouldOpen, setShouldOpen] = useState(false);
+  const { furthestPage } = useContext(MembershipContext);
 
   const handleBackBtnClicked = () => {
     if (nextPage === '/submitted') {
@@ -25,7 +34,14 @@ const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit,
     }
     const isEmpty = checkIsEmpty();
     formik.validateForm().then((result) => {
-      validateGoBack(isEmpty, result, formik, setShouldOpen, () => history.push(previousPage), updatedFormValues);
+      validateGoBack(
+        isEmpty,
+        result,
+        formik,
+        setShouldOpen,
+        () => history.push(previousPage),
+        checkIsNotFurthestPage(currentIndex, furthestPage.index)
+      );
     });
   };
 

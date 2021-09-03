@@ -82,6 +82,7 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
       </div>
       <CustomStepButton
         previousPage="/working-groups"
+        currentIndex={4}
         nextPage="/review"
         checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
         formik={formik}

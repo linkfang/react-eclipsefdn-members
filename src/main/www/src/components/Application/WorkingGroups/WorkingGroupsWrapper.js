@@ -136,6 +136,7 @@ const WorkingGroupsWrapper = ({
         </div>
         <CustomStepButton
           previousPage="/membership-level"
+          currentIndex={3}
           nextPage="/signing-authority"
           formik={formik}
           checkIsEmpty={checkIsEmpty}

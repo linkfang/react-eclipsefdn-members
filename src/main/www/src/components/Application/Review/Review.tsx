@@ -390,6 +390,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
 
       <CustomStepButton
         previousPage="/signing-authority"
+        currentIndex={5}
         nextPage="/submitted"
         disableSubmit={!isTermChecked}
         checkIsEmpty={() => false}

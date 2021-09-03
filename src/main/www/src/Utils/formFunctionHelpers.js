@@ -730,22 +730,28 @@ export function isObjectEmpty(obj) {
   return true;
 }
 
-export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, updatedFormValues) {
+export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, isNotFurthestPage) {
   // Save values on current step if it's NOT empty and passes validation
   if (!isEmpty && Object.keys(result).length <= 0) {
     formik.submitForm();
   }
 
   // Open modal window if it's NOT empty and fails to pass validation
-  if (!isEmpty && Object.keys(result).length > 0) {
+  // OR open it if it's emtpy and NOT the furthest page
+  if ((!isEmpty && Object.keys(result).length > 0) || (isEmpty && isNotFurthestPage)) {
     formik.setTouched(result);
     setShouldOpen(true);
     return;
   }
 
-  if (isEmpty) {
-    formik.setValues(updatedFormValues);
-  }
-
   navigate();
+}
+
+export function checkIsNotFurthestPage(currentIndex, furthestIndex) {
+  if (currentIndex === 3) {
+    // For wg/3rd step, it can be empty, and clear and remove operation will update the database when user does so
+    // So, no need to roll back the data
+    return false;
+  }
+  return currentIndex < furthestIndex;
 }

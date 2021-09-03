@@ -51,6 +51,7 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
 
       <CustomStepButton
         previousPage="/company-info"
+        currentIndex={2}
         nextPage="/working-groups"
         checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
         formik={formik}

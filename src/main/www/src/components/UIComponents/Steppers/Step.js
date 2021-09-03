@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
-import { isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
+import { checkIsNotFurthestPage, isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
 
 /**
@@ -43,7 +43,7 @@ const Step = ({
         formik,
         setShouldOpen,
         () => history.push(pathName),
-        updatedFormValues
+        checkIsNotFurthestPage(currentIndex, furthestPage.index)
       );
       return;
     }
