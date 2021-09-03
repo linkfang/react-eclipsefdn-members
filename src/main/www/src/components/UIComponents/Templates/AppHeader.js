@@ -1,21 +1,11 @@
 import { useContext } from 'react';
-import { api_prefix } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
+import { logout } from '../../../Utils/formFunctionHelpers';
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 export default function AppHeader() {
   const { currentUser, setNeedLoadingSignIn } = useContext(MembershipContext);
-  const logout = () => {
-    fetch(`${api_prefix()}/logout`)
-      .then(() => {
-        window.location.assign('/');
-      })
-      .catch((err) => {
-        console.log(err);
-        window.location.assign('/');
-      });
-  };
 
   return (
     <header className="header-wrapper" id="header-wrapper">
