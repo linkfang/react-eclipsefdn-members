@@ -46,6 +46,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
     private String userID;
+    @NotBlank(message = "Membership level is required for submission", groups = Completion.class)
     private String membershipLevel;
     private boolean signingAuthority;
     @NotBlank(message = "Purchase order state cannot be blank", groups = Completion.class)
