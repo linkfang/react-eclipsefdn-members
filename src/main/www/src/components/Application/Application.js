@@ -314,6 +314,8 @@ export default function Application() {
                 fullWorkingGroupList={fullWorkingGroupList}
                 setFullWorkingGroupList={setFullWorkingGroupList}
                 setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
+                updatedFormValues={updatedFormValues}
+                setUpdatedFormValues={setUpdatedFormValues}
               />
             ) : (
               // if uses are not allowed to visit this page,
