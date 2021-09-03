@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
-export default function ModalWindow({ title, content, handleProceed, shouldOpen, setShouldOpen }) {
+export default function ModalWindow({ title, content, handleProceed, shouldOpen, setShouldOpen, cancelText, yesText }) {
   return (
     <Dialog
       open={shouldOpen}
@@ -13,9 +13,9 @@ export default function ModalWindow({ title, content, handleProceed, shouldOpen,
         <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setShouldOpen(false)}>Cancel</Button>
+        <Button onClick={() => setShouldOpen(false)}>{cancelText || 'Cancel'}</Button>
         <Button onClick={handleProceed} color="primary" autoFocus>
-          Yes
+          {yesText || 'Yes'}
         </Button>
       </DialogActions>
     </Dialog>

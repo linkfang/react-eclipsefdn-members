@@ -134,10 +134,12 @@ const Step = ({
     <>
       <ModalWindow
         title={'Go Back to Previous Step'}
-        content={'You will lose all the new changes in this step without finishing it. Proceed to go back?'}
+        content={'The form submission for this step is incomplete or has errors. Are you sure you want to leave without saving?'}
         handleProceed={handleGoBack}
         shouldOpen={shouldOpen}
         setShouldOpen={setShouldOpen}
+        yesText={'Leave'}
+        cancelText={'Keep Editing'}
       />
       <div className="step" onClick={handleSubmit}>
         <span className="step-span-index">{index + 1}</span>
