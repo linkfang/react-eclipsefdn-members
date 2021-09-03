@@ -43,6 +43,7 @@ import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.eclipsefoundation.react.dto.ValidationGroups.Completion;
+import org.eclipsefoundation.react.helper.TimeHelper;
 import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory;
 import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory.ConstraintViolationWrap;
 import org.eclipsefoundation.react.model.MailerData;
@@ -117,7 +118,8 @@ public class MembershipFormResource extends AbstractRESTResource {
     @POST
     public List<MembershipForm> create(MembershipForm mem) {
         mem.setUserID(ident.getPrincipal().getName());
-        mem.setDateCreated(System.currentTimeMillis());
+        mem.setDateCreated(TimeHelper.getMillis());
+        mem.setDateUpdated(mem.getDateCreated());
         return dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mem));
     }
 
@@ -134,6 +136,7 @@ public class MembershipFormResource extends AbstractRESTResource {
             return r;
         }
         mem.setUserID(ident.getPrincipal().getName());
+        mem.setDateUpdated(TimeHelper.getMillis());
         // need to fetch ref to use attached entity
         MembershipForm ref = mem.cloneTo(dao.getReference(formID, MembershipForm.class));
         return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref)))
@@ -211,7 +214,8 @@ public class MembershipFormResource extends AbstractRESTResource {
         mailer.sendToMembershipTeam(data);
 
         // update the state and push the update
-        mf.setDateSubmitted(System.currentTimeMillis());
+        mf.setDateSubmitted(TimeHelper.getMillis());
+        mf.setDateUpdated(mf.getDateSubmitted());
         mf.setState(FormState.SUBMITTED);
         return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mf)))
                 .build();

@@ -7,6 +7,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  api_prefix,
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
@@ -755,3 +756,14 @@ export function checkIsNotFurthestPage(currentIndex, furthestIndex) {
   }
   return currentIndex < furthestIndex;
 }
+
+export const logout = () => {
+  fetch(`${api_prefix()}/logout`)
+    .then(() => {
+      window.location.assign('/');
+    })
+    .catch((err) => {
+      console.log(err);
+      window.location.assign('/');
+    });
+};
