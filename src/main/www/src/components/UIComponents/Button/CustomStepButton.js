@@ -14,18 +14,10 @@ import ModalWindow from '../Notifications/ModalWindow';
  *   - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
  *   - isLastStep: boolean, whether it's the final step (preview step) or not
  */
-const CustomStepButton = ({
-  previousPage,
-  currentIndex,
-  nextPage,
-  checkIsEmpty,
-  disableSubmit,
-  formik,
-  updatedFormValues,
-}) => {
+const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit, formik, updatedFormValues }) => {
   const history = useHistory();
   const [shouldOpen, setShouldOpen] = useState(false);
-  const { furthestPage } = useContext(MembershipContext);
+  const { furthestPage, currentStepIndex } = useContext(MembershipContext);
 
   const handleBackBtnClicked = () => {
     if (nextPage === '/submitted') {
@@ -40,7 +32,7 @@ const CustomStepButton = ({
         formik,
         setShouldOpen,
         () => history.push(previousPage),
-        checkIsNotFurthestPage(currentIndex, furthestPage.index)
+        checkIsNotFurthestPage(currentStepIndex, furthestPage.index)
       );
     });
   };

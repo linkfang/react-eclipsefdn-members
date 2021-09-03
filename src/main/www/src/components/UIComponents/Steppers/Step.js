@@ -32,10 +32,10 @@ const Step = ({
   const isActive = useRouteMatch(pathName);
   const history = useHistory();
   const [shouldOpen, setShouldOpen] = useState(false);
-  const { furthestPage, setFurthestPage } = useContext(MembershipContext);
+  const { furthestPage, setFurthestPage, currentStepIndex } = useContext(MembershipContext);
 
-  const navigateTo = (result, currentIndex, destinatedPath, formik, isEmpty) => {
-    if (index < currentIndex) {
+  const navigateTo = (result, destinatedPath, formik, isEmpty) => {
+    if (index < currentStepIndex) {
       // means go back
       validateGoBack(
         isEmpty,
@@ -43,7 +43,7 @@ const Step = ({
         formik,
         setShouldOpen,
         () => history.push(pathName),
-        checkIsNotFurthestPage(currentIndex, furthestPage.index)
+        checkIsNotFurthestPage(currentStepIndex, furthestPage.index)
       );
       return;
     }
@@ -55,7 +55,8 @@ const Step = ({
     }
 
     formik.submitForm();
-    furthestPage.index <= currentIndex && setFurthestPage({ index: currentIndex + 1, pathName: destinatedPath });
+    furthestPage.index <= currentStepIndex &&
+      setFurthestPage({ index: currentStepIndex + 1, pathName: destinatedPath });
     history.push(pathName);
   };
 
@@ -92,14 +93,14 @@ const Step = ({
 
         formikCompanyInfo
           .validateForm()
-          .then((result) => navigateTo(result, 1, '/membership-level', formikCompanyInfo, isEmpty));
+          .then((result) => navigateTo(result, '/membership-level', formikCompanyInfo, isEmpty));
         break;
 
       case '#membership-level':
         isEmpty = isObjectEmpty(formikMembershipLevel.values.membershipLevel);
         formikMembershipLevel
           .validateForm()
-          .then((result) => navigateTo(result, 2, '/working-groups', formikMembershipLevel, isEmpty));
+          .then((result) => navigateTo(result, '/working-groups', formikMembershipLevel, isEmpty));
         break;
 
       case '#working-groups':
@@ -113,14 +114,14 @@ const Step = ({
         }
         formikWorkingGroups
           .validateForm()
-          .then((result) => navigateTo(result, 3, '/signing-authority', formikWorkingGroups, isEmpty));
+          .then((result) => navigateTo(result, '/signing-authority', formikWorkingGroups, isEmpty));
         break;
 
       case '#signing-authority':
         isEmpty = isObjectEmpty(formikSigningAuthority.values.signingAuthorityRepresentative);
         formikSigningAuthority
           .validateForm()
-          .then((result) => navigateTo(result, 4, '/review', formikSigningAuthority, isEmpty));
+          .then((result) => navigateTo(result, '/review', formikSigningAuthority, isEmpty));
         break;
       case '#review':
         history.push(pathName);

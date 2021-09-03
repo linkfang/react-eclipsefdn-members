@@ -62,7 +62,7 @@ const CompanyInformation = ({
   setFullWorkingGroupList,
   setWorkingGroupsUserJoined,
 }) => {
-  const { currentFormId } = useContext(MembershipContext); // current chosen form id
+  const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
   const setWGFieldValue = formikWG.setFieldValue;
@@ -71,6 +71,10 @@ const CompanyInformation = ({
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(1)
+  }, [setCurrentStepIndex])
 
   useEffect(() => {
     const detectModeAndFetch = () => {

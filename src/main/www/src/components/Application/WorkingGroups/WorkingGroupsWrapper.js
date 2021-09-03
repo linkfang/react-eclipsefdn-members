@@ -48,14 +48,14 @@ const WorkingGroupsWrapper = ({
   updatedFormValues,
   setUpdatedFormValues,
 }) => {
-  const { currentFormId } = useContext(MembershipContext);
+  const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext);
   const [shouldOpen, setShouldOpen] = useState(false);
 
   const handleSkipJoiningWG = () => {
     const skipJoiningWG = formik.values.skipJoiningWG;
     if (skipJoiningWG) {
       formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
-    setUpdatedFormValues({ ...updatedFormValues, skipJoiningWG: false });
+      setUpdatedFormValues({ ...updatedFormValues, skipJoiningWG: false });
     } else {
       setShouldOpen(true);
     }
@@ -86,6 +86,10 @@ const WorkingGroupsWrapper = ({
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(3);
+  }, [setCurrentStepIndex]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -136,7 +140,6 @@ const WorkingGroupsWrapper = ({
         </div>
         <CustomStepButton
           previousPage="/membership-level"
-          currentIndex={3}
           nextPage="/signing-authority"
           formik={formik}
           checkIsEmpty={checkIsEmpty}

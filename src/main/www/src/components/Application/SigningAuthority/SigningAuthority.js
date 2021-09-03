@@ -1,9 +1,10 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Have not added any API calls here,
@@ -13,6 +14,7 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 const sectionName = 'signing-authority';
 const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
+  const { setCurrentStepIndex } = useContext(MembershipContext);
   const { signingAuthorityRepresentative } = formField;
   const name = 'signingAuthorityRepresentative';
   const generateSingleContact = (el) => (
@@ -53,6 +55,10 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
     scrollToTop();
   }, []);
 
+  useEffect(() => {
+    setCurrentStepIndex(4);
+  }, [setCurrentStepIndex]);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
@@ -82,7 +88,6 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
       </div>
       <CustomStepButton
         previousPage="/working-groups"
-        currentIndex={4}
         nextPage="/review"
         checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
         formik={formik}
