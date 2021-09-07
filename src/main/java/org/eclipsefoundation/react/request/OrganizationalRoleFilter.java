@@ -2,11 +2,12 @@ package org.eclipsefoundation.react.request;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.core.exception.FinalUnauthorizedException;
 import org.eclipsefoundation.core.service.CachingService;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
+import org.eclipsefoundation.react.namespace.OrganizationalUserType;
 import org.jboss.resteasy.core.interception.jaxrs.PostMatchContainerRequestContext;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.slf4j.Logger;
@@ -33,7 +35,7 @@ import io.quarkus.security.identity.SecurityIdentity;
 /**
  * Filters requests post-matching to secure PII data for organizations to people associated with said organization.
  * 
- * @author martin
+ * @author Martin Lowe
  *
  */
 @Provider
@@ -76,7 +78,8 @@ public class OrganizationalRoleFilter implements ContainerRequestFilter {
     }
 
     private boolean isAllowedToAccess(String orgId, RolesAllowed rolesAnnotation) {
-        List<String> roles = Arrays.asList(rolesAnnotation.value());
+        List<String> roles = Stream.of(rolesAnnotation.value()).map(OrganizationalUserType::name)
+                .collect(Collectors.toList());
         LOGGER.debug("Checking userID '{}' for access of level '{}' in org '{}'", identity.getPrincipal().getName(),
                 roles, orgId);
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();

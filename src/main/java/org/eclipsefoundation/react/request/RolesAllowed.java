@@ -7,6 +7,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.eclipsefoundation.react.namespace.OrganizationalUserType;
+
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD })
 public @interface RolesAllowed {
@@ -15,5 +17,5 @@ public @interface RolesAllowed {
      * 
      * @return
      */
-    String[] value();
+    OrganizationalUserType[] value();
 }

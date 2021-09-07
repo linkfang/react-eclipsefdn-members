@@ -6,7 +6,7 @@ package org.eclipsefoundation.react.model;
  * @author Martin Lowe
  *
  */
-public class OrganizationWorkingGroupPA {
+public class OrganizationWGPA {
     private String documentID;
     private String description;
     private String level;

@@ -53,7 +53,7 @@ import org.eclipsefoundation.react.model.MemberOrganization;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationDescription;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationLogos;
 import org.eclipsefoundation.react.model.MembershipLevel;
-import org.eclipsefoundation.react.model.OrganizationWorkingGroupPA;
+import org.eclipsefoundation.react.model.OrganizationWGPA;
 import org.eclipsefoundation.react.service.LiveImageService;
 import org.eclipsefoundation.react.service.OrganizationsService;
 import org.eclipsefoundation.react.service.WorkingGroupsService;
@@ -186,10 +186,14 @@ public class FoundationDBOrganizationService implements OrganizationsService {
 
     @Override
     public void removeOrganizationContact(String orgID, String userName, String role) {
-        // if there as an error, it will throw up
         orgAPI.removeOrganizationContacts(orgID, userName, role);
     }
 
+    @Override
+    public OrganizationContact updateOrganizationContact(String orgID, OrganizationContact orgContact) {
+        return orgAPI.updateOrganizationContacts(orgID, orgContact);
+    }
+    
     /**
      * Used to populate the cache and is therefore uncached. This should not be called outside of the loading cache
      * thread. AS this is typically called outside of the request context, a new context should be invoked around this
@@ -307,9 +311,9 @@ public class FoundationDBOrganizationService implements OrganizationsService {
      * document IDs
      * @return an enhanced document model with extra contextual data.
      */
-    private OrganizationWorkingGroupPA generateOrganizationWorkingGroupPA(OrganizationDocument wgpa,
+    private OrganizationWGPA generateOrganizationWorkingGroupPA(OrganizationDocument wgpa,
             Map<String, List<String>> wgpaDocIDs) {
-        OrganizationWorkingGroupPA owgpa = new OrganizationWorkingGroupPA();
+        OrganizationWGPA owgpa = new OrganizationWGPA();
         owgpa.setDocumentID(wgpa.getCompositeID().getDocumentID());
         owgpa.setLevel(wgpa.getRelation());
         // find the first entry that has a matching ID for current document
@@ -331,5 +335,4 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         return rels.stream().filter(rel -> rel.getRelation().equals(relation)).findFirst().orElse(new SysRelation())
                 .getDescription();
     }
-
 }

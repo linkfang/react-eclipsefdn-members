@@ -11,6 +11,7 @@
  */
 package org.eclipsefoundation.react.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.bind.annotation.JsonbProperty;
@@ -22,7 +23,7 @@ public class MemberOrganization {
     private MemberOrganizationLogos logos;
     private String website;
     private List<MembershipLevel> levels;
-    private List<OrganizationWorkingGroupPA> wgpas;
+    private List<OrganizationWGPA> wgpas;
 
     /**
      * @return the organizationID
@@ -111,15 +112,15 @@ public class MemberOrganization {
     /**
      * @return the wgpas
      */
-    public List<OrganizationWorkingGroupPA> getWgpas() {
-        return wgpas;
+    public List<OrganizationWGPA> getWgpas() {
+        return new ArrayList<>(wgpas);
     }
 
     /**
      * @param wgpas the wgpas to set
      */
-    public void setWgpas(List<OrganizationWorkingGroupPA> wgpas) {
-        this.wgpas = wgpas;
+    public void setWgpas(List<OrganizationWGPA> wgpas) {
+        this.wgpas = new ArrayList<>(wgpas);
     }
 
     public static class MemberOrganizationDescription {
