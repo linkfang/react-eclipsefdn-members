@@ -3,7 +3,7 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useContext, useEffect } from 'react';
 import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
-import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
+import { MEMBERSHIP_LEVELS, ROUTE_COMPANY, ROUTE_WGS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 import MembershipContext from '../../../Context/MembershipContext';
 
@@ -56,8 +56,8 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
       </div>
 
       <CustomStepButton
-        previousPage="/company-info"
-        nextPage="/working-groups"
+        previousPage={ROUTE_COMPANY}
+        nextPage={ROUTE_WGS}
         checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
         formik={formik}
         updatedFormValues={updatedFormValues}
