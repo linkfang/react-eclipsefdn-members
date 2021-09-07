@@ -13,6 +13,7 @@ import {
 } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
+import { initialValues } from '../FormComponents/formFieldModel';
 const styles = {
   marginBottom: '30px',
   textAlign: 'center',
@@ -26,6 +27,7 @@ const FormChooser = ({
   resetWorkingGroupForm,
   resetMembershipLevelForm,
   resetCompanyInfoForm,
+  setUpdatedFormValues
 }) => {
   const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
@@ -42,7 +44,10 @@ const FormChooser = ({
 
   const handleStartNewForm = () => {
     setIsStartNewForm(true);
-    if (getCurrentMode() === MODE_REACT_API) setCurrentFormId('');
+    setUpdatedFormValues(initialValues); // reset backup values
+    if (getCurrentMode() === MODE_REACT_API) {
+      setCurrentFormId('');
+    }
     // reset the form if user has gone to a further page/step
     if (furthestPage.index > 0) {
       resetCompanyInfoForm();
