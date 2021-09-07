@@ -55,7 +55,7 @@ export default function Application() {
     goToNextStep(5, '/submitted');
   };
 
-  const submitCompanyInfo = (isUsingStepper) => {
+  const submitCompanyInfo = () => {
     const values = formikCompanyInfo.values;
     // update the organization values
     const organization = values.organization;
@@ -107,27 +107,28 @@ export default function Application() {
       method: formikCompanyInfo.setFieldValue,
     };
 
-    executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj);
+    const updateFormValuesObj = {
+      theNewValue,
+      setUpdatedFormValues,
+    };
+
+    executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
     // Only make the API call when signingAuthorityRepresentative has an id
     // If not, it means there is nothing in the db, so no need to update.
     values.signingAuthorityRepresentative.id &&
-      executeSendDataByStep(
-        4,
-        values,
-        currentFormId,
-        currentUser.name,
-        setFieldValueObj
-      );
+      executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
     // Only need to call goToNextStep when is not using stepper
-    !isUsingStepper && goToNextStep(1, '/membership-level');
   };
   const formikCompanyInfo = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[0],
-    onSubmit: () => submitCompanyInfo(),
+    onSubmit: () => {
+      submitCompanyInfo();
+      goToNextStep(1, '/membership-level');
+    },
   });
 
-  const submitMembershipLevel = (isUsingStepper) => {
+  const submitMembershipLevel = () => {
     const values = formikMembershipLevel.values;
     // update the membershipLevel values
     const membershipLevel = values.membershipLevel;
@@ -145,21 +146,26 @@ export default function Application() {
     ];
     // set valueToUpdateFormik to CompanyInfo formik to make sure the value is up to date
     updateCompanyInfoForm(valueToUpdateFormik);
-
     executeSendDataByStep(2, values, currentFormId, currentUser.name);
-    !isUsingStepper && goToNextStep(2, '/working-groups');
   };
   const formikMembershipLevel = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[1],
-    onSubmit: () => submitMembershipLevel(),
+    onSubmit: () => {
+      submitMembershipLevel();
+      goToNextStep(2, '/working-groups');
+    },
   });
 
-  const submitWorkingGroups = (isUsingStepper) => {
+  const submitWorkingGroups = () => {
     const values = formikWorkingGroups.values;
     // update the workingGroups values
-    const workingGroups = values.workingGroups;
-    setUpdatedFormValues({ ...updatedFormValues, workingGroups });
+    const theNewValue = {
+      ...updatedFormValues,
+      workingGroups: values.workingGroups,
+      skipJoiningWG: values.skipJoiningWG,
+    };
+    setUpdatedFormValues(theNewValue);
     console.log('updated working groups: ', values);
 
     if (!values.skipJoiningWG) {
@@ -169,27 +175,30 @@ export default function Application() {
         method: formikWorkingGroups.setFieldValue,
       };
 
-      executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj);
-      !isUsingStepper && goToNextStep(3, '/signing-authority');
-    } else if (!isUsingStepper) {
-      // If the user is NOT using stepper and NOT joining any wg, then go to next page directly
-      goToNextStep(3, '/signing-authority');
+      executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj, {
+        theNewValue,
+        setUpdatedFormValues,
+      });
     }
   };
   const formikWorkingGroups = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[2],
-    onSubmit: () => submitWorkingGroups(),
+    onSubmit: () => {
+      submitWorkingGroups();
+      goToNextStep(3, '/signing-authority');
+    },
   });
 
-  const submitSigningAuthority = (isUsingStepper) => {
+  const submitSigningAuthority = () => {
     const values = formikSigningAuthority.values;
     // update the signingAuthorityRepresentative values
     const signingAuthorityRepresentative = values.signingAuthorityRepresentative;
-    setUpdatedFormValues({
+    const theNewValue = {
       ...updatedFormValues,
       signingAuthorityRepresentative,
-    });
+    };
+    setUpdatedFormValues(theNewValue);
     console.log('updated SigningAuthority: ', values);
 
     const valueToUpdateFormik = [
@@ -207,19 +216,24 @@ export default function Application() {
         companyInfo: formikCompanyInfo.setFieldValue,
       },
     };
-    executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj);
-    !isUsingStepper && goToNextStep(4, '/review');
+
+    executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, {
+      theNewValue,
+      setUpdatedFormValues,
+    });
   };
   const formikSigningAuthority = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema[3],
-    onSubmit: () => submitSigningAuthority(),
+    onSubmit: () => {
+      submitSigningAuthority();
+      goToNextStep(4, '/review');
+    },
   });
 
   const handleLoginExpired = useCallback(() => {
     if (sessionStorage.getItem(HAS_TOKEN_EXPIRED)) {
       sessionStorage.setItem(HAS_TOKEN_EXPIRED, '');
-
       // using setTimeout here is to make the pop up message more noticeable
       setTimeout(() => {
         setIsLoginExpired(true);
@@ -237,8 +251,6 @@ export default function Application() {
   // generate the step options above the form
   const renderStepper = () => (
     <div className="stepper">
-      <Step title="Sign In" index={-1} pathName="/sign-in" />
-
       {PAGE_STEP.map((pageStep, index) => {
         return (
           <Step
@@ -246,10 +258,23 @@ export default function Application() {
             title={pageStep.label}
             index={index}
             pathName={pageStep.pathName}
-            submitCompanyInfo={submitCompanyInfo}
-            submitMembershipLevel={submitMembershipLevel}
-            submitWorkingGroups={submitWorkingGroups}
-            submitSigningAuthority={submitSigningAuthority}
+            updatedFormValues={updatedFormValues}
+            formikCompanyInfo={{
+              ...formikCompanyInfo,
+              submitForm: submitCompanyInfo,
+            }}
+            formikMembershipLevel={{
+              ...formikMembershipLevel,
+              submitForm: submitMembershipLevel,
+            }}
+            formikWorkingGroups={{
+              ...formikWorkingGroups,
+              submitForm: submitWorkingGroups,
+            }}
+            formikSigningAuthority={{
+              ...formikSigningAuthority,
+              submitForm: submitSigningAuthority,
+            }}
           />
         );
       })}
@@ -289,6 +314,8 @@ export default function Application() {
                 fullWorkingGroupList={fullWorkingGroupList}
                 setFullWorkingGroupList={setFullWorkingGroupList}
                 setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
+                updatedFormValues={updatedFormValues}
+                setUpdatedFormValues={setUpdatedFormValues}
               />
             ) : (
               // if uses are not allowed to visit this page,
@@ -301,7 +328,10 @@ export default function Application() {
         <Route path="/membership-level">
           {renderStepper()}
           {furthestPage.index >= 2 ? (
-            <MembershipLevel formik={formikMembershipLevel} />
+            <MembershipLevel
+              formik={{ ...formikMembershipLevel, submitForm: submitMembershipLevel }}
+              updatedFormValues={updatedFormValues}
+            />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}
@@ -311,11 +341,13 @@ export default function Application() {
           {renderStepper()}
           {furthestPage.index >= 3 ? (
             <WorkingGroupsWrapper
-              formik={formikWorkingGroups}
+              formik={{ ...formikWorkingGroups, submitForm: submitWorkingGroups }}
               formikOrgValue={formikCompanyInfo.values}
               isStartNewForm={isStartNewForm}
               fullWorkingGroupList={fullWorkingGroupList}
               workingGroupsUserJoined={workingGroupsUserJoined}
+              updatedFormValues={updatedFormValues}
+              setUpdatedFormValues={setUpdatedFormValues}
             />
           ) : (
             <Redirect to={furthestPage.pathName} />
@@ -325,7 +357,11 @@ export default function Application() {
         <Route path="/signing-authority">
           {renderStepper()}
           {furthestPage.index >= 4 ? (
-            <SigningAuthority formik={formikSigningAuthority} formikOrgValue={formikCompanyInfo.values} />
+            <SigningAuthority
+              formik={{ ...formikSigningAuthority, submitForm: submitSigningAuthority }}
+              formikOrgValue={formikCompanyInfo.values}
+              updatedFormValues={updatedFormValues}
+            />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}

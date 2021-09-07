@@ -1,10 +1,11 @@
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { useContext, useEffect } from 'react';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
@@ -14,12 +15,17 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const MembershipLevel = ({ formik }) => {
+const MembershipLevel = ({ formik, updatedFormValues }) => {
   const { membershipLevel } = formField;
+  const { setCurrentStepIndex } = useContext(MembershipContext);
 
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(2);
+  }, [setCurrentStepIndex]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -49,7 +55,13 @@ const MembershipLevel = ({ formik }) => {
         <MembershipLevelFeeTable />
       </div>
 
-      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" />
+      <CustomStepButton
+        previousPage="/company-info"
+        nextPage="/working-groups"
+        checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
+      />
     </form>
   );
 };
