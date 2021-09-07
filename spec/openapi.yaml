@@ -11,16 +11,18 @@ servers:
 tags:
 -  name: Membership form
    description: Definitions related to membership form data in the database
--  name: Contacts
+-  name: Form Contacts
    description: Definitions related to membership form designated contacts
 -  name: Form Organizations
    description: Definitions related to membership form organizations
 -  name: Form Working Groups
    description: Definitions related to membership form working group targets
 -  name: Organizations
-   description: Definitions related to membership form organizations
+   description: Definitions related to Eclipse Foundation organizations
+-  name: Organization Contacts
+   description: Definitions related to Eclipse Foundation organization contacts
 -  name: Working Groups
-   description: Definitions related to membership form working group targets
+   description: Definitions related to Eclipse Foundation working group entities
 paths:
    /form:
       get:
@@ -151,7 +153,7 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       get:
          tags:
-         - Contacts
+         - Form Contacts
          summary: Contacts list
          description: Returns a list of tracked contacts
          responses:
@@ -165,7 +167,7 @@ paths:
                description: Error while retrieving data
       post:
          tags:
-         - Contacts
+         - Form Contacts
          summary: Contacts create
          description: Using the passed contact object, updates or inserts are made to save the data.
          requestBody:
@@ -199,7 +201,7 @@ paths:
             $ref: '#/components/schemas/ObjectID'
       get:
          tags:
-         - Contacts
+         - Form Contacts
          summary: Contacts
          description: Returns a contact for the form given a form ID and contact ID
          responses:
@@ -215,7 +217,7 @@ paths:
                description: Error while retrieving data
       put:
          tags:
-         - Contacts
+         - Form Contacts
          summary: Contacts update
          description: Using the passed contact object, updates or inserts are made to save the data.
          requestBody:
@@ -235,7 +237,7 @@ paths:
                description: Unauthorized
       delete:
          tags:
-         - Contacts
+         - Form Contacts
          summary: Contacts delete
          description: Remove a contact entry with the given ID
          responses:
@@ -469,6 +471,140 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Organization'
+            500:
+               description: Error while retrieving data
+   /organizations/{organizationID}/contacts:
+      parameters:
+      -  name: organizationID
+         in: path
+         description: The organization ID for the organization to retrieve
+         required: true
+         schema:
+            type: number
+      get:
+         tags:
+         - Organization Contacts
+         summary: Organization
+         description: Returns a list of contacts for the given organization
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/OrganizationContacts'
+            401:
+               description: Unauthorized
+            403:
+               description: Forbidden
+            404:
+               description: Not found
+            500:
+               description: Error while retrieving data
+   /organizations/{organizationID}/contacts/{contactID}:
+      parameters:
+      -  name: organizationID
+         in: path
+         description: The organization ID for the organization to retrieve
+         required: true
+         schema:
+            type: number
+      -  name: contactID
+         in: path
+         description: The contact ID/username of the contact to retrieve
+         required: true
+         schema:
+            type: string
+      get:
+         tags:
+         - Organization Contacts
+         summary: Organization
+         description: Returns a list of contact relations for the given user in the passed organization
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/OrganizationContact'
+            401:
+               description: Unauthorized
+            403:
+               description: Forbidden
+            404:
+               description: Not found
+            500:
+               description: Error while retrieving data
+   /organizations/{organizationID}/contacts/{contactID}/{relation}:
+      parameters:
+      -  name: organizationID
+         in: path
+         description: The organization ID for the organization to retrieve
+         required: true
+         schema:
+            type: number
+      -  name: contactID
+         in: path
+         description: The contact ID/username of the contact to retrieve
+         required: true
+         schema:
+            type: string
+      -  name: relation
+         in: path
+         description: The relation code of the relation type to retrieve/check for/update.
+         required: true
+         schema:
+            type: string
+      get:
+         tags:
+         - Organization Contacts
+         summary: Organization
+         description: Returns a contact relations for the given user and relation/position in the passed organization if it exists
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/OrganizationContact'
+            401:
+               description: Unauthorized
+            403:
+               description: Forbidden
+            404:
+               description: Not found
+            500:
+               description: Error while retrieving data
+      post:
+         tags:
+         - Organization Contacts
+         summary: Organization
+         description: Updates an organization contact and returns the updated entity
+         responses:
+            200:
+               description: Success
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/OrganizationContact'
+            401:
+               description: Unauthorized
+            403:
+               description: Forbidden
+            500:
+               description: Error while retrieving data
+      delete:
+         tags:
+         - Organization Contacts
+         summary: Organization
+         description: Returns a list of contact relations for the given user in the passed organization
+         responses:
+            200:
+               description: Success
+            401:
+               description: Unauthorized
+            403:
+               description: Forbidden
             500:
                description: Error while retrieving data
    /working_groups:
@@ -784,6 +920,30 @@ components:
                         type: string
                      description:
                         type: string
+      OrganizationContacts:
+         type: array
+         items:
+            $ref: '#/components/schemas/OrganizationContact'
+      OrganizationContact:
+         type: object
+         description: A contact entity retrieved and stored in the external FoundationDB service.
+         properties:
+            organization_id:
+               description: The ID of the organization from the external service
+               type: number
+            person_id:
+               description: the ID of the individual from the external service
+               type: string
+            relation:
+               description: the relation code for the contact in regards to the current organization and the currently represented relationship
+               type: string
+            comments:
+               description: System comments regarding the relation.
+               type: string
+            title:
+               description: The title of the relation
+               type: string
+
       WorkingGroups:
          type: array
          items:

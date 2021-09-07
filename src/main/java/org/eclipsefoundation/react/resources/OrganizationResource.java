@@ -38,6 +38,7 @@ import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.api.model.OrganizationContactID;
 import org.eclipsefoundation.api.model.SysRelation;
 import org.eclipsefoundation.react.model.MemberOrganization;
+import org.eclipsefoundation.react.model.OrganizationContactData;
 import org.eclipsefoundation.react.request.RolesAllowed;
 import org.eclipsefoundation.react.service.OrganizationsService;
 import org.eclipsefoundation.react.service.WorkingGroupsService;
@@ -90,7 +91,7 @@ public class OrganizationResource extends AbstractRESTResource {
     @Path("{orgID}/contacts")
     public Response getContactsWithSearch(@PathParam("orgID") String organizationID, @QueryParam("mail") String mail,
             @QueryParam("role") String role, @QueryParam("fname") String fName, @QueryParam("lname") String lName) {
-        Optional<List<OrganizationContact>> contacts = orgService.getOrganizationContacts(organizationID,
+        Optional<List<OrganizationContactData>> contacts = orgService.getOrganizationContacts(organizationID,
                 Optional.ofNullable(mail), Optional.ofNullable(role), Optional.ofNullable(fName),
                 Optional.ofNullable(lName));
         if (contacts.isEmpty()) {

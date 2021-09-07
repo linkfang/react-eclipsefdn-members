@@ -53,6 +53,7 @@ import org.eclipsefoundation.react.model.MemberOrganization;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationDescription;
 import org.eclipsefoundation.react.model.MemberOrganization.MemberOrganizationLogos;
 import org.eclipsefoundation.react.model.MembershipLevel;
+import org.eclipsefoundation.react.model.OrganizationContactData;
 import org.eclipsefoundation.react.model.OrganizationWGPA;
 import org.eclipsefoundation.react.service.LiveImageService;
 import org.eclipsefoundation.react.service.OrganizationsService;
@@ -152,7 +153,7 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     }
 
     @Override
-    public Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, Optional<String> mail,
+    public Optional<List<OrganizationContactData>> getOrganizationContacts(String orgID, Optional<String> mail,
             Optional<String> role, Optional<String> fName, Optional<String> lName) {
         // create param map to properly generate a cache key
         MultivaluedMap<String, String> params = new MultivaluedMapImpl<>();
@@ -160,12 +161,17 @@ public class FoundationDBOrganizationService implements OrganizationsService {
         params.add("relation", role.orElse(null));
         params.add("fName", fName.orElse(null));
         params.add("lName", lName.orElse(null));
-        return cache
+
+        Optional<List<OrganizationContact>> data = cache
                 .get(orgID, params, OrganizationContact.class,
                         () -> APIMiddleware.getAll(
                                 i -> orgAPI.getOrganizationContactsWithSearch(orgID, i, mail.orElse(null),
                                         role.orElse(null), fName.orElse(null), lName.orElse(null)),
                                 OrganizationContact.class));
+        if (data.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(data.get().stream().map(OrganizationContactData::convert).collect(Collectors.toList()));
     }
 
     @Override
@@ -193,7 +199,7 @@ public class FoundationDBOrganizationService implements OrganizationsService {
     public OrganizationContact updateOrganizationContact(String orgID, OrganizationContact orgContact) {
         return orgAPI.updateOrganizationContacts(orgID, orgContact);
     }
-    
+
     /**
      * Used to populate the cache and is therefore uncached. This should not be called outside of the loading cache
      * thread. AS this is typically called outside of the request context, a new context should be invoked around this
@@ -261,7 +267,7 @@ public class FoundationDBOrganizationService implements OrganizationsService {
 
         // get org WGPA documents and convert to model to be returned with extra context
         Map<String, List<String>> wgpaDocIDs = wgService.getWGPADocumentIDs();
-        List<OrganizationDocument> docs = getCachedOrganizationDocuments(org, wgpaDocIDs);
+        List<OrganizationDocument> docs = getCachedOrganizationWGDocuments(org, wgpaDocIDs);
         out.setWgpas(docs.stream().map(wgpa -> generateOrganizationWorkingGroupPA(wgpa, wgpaDocIDs))
                 .collect(Collectors.toList()));
         return out;
@@ -275,8 +281,9 @@ public class FoundationDBOrganizationService implements OrganizationsService {
      * document IDs
      * @return the list of WGPA documents for current working group or an empty list.
      */
-    private List<OrganizationDocument> getCachedOrganizationDocuments(Organization org,
+    private List<OrganizationDocument> getCachedOrganizationWGDocuments(Organization org,
             Map<String, List<String>> wgpaDocIDs) {
+        // gets all organization WG documents, using cache to reduce latency. Uses middleware for pagination
         return cache
                 .get(Integer.toString(org.getOrganizationID()), new MultivaluedMapImpl<>(), OrganizationDocument.class,
                         () -> APIMiddleware.getAll(
@@ -287,6 +294,13 @@ public class FoundationDBOrganizationService implements OrganizationsService {
                 .orElseGet(Collections::emptyList);
     }
 
+    /**
+     * Retrieves all membership relations for an organization, using caching+middleware to simplify and reduce latency
+     * of calls.
+     * 
+     * @param org the organization to retrieve memberships for
+     * @return the list of membership relations for the organizations or an empty list.
+     */
     private List<OrganizationMembership> getCachedOrganizationMemberships(Organization org) {
         return cache.get(Integer.toString(org.getOrganizationID()), new MultivaluedMapImpl<>(),
                 OrganizationMembership.class,
@@ -296,6 +310,12 @@ public class FoundationDBOrganizationService implements OrganizationsService {
                 .orElseGet(Collections::emptyList);
     }
 
+    /**
+     * Retrieves cached system relations from external service. This is used to map the relation codes to human-readable
+     * strings.
+     * 
+     * @return list of system relations, or an empty list.
+     */
     private List<SysRelation> getCachedRelations() {
         return cache
                 .get(ALL_LIST_CACHE_KEY, new MultivaluedMapImpl<>(), SysRelation.class,

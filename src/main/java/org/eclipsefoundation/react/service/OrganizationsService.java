@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.eclipsefoundation.api.model.OrganizationContact;
 import org.eclipsefoundation.react.model.MemberOrganization;
+import org.eclipsefoundation.react.model.OrganizationContactData;
 
 /**
  * Service for interacting with external organization entities. 
@@ -49,7 +50,7 @@ public interface OrganizationsService {
      * @param lName the last name of the user (no fuzzy).
      * @return a list of organization contacts that match the given parameters.
      */
-    Optional<List<OrganizationContact>> getOrganizationContacts(String orgID, Optional<String> mail,
+    Optional<List<OrganizationContactData>> getOrganizationContacts(String orgID, Optional<String> mail,
             Optional<String> role, Optional<String> fName, Optional<String> lName);
 
     /**
