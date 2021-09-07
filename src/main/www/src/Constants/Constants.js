@@ -23,6 +23,7 @@ export const api_prefix = () => {
 export const API_PREFIX_FORM = api_prefix() + '/form';
 export const API_FORM_PARAM = '?sort=dateCreated&order=desc';
 
+export const SIGN_IN = 'Sign In';
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
 export const WORKING_GROUPS = 'Working Groups';
@@ -31,7 +32,7 @@ export const REVIEW = 'Review';
 export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
-export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters'
+export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters';
 
 export const PATH_NAME_ARRAY = [
   '/company-info',
@@ -65,6 +66,7 @@ export const MEMBERSHIP_LEVELS = [
 ];
 
 export const PAGE_STEP = [
+  { label: SIGN_IN, pathName: '/sign-in' },
   { label: COMPANY_INFORMATION, pathName: '/company-info' },
   { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' },
   { label: WORKING_GROUPS, pathName: '/working-groups' },
