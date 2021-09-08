@@ -132,6 +132,7 @@ class SignIn extends React.Component {
             resetMembershipLevelForm={this.props.resetMembershipLevelForm}
             resetWorkingGroupForm={this.props.resetWorkingGroupForm}
             resetSigningAuthorityForm={this.props.resetSigningAuthorityForm}
+            setUpdatedFormValues={this.props.setUpdatedFormValues}
           />
         ) : (
           this.renderButtons(this.props.setFurthestPage)
