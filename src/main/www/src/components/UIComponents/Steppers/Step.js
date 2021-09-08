@@ -1,7 +1,8 @@
-import { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
+import { checkIsNotFurthestPage, isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
+import ModalWindow from '../Notifications/ModalWindow';
 
 /**
  * Props:
@@ -22,43 +23,133 @@ const Step = ({
   index,
   title,
   pathName,
-  submitCompanyInfo,
-  submitMembershipLevel,
-  submitWorkingGroups,
-  submitSigningAuthority,
+  formikCompanyInfo,
+  formikMembershipLevel,
+  formikWorkingGroups,
+  formikSigningAuthority,
+  updatedFormValues,
 }) => {
   const isActive = useRouteMatch(pathName);
   const history = useHistory();
-  const { furthestPage } = useContext(MembershipContext);
-  const handleSubmit = () => {
-    // Only call submit func when user can navigate using stepper
+  const [shouldOpen, setShouldOpen] = useState(false);
+  const { furthestPage, setFurthestPage, currentStepIndex } = useContext(MembershipContext);
+
+  const navigateTo = (result, destinatedPath, formik, isEmpty) => {
+    if (index < currentStepIndex) {
+      // means go back
+      validateGoBack(
+        isEmpty,
+        result,
+        formik,
+        setShouldOpen,
+        () => history.push(pathName),
+        checkIsNotFurthestPage(currentStepIndex, furthestPage.index)
+      );
+      return;
+    }
+
+    // If validation result is NOT empty, it means something fail to pass validation
+    if (Object.keys(result).length > 0) {
+      formik.setTouched(result);
+      return;
+    }
+
+    formik.submitForm();
+    furthestPage.index <= currentStepIndex &&
+      setFurthestPage({ index: currentStepIndex + 1, pathName: destinatedPath });
+    history.push(pathName);
+  };
+
+  const handleGoBack = () => {
+    setShouldOpen(false);
+    // Reset/roll back different formik based on current route
     switch (window.location.hash) {
       case '#company-info':
-        furthestPage.index > 1 && submitCompanyInfo(true);
+        formikCompanyInfo.setValues(updatedFormValues);
         break;
       case '#membership-level':
-        furthestPage.index > 2 && submitMembershipLevel(true);
+        formikMembershipLevel.setValues(updatedFormValues);
         break;
       case '#working-groups':
-        furthestPage.index > 3 && submitWorkingGroups(true);
+        formikWorkingGroups.setValues(updatedFormValues);
         break;
       case '#signing-authority':
-        furthestPage.index > 4 && submitSigningAuthority(true);
+        formikSigningAuthority.setValues(updatedFormValues);
         break;
       default:
         break;
     }
     history.push(pathName);
   };
+
+  const handleSubmit = () => {
+    let isEmpty = true;
+    switch (window.location.hash) {
+      case '#company-info':
+        isEmpty =
+          isObjectEmpty(formikCompanyInfo.values.organization) &&
+          isObjectEmpty(formikCompanyInfo.values.representative) &&
+          isObjectEmpty(formikCompanyInfo.values.purchasingAndVAT);
+
+        formikCompanyInfo
+          .validateForm()
+          .then((result) => navigateTo(result, '/membership-level', formikCompanyInfo, isEmpty));
+        break;
+
+      case '#membership-level':
+        isEmpty = isObjectEmpty(formikMembershipLevel.values.membershipLevel);
+        formikMembershipLevel
+          .validateForm()
+          .then((result) => navigateTo(result, '/working-groups', formikMembershipLevel, isEmpty));
+        break;
+
+      case '#working-groups':
+        isEmpty = true;
+        const workingGroups = formikWorkingGroups.values.workingGroups;
+        for (let i = 0; i < workingGroups.length; i++) {
+          if (!isObjectEmpty(workingGroups[i])) {
+            isEmpty = false;
+            break;
+          }
+        }
+        formikWorkingGroups
+          .validateForm()
+          .then((result) => navigateTo(result, '/signing-authority', formikWorkingGroups, isEmpty));
+        break;
+
+      case '#signing-authority':
+        isEmpty = isObjectEmpty(formikSigningAuthority.values.signingAuthorityRepresentative);
+        formikSigningAuthority
+          .validateForm()
+          .then((result) => navigateTo(result, '/review', formikSigningAuthority, isEmpty));
+        break;
+      case '#review':
+        history.push(pathName);
+        break;
+      default:
+        break;
+    }
+  };
   return (
-    <div className="step" onClick={handleSubmit}>
-      <span className="step-span-index">{index + 2}</span>
-      <div className="step-span">
-        <div className={isActive ? 'step-title-container-active' : 'step-title-container'}>
-          <span className="step-title">{title}</span>
+    <>
+      <ModalWindow
+        title={'Go Back to Previous Step'}
+        content={'The form submission for this step is incomplete or has errors. Are you sure you want to leave without saving?'}
+        handleProceed={handleGoBack}
+        shouldOpen={shouldOpen}
+        setShouldOpen={setShouldOpen}
+        yesText={'Leave'}
+        cancelText={'Keep Editing'}
+      />
+      <div className="step" onClick={handleSubmit}>
+        <span className="step-span-index">{index + 1}</span>
+        <div className="step-span">
+          <div className={isActive ? 'step-title-container-active' : 'step-title-container'}>
+            <span className="step-title">{title}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

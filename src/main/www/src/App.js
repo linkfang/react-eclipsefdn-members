@@ -26,6 +26,7 @@ const App = () => {
     pathName: '/sign-in',
   });
   const [needLoadingSignIn, setNeedLoadingSignIn] = useState(true);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const membershipContextValue = {
     currentUser,
@@ -36,6 +37,8 @@ const App = () => {
     setFurthestPage,
     needLoadingSignIn,
     setNeedLoadingSignIn,
+    currentStepIndex,
+    setCurrentStepIndex
   };
 
   return (

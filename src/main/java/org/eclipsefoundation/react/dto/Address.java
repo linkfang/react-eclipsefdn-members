@@ -11,6 +11,7 @@
  */
 package org.eclipsefoundation.react.dto;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import org.eclipsefoundation.persistence.dto.filter.DtoFilter;
 import org.eclipsefoundation.persistence.model.DtoTable;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatement;
 import org.eclipsefoundation.persistence.model.ParameterizedSQLStatementBuilder;
+import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -183,6 +185,12 @@ public class Address extends BareNode implements TargetedClone<Address> {
                     stmt.addClause(
                             new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".id = ?", new Object[] { id }));
                 }
+            }
+            // form IDs check
+            List<String> formIds = params.get(MembershipFormAPIParameterNames.FORM_IDS.getName());
+            if (formIds != null) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".organization.form.id IN ?",
+                        new Object[] { formIds }));
             }
             return stmt;
         }

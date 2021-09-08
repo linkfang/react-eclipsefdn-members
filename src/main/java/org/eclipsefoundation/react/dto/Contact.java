@@ -11,6 +11,7 @@
  */
 package org.eclipsefoundation.react.dto;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -196,11 +197,17 @@ public class Contact extends BareNode implements TargetedClone<Contact> {
                             new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".id = ?", new Object[] { id }));
                 }
             }
-            // user ID check
+            // form ID check
             String formId = params.getFirst(MembershipFormAPIParameterNames.FORM_ID.getName());
             if (formId != null) {
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".form.id = ?",
                         new Object[] { formId }));
+            }
+            // form IDs check
+            List<String> formIds = params.get(MembershipFormAPIParameterNames.FORM_IDS.getName());
+            if (formIds != null) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".form.id IN ?",
+                        new Object[] { formIds }));
             }
             return stmt;
         }

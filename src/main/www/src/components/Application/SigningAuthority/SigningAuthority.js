@@ -1,9 +1,10 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { useContext, useEffect } from 'react';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Have not added any API calls here,
@@ -12,7 +13,8 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik, formikOrgValue }) => {
+const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
+  const { setCurrentStepIndex } = useContext(MembershipContext);
   const { signingAuthorityRepresentative } = formField;
   const name = 'signingAuthorityRepresentative';
   const generateSingleContact = (el) => (
@@ -39,9 +41,7 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
   );
 
   const handleCheckboxChange = (isChecked) => {
-    const repInfo = isChecked
-      ? formikOrgValue.representative.member
-      : formik.values.signingAuthorityRepresentative;
+    const repInfo = isChecked ? formikOrgValue.representative.member : formik.values.signingAuthorityRepresentative;
 
     const newValues = {
       ...repInfo,
@@ -54,6 +54,10 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(4);
+  }, [setCurrentStepIndex]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -82,7 +86,13 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
           {signingAuthorityRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}
         </div>
       </div>
-      <CustomStepButton previousPage="/working-groups" nextPage="/review" />
+      <CustomStepButton
+        previousPage="/working-groups"
+        nextPage="/review"
+        checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
+      />
     </form>
   );
 };

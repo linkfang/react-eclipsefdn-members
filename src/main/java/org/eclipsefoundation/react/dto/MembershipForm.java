@@ -24,6 +24,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
 import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.dto.filter.DtoFilter;
@@ -46,6 +47,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
     private String userID;
+    @NotBlank(message = "Membership level is required for submission", groups = Completion.class)
     private String membershipLevel;
     private boolean signingAuthority;
     @NotBlank(message = "Purchase order state cannot be blank", groups = Completion.class)
@@ -54,6 +56,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
     private String registrationCountry;
     @SortableField
     private Long dateCreated;
+    @SortableField
+    private Long dateUpdated;
     @SortableField
     private Long dateSubmitted;
     @NotNull(message = "The form state cannot be null")
@@ -135,6 +139,20 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         this.dateCreated = dateCreated;
     }
 
+    /**
+     * @return the dateUpdated
+     */
+    public Long getDateUpdated() {
+        return dateUpdated;
+    }
+
+    /**
+     * @param dateUpdated the dateUpdated to set
+     */
+    public void setDateUpdated(Long dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
     public Long getDateSubmitted() {
         return this.dateSubmitted;
     }
@@ -175,7 +193,7 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Objects.hash(id, membershipLevel, signingAuthority, userID, vatNumber,
-                registrationCountry, purchaseOrderRequired, dateCreated, dateSubmitted, state);
+                registrationCountry, purchaseOrderRequired, dateCreated, dateUpdated, dateSubmitted, state);
         return result;
     }
 
@@ -193,7 +211,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
                 && Objects.equals(vatNumber, other.vatNumber) && Objects.equals(dateCreated, other.dateCreated)
                 && Objects.equals(registrationCountry, other.registrationCountry)
                 && Objects.equals(purchaseOrderRequired, other.purchaseOrderRequired)
-                && Objects.equals(state, other.state) && Objects.equals(dateSubmitted, other.dateSubmitted);
+                && Objects.equals(state, other.state) && Objects.equals(dateSubmitted, other.dateSubmitted)
+                && Objects.equals(dateUpdated, other.dateUpdated);
     }
 
     @Override
@@ -250,6 +269,13 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
             if (formState != null) {
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".state = ?",
                         new Object[] { FormState.valueOf(formState.toUpperCase()) }));
+            }
+
+            String dateCreated = params
+                    .getFirst(MembershipFormAPIParameterNames.BEFORE_DATE_UPDATED_IN_MILLIS.getName());
+            if (dateCreated != null && StringUtils.isNumeric(dateCreated)) {
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".dateUpdated < ?",
+                        new Object[] { Long.parseLong(dateCreated) }));
             }
             return stmt;
         }

@@ -11,11 +11,12 @@
  */
 package org.eclipsefoundation.react.bootstrap;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 import io.quarkus.arc.config.ConfigProperties;
 
@@ -35,6 +36,7 @@ public class DataLoaderConfig {
     private List<String> workingGroups = Arrays.asList("internet-things-iot", "jakarta-ee", "cloud-tools-development");
     private List<String> membershipLevels = Arrays.asList("strategic", "contributing", "associate", "committer");
     private List<String> participationLevels = Arrays.asList("platinum", "gold", "silver", "associate");
+    private Duration daysOut = Duration.of(60, ChronoUnit.DAYS);
 
     /**
      * @return the dataLoaderEnabled
@@ -132,5 +134,19 @@ public class DataLoaderConfig {
      */
     public void setParticipationLevels(List<String> participationLevels) {
         this.participationLevels = new ArrayList<>(participationLevels);
+    }
+
+    /**
+     * @return the daysOut
+     */
+    public Duration getDaysOut() {
+        return daysOut;
+    }
+
+    /**
+     * @param daysOut the daysOut to set
+     */
+    public void setDaysOut(Duration daysOut) {
+        this.daysOut = daysOut;
     }
 }
