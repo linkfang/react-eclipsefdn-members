@@ -299,6 +299,7 @@ export default function Application() {
             resetMembershipLevelForm={formikMembershipLevel.resetForm}
             resetWorkingGroupForm={formikWorkingGroups.resetForm}
             resetSigningAuthorityForm={formikSigningAuthority.resetForm}
+            setUpdatedFormValues={setUpdatedFormValues}
           />
         </Route>
 
