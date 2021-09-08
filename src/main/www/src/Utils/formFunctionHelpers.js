@@ -768,7 +768,7 @@ export const logout = () => {
       window.location.assign('/');
     })
     .catch((err) => {
-      console.log(err);
+      !isProd && console.log(err);
       window.location.assign('/');
     });
 };
