@@ -29,7 +29,7 @@ const eclipseFdnScrollUp = (function ($, document) {
     if (window.HubSpotConversations && $('.scrollup').css('bottom') !== '100px') {
       console.log(1);
       $('.scrollup').css('bottom', '100px');
-    } else {
+    } else if (!window.HubSpotConversations) {
       window.hsConversationsOnReady = [
         () => {
           console.log(2);
