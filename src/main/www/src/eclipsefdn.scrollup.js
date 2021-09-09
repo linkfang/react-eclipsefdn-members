@@ -26,12 +26,13 @@ const eclipseFdnScrollUp = (function ($, document) {
       $('.scrollup').fadeOut();
     }
 
-    if (window.HubSpotConversations) {
+    if (window.HubSpotConversations && $('.scrollup').css('bottom') !== '100px') {
+      console.log(1);
       $('.scrollup').css('bottom', '100px');
-      console.log($('.scrollup').css('bottom'));
     } else {
       window.hsConversationsOnReady = [
         () => {
+          console.log(2);
           $('.scrollup').css('bottom', '100px');
         },
       ];
