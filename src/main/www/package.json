@@ -19,6 +19,7 @@
     "eclipsefdn-solstice-assets": "^0.0.162",
     "formik": "^2.2.6",
     "less-watch-compiler": "^1.15.1",
+    "postal-address-field-names": "^1.0.3",
     "react": "^17.0.0",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.0",
@@ -54,9 +55,9 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.7",
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
     "@stoplight/json-ref-resolver": "^3.1.2",
+    "@types/react-router-dom": "^5.1.7",
     "decamelize": "^5.0.0",
     "js-yaml": "^4.1.0",
     "react-datepicker": "^3.2.2",

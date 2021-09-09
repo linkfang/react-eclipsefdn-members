@@ -21,16 +21,37 @@ import {
 
 const CompanyInformationCompany = ({ formik, useStyles }) => {
   const classes = useStyles();
-  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue, organizationType } =
-    formField;
+  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue } = formField;
+  const [orgAddressObj, setOrgAddressObj] = useState({
+    street: 'Address 1',
+    streetTwo: 'Address 2',
+    city: 'City',
+    provinceOrState: 'Province',
+    postalCode: 'Postal Code',
+  });
 
-  // get country list library and map as option pass to the React-Select
-  const countryList = require('country-list')
-    .getNames()
-    .map((item) => ({ label: item, value: item }));
+  const countryList = countryAddressDetails.map((item) => ({ label: item.name, value: item.name }));
 
   const handleFieldChange = (value, fieldName) => {
     formik.setFieldValue(fieldName, value);
+  };
+
+  const handleCountryOnChange = (ev, value) => {
+    // this is only for display
+    formik.setFieldValue(`${organizationAddress.country.name}-label`, value || null);
+    // this is the data will be actually used
+    formik.setFieldValue(organizationAddress.country.name, value?.value || null);
+    if (value) {
+      const currentAddressObj = countryAddressDetails.find((item) => item.name === value.value).fields;
+      console.log(currentAddressObj);
+      setOrgAddressObj({
+        street: currentAddressObj.addressLine1 || 'Address 1',
+        streetTwo: currentAddressObj.addressLine2 || 'Address 2',
+        city: currentAddressObj.locality || 'City',
+        provinceOrState: currentAddressObj.administrativeArea || 'Province',
+        postalCode: currentAddressObj.postalCode || 'Postal Code',
+      });
+    }
   };
 
   return (
@@ -39,7 +60,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         Organization
       </h2>
       <div className="row">
-        <div className="col-md-24">
+        <div className="col-md-16">
           <Input
             name={organizationName.name}
             labelName={organizationName.label}
@@ -121,10 +142,10 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         Address
       </h2>
       <div className="row">
-        <div className="col-md-16">
+        <div className="col-md-12">
           <Input
             name={organizationAddress.street.name}
-            labelName={organizationAddress.street.label}
+            labelName={orgAddressObj.street}
             placeholder={organizationAddress.street.placeholder}
             requiredMark={true}
             value={formik.values.organization.address.street}
@@ -134,17 +155,18 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             helperText={formik.errors.organization?.address?.street}
           />
         </div>
-        <div className="col-md-8">
+        <div className="col-md-12">
           <Input
-            name={organizationAddress.city.name}
-            labelName={organizationAddress.city.label}
-            placeholder={organizationAddress.city.placeholder}
-            requiredMark={true}
-            value={formik.values.organization.address.city}
+            name={organizationAddress.streetTwo.name}
+            labelName={orgAddressObj.streetTwo}
+            placeholder={organizationAddress.streetTwo.placeholder}
+            value={formik.values.organization.address.streetTwo}
             onChange={formik.handleChange}
-            ariaLabel={`${organizationName.name}-address`}
-            error={formik.touched.organization?.address?.city && Boolean(formik.errors.organization?.address?.city)}
-            helperText={formik.errors.organization?.address?.city}
+            ariaLabel={`${organizationName.name}-address2`}
+            error={
+              formik.touched.organization?.address?.streetTwo && Boolean(formik.errors.organization?.address?.streetTwo)
+            }
+            helperText={formik.errors.organization?.address?.streetTwo}
           />
         </div>
       </div>
@@ -159,13 +181,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
             fullWidth={true}
             freeSolo={true}
             openOnFocus={true}
-            onChange={(ev, value) => {
-              // this is only for display
-              formik.setFieldValue(`${organizationAddress.country.name}-label`, value || null);
-
-              // this is the data will be actually used
-              formik.setFieldValue(organizationAddress.country.name, value?.value || null);
-            }}
+            onChange={(ev, value) => handleCountryOnChange(ev, value)}
             value={formik.values.organization.address['country-label'] || null}
             renderInput={(params) => {
               params.inputProps = {
@@ -192,11 +208,25 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           />
         </div>
 
+        <div className="col-md-4">
+          <Input
+            name={organizationAddress.city.name}
+            labelName={orgAddressObj.city}
+            placeholder={orgAddressObj.city}
+            requiredMark={true}
+            value={formik.values.organization.address.city}
+            onChange={formik.handleChange}
+            ariaLabel={`${organizationName.name}-address`}
+            error={formik.touched.organization?.address?.city && Boolean(formik.errors.organization?.address?.city)}
+            helperText={formik.errors.organization?.address?.city}
+          />
+        </div>
+
         <div className="col-md-8">
           <Input
             name={organizationAddress.provinceOrState.name}
-            labelName={organizationAddress.provinceOrState.label}
-            placeholder={organizationAddress.provinceOrState.placeholder}
+            labelName={orgAddressObj.provinceOrState}
+            placeholder={orgAddressObj.provinceOrState}
             requiredMark={false}
             value={formik.values.organization.address.provinceOrState}
             onChange={formik.handleChange}
@@ -206,11 +236,11 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
           />
         </div>
 
-        <div className="col-md-8">
+        <div className="col-md-4">
           <Input
             name={organizationAddress.postalCode.name}
-            labelName={organizationAddress.postalCode.label}
-            placeholder={organizationAddress.postalCode.placeholder}
+            labelName={orgAddressObj.postalCode}
+            placeholder={orgAddressObj.postalCode}
             requiredMark={false}
             value={formik.values.organization.address.postalCode}
             onChange={formik.handleChange}
