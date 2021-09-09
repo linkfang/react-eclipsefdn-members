@@ -64,10 +64,10 @@
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-oidc</artifactId>
 		</dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-oidc-client-filter</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-oidc-client-filter</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-rest-client</artifactId>
@@ -105,26 +105,26 @@
 			<artifactId>quarkus-hibernate-validator</artifactId>
 		</dependency>
 
-    <dependency>
+		<dependency>
       <!-- ALWAYS required, usually included transitively. -->
-      <groupId>com.openhtmltopdf</groupId>
-      <artifactId>openhtmltopdf-core</artifactId>
-      <version>${openhtml.version}</version>
-    </dependency>
-    
-    <dependency>
+			<groupId>com.openhtmltopdf</groupId>
+			<artifactId>openhtmltopdf-core</artifactId>
+			<version>${openhtml.version}</version>
+		</dependency>
+
+		<dependency>
       <!-- Required for PDF output. -->
-      <groupId>com.openhtmltopdf</groupId>
-      <artifactId>openhtmltopdf-pdfbox</artifactId>
-      <version>${openhtml.version}</version>
-    </dependency>
-    
-    <dependency>
-      <!-- Required for image output only. -->    
-      <groupId>com.openhtmltopdf</groupId>
-      <artifactId>openhtmltopdf-java2d</artifactId>
-      <version>${openhtml.version}</version>
-    </dependency>
+			<groupId>com.openhtmltopdf</groupId>
+			<artifactId>openhtmltopdf-pdfbox</artifactId>
+			<version>${openhtml.version}</version>
+		</dependency>
+
+		<dependency>
+      <!-- Required for image output only. -->
+			<groupId>com.openhtmltopdf</groupId>
+			<artifactId>openhtmltopdf-java2d</artifactId>
+			<version>${openhtml.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -154,6 +154,23 @@
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-junit5-mockito</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Following H2/devservices deps are made to circumvent need for docker -->
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-devservices-h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-jdbc-h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

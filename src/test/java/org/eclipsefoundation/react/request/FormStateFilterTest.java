@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.react.dto.Contact;
@@ -35,7 +35,7 @@ class FormStateFilterTest {
     static final String GENERATED_RANDOM_HEADER = "sample-header-value";
 
     @InjectMock
-    PersistenceDao dao;
+    DefaultHibernateDao dao;
 
     // these will be reset before each test, do not rely on static data here
     MembershipForm inprogress;

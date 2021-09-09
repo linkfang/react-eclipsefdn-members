@@ -58,7 +58,6 @@ public class ScheduledDBCleanTask {
             InstanceHandle<FilterService> filtersHandle = Arc.container().instance(FilterService.class);
             FilterService filters = filtersHandle.get();
 
-            LOGGER.error("Can we hit here");
             ZonedDateTime maxAge = TimeHelper.now().minus(maxAgeBeforeDeletion.get());
             LOGGER.info("Checking for database entries updated before {}", maxAge);
             // create parameter map for inprogress documents older than the configured period

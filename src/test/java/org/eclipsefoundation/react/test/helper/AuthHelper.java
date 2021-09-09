@@ -12,11 +12,12 @@ import io.restassured.specification.RequestSpecification;
 import io.smallrye.jwt.build.Jwt;
 
 public class AuthHelper {
-    public static final String TEST_USER_NAME = "sample_user";
+    public static final String TEST_USER_NAME = "alice";
     public static final String FAMILY_NAME_CLAIM_VALUE = "Lowe";
     public static final String GIVEN_NAME_CLAIM_VALUE = "Martin";
     public static final String FAMILY_NAME_CLAIM_KEY = "family_name";
     public static final String GIVEN_NAME_CLAIM_KEY = "given_name";
+    private static final Set<String> ROLES = Collections.unmodifiableSet(Set.of("user"));
 
     /**
      * Retrieves a CSRF value for the given session using restassured.
@@ -38,8 +39,8 @@ public class AuthHelper {
     public static String getAccessToken(Set<String> groups) {
         // first name and given name are claims provided by KC, mocked here
         return Jwt.preferredUserName(TEST_USER_NAME).claim(GIVEN_NAME_CLAIM_KEY, GIVEN_NAME_CLAIM_VALUE)
-                .claim(FAMILY_NAME_CLAIM_KEY, FAMILY_NAME_CLAIM_VALUE).groups(groups)
-                .issuer("https://server.example.com").audience("https://service.example.com").jws().keyId("1").sign();
+                .claim(FAMILY_NAME_CLAIM_KEY, FAMILY_NAME_CLAIM_VALUE).groups(ROLES)
+                .issuer("https://server.example.com").audience("https://service.example.com").sign();
     }
     
     public static RequestSpecification getAuthorizedResteasyRequest() {
