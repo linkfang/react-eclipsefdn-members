@@ -8,6 +8,7 @@ import Application from './components/Application/Application';
 import Portal from './components/Portal/Portal';
 import NotFound404 from './components/ErrorPages/NotFound404';
 import InternalError50x from './components/ErrorPages/InternalError50x';
+import './eclipsefdn.scrollup';
 
 const theme = createMuiTheme({
   palette: {
