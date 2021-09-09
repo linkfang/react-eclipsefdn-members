@@ -27,11 +27,12 @@ const eclipseFdnScrollUp = (function ($, document) {
     }
 
     if (window.HubSpotConversations) {
-      $('.scrollup').style.bottom = '100px'
+      $('.scrollup').css('bottom', '100px');
+      console.log($('.scrollup').css('bottom'));
     } else {
       window.hsConversationsOnReady = [
         () => {
-          $('.scrollup').style.bottom = '100px'
+          $('.scrollup').css('bottom', '100px');
         },
       ];
     }
