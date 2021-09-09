@@ -8,6 +8,7 @@ import Application from './components/Application/Application';
 import Portal from './components/Portal/Portal';
 import NotFound404 from './components/ErrorPages/NotFound404';
 import InternalError50x from './components/ErrorPages/InternalError50x';
+import { ROUTE_SIGN_IN } from './Constants/Constants';
 
 const theme = createMuiTheme({
   palette: {
@@ -23,7 +24,7 @@ const App = () => {
   const [currentFormId, setCurrentFormId] = useState('');
   const [furthestPage, setFurthestPage] = useState({
     index: 0,
-    pathName: '/sign-in',
+    pathName: ROUTE_SIGN_IN,
   });
   const [needLoadingSignIn, setNeedLoadingSignIn] = useState(true);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);

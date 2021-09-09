@@ -3,7 +3,7 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_PURCHASING_PROCESS } from '../../../Constants/Constants';
+import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_PURCHASING_PROCESS, ROUTE_SIGNING, ROUTE_SUBMITTED } from '../../../Constants/Constants';
 import ReadOnlyInput from '../../UIComponents/Inputs/ReadOnlyInput';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import MembershipContext from '../../../Context/MembershipContext';
@@ -396,8 +396,8 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
       />
 
       <CustomStepButton
-        previousPage="/signing-authority"
-        nextPage="/submitted"
+        previousPage={ROUTE_SIGNING}
+        nextPage={ROUTE_SUBMITTED}
         disableSubmit={!isTermChecked}
         checkIsEmpty={() => false}
         formik={false}

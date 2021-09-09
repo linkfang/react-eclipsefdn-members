@@ -6,6 +6,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   API_FORM_PARAM,
+  ROUTE_COMPANY,
 } from '../../../Constants/Constants';
 import {
   handleNewForm,
@@ -33,8 +34,8 @@ const FormChooser = ({
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = useCallback(() => {
-    setFurthestPage({ index: 1, pathName: '/company-info' });
-    history.push('/company-info');
+    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
+    history.push(ROUTE_COMPANY);
   }, [history, setFurthestPage]);
 
   const handleContinueExistingForm = () => {

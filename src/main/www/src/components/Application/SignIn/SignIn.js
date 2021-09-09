@@ -8,6 +8,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  ROUTE_COMPANY,
 } from '../../../Constants/Constants';
 import { NavLink } from 'react-router-dom';
 import Loading from '../../UIComponents/Loading/Loading';
@@ -42,7 +43,7 @@ class SignIn extends React.Component {
   static contextType = MembershipContext;
 
   getFakeUser = (setFurthestPage) => {
-    setFurthestPage({ index: 1, pathName: '/company-info' });
+    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
     this.context.setCurrentFormId('reactOnly');
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
@@ -65,7 +66,7 @@ class SignIn extends React.Component {
           Get started by logging in with your Eclipse Foundation account:
         </p>
         {getCurrentMode() === MODE_REACT_ONLY && (
-          <NavLink to="/company-info">
+          <NavLink to={ROUTE_COMPANY}>
             <button type="button" onClick={() => this.getFakeUser(setFurthestPage)} className="btn btn-secondary">
               React Only Login
             </button>

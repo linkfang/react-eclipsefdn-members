@@ -5,6 +5,7 @@ import { useContext, useEffect } from 'react';
 import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import MembershipContext from '../../../Context/MembershipContext';
+import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
 
 /**
  * Have not added any API calls here,
@@ -87,8 +88,8 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
         </div>
       </div>
       <CustomStepButton
-        previousPage="/working-groups"
-        nextPage="/review"
+        previousPage={ROUTE_WGS}
+        nextPage={ROUTE_REVIEW}
         checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
         formik={formik}
         updatedFormValues={updatedFormValues}
