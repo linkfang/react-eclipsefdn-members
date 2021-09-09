@@ -29,14 +29,18 @@ const eclipseFdnScrollUp = (function ($, document) {
     if (window.HubSpotConversations && $('.scrollup').css('bottom') !== '100px') {
       console.log(1);
       $('.scrollup').css('bottom', '100px');
-    } else if (!window.HubSpotConversations) {
-      window.hsConversationsOnReady = [
-        () => {
-          console.log(2);
-          $('.scrollup').css('bottom', '100px');
-        },
-      ];
+    } else if (!window.HubSpotConversations && $('.scrollup').css('bottom') !== '50px') {
+      console.log(2);
+      $('.scrollup').css('bottom', '50px');
     }
+    // else if (!window.HubSpotConversations) {
+    //   window.hsConversationsOnReady = [
+    //     () => {
+    //       console.log(2);
+    //       $('.scrollup').css('bottom', '100px');
+    //     },
+    //   ];
+    // }
   });
 
   // scroll back to the top of the page.
