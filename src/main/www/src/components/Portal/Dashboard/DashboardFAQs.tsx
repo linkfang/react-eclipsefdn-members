@@ -44,25 +44,26 @@ const useStyles = makeStyles((theme: Theme) =>
     faqContainer: {
       position: 'relative',
       display: 'flex',
-      marginTop: 40,
-      padding: '0 10px',
+      marginTop: theme.spacing(4),
+      padding: theme.spacing(0, 1),
       border: '2px #DCDFE5 solid',
       borderRadius: borderRadiusSize,
       maxWidth: '100%',
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: 64,
+        paddingLeft: theme.spacing(6.4),
       },
     },
     faqIcon: {
       position: 'absolute',
-      top: -30,
-      left: 12,
+      top: theme.spacing(-3),
+      left: theme.spacing(1.2),
       color: iconGray,
       backgroundColor: mainContentBGColor,
       fontSize: 60,
     },
     faqTitle: {
       textAlign: 'center',
+      paddingTop: theme.spacing(9),
       [theme.breakpoints.up('sm')]: {
         textAlign: 'left',
       },
@@ -71,22 +72,22 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 200,
       opacity: 0.15,
       color: iconGray,
-      marginTop: 42,
+      marginTop: theme.spacing(4.2),
       display: 'none',
       [theme.breakpoints.up('lg')]: {
         display: 'block',
       },
     },
     faqList: {
-      marginTop: 30,
-      marginBottom: 25,
-      padding: 10,
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(2.5),
+      padding: theme.spacing(1),
     },
     faqItemCtn: {
       padding: 0,
       border: '2px #EDEDED solid',
       borderRadius: borderRadiusSize,
-      marginBottom: 5,
+      marginBottom: theme.spacing(0.5),
     },
     faqQuestion: {
       backgroundColor: '#EDEDED',
@@ -96,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row-reverse',
     },
     faqAnswer: {
-      padding: '16px 32px',
+      padding: theme.spacing(1.6, 3.2),
     },
   })
 );
@@ -127,12 +128,7 @@ export default function DashboardFAQs() {
     </List>
   ));
   return (
-    <div
-      style={{
-        paddingTop: 90,
-      }}
-      id="faqs"
-    >
+    <div id="faqs">
       <Typography className={classes.faqTitle} variant="h4">
         FAQs
       </Typography>

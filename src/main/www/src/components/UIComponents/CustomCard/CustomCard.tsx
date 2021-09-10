@@ -9,48 +9,47 @@ import {
   ListItemText,
   Theme,
 } from '@material-ui/core';
-import { darkGray, iconGray } from '../../../Constants/Constants';
+import { borderRadiusSize, darkGray, iconGray } from '../../../Constants/Constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     resourcesCard: {
       padding: 0,
       position: 'relative',
-      minWidth: 230,
-      height: 200,
+      minWidth: theme.spacing(23),
+      height: theme.spacing(20),
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
-      borderRadius: 4,
-      margin: '20px 0',
+      borderRadius: borderRadiusSize,
+      margin: theme.spacing(2, 0),
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        margin: '25px 10px 20px 10px',
+        margin: theme.spacing(2.5, 1, 2, 1),
         width: '46%',
       },
       [theme.breakpoints.up(1200)]: {
-        margin: '25px 10px 20px 10px',
+        margin: theme.spacing(2.5, 1, 2, 1),
         width: '22%',
       },
     },
 
     resourcesIconCtn: {
       position: 'absolute',
-      top: -27,
-      left: 14,
-      width: 54,
-      height: 54,
+      top: theme.spacing(-2.7),
+      left: theme.spacing(1.4),
+      width: theme.spacing(5.4),
+      height: theme.spacing(5.4),
       padding: 0,
       '& svg': {
         color: iconGray,
         width: '100%',
         height: '100%',
-        paddingBottom: 2,
-        // borderBottom: `4px solid ${brightOrange}`,
+        paddingBottom: theme.spacing(0.2),
       },
     },
 
     resourcesContent: {
-      margin: '30px 15px 25px 60px',
+      margin: theme.spacing(3, 1.5, 2.5, 6),
       width: 'calc(100% - 60px)',
     },
 

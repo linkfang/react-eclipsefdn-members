@@ -34,11 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     navItems: {
-      height: 53,
+      height: theme.spacing(5.3),
       borderLeft: `rgba(0,0,0,0) 5px solid`,
     },
     navItemsActive: {
-      height: 53,
+      height: theme.spacing(5.3),
       borderLeft: `${darkOrange} 5px solid`,
     },
     navIcons: {
@@ -51,17 +51,17 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#FFF',
     },
     efLogoCtn: {
-      height: 70,
+      height: theme.spacing(7),
       display: 'flex',
       justifyContent: 'center',
     },
     efLogo: {
-      width: 174,
+      width: theme.spacing(17.4),
     },
     closeBtn: {
       position: 'fixed',
-      top: 15,
-      right: 20,
+      top: theme.spacing(1.5),
+      right: theme.spacing(2),
     },
     closeIcon: {
       color: 'white',

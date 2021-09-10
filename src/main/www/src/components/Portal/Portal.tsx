@@ -23,6 +23,7 @@ const theme = createMuiTheme({
       contrastText: themeBlack, // for button text color
     },
   },
+  spacing: 10,
 });
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,15 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: '24px 14px',
+      padding: theme.spacing(3, 1.75),
       backgroundColor: mainContentBGColor,
       [theme.breakpoints.up('sm')]: {
-        padding: 24,
+        padding: theme.spacing(3),
       },
       [theme.breakpoints.up('md')]: {
-        marginLeft: 280,
-        padding: 64,
-        marginTop: 64,
+        marginLeft: theme.spacing(35),
+        padding: theme.spacing(8),
+        marginTop: theme.spacing(8),
       },
     },
   })

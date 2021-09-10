@@ -2,12 +2,12 @@ import { Typography, createStyles, makeStyles, Container, Theme } from '@materia
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    main: { padding: '90px 0 0', margin: 0, maxWidth: '100%' },
+    main: { padding: theme.spacing(9, 0, 0), margin: 0, maxWidth: '100%' },
     projectAndWGCtn: {
       maxWidth: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      marginTop: 40,
+      marginTop: theme.spacing(4),
       padding: 0,
       justifyContent: 'center',
       [theme.breakpoints.up('sm')]: {

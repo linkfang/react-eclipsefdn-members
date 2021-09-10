@@ -3,14 +3,21 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
+import {
+  borderRadiusSize,
+  brightBlue,
+  brightOrange,
+  darkGray,
+  darkOrange,
+  iconGray,
+} from '../../../Constants/Constants';
 import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     overviewCard: {
-      minWidth: 230,
-      height: 90,
+      minWidth: theme.spacing(23),
+      height: theme.spacing(9),
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       transition: 'all 0.2s ease-out',
@@ -19,14 +26,14 @@ const useStyles = makeStyles((theme: Theme) =>
         transform: 'scale(1.03)',
         transition: 'all 0.2s ease-out',
       },
-      margin: '20px 0',
+      margin: theme.spacing(2, 0),
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        margin: '25px 10px 20px 10px',
+        margin: theme.spacing(2.5, 1, 2, 1),
         width: '46%',
       },
       [theme.breakpoints.up(1200)]: {
-        margin: '25px 10px 20px 10px',
+        margin: theme.spacing(2.5, 1, 2, 1),
         width: '22%',
       },
     },
@@ -40,15 +47,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
     overviewIcon: {
       height: '100%',
-      width: 85,
-      padding: 18,
-      marginRight: 12,
+      width: theme.spacing(8.5),
+      padding: theme.spacing(1.8),
+      marginRight: theme.spacing(1.2),
       color: iconGray,
-      borderRadius: 4,
+      borderRadius: borderRadiusSize,
     },
     overviewTitle: {
       color: darkGray,
-      paddingRight: 10,
+      paddingRight: theme.spacing(1),
     },
   })
 );

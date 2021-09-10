@@ -44,21 +44,21 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     card: {
-      height: 260,
+      height: theme.spacing(26),
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      minWidth: 255,
+      minWidth: theme.spacing(25.5),
       width: '100%',
-      margin: '20px 0',
+      margin: theme.spacing(2, 0),
       [theme.breakpoints.up(650)]: {
         width: '45%',
-        margin: '25px 5px 0px 5px',
+        margin: theme.spacing(2.5, 0.5, 0, 0.5),
       },
       [theme.breakpoints.up(1280)]: {
         width: '30%',
-        margin: '25px 10px 0px 10px',
+        margin: theme.spacing(2.5, 1, 0, 1),
       },
     },
     companyLogoCard: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     companyLogo: {
       width: '90%',
-      maxWidth: 250,
+      maxWidth: theme.spacing(25),
     },
     companyRepCard: {
       backgroundColor: '#D0D0D0',
@@ -81,25 +81,25 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      padding: '20px 30px',
+      padding: theme.spacing(2, 3),
       backgroundColor: '#fff',
     },
     contentTitle: {
-      marginBottom: 5,
+      marginBottom: theme.spacing(0.5),
     },
     divider: {
       width: '100%',
-      margin: '5px 0',
+      margin: theme.spacing(0.5, 0),
     },
     contentList: {
       width: '100%',
     },
     contentItemCtn: {
-      padding: '8px 0',
+      padding: theme.spacing(0.8, 0),
     },
     contentAvatar: {
-      width: 35,
-      height: 35,
+      width: theme.spacing(3.5),
+      height: theme.spacing(3.5),
     },
     contentItemText: {
       display: 'flex',

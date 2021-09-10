@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
       position: 'relative',
-      height: 110,
+      height: theme.spacing(11),
       backgroundColor: '#fff',
       boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
       [theme.breakpoints.up('md')]: {
-        height: 70,
+        height: theme.spacing(7),
         position: 'fixed',
       },
       [theme.breakpoints.down('sm')]: {
@@ -64,55 +64,55 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     efLogo: {
-      width: 120,
+      width: theme.spacing(12),
     },
     hamburgerIcon: {
-      marginRight: 4,
+      marginRight: theme.spacing(0.4),
     },
     userInfoCtn: {
       display: 'flex',
       position: 'absolute',
-      top: 10,
-      right: 12,
-      height: 38,
+      top: theme.spacing(1),
+      right: theme.spacing(1.2),
+      height: theme.spacing(3.8),
       alignItems: 'center',
       [theme.breakpoints.up('md')]: {
-        top: 16,
-        right: 20,
+        top: theme.spacing(1.6),
+        right: theme.spacing(2),
       },
     },
     verticalDivider: {
       display: 'none',
       backgroundColor: '#EBEBF2',
-      height: 28,
-      width: 1,
-      marginRight: 21,
+      height: theme.spacing(2.8),
+      width: theme.spacing(0.1),
+      marginRight: theme.spacing(2.1),
       [theme.breakpoints.up('md')]: {
         display: 'block',
       },
     },
     username: {
       marginBottom: 0,
-      marginRight: 7,
+      marginRight: theme.spacing(0.7),
     },
     dropDownBtn: {
-      minWidth: 38,
-      height: 30,
+      minWidth: theme.spacing(3.8),
+      height: theme.spacing(3),
       padding: 0,
     },
     dropDownIcon: {
       color: '#A4AFB7',
     },
     dropDownItemIcon: {
-      minWidth: 30,
+      minWidth: theme.spacing(3),
     },
     avatarCtn: {
       display: 'none',
-      width: 38,
-      height: 38,
-      marginLeft: 11,
+      width: theme.spacing(3.8),
+      height: theme.spacing(3.8),
+      marginLeft: theme.spacing(1.1),
       [theme.breakpoints.up('md')]: {
-        display: 'block',
+        display: 'flex',
       },
       backgroundColor: darkOrange,
     },
