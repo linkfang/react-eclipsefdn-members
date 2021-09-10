@@ -25,13 +25,9 @@ const useStyle = makeStyles(() =>
     linksDescription: {
       marginBottom: 16,
     },
-    primaryBtn: {
+    btns: {
       marginRight: 20,
-      width: 80,
-    },
-    secondaryBtn: {
-      marginRight: 20,
-      width: 80,
+      width: '100%',
     },
     saveBtn: {
       marginTop: 40,
@@ -174,12 +170,18 @@ export default function OrgProfile() {
           <Input name="linkTitle" labelName="Title" backgroundColor="#f9f9f9" />
           <Input name="linkDescription" labelName="Description" multiline={true} rows={8} backgroundColor="#f9f9f9" />
           <Input name="linkURL" labelName="URL" backgroundColor="#f9f9f9" />
-          <Button className={classes.primaryBtn} variant="contained" color="primary">
-            Add
-          </Button>
-          <Button className={classes.secondaryBtn} variant="contained" color="secondary">
-            Cancel
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item xs>
+              <Button className={classes.btns} variant="contained" color="primary">
+                Add
+              </Button>
+            </Grid>
+            <Grid item xs>
+              <Button className={classes.btns} variant="contained" color="secondary">
+                Cancel
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
