@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { Theme, ThemeProvider } from '@material-ui/core';
 import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
 import LeftNavBar from './NavBar/LeftNavBar';
-import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
+import { darkGray, mainContentBGColor } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
 // import Home from './Home/Home';
@@ -19,7 +19,11 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#f7941e',
-      contrastText: themeBlack, // for button text color
+      contrastText: '#fff', // for button text color
+    },
+    secondary: {
+      main: darkGray,
+      contrastText: '#fff',
     },
   },
 });

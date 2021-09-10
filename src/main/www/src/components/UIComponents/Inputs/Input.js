@@ -38,6 +38,8 @@ export default function Input(props) {
     backgroundColor,
     type,
     height,
+    maxLength,
+    explanationHelperText,
   } = props;
   const classes = useStyles();
 
@@ -45,13 +47,12 @@ export default function Input(props) {
     <TextField
       type={type || 'text'}
       name={name}
-      type={type || 'text'}
       required={requiredMark}
       disabled={disableInput}
       value={value}
       onChange={onChange}
       error={error}
-      helperText={error && helperText}
+      helperText={(error && helperText) || explanationHelperText}
       size="small"
       variant="outlined"
       className={classes.root}
@@ -64,7 +65,7 @@ export default function Input(props) {
         style: { backgroundColor: backgroundColor || 'white', height: height },
         inputProps: {
           'aria-labelledby': ariaLabel,
-          maxLength: 255,
+          maxLength: maxLength || 255,
         },
       }}
     />

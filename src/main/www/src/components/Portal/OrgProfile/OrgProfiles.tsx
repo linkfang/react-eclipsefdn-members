@@ -1,6 +1,7 @@
-import { createStyles, makeStyles, Typography, TextField, Button, Grid } from '@material-ui/core';
+import { createStyles, makeStyles, Typography, Button, Grid, Link } from '@material-ui/core';
 import Input from '../../UIComponents/Inputs/Input';
-// import { DropzoneArea } from 'material-ui-dropzone';
+import { DropzoneDialog } from 'material-ui-dropzone';
+import { useState } from 'react';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -17,22 +18,23 @@ const useStyle = makeStyles(() =>
     helperText: {
       margin: 0,
     },
+    uploadBtn: {
+      backgroundColor: '#DCDFE5',
+      width: 160,
+    },
     linksDescription: {
-      marginTop: 15,
+      marginBottom: 16,
     },
     primaryBtn: {
-      color: 'white',
       marginRight: 20,
       width: 80,
     },
     secondaryBtn: {
-      color: 'white',
       marginRight: 20,
       width: 80,
     },
     saveBtn: {
-      color: 'white',
-      backgroundColor: '#696969',
+      marginTop: 40,
       width: 80,
     },
   })
@@ -40,6 +42,19 @@ const useStyle = makeStyles(() =>
 
 export default function OrgProfile() {
   const classes = useStyle();
+  const [openLogoForWeb, setOpenLogoForWeb] = useState(false);
+  const [openLogoForPrint, setOpenLogoForPrint] = useState(false);
+
+  const handleSaveWebLogo = (files: any) => {
+    console.log('Web Logo Saved!', files);
+    setOpenLogoForWeb(false);
+  };
+
+  const handleSavePrintLogo = (files: any) => {
+    console.log('Print Logo Saved!', files);
+    setOpenLogoForPrint(false);
+  };
+
   return (
     <>
       <Typography variant="h4" className={classes.pageHeader}>
@@ -47,7 +62,15 @@ export default function OrgProfile() {
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs>
-          <Input name="description" labelName="Description" multiline={true} rows={8} backgroundColor="#f9f9f9" />
+          <Input
+            name="description"
+            labelName="Description"
+            multiline={true}
+            rows={8}
+            backgroundColor="#f9f9f9"
+            maxLength={700}
+            explanationHelperText={'700 characters limit'}
+          />
         </Grid>
         <Grid item xs>
           <Input name="companyURL" labelName="Company URL" backgroundColor="#f9f9f9" />
@@ -57,21 +80,22 @@ export default function OrgProfile() {
       <Grid container spacing={4}>
         <Grid item>
           <Typography className={classes.subHeader} variant="h6">
-            Logo for Web 
+            Logo for Web
           </Typography>
         </Grid>
 
-        <Grid item xs={2}>
-          <TextField name="companyLogo" type="file" />
-          {/* <DropzoneArea /> */}
+        <Grid item>
+          <Button className={classes.uploadBtn} onClick={() => setOpenLogoForWeb(true)}>
+            Upload New
+          </Button>
         </Grid>
 
         <Grid item xs>
           <Typography className={classes.helperText} variant="body2">
-            Provide the logo in PNG or SVG formats
+            The supported formats for uploading your logo include: PNG, JPG, or GIF file under 1 MB in size.
           </Typography>
           <Typography className={classes.helperText} variant="body2">
-            The dimensions of the logo cannot exceed 354 * 472
+            The logo dimension cannot exceed 500 by 500 pixels.
           </Typography>
         </Grid>
       </Grid>
@@ -83,9 +107,10 @@ export default function OrgProfile() {
           </Typography>
         </Grid>
 
-        <Grid item xs={2}>
-          <TextField name="companyLogo" type="file" />
-          {/* <DropzoneArea /> */}
+        <Grid item>
+          <Button className={classes.uploadBtn} onClick={() => setOpenLogoForPrint(true)}>
+            Upload New
+          </Button>
         </Grid>
 
         <Grid item xs>
@@ -94,6 +119,26 @@ export default function OrgProfile() {
           </Typography>
         </Grid>
       </Grid>
+
+      <DropzoneDialog
+        dialogTitle="Upload Logo for Web"
+        open={openLogoForWeb}
+        onSave={(file) => handleSaveWebLogo(file)}
+        acceptedFiles={['image/jpeg', 'image/png', 'image/gif']}
+        showPreviews={true}
+        maxFileSize={1048576}
+        onClose={() => setOpenLogoForWeb(false)}
+      />
+
+      <DropzoneDialog
+        dialogTitle="Upload Logo for Print"
+        open={openLogoForPrint}
+        onSave={(file) => handleSavePrintLogo(file)}
+        acceptedFiles={['image/jpeg', 'image/png', 'image/gif', '.eps']}
+        showPreviews={true}
+        maxFileSize={1048576}
+        onClose={() => setOpenLogoForPrint(false)}
+      />
 
       <Typography className={classes.mainSectionHeader} variant="h5">
         Links
@@ -107,21 +152,22 @@ export default function OrgProfile() {
         In addition to your explicit links included here, your organization listing on the Eclipse marketplace will
         automatically appear on your membership page. Please ensure that Your organization [company name] on the
         marketplace listings is the same as it appears on your membership page ( including suffixes such as Inc., GmbH,
-        etc )
+        etc ).
       </Typography>
       <Typography className={classes.linksDescription} variant="body1">
-        Please email membership_admin@eclipse.org if you required assistance.
+        Please email <Link href="mailto:membership_admin@eclipse.org">membership_admin@eclipse.org</Link> if you
+        required assistance.
       </Typography>
 
-      <div className="row">
-        <div className="col-md-12">
+      <Grid container spacing={4}>
+        <Grid item xs>
           <Typography className={classes.mainSectionHeader} variant="h5">
             Current Links
           </Typography>
           <Input name="currentLink1" value="lorem ipsum" backgroundColor="#f9f9f9" />
           <Input name="currentLink2" value="lorem ipsum" backgroundColor="#f9f9f9" />
-        </div>
-        <div className="col-md-12">
+        </Grid>
+        <Grid item xs>
           <Typography className={classes.mainSectionHeader} variant="h5">
             Add a New Link
           </Typography>
@@ -131,14 +177,15 @@ export default function OrgProfile() {
           <Button className={classes.primaryBtn} variant="contained" color="primary">
             Add
           </Button>
-          <Button className={classes.secondaryBtn} variant="contained" color="primary">
+          <Button className={classes.secondaryBtn} variant="contained" color="secondary">
             Cancel
           </Button>
-          <Button className={classes.saveBtn} variant="contained">
-            Save
-          </Button>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
+
+      <Button className={classes.saveBtn} variant="contained" color="primary">
+        Save
+      </Button>
     </>
   );
 }
