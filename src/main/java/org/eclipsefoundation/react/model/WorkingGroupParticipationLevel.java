@@ -11,61 +11,55 @@
  */
 package org.eclipsefoundation.react.model;
 
-public class WorkingGroupParticipationLevel  {
-    private String documentID;
-    private String level;
-    private String price;
-    private int revenueTop;
-    private int revenueBottom;
-    private Integer companySize;
+import java.util.Objects;
 
-    public String getDocumentID() {
-        return this.documentID;
+public class WorkingGroupParticipationLevel {
+    private String relation;
+    private String description;
+
+    /**
+     * @return the relation
+     */
+    public String getRelation() {
+        return relation;
     }
 
-    public void setDocumentID(String documentID) {
-        this.documentID = documentID;
+    /**
+     * @param relation the relation to set
+     */
+    public void setRelation(String relation) {
+        this.relation = relation;
     }
 
-    public String getLevel() {
-        return this.level;
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getPrice() {
-        return this.price;
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, relation);
     }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-
-    public int getRevenueTop() {
-        return this.revenueTop;
-    }
-
-    public void setRevenueTop(int revenueTop) {
-        this.revenueTop = revenueTop;
-    }
-
-    public int getRevenueBottom() {
-        return this.revenueBottom;
-    }
-
-    public void setRevenueBottom(int revenueBottom) {
-        this.revenueBottom = revenueBottom;
-    }
-
-    public Integer getCompanySize() {
-        return this.companySize;
-    }
-
-    public void setCompanySize(Integer companySize) {
-        this.companySize = companySize;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        WorkingGroupParticipationLevel other = (WorkingGroupParticipationLevel) obj;
+        return Objects.equals(description, other.description) && Objects.equals(relation, other.relation);
     }
 
 }

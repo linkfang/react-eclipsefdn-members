@@ -7,15 +7,23 @@ const twitterLabel = 'Twitter Handle';
 const twitter = '@username';
 const street = 'Street';
 const city = 'City';
-const provinceOrState = 'Province Or State';
+const provinceOrState = 'Province or State';
 const postalCode = 'Postal Code';
 const country = 'Country';
 const jobtitle = 'Job Title';
-const purchasingProcess = 'Require or Not';
+const purchasingProcess = 'Purchasing Process';
 const vatNumber = 'VAT Number';
 const countryOfRegistration = 'Country of Registration';
+const REVENUE = 'Revenue';
+const EMPLOYEE_COUNT = 'Employee Count';
+const ORG_TYPE = 'Organization Type';
+const MEMBERSHIP_LEVEL = 'Membership Level';
+const WORKING_GROUP = 'Working Group';
+const PARTICIPATION_LEVEL = 'Participation Level';
+const EFFECTTIVE_DATE = 'Effective Date';
+const VAT_REGISTRATION = 'Your organization is registered for VAT in the European Union';
 
-export const requiredErrorMsg = 'is required';
+export const requiredErrorMsg = 'Required field';
 
 // Initial values passed to Formik, this defines
 // the form fields, names, and nesting relations of the whole form
@@ -24,6 +32,10 @@ export const initialValues = {
   organization: {
     id: '',
     legalName: '',
+    revenue: '',
+    employeeCount: '',
+    type: '',
+    twitterHandle: '',
     address: {
       id: '',
       street: '',
@@ -33,7 +45,6 @@ export const initialValues = {
       'country-label': '',
       postalCode: '',
     },
-    twitterHandle: '',
   },
 
   // Step1: Representatives
@@ -89,11 +100,12 @@ export const initialValues = {
         jobtitle: '',
         email: '',
         id: '',
+        sameAsCompany: false,
       },
     },
   ],
 
-  isJoiningWG: false,
+  skipJoiningWG: false,
 
   signingAuthorityRepresentative: {
     firstName: '',
@@ -101,6 +113,7 @@ export const initialValues = {
     email: '',
     jobtitle: '',
     id: '',
+    sameAsCompany: false,
   },
 };
 
@@ -127,6 +140,23 @@ export const formField = {
     label: orgName,
     placeholder: orgName,
     requiredErrorMsg: requiredErrorMsg,
+  },
+  organizationRevenue: {
+    revenue: {
+      name: 'revenue',
+      label: REVENUE,
+      placeholder: REVENUE,
+    },
+    employeeCount: {
+      name: 'employeeCount',
+      label: EMPLOYEE_COUNT,
+      placeholder: EMPLOYEE_COUNT,
+    },
+  },
+  organizationType: {
+    name: 'organization.type',
+    label: ORG_TYPE,
+    placeholder: ORG_TYPE,
   },
   organizationAddress: {
     address: {
@@ -203,7 +233,7 @@ export const formField = {
   vatRegistration: {
     isRegistered: {
       name: 'purchasingAndVAT.isRegistered',
-      label: 'Your organization is registered for VAT in the European Union',
+      label: VAT_REGISTRATION,
     },
     vatNumber: {
       name: 'purchasingAndVAT.vatNumber',
@@ -218,21 +248,21 @@ export const formField = {
   },
   membershipLevel: {
     name: 'membershipLevel',
-    label: 'Membership Level',
+    label: MEMBERSHIP_LEVEL,
     requiredErrorMsg: requiredErrorMsg,
   },
   workingGroup: {
     name: 'workingGroup',
-    label: 'Working Group',
+    label: WORKING_GROUP,
     requiredErrorMsg: requiredErrorMsg,
   },
   participationLevel: {
     name: 'participationLevel',
-    label: 'Participation Level',
+    label: PARTICIPATION_LEVEL,
   },
   effectiveDate: {
     name: 'effectiveDate',
-    label: 'Effective Date',
+    label: EFFECTTIVE_DATE,
     requiredErrorMsg: requiredErrorMsg,
   },
 

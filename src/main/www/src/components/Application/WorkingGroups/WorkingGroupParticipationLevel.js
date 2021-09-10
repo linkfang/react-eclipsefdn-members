@@ -12,17 +12,18 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
 const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList, formik, index }) => {
   const [participationLevelOptions, setParticipationLevelOptions] = useState([]);
-
+  const [selectedWG, setSelectedWG] = useState();
   const theIndex = index;
+
   useEffect(() => {
     // If have selected working group, find this working group's
     // participation levels, and pass to the react-select option
     if (fullWorkingGroupList) {
-      let temp = fullWorkingGroupList?.find((item) => workingGroupUserJoined.value === item.value);
-
+      let selectedWG = fullWorkingGroupList?.find((item) => workingGroupUserJoined.value === item.value);
+      setSelectedWG(selectedWG);
       // extract all the participation_levels
-      let optionsForParticipationLevels = temp?.participation_levels
-        ? temp?.participation_levels.map((item) => item.description || item.level)
+      let optionsForParticipationLevels = selectedWG?.participation_levels
+        ? selectedWG?.participation_levels.map((item) => item.description)
         : [];
 
       // the Set will deduplicate participation_levels options
@@ -50,10 +51,27 @@ const ParticipationLevel = ({ name, workingGroupUserJoined, fullWorkingGroupList
               inputValue={formik.values.workingGroups[theIndex]['participationLevel']}
               optionsArray={participationLevelOptions}
               handleChange={formik.handleChange}
+              error={
+                formik.touched.workingGroups?.[theIndex]?.['participationLevel'] &&
+                Boolean(formik.errors.workingGroups?.[theIndex]?.['participationLevel'])
+              }
+              helperText={formik.errors.workingGroups?.[theIndex]?.['participationLevel']}
             />
           )}
         </div>
       </div>
+      <p>
+        Each Working Group has different participation levels and restrictions on who can join at those levels (e.g.,
+        Guest Member level is typically restricted to non-profit organizations). See the{' '}
+        <a target="_blank" rel="noreferrer" href={selectedWG?.charter}>
+          charter
+        </a>{' '}
+        for full details on which choice is best for you, and to see the working group fees associated with joining this
+        working group. Note: working group fees are in addition to the membership fees associated with joining the
+        Eclipse Foundation. Please{' '}
+        <a href="mailto:membership.coordination@eclipse-foundation.org">contact our membership team</a> with any
+        questions.
+      </p>
     </>
   );
 };

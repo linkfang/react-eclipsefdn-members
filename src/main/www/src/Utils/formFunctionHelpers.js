@@ -7,7 +7,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
-  PATH_NAME_ARRAY,
+  api_prefix,
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
@@ -74,6 +74,9 @@ export function matchCompanyFields(existingOrganizationData) {
     // Step1: company Info
     id: existingOrganizationData?.id || '',
     legalName: existingOrganizationData?.legal_name || '',
+    revenue: existingOrganizationData?.aggregate_revenue || '',
+    employeeCount: existingOrganizationData?.employee_count || '',
+    type: existingOrganizationData?.organization_type || '',
     address: {
       id: existingOrganizationData?.address?.id || '',
       street: existingOrganizationData?.address?.street || '',
@@ -99,9 +102,9 @@ export function mapPurchasingAndVAT(existingPurchasingAndVATData) {
     // Step1: purchasing process and VAT Info
     id: existingPurchasingAndVATData?.id || '',
     isRegistered: !!existingPurchasingAndVATData?.registration_country,
-    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required,
-    vatNumber: existingPurchasingAndVATData?.vat_number,
-    countryOfRegistration: existingPurchasingAndVATData?.registration_country,
+    purchasingProcess: existingPurchasingAndVATData?.purchase_order_required || '',
+    vatNumber: existingPurchasingAndVATData?.vat_number || '',
+    countryOfRegistration: existingPurchasingAndVATData?.registration_country || '',
   };
 }
 
@@ -164,6 +167,10 @@ export function matchContactFields(existingContactData) {
       lastName: existingSigningContact?.last_name || '',
       jobtitle: existingSigningContact?.job_title || '',
       email: existingSigningContact?.email || '',
+      sameAsCompany: checkSameContact(
+        existingCompanyContact,
+        existingSigningContact
+      ),
     },
   };
 }
@@ -176,7 +183,8 @@ export function matchContactFields(existingContactData) {
  */
 export function matchWorkingGroupFields(
   existingworkingGroupData,
-  workingGroupsOptions
+  workingGroupsOptions,
+  existingCompanyContact,
 ) {
   var res = [];
   // Array
@@ -184,6 +192,12 @@ export function matchWorkingGroupFields(
     let wg = workingGroupsOptions?.find(
       (el) => el.label === item?.working_group_id
     );
+    const basicRepInfo = {
+      firstName: item?.contact?.first_name || '',
+      lastName: item?.contact?.last_name || '',
+      jobtitle: item?.contact?.job_title || '',
+      email: item?.contact?.email || '',
+    };
     res.push({
       id: item?.id || '',
       workingGroup:
@@ -195,11 +209,12 @@ export function matchWorkingGroupFields(
       participationLevel: item?.participation_level || '',
       effectiveDate: item?.effective_date?.substring(0, 10) || '',
       workingGroupRepresentative: {
-        firstName: item?.contact?.first_name || '',
-        lastName: item?.contact?.last_name || '',
-        jobtitle: item?.contact?.job_title || '',
-        email: item?.contact?.email || '',
+        ...basicRepInfo,
         id: item?.contact?.id || '',
+        sameAsCompany: checkSameContact(
+          existingCompanyContact,
+          basicRepInfo
+        ),
       },
     });
   });
@@ -220,14 +235,17 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     address: {
       city: organizationData.address.city,
       country: organizationData.address.country,
-      postal_code: organizationData.address.postalCode,
-      province_state: organizationData.address.provinceOrState,
+      postal_code: organizationData.address.postalCode  || '',
+      province_state: organizationData.address.provinceOrState  || '',
       street: organizationData.address.street,
     },
     form_id: formId,
     id: organizationData.id,
     legal_name: organizationData.legalName,
     twitter: organizationData.twitterHandle || '',
+    aggregate_revenue: organizationData.revenue,
+    employee_count: organizationData.employeeCount,
+    organization_type: organizationData.type
   };
 
   if (organizationData.address.id) {
@@ -300,9 +318,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
     formId
   );
 
-  const theDate = eachWorkingGroupData?.effectiveDate
-    ? new Date(eachWorkingGroupData?.effectiveDate)
-    : new Date();
+  const theDate = new Date();
 
   return {
     id: eachWorkingGroupData?.id,
@@ -323,89 +339,76 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(
-  step,
-  formData,
-  formId,
-  userId,
-  goToNextStep,
-  setFieldValueObj
-) {
-  const goToNextStepObj = {
-    method: goToNextStep,
-    stepNum: step,
-    pathName: PATH_NAME_ARRAY[step],
-  };
+export async function executeSendDataByStep(step, formData, formId, userId, setFieldValueObj, updateFormValuesObj) {
   switch (step) {
     case 1:
-      // only need 1 goToNextStepObj in "case 1", or it would execute it 5 times.
       callSendData(
         formId,
         END_POINT.organizations,
         matchCompanyFieldsToBackend(formData.organization, formId),
-        goToNextStepObj,
+        step,
         {
           fieldName: setFieldValueObj.fieldName.organization,
           method: setFieldValueObj.method,
-        }
+        },
+        updateFormValuesObj
       );
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.member,
-          CONTACT_TYPE.COMPANY,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.member, CONTACT_TYPE.COMPANY, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.member,
           method: setFieldValueObj.method,
-        }
+        },
+        updateFormValuesObj
       );
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.marketing,
-          CONTACT_TYPE.MARKETING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.marketing, CONTACT_TYPE.MARKETING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.marketing,
           method: setFieldValueObj.method,
-        }
+        },
+        updateFormValuesObj
       );
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.representative.accounting,
-          CONTACT_TYPE.ACCOUNTING,
-          formId
-        ),
-        '',
+        matchContactFieldsToBackend(formData.representative.accounting, CONTACT_TYPE.ACCOUNTING, formId),
+        step,
         {
           fieldName: setFieldValueObj.fieldName.accounting,
           method: setFieldValueObj.method,
-        }
+        },
+        updateFormValuesObj
       );
-      callSendData(
-        formId,
-        '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        ''
+      callSendData(formId, '', matchMembershipLevelFieldsToBackend(formData, formId, userId), '');
+      let isWGRepSameAsCompany = false;
+      formData.workingGroups.map(
+        (wg) => (isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany)
       );
+      // only do this API call when there is at least 1 WG rep is same as company rep
+      if (isWGRepSameAsCompany) {
+        formData.workingGroups.forEach((item, index) => {
+          callSendData(
+            formId,
+            END_POINT.working_groups,
+            matchWGFieldsToBackend(item, formId),
+            '',
+            setFieldValueObj,
+            updateFormValuesObj,
+            index
+          );
+        });
+      }
       break;
 
     case 2:
-      callSendData(
-        formId,
-        '',
-        matchMembershipLevelFieldsToBackend(formData, formId, userId),
-        goToNextStepObj
-      );
+      callSendData(formId, '', matchMembershipLevelFieldsToBackend(formData, formId, userId), step);
       break;
 
     case 3:
@@ -414,8 +417,9 @@ export async function executeSendDataByStep(
           formId,
           END_POINT.working_groups,
           matchWGFieldsToBackend(item, formId),
-          goToNextStepObj,
+          step,
           setFieldValueObj,
+          updateFormValuesObj,
           index
         );
       });
@@ -425,24 +429,15 @@ export async function executeSendDataByStep(
       callSendData(
         formId,
         END_POINT.contacts,
-        matchContactFieldsToBackend(
-          formData.signingAuthorityRepresentative,
-          CONTACT_TYPE.SIGNING,
-          formId
-        ),
-        goToNextStepObj,
-        setFieldValueObj
+        matchContactFieldsToBackend(formData.signingAuthorityRepresentative, CONTACT_TYPE.SIGNING, formId),
+        step,
+        setFieldValueObj,
+        updateFormValuesObj
       );
       break;
 
     case 5:
-      callSendData(
-        formId,
-        END_POINT.complete,
-        false,
-        goToNextStepObj,
-        setFieldValueObj
-      );
+      callSendData(formId, END_POINT.complete, false, step, setFieldValueObj);
       break;
 
     default:
@@ -462,9 +457,10 @@ function callSendData(
   formId,
   endpoint = '',
   dataBody,
-  goToNextStepObj,
+  stepNum,
   setFieldValueObj,
-  index
+  updateFormValuesObj,
+  index,
 ) {
   const entityId = dataBody.id ? dataBody.id : '';
   const method = dataBody.id ? FETCH_METHOD.PUT : FETCH_METHOD.POST;
@@ -484,9 +480,6 @@ function callSendData(
   if (getCurrentMode() === MODE_REACT_ONLY) {
     console.log(`You called ${url} with Method ${method} and data body is:`);
     console.log(JSON.stringify(dataBody));
-    if (goToNextStepObj) {
-      goToNextStepObj.method(goToNextStepObj.stepNum, goToNextStepObj.pathName);
-    }
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -496,7 +489,7 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (goToNextStepObj.stepNum === 5) {
+        if (stepNum === 5) {
           if (res.ok) return res;
         } else {
           if (res.ok) return res.json();
@@ -518,27 +511,36 @@ function callSendData(
                 'organization.address.id',
                 data[0]?.address?.id
               );
+              updateFormValuesObj.theNewValue.organization.id = data[0]?.id;
+              updateFormValuesObj.theNewValue.organization.address.id = data[0]?.address?.id;
+              updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
               break;
 
             case 'representative.member':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
+              updateFormValuesObj.theNewValue.representative.member.id = data[0]?.id;
+              updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
               break;
 
             case 'representative.marketing':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
+              updateFormValuesObj.theNewValue.representative.marketing.id = data[0]?.id;
+              updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
               break;
 
             case 'representative.accounting':
               setFieldValueObj.method(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
+              updateFormValuesObj.theNewValue.representative.accounting.id = data[0]?.id;
+              updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
               break;
 
             case 'workingGroups':
@@ -550,29 +552,29 @@ function callSendData(
                 `workingGroups[${index}].workingGroupRepresentative.id`,
                 data[0]?.contact?.id
               );
+              if (updateFormValuesObj?.theNewValue) {
+                updateFormValuesObj.theNewValue.workingGroups[index].id = data[0]?.id;
+                updateFormValuesObj.theNewValue.workingGroups[index].workingGroupRepresentative.id = data[0]?.contact?.id;
+                updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
+              }
               break;
 
             case 'signingAuthorityRepresentative':
               setFieldValueObj.method.signingAuthority(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
               setFieldValueObj.method.companyInfo(
                 `${setFieldValueObj.fieldName}.id`,
-                data?.id
+                data[0]?.id
               );
+              updateFormValuesObj.theNewValue.signingAuthorityRepresentative.id = data[0]?.id;
+              updateFormValuesObj.setUpdatedFormValues(updateFormValuesObj.theNewValue);
               break;
 
             default:
               break;
           }
-        }
-
-        if (goToNextStepObj) {
-          goToNextStepObj.method(
-            goToNextStepObj.stepNum,
-            goToNextStepObj.pathName
-          );
         }
       })
       .catch((err) => {
@@ -657,7 +659,7 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
     var dataBody = {
       membership_level: '',
       signing_authority: false,
-      purchase_order_required: 'na',
+      purchase_order_required: '',
       state: 'INPROGRESS',
     };
 
@@ -709,3 +711,59 @@ export function requestErrorHandler(statusCode) {
 export function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+export function isObjectEmpty(obj) {
+  for (const key in obj) {
+    // Do not need to check the value of id or allWorkingGroups, as they are not provided by users
+    if (key === 'id' || key === 'allWorkingGroups') {
+      continue;
+    }
+
+    const element = obj[key];
+    if (typeof element === 'object') {
+      if (!isObjectEmpty(element)) {
+        return false;
+      }
+    } else if (element !== '' && element !== false) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, isNotFurthestPage) {
+  // Save values on current step if it's NOT empty and passes validation
+  if (!isEmpty && Object.keys(result).length <= 0) {
+    formik.submitForm();
+  }
+
+  // Open modal window if it's NOT empty and fails to pass validation
+  // OR open it if it's emtpy and NOT the furthest page
+  if ((!isEmpty && Object.keys(result).length > 0) || (isEmpty && isNotFurthestPage)) {
+    formik.setTouched(result);
+    setShouldOpen(true);
+    return;
+  }
+
+  navigate();
+}
+
+export function checkIsNotFurthestPage(currentIndex, furthestIndex) {
+  if (currentIndex === 3) {
+    // For wg/3rd step, it can be empty, and clear and remove operation will update the database when user does so
+    // So, no need to roll back the data
+    return false;
+  }
+  return currentIndex < furthestIndex;
+}
+
+export const logout = () => {
+  fetch(`${api_prefix()}/logout`)
+    .then(() => {
+      window.location.assign('/');
+    })
+    .catch((err) => {
+      console.log(err);
+      window.location.assign('/');
+    });
+};

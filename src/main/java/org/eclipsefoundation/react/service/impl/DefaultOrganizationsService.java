@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class DefaultOrganizationsService implements OrganizationsService {
     public static final Logger LOGGER = LoggerFactory.getLogger(DefaultOrganizationsService.class);
-
+    
     @RestClient
     @Inject
     OrganizationAPI orgAPI;

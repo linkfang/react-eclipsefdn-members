@@ -1,10 +1,11 @@
 import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
-import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
+import { useContext, useEffect } from 'react';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { MEMBERSHIP_LEVELS, ROUTE_COMPANY, ROUTE_WGS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
+import MembershipContext from '../../../Context/MembershipContext';
 
 /**
  * Render membership select component (use React-Select), with fetch and prefill data operation
@@ -14,19 +15,25 @@ import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const MembershipLevel = ({ formik }) => {
+const MembershipLevel = ({ formik, updatedFormValues }) => {
   const { membershipLevel } = formField;
+  const { setCurrentStepIndex } = useContext(MembershipContext);
 
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(2);
+  }, [setCurrentStepIndex]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
-          Please indicate the class of membership for which you are applying
+          Please indicate the class of membership for which you are applying. Note that most new members choose
+          Contributing.
         </p>
         <h2 className="fw-600 h4" id={membershipLevel.name}>
           What is your intended Membership Level?
@@ -40,6 +47,8 @@ const MembershipLevel = ({ formik }) => {
               inputValue={formik.values.membershipLevel}
               optionsArray={MEMBERSHIP_LEVELS}
               handleChange={formik.handleChange}
+              error={formik.touched.membershipLevel && Boolean(formik.errors.membershipLevel)}
+              helperText={formik.errors.membershipLevel}
             />
           </div>
         </div>
@@ -47,9 +56,11 @@ const MembershipLevel = ({ formik }) => {
       </div>
 
       <CustomStepButton
-        previousPage="/company-info"
-        nextPage="/working-groups"
-        pageIndex={2}
+        previousPage={ROUTE_COMPANY}
+        nextPage={ROUTE_WGS}
+        checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
       />
     </form>
   );

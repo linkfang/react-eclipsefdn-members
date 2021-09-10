@@ -1,14 +1,30 @@
-<div style="background: #efefef; margin-left: -10px; margin-right: -10px;">
-  <div style="background: #FFF; min-width: 700px; width: 66%; margin: auto; margin-top: -20px; margin-bottom: -20px;">
+<div style="{#if !isPDF}background: #efefef; {/if}margin-left: -10px; margin-right: -10px;">
+  <div style="{#if !isPDF}min-width: 700px; width: 66%; background: #FFF; {/if} margin: auto; margin-top: -20px; margin-bottom: -20px;">
     <div style="padding: 20px">
-      <h1>New form submission by: {name} ({form.userID})</h1>
+      <h1 style="text-align: center">Eclipse Foundation AISBL Membership Application</h1>
+      <p style="font-size: 18px; font-weight: 600;">Date submitted: {time:format(now,'d MMM uuuu, HH:mm')}</p>
+      {#if includePreamble}
+      <p>Dear {name},</p>
+      <p>Thank you for submitting the Membership Application Form on behalf of your organization. Our team will review your application and follow up within 2 business days.</p>
+      <p>Meanwhile, if you have any questions, please reach out to us at membership.coordination@eclipse-foundation.org.</p>
+      <p>Best regards,</p>
+      <p>Eclipse Foundation Membership Coordination</p>
+      {/if}
+      <p>Form submission by: {name} ({data.form.userID})</p>
       <h2>Organization</h2>
-      <p style="margin-bottom: 0px">Name: {org.legalName}</p>
-      <p style="margin-top: 5px">Twitter: {org.twitterHandle}</p>
+      <p style="margin: 0px">Name: {data.org.legalName}</p>
+      <p style="margin: 0px;">Aggregate Revenue: {data.org.aggregateRevenue}</p>
+      <p style="margin: 0px;">Employee Count: {data.org.employeeCount}</p>
+      <p style="margin: 0px;">Organization Type: {data.org.organizationType}</p>
+      <p style="margin: 0px;">Twitter: {data.org.twitterHandle}</p>
+      <p style="margin: 0px;">Requires Purchase Order: {data.form.purchaseOrderRequired}</p>
+      <p style="margin: 0px;">VAT Number: {data.form.vatNumber}</p>
+      <p style="margin: 0px">VAT Registration Country: {data.form.registrationCountry}</p>
+      <p style="margin: 0px">Membership Level: {data.form.membershipLevel}</p>
       <div>
         <h3>Address</h3>
         <p>
-          {org.address.street}<br /> {org.address.city}<br /> {org.address.provinceState}<br /> {org.address.country}<br /> {org.address.postalCode}
+          {data.org.address.street}<br /> {data.org.address.city}<br /> {data.org.address.provinceState}<br /> {data.org.address.country}<br /> {data.org.address.postalCode}
         </p>
       </div>
 
@@ -23,7 +39,7 @@
           </tr>
         </thead>
         <tbody>
-          {#for contact in contacts.orEmpty}
+          {#for contact in data.contacts.orEmpty}
           <tr {#if even} style="background: #efefef"{/if}>
             <td>{contact.fName} {contact.lName}</td>
             <td>{contact.email}</td>
@@ -46,7 +62,7 @@
           </tr>
         </thead>
         <tbody>
-          {#for wg in wgs.orEmpty}
+          {#for wg in data.wgs.orEmpty}
           <tr {#if even} style="background: #efefef"{/if}>
             <td>{wg.workingGroupID}</td>
             <td>{wg.participationLevel}</td>
@@ -56,6 +72,20 @@
           {/for}
         </tbody>
       </table>
+      {#if isPDF}
+      <p>As a new Member:</p>
+      <ol>
+        <li>You agree to publicly support the Eclipse Foundation and its Purpose.</li>
+        <li>You acknowledge your commitment in principle to comply with the Bylaws, the Internal Rules, the Eclipse Foundation Antitrust Policy, IP Policy, and any and all additional policies, procedures and other governing rules of the Eclipse Foundation.</li>
+        <li>You agree to provide Eclipse Foundation with your logo (or instructions to obtain your logo) in accordance with Section 2.3 of the Eclipse Foundation Membership Agreement. When providing your logo, be sure to include a reference or link to any logo and trademark usage guidelines you have.<br />
+        Our Membership Coordination team will work with you to complete this after your Membership Application is processed.</li>
+      </ol>
+      <p>Thank you for completing the Membership Application Process. This PDF captures the information you have provided to us. Please review this information as it becomes a part of your formal application to the Eclipse Foundation.</p>
+      <p>Should you wish to update any of the information, please reach out to our Membership team at <a href="mailto:membership.coordination@eclipse-foundation.org">membership.coordination@eclipse-foundation.org</a></p>
+      {/if}
+      <hr style="margin:40px 20px "></hr>
+      <p style="text-align: center">This is an automatic message from <a href="https://membership.eclipse.org">https://membership.eclipse.org</a></p>
+      <p style="text-align: center">Twitter: <a href="https://twitter.com/EclipseFdn">@EclipseFdn</a></p>
     </div>
   </div>
 </div>

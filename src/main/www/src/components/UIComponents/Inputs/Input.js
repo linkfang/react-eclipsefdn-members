@@ -38,18 +38,20 @@ export default function Input(props) {
     onChange,
     error,
     helperText,
+    type,
   } = props;
   const classes = useStyles();
 
   return (
     <TextField
       name={name}
+      type={type || 'text'}
       required={requiredMark}
       disabled={disableInput}
       value={value}
       onChange={onChange}
       error={error}
-      helperText={helperText}
+      helperText={error && helperText}
       size="small"
       variant="outlined"
       className={classes.root}
@@ -60,6 +62,7 @@ export default function Input(props) {
         className: classes.input,
         inputProps: {
           'aria-labelledby': ariaLabel,
+          maxLength: 255,
         },
       }}
     />

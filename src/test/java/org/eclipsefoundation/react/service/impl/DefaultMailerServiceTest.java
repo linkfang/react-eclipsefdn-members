@@ -11,6 +11,7 @@ import org.eclipsefoundation.react.dto.Contact;
 import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
+import org.eclipsefoundation.react.model.MailerData;
 import org.eclipsefoundation.react.test.helper.AuthHelper;
 import org.eclipsefoundation.react.test.helper.DtoHelper;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +23,6 @@ import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.oidc.server.OidcWiremockTestResource;
-import io.quarkus.test.security.TestSecurity;
 
 @QuarkusTest
 @QuarkusTestResource(OidcWiremockTestResource.class)
@@ -51,9 +51,14 @@ class DefaultMailerServiceTest {
     void sendToFormAuthor_success() {
         // set up form to submit through mock service
         MembershipForm f = DtoHelper.generateForm(Optional.of(AuthHelper.TEST_USER_NAME));
+        FormOrganization org = DtoHelper.generateOrg(f);
+        List<FormWorkingGroup> wgs = DtoHelper.generateWorkingGroups(f);
+        List<Contact> contacts = DtoHelper.generateContacts(f);
+
+        MailerData data = new MailerData(f,org,wgs,contacts);
 
         // perform the action
-        mailerService.sendToFormAuthor(f);
+        mailerService.sendToFormAuthor(data);
 
         // verify that it was sent
         List<Mail> sent = mailbox.getMessagesSentTo(TO_ADDRESS);
@@ -71,10 +76,15 @@ class DefaultMailerServiceTest {
     void sendToFormAuthor_anon() {
         // set up form to submit through mock service
         MembershipForm f = DtoHelper.generateForm(Optional.of(AuthHelper.TEST_USER_NAME));
+        FormOrganization org = DtoHelper.generateOrg(f);
+        List<FormWorkingGroup> wgs = DtoHelper.generateWorkingGroups(f);
+        List<Contact> contacts = DtoHelper.generateContacts(f);
+
+        MailerData data = new MailerData(f,org,wgs,contacts);
 
         // verify that it failed to send due to state exception
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToFormAuthor(f);
+            mailerService.sendToFormAuthor(data);
         });
         // verify that no messages were sent
         Assertions.assertEquals(0, mailbox.getTotalMessagesSent());
@@ -101,8 +111,9 @@ class DefaultMailerServiceTest {
         List<FormWorkingGroup> wgs = DtoHelper.generateWorkingGroups(f);
         List<Contact> contacts = DtoHelper.generateContacts(f);
 
+        MailerData data = new MailerData(f,org,wgs,contacts);
         // perform the action
-        mailerService.sendToMembershipTeam(f, org, wgs, contacts);
+        mailerService.sendToMembershipTeam(data);
 
         // verify that it was sent
         List<Mail> sent = mailbox.getMessagesSentTo(membershipMailbox);
@@ -126,19 +137,16 @@ class DefaultMailerServiceTest {
 
         // perform the action
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(null, org, wgs, contacts);
+            mailerService.sendToMembershipTeam(new MailerData(null, org, wgs, contacts));
         });
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(f, null, wgs, contacts);
+            mailerService.sendToMembershipTeam(new MailerData(f, null, wgs, contacts));
         });
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(f, org, null, contacts);
+            mailerService.sendToMembershipTeam(new MailerData(f, org, wgs, null));
         });
         Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(f, org, wgs, null);
-        });
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            mailerService.sendToMembershipTeam(f, org, wgs, Collections.emptyList());
+            mailerService.sendToMembershipTeam(new MailerData(f, org, wgs, Collections.emptyList()));
         });
         // verify that no messages were sent
         List<Mail> sent = mailbox.getMessagesSentTo(membershipMailbox);

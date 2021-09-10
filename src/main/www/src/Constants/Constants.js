@@ -23,6 +23,7 @@ export const api_prefix = () => {
 export const API_PREFIX_FORM = api_prefix() + '/form';
 export const API_FORM_PARAM = '?sort=dateCreated&order=desc';
 
+export const SIGN_IN = 'Sign In';
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
 export const WORKING_GROUPS = 'Working Groups';
@@ -31,15 +32,15 @@ export const REVIEW = 'Review';
 export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
+export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters';
 
-export const PATH_NAME_ARRAY = [
-  '/company-info',
-  '/membership-level',
-  '/working-groups',
-  '/signing-authority',
-  '/review',
-  '/submitted',
-];
+export const ROUTE_SIGN_IN = '/sign-in';
+export const ROUTE_COMPANY = '/company-info';
+export const ROUTE_MEMBERSHIP = '/membership-level';
+export const ROUTE_WGS = '/working-groups';
+export const ROUTE_SIGNING = '/signing-authority';
+export const ROUTE_REVIEW = '/review';
+export const ROUTE_SUBMITTED = '/submitted';
 
 export const FETCH_METHOD = {
   POST: 'POST',
@@ -57,18 +58,19 @@ export const FETCH_HEADER = {
 export const MEMBERSHIP_LEVELS = [
   { label: 'Strategic Member', value: 'Strategic Member' },
   {
-    label: 'Contributing Member (formerly referred to as Solutions Members)',
+    label: 'Contributing Member',
     value: 'Contributing Member',
   },
   { label: 'Associate Member', value: 'Associate Member' },
 ];
 
 export const PAGE_STEP = [
-  { props: { label: COMPANY_INFORMATION, pathName: '/company-info' } },
-  { props: { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' } },
-  { props: { label: WORKING_GROUPS, pathName: '/working-groups' } },
-  { props: { label: SIGNING_AUTHORITY, pathName: '/signing-authority' } },
-  { props: { label: REVIEW, pathName: '/review' } },
+  { label: SIGN_IN, pathName: ROUTE_SIGN_IN },
+  { label: COMPANY_INFORMATION, pathName: ROUTE_COMPANY },
+  { label: MEMBERSHIP_LEVEL, pathName: ROUTE_MEMBERSHIP },
+  { label: WORKING_GROUPS, pathName: ROUTE_WGS },
+  { label: SIGNING_AUTHORITY, pathName: ROUTE_SIGNING },
+  { label: REVIEW, pathName: ROUTE_REVIEW },
 ];
 
 export const CONTACT_TYPE = {
@@ -83,6 +85,49 @@ export const OPTIONS_FOR_PURCHASING_PROCESS = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
   { label: 'Not Applicable', value: 'na' },
+];
+
+export const OPTIONS_FOR_REVENUE = [
+  { label: '> €1 billion', value: '> €1 billion' },
+  { label: '€250 million - €1 billion', value: '€250 million - €1 billion' },
+  { label: '€100 million - €250 million', value: '€100 million - €250 million' },
+  { label: '€50 million - €100 million', value: '€50 million - €100 million' },
+  { label: '€10 million - €50 million', value: '€10 million - €50 million' },
+  { label: '€1 million - €10 million', value: '€1 million - €10 million' },
+  { label: '< €1 million', value: '< €1 million' },
+  { label: 'Not Applicable', value: 'Not Applicable' },
+];
+
+export const HELPERTEXT_FOR_REVENUE = (
+  <>
+    Choose Not Applicable if your organization is: <br />
+    Govt, Govt agencies, Research Organizations, NGOs, etc. <br />
+    Academic, Publishing Organizations, User Groups, etc.
+  </>
+);
+
+export const OPTIONS_FOR_EMPLOYEE_COUNT = [
+  { label: '1 - 10', value: '1 - 10' },
+  { label: '10 - 100', value: '10 - 100' },
+  { label: '100 - 1000', value: '100 - 1000' },
+  { label: '1000 - 10,000', value: '1000 - 10,000' },
+  { label: '> 10,000', value: '> 10,000' },
+];
+
+export const OPTIONS_FOR_ORG_TYPE = [
+  {
+    label: 'Non-Profit Open Source Organization/User Group',
+    value: 'NON_PROFIT_OPEN_SOURCE',
+  },
+  { label: 'Academic Organization', value: 'ACADEMIC' },
+  { label: 'Standards Organization', value: 'STANDARDS' },
+  {
+    label: 'Government Organization, Government Agency, or NGO',
+    value: 'GOVERNMENT_ORGANIZATION_AGENCY_NGO',
+  },
+  { label: 'Publishing/Media Organization', value: 'MEDIA_ORGANIZATION' },
+  { label: 'Research Institute', value: 'RESEARCH' },
+  { label: 'All others', value: 'OTHER' },
 ];
 
 export const END_POINT = {
@@ -128,6 +173,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Committer Member', relation: 'WGFHA' },
     ],
+    charter: 'https://www.eclipse.org/org/workinggroups/openmobility_charter.php',
   },
   {
     label: 'Jakarta EE Working Group',
@@ -138,6 +184,7 @@ export const FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY = [
       { description: 'Participant Member', relation: 'WGAPS' },
       { description: 'Guest Member', relation: 'WGSAP' },
     ],
+    charter: 'https://www.eclipse.org/org/workinggroups/jakarta_ee_charter.php',
   },
 ];
 

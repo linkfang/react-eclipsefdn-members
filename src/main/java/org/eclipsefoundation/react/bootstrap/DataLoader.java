@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
@@ -34,8 +35,10 @@ import org.eclipsefoundation.react.dto.Contact;
 import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
+import org.eclipsefoundation.react.helper.TimeHelper;
 import org.eclipsefoundation.react.namespace.ContactTypes;
 import org.eclipsefoundation.react.namespace.FormState;
+import org.eclipsefoundation.react.namespace.OrganizationTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,8 +91,9 @@ public class DataLoader {
                 mf.setRegistrationCountry("CA");
                 mf.setVatNumber(RandomStringUtils.randomNumeric(10));
                 mf.setPurchaseOrderRequired(Math.random() > 0.5 ? "yes" : "no");
-                mf.setDateCreated(Math.random() > 0.5 ? System.currentTimeMillis() + r.nextInt(10000)
-                        : System.currentTimeMillis() - r.nextInt(10000));
+                mf.setDateCreated(
+                        TimeHelper.getMillis() - ThreadLocalRandom.current().nextLong(config.getDaysOut().toMillis()));
+                mf.setDateUpdated(mf.getDateCreated());
                 mf.setState(FormState.INPROGRESS);
                 forms.add(mf);
             }
@@ -106,6 +110,9 @@ public class DataLoader {
                 o.setForm(mf);
                 o.setLegalName(RandomStringUtils.randomAlphabetic(4, 10));
                 o.setTwitterHandle(RandomStringUtils.randomAlphabetic(4, 10));
+                o.setAggregateRevenue(RandomStringUtils.randomNumeric(5, 10));
+                o.setEmployeeCount(RandomStringUtils.randomNumeric(5, 10));
+                o.setOrganizationType(OrganizationTypes.OTHER);
                 Address a = new Address();
                 a.setCity(RandomStringUtils.randomAlphabetic(4, 10));
                 a.setCountry(RandomStringUtils.randomAlphabetic(4, 10));

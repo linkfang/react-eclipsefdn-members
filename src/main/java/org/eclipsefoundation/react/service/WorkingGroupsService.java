@@ -15,6 +15,13 @@ import java.util.Set;
 
 import org.eclipsefoundation.react.model.WorkingGroup;
 
+/**
+ * Defines a service that will return available working group data, allowing for retrieval by alias name, or the full
+ * set.
+ * 
+ * @author Martin Lowe
+ *
+ */
 public interface WorkingGroupsService {
     public Set<WorkingGroup> get();
 
