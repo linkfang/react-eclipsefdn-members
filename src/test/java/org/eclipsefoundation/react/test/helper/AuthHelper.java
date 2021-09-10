@@ -2,22 +2,30 @@ package org.eclipsefoundation.react.test.helper;
 
 import static io.restassured.RestAssured.given;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.eclipsefoundation.core.helper.CSRFHelper;
 
 import io.restassured.filter.session.SessionFilter;
 import io.restassured.specification.RequestSpecification;
-import io.smallrye.jwt.build.Jwt;
 
+/**
+ * Contains central values for testing authentication in application. This helps reduce variables in testing and
+ * concentrate on the actual code being tested.
+ * 
+ * @author Martin Lowe
+ *
+ */
 public class AuthHelper {
-    public static final String TEST_USER_NAME = "alice";
-    public static final String FAMILY_NAME_CLAIM_VALUE = "Lowe";
-    public static final String GIVEN_NAME_CLAIM_VALUE = "Martin";
+    public static final String TEST_USER_NAME = "opearson";
+    public static final String EMAIL_CLAIM_VALUE = "oli.pearson@eclipse.org";
+    public static final String FAMILY_NAME_CLAIM_VALUE = "Pearson";
+    public static final String GIVEN_NAME_CLAIM_VALUE = "Oli";
+    public static final String EMAIL_CLAIM_KEY = "family_name";
     public static final String FAMILY_NAME_CLAIM_KEY = "family_name";
     public static final String GIVEN_NAME_CLAIM_KEY = "given_name";
-    private static final Set<String> ROLES = Collections.unmodifiableSet(Set.of("user"));
+    public static final String ISSUER_FIELD_KEY = "issuer";
+    public static final String ISSUER_FIELD_VALUE = "https://auth.eclipse.org";
+    
+    public static final String DEFAULT_ROLE = "user";
 
     /**
      * Retrieves a CSRF value for the given session using restassured.
@@ -29,24 +37,10 @@ public class AuthHelper {
         return given().when().filter(sessionFilter).get("/csrf").then().extract().header(CSRFHelper.CSRF_HEADER_NAME);
     }
 
-    /**
-     * Creates a fake user token for usage in tests. Allows for different group scopes to be set for tests to allow some
-     * minor flexibility.
-     * 
-     * @param groups set of group scopes to include in the access token
-     * @return a stringified access token using mostly static fields for easy testing
-     */
-    public static String getAccessToken(Set<String> groups) {
-        // first name and given name are claims provided by KC, mocked here
-        return Jwt.preferredUserName(TEST_USER_NAME).claim(GIVEN_NAME_CLAIM_KEY, GIVEN_NAME_CLAIM_VALUE)
-                .claim(FAMILY_NAME_CLAIM_KEY, FAMILY_NAME_CLAIM_VALUE).groups(ROLES)
-                .issuer("https://server.example.com").audience("https://service.example.com").sign();
-    }
-    
-    public static RequestSpecification getAuthorizedResteasyRequest() {
+    public static RequestSpecification getCSRFDefinedResteasyRequest() {
         SessionFilter sessionFilter = new SessionFilter();
-        return given().filter(sessionFilter).auth().oauth2(AuthHelper.getAccessToken(Collections.emptySet()))
-                .header(CSRFHelper.CSRF_HEADER_NAME, AuthHelper.getCSRFValue(sessionFilter));
+        return given().filter(sessionFilter).header(CSRFHelper.CSRF_HEADER_NAME,
+                AuthHelper.getCSRFValue(sessionFilter));
     }
 
     private AuthHelper() {

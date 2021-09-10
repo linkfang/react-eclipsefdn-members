@@ -28,6 +28,9 @@ import org.mockito.Mockito;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.quarkus.test.security.TestSecurity;
+import io.quarkus.test.security.oidc.Claim;
+import io.quarkus.test.security.oidc.ConfigMetadata;
+import io.quarkus.test.security.oidc.OidcSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
@@ -102,7 +105,7 @@ class FormStateFilterTest {
         Mockito.when(dao.getReference(ArgumentMatchers.eq(contact.getId()), ArgumentMatchers.eq(Contact.class)))
                 .thenReturn(contact);
 
-        // organization data mocks 
+        // organization data mocks
         org = DtoHelper.generateOrg(completed);
         org.setId(UUID.randomUUID().toString());
         Mockito.when(dao.get(ArgumentMatchers.argThat(new ArgumentMatcher<RDBMSQuery<FormOrganization>>() {
@@ -132,21 +135,33 @@ class FormStateFilterTest {
     }
 
     @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = AuthHelper.DEFAULT_ROLE)
+    @OidcSecurity(claims = { @Claim(key = AuthHelper.EMAIL_CLAIM_KEY, value = AuthHelper.EMAIL_CLAIM_VALUE),
+            @Claim(key = AuthHelper.GIVEN_NAME_CLAIM_KEY, value = AuthHelper.GIVEN_NAME_CLAIM_VALUE),
+            @Claim(key = AuthHelper.FAMILY_NAME_CLAIM_KEY, value = AuthHelper.FAMILY_NAME_CLAIM_VALUE) }, userinfo = {}, config = {
+                    @ConfigMetadata(key = AuthHelper.ISSUER_FIELD_KEY, value = AuthHelper.ISSUER_FIELD_VALUE) })
     void filterInprogressForms_mutator() {
         // attempting to modify submitted forms should pass
         testMutatorsWithStatus(submitted.getId(), FormState.INPROGRESS, Status.OK.getStatusCode());
     }
 
     @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = AuthHelper.DEFAULT_ROLE)
+    @OidcSecurity(claims = { @Claim(key = AuthHelper.EMAIL_CLAIM_KEY, value = AuthHelper.EMAIL_CLAIM_VALUE),
+            @Claim(key = AuthHelper.GIVEN_NAME_CLAIM_KEY, value = AuthHelper.GIVEN_NAME_CLAIM_VALUE),
+            @Claim(key = AuthHelper.FAMILY_NAME_CLAIM_KEY, value = AuthHelper.FAMILY_NAME_CLAIM_VALUE) }, userinfo = {}, config = {
+                    @ConfigMetadata(key = AuthHelper.ISSUER_FIELD_KEY, value = AuthHelper.ISSUER_FIELD_VALUE) })
     void filterSubmittedForms_mutator() {
         // attempting to modify submitted forms should fail
         testMutatorsAssertBadRequest(submitted.getId(), FormState.SUBMITTED);
     }
 
     @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = AuthHelper.DEFAULT_ROLE)
+    @OidcSecurity(claims = { @Claim(key = AuthHelper.EMAIL_CLAIM_KEY, value = AuthHelper.EMAIL_CLAIM_VALUE),
+            @Claim(key = AuthHelper.GIVEN_NAME_CLAIM_KEY, value = AuthHelper.GIVEN_NAME_CLAIM_VALUE),
+            @Claim(key = AuthHelper.FAMILY_NAME_CLAIM_KEY, value = AuthHelper.FAMILY_NAME_CLAIM_VALUE) }, userinfo = {}, config = {
+                    @ConfigMetadata(key = AuthHelper.ISSUER_FIELD_KEY, value = AuthHelper.ISSUER_FIELD_VALUE) })
     void filterCompleteForms_mutator() {
         // attempting to modify complete forms should fail
         testMutatorsAssertBadRequest(completed.getId(), FormState.COMPLETE);
@@ -156,7 +171,11 @@ class FormStateFilterTest {
      * Checks to make sure accessors are not affected when state is {@link FormState.SUBMITTED}
      */
     @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = AuthHelper.DEFAULT_ROLE)
+    @OidcSecurity(claims = { @Claim(key = AuthHelper.EMAIL_CLAIM_KEY, value = AuthHelper.EMAIL_CLAIM_VALUE),
+            @Claim(key = AuthHelper.GIVEN_NAME_CLAIM_KEY, value = AuthHelper.GIVEN_NAME_CLAIM_VALUE),
+            @Claim(key = AuthHelper.FAMILY_NAME_CLAIM_KEY, value = AuthHelper.FAMILY_NAME_CLAIM_VALUE) }, userinfo = {}, config = {
+                    @ConfigMetadata(key = AuthHelper.ISSUER_FIELD_KEY, value = AuthHelper.ISSUER_FIELD_VALUE) })
     void filterSubmittedForms_accessor() {
         testAccessors(submitted.getId(), FormState.SUBMITTED);
     }
@@ -165,7 +184,11 @@ class FormStateFilterTest {
      * Checks to make sure accessors are not affected when state is {@link FormState.COMPLETE}
      */
     @Test
-    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = "viewer")
+    @TestSecurity(user = AuthHelper.TEST_USER_NAME, roles = AuthHelper.DEFAULT_ROLE)
+    @OidcSecurity(claims = { @Claim(key = AuthHelper.EMAIL_CLAIM_KEY, value = AuthHelper.EMAIL_CLAIM_VALUE),
+            @Claim(key = AuthHelper.GIVEN_NAME_CLAIM_KEY, value = AuthHelper.GIVEN_NAME_CLAIM_VALUE),
+            @Claim(key = AuthHelper.FAMILY_NAME_CLAIM_KEY, value = AuthHelper.FAMILY_NAME_CLAIM_VALUE) }, userinfo = {}, config = {
+                    @ConfigMetadata(key = AuthHelper.ISSUER_FIELD_KEY, value = AuthHelper.ISSUER_FIELD_VALUE) })
     void filterCompletedForms_accessor() {
         testAccessors(completed.getId(), FormState.COMPLETE);
     }
@@ -189,46 +212,46 @@ class FormStateFilterTest {
                 form = inprogress;
         }
         // test the PUT, POST, and DELETE calls for all form endpoints
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(form).when().put("/form/{id}", formID)
                 .then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .delete("/form/{id}", formID).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(contact).when()
                 .post("/form/{id}/contacts", formID).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(contact).when()
                 .put("/form/{id}/contacts/{contactID}", formID, contact.getId()).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .delete("/form/{id}/contacts/{contactID}", formID, contact.getId()).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(org).when()
                 .post("/form/{id}/organizations", formID).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(org).when()
                 .put("/form/{id}/organizations/{orgID}", formID, org.getId()).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .delete("/form/{id}/organizations/{orgID}", formID, org.getId()).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(wg).when()
                 .post("/form/{id}/working_groups", formID).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue)
                 .contentType(ContentType.JSON).accept(ContentType.JSON).body(wg).when()
                 .put("/form/{id}/working_groups/{wgID}", formID, wg.getId()).then().statusCode(status);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .delete("/form/{id}/working_groups/{wgID}", formID, wg.getId()).then().statusCode(status);
     }
 
     private void testAccessors(String formID, FormState state) {
         String headerValue = state.name();
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .get("/form/{id}", formID).then().statusCode(200).body("state", Matchers.equalTo(state.name()));
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .get("/form/{id}/contacts", formID).then().statusCode(200);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .get("/form/{id}/organizations", formID).then().statusCode(200);
-        AuthHelper.getAuthorizedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
+        AuthHelper.getCSRFDefinedResteasyRequest().header(GENERATED_RANDOM_HEADER, headerValue).when()
                 .get("/form/{id}/working_groups", formID).then().statusCode(200);
     }
 
