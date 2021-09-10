@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +56,9 @@ public class Address extends BareNode implements TargetedClone<Address> {
     private FormOrganization organization;
 
     @NotBlank(message = "First address line cannot be blank")
+    @JsonbProperty("address_line_1")
     private String addressLine1;
+    @JsonbProperty("address_line_2")
     private String addressLine2;
     @NotBlank(message = "Locality cannot be blank")
     private String locality;
@@ -76,6 +79,7 @@ public class Address extends BareNode implements TargetedClone<Address> {
     }
 
     /** @return the organization */
+    @JsonbTransient
     public FormOrganization getOrganization() {
         return this.organization;
     }
@@ -173,8 +177,8 @@ public class Address extends BareNode implements TargetedClone<Address> {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(addressLine1, addressLine2, administrativeArea, country, id, locality,
-                organization, postalCode);
+        result = prime * result
+                + Objects.hash(addressLine1, addressLine2, administrativeArea, country, id, locality, postalCode);
         return result;
     }
 
@@ -190,8 +194,7 @@ public class Address extends BareNode implements TargetedClone<Address> {
         return Objects.equals(addressLine1, other.addressLine1) && Objects.equals(addressLine2, other.addressLine2)
                 && Objects.equals(administrativeArea, other.administrativeArea)
                 && Objects.equals(country, other.country) && Objects.equals(id, other.id)
-                && Objects.equals(locality, other.locality) && Objects.equals(organization, other.organization)
-                && Objects.equals(postalCode, other.postalCode);
+                && Objects.equals(locality, other.locality) && Objects.equals(postalCode, other.postalCode);
     }
 
     @Override
@@ -204,7 +207,7 @@ public class Address extends BareNode implements TargetedClone<Address> {
         target.setPostalCode(getPostalCode());
         return target;
     }
-    
+
     /**
      * Filter for selecting the address within the database.
      * 
