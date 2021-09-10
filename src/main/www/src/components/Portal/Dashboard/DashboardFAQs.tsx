@@ -48,6 +48,7 @@ const useStyles = makeStyles(() =>
       paddingRight: 0,
       border: '2px #DCDFE5 solid',
       borderRadius: borderRadiusSize,
+      maxWidth: '100%',
     },
     faqIcon: {
       position: 'absolute',
@@ -99,8 +100,8 @@ export default function DashboardFAQs() {
 
   const renderFAQs = faqItems.map((item, index) => (
     <List className={classes.faqItemCtn} key={index}>
-      <ListItem className={classes.faqQuestion}>
-        <ListItemText primary={item.question} onClick={() => handleClick(index)} />
+      <ListItem className={classes.faqQuestion} onClick={() => handleClick(index)}>
+        <ListItemText primary={item.question} />
         <ListItemIcon className={classes.faqExpandIcon}>
           {shouldCollapse[index] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </ListItemIcon>

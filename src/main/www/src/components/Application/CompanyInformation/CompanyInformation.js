@@ -17,10 +17,15 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  ROUTE_MEMBERSHIP,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
 import { makeStyles } from '@material-ui/core';
+import {
+  fetchAvailableFullWorkingGroupList,
+  fetchWorkingGroupsUserJoined,
+} from '../WorkingGroups/WorkingGroupsWrapper';
 
 /**
  * Wrapper for Contacts and Company components
@@ -35,6 +40,8 @@ import { makeStyles } from '@material-ui/core';
  *  - formField: the form field in formModels/formFieldModel.js
  */
 
+let hasWGData = false;
+
 const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: 14,
@@ -46,16 +53,30 @@ const useStyles = makeStyles(() => ({
 }));
 
 let hasOrgData = false;
-let hasMembershipLevelData = false;
 
-const CompanyInformation = ({ formik, isStartNewForm }) => {
-  const { currentFormId } = useContext(MembershipContext); // current chosen form id
+const CompanyInformation = ({
+  formik,
+  isStartNewForm,
+  formikWG,
+  fullWorkingGroupList,
+  setFullWorkingGroupList,
+  setWorkingGroupsUserJoined,
+  updatedFormValues,
+  setUpdatedFormValues,
+}) => {
+  const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
+  const setWGFieldValue = formikWG.setFieldValue;
+  const companyRep = formik.values.representative.member;
 
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(1);
+  }, [setCurrentStepIndex]);
 
   useEffect(() => {
     const detectModeAndFetch = () => {
@@ -84,24 +105,15 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // Using promise pool, because in first step,
       // need to get company data, and contacts data
       let pool = [
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            END_POINT.organizations +
-            url_suffix_local,
-          {
-            headers: FETCH_HEADER,
-          }
-        ),
-        fetch(
-          url_prefix_local +
-            `/${currentFormId}/` +
-            END_POINT.contacts +
-            url_suffix_local,
-          {
-            headers: FETCH_HEADER,
-          }
-        ),
+        fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.organizations + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
+        fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.contacts + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
+        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
       ];
       Promise.all(pool)
         .then((res) =>
@@ -114,7 +126,8 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
             })
           )
         )
-        .then(([organizations, contacts]) => {
+        .then(([organizations, contacts, membershipLevel]) => {
+          let newFormData = { ...updatedFormValues };
           // Matching the field data
           if (organizations[0]) {
             // the organization data returned is always an
@@ -127,7 +140,7 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
             // if nested, it will automatically map the
             // properties and values
             setFieldValue('organization', tempOrg);
-            hasOrgData = true;
+            newFormData = { ...newFormData, organization: tempOrg };
           }
 
           if (contacts.length) {
@@ -139,55 +152,25 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
             // to set representative field with the mapped data,
             // if nested, it will automatically map the properties and values
             setFieldValue('representative', tempContacts.organizationContacts);
-
-            setFieldValue(
-              'signingAuthorityRepresentative',
-              tempContacts.signingAuthorityRepresentative
-            );
-            hasOrgData = true;
+            setFieldValue('signingAuthorityRepresentative', tempContacts.signingAuthorityRepresentative);
+            newFormData = { ...newFormData, representative: tempContacts.organizationContacts };
           }
+
+          if (membershipLevel) {
+            // setFieldValue(): Prefill Data --> Call the setFieldValue of
+            // Formik, to set membershipLevel field with the mapped data
+            setFieldValue('membershipLevel', membershipLevel.membership_level);
+
+            const tempPurchasingAndVAT = mapPurchasingAndVAT(membershipLevel);
+            setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
+
+            newFormData = { ...newFormData, purchasingAndVAT: tempPurchasingAndVAT };
+            setUpdatedFormValues(newFormData);
+          }
+          hasOrgData = true;
           setLoading(false);
         })
         .catch((err) => console.log(err));
-    };
-
-    const detectModeAndFetchMembershipLevel = () => {
-      let url_prefix_local;
-      let url_suffix_local = '';
-      if (getCurrentMode() === MODE_REACT_ONLY) {
-        url_prefix_local = 'membership_data';
-        url_suffix_local = '/form.json';
-      }
-
-      if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = API_PREFIX_FORM;
-      }
-
-      fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
-        headers: FETCH_HEADER,
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-
-          requestErrorHandler(res.status);
-          throw res.status;
-        })
-        .then((data) => {
-          if (data) {
-            // setFieldValue(): Prefill Data --> Call the setFieldValue of
-            // Formik, to set membershipLevel field with the mapped data
-            setFieldValue('membershipLevel', data.membership_level);
-
-            const tempPurchasingAndVAT = mapPurchasingAndVAT(data);
-            setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
-            hasMembershipLevelData = true;
-          }
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          requestErrorHandler(err);
-        });
     };
 
     if (isStartNewForm) {
@@ -196,11 +179,43 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       // continue with an existing one, if there is no data saved locally
       // then it means this is the 1st time the user see this page
       // need to GET the data
-      if (!hasOrgData) detectModeAndFetch();
-      if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
-      if (hasOrgData && hasMembershipLevelData) setLoading(false);
+      if (!hasOrgData) {
+        detectModeAndFetch();
+      }
+      if (hasOrgData) {
+        setLoading(false);
+      }
     }
-  }, [isStartNewForm, setFieldValue, currentFormId]);
+  }, [isStartNewForm, setFieldValue, currentFormId, setUpdatedFormValues, updatedFormValues]);
+
+  useEffect(() => {
+    fetchAvailableFullWorkingGroupList(setFullWorkingGroupList);
+  }, [setFullWorkingGroupList]);
+
+  useEffect(() => {
+    if (!isStartNewForm && !hasWGData && fullWorkingGroupList.length > 0 && companyRep.firstName) {
+      // continue with an existing one and there is no working group data
+      fetchWorkingGroupsUserJoined(
+        currentFormId,
+        fullWorkingGroupList,
+        setWorkingGroupsUserJoined,
+        setWGFieldValue,
+        companyRep,
+        setLoading
+      );
+      hasWGData = true;
+    } else {
+      setLoading(false);
+    }
+  }, [
+    isStartNewForm,
+    currentFormId,
+    fullWorkingGroupList,
+    setFieldValue,
+    companyRep,
+    setWGFieldValue,
+    setWorkingGroupsUserJoined,
+  ]);
 
   // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
@@ -213,19 +228,23 @@ const CompanyInformation = ({ formik, isStartNewForm }) => {
       <div className="align-center">
         <h1 className="fw-600 h2">Company Information</h1>
         <p>
-          Please complete your company information below. This should be the
-          legal name and address of your organization.
+          Please complete your company information below. This should be the legal name and address of your
+          organization.
+        </p>
+        <p>
+          **** NOTE: Committers wishing to complete the Eclipse Foundation membership process should not use this form,
+          but instead should visit{' '}
+          <a href="https://www.eclipse.org/membership/#tab-membership" target="_blank" rel="noreferrer">
+            here
+          </a>
+          .
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
-        <CompanyInformationContacts formik={formik} />
+        <CompanyInformationContacts formik={formik} formikWG={formikWG} />
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton
-        previousPage=""
-        nextPage="/membership-level"
-        pageIndex={1}
-      />
+      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} />
     </form>
   );
 };

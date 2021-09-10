@@ -6,6 +6,7 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   API_FORM_PARAM,
+  ROUTE_COMPANY,
 } from '../../../Constants/Constants';
 import {
   handleNewForm,
@@ -13,8 +14,9 @@ import {
 } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
+import { initialValues } from '../FormComponents/formFieldModel';
 const styles = {
-  marginBottom: '20px',
+  marginBottom: '30px',
   textAlign: 'center',
 };
 
@@ -26,13 +28,14 @@ const FormChooser = ({
   resetWorkingGroupForm,
   resetMembershipLevelForm,
   resetCompanyInfoForm,
+  setUpdatedFormValues
 }) => {
   const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = useCallback(() => {
-    setFurthestPage({ index: 1, pathName: '/company-info' });
-    history.push('/company-info');
+    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
+    history.push(ROUTE_COMPANY);
   }, [history, setFurthestPage]);
 
   const handleContinueExistingForm = () => {
@@ -41,7 +44,11 @@ const FormChooser = ({
   };
 
   const handleStartNewForm = () => {
-    if (getCurrentMode() === MODE_REACT_API) setCurrentFormId('');
+    setIsStartNewForm(true);
+    setUpdatedFormValues(initialValues); // reset backup values
+    if (getCurrentMode() === MODE_REACT_API) {
+      setCurrentFormId('');
+    }
     // reset the form if user has gone to a further page/step
     if (furthestPage.index > 0) {
       resetCompanyInfoForm();
@@ -72,7 +79,7 @@ const FormChooser = ({
         })
         .then((data) => {
           console.log('existing forms:  ', data);
-          if (data.length > 0) {
+          if (data.length > 0 && data[0].state !== 'SUBMITTED') {
             setHasExistingForm(data[0]?.id);
             setCurrentFormId(data[0]?.id);
           } else {
@@ -99,7 +106,7 @@ const FormChooser = ({
           <Loading />
         ) : (
           <div style={styles}>
-            <h1 className="h3 padding-bottom-10">
+            <h1 className="h4">
               Welcome back! You can continue the application you previously
               started or start a new application.
             </h1>

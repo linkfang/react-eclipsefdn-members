@@ -585,9 +585,19 @@ components:
             legal_name:
                type: string
                description: Legal Name of the Organization
+            organization_type:
+               type: string
+               description: The category of organization used for fee determination for current entity
+               enum: [NON_PROFIT_OPEN_SOURCE, ACADEMIC, STANDARDS, GOVERNMENT_ORGANIZATION_AGENCY_NGO, MEDIA_ORGANIZATION, RESEARCH, OTHER]
             twitter:
                type: string
                description: The Twitter handle of the organization
+            aggregate_revenue:
+               type: string
+               description: The aggregate revenue of the organization and its affiliates
+            employee_count:
+               type: string
+               description: The number of employees for the given organization
             address:
                type: object
                properties:
@@ -612,9 +622,19 @@ components:
             legal_name:
                type: string
                description: Legal Name of the Organization
+            organization_type:
+               type: string
+               description: The category of organization used for fee determination for current entity
+               enum: [NON_PROFIT_OPEN_SOURCE, ACADEMIC, STANDARDS, GOVERNMENT_ORGANIZATION_AGENCY_NGO, MEDIA_ORGANIZATION, RESEARCH, OTHER]
             twitter:
                type: string
                description: The Twitter handle of the organization
+            aggregate_revenue:
+               type: string
+               description: The aggregate revenue of the organization and its affiliates
+            employee_count:
+               type: string
+               description: The number of employees for the given organization
             address:
                type: object
                properties:
@@ -771,26 +791,66 @@ components:
       WorkingGroup:
          type: object
          properties:
-            documentID:
-               $ref: '#/components/schemas/ObjectID'
-            name:
+            alias:
                type: string
-            levels:
+               description: internal alias for the working group 
+            title:
+               type: string
+               description: Public-facing or official name of the working group
+            status:
+               type: string
+               description: Current status of the working group (e.g. incubating, active, archived)
+            logo:
+               type: string
+               description: image link for the working groups logo
+            description:
+               type: string
+               description: Short description of the working group
+            resources:
                type: object
-               description: The ID of the working group relationship to be formed
                properties:
-                  document_id:
-                     $ref: '#/components/schemas/ObjectID'
-                  level:
+                  charter:
                      type: string
-                  price:
+                     description: Link to the charter for the current working group
+                  contact_form:
                      type: string
-                  revenue_top:
-                     type: number
-                  revenue_bottom:
-                     type: number
-                  company_size:
-                     type: number
+                     description: URL link to the contact form
+                  members:
+                     type: string
+                     description: URL to the members list for the given working group
+                  participation_agreements:
+                     type: object
+                     properties:
+                        individual:
+                           $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                        organization:
+                           $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                  sponsorship:
+                     type: string
+                     description: link to the sponsorship agreement document
+                  website:
+                     type: string
+                     description: the URL for the homepage of this working group
+            levels:
+               type: array
+               items:
+                  type: object
+                  description: Definition of the participation level for the working group, including its relation code
+                  properties:
+                     relation:
+                        type: string
+                        description: code representing the relation, used internally when using common relation types
+                     description:
+                        type: string
+                        description: the label for the participation level
+      WorkingGroupParticipationAgreement:
+         type: object
+         properties:
+            document_id:
+               $ref: '#/components/schemas/ObjectID'
+            pdf:
+               type: string
+               description: Link to the PDF version of the participation agreement
                      
       ConstraintViolations:
          type: array

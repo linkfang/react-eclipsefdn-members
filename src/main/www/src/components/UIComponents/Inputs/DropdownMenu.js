@@ -1,14 +1,10 @@
-import {
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import { FormControl, FormHelperText, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   formControl: {
     width: '100%',
+    marginBottom: 14,
+    marginTop: 6,
   },
   selectField: {
     backgroundColor: 'white',
@@ -18,22 +14,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function DropdownMenu({
-  inputLabel,
-  inputName,
-  inputValue,
-  optionsArray,
-  handleChange,
-}) {
+export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange, explanationHelperText, error, helperText }) {
   const classes = useStyles();
 
   return (
-    <FormControl
-      margin="dense"
-      variant="outlined"
-      required={true}
-      className={classes.formControl}
-    >
+    <FormControl margin="dense" variant="outlined" required={true} className={classes.formControl} error={error}>
       <InputLabel>{inputLabel}</InputLabel>
       <Select
         name={inputName}
@@ -48,6 +33,8 @@ export default function DropdownMenu({
           </MenuItem>
         ))}
       </Select>
+      {error && <FormHelperText>{helperText}</FormHelperText>}
+      {explanationHelperText && <FormHelperText>{explanationHelperText}</FormHelperText>}
     </FormControl>
   );
 }

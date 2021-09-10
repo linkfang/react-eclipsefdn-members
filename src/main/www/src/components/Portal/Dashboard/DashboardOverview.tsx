@@ -1,22 +1,17 @@
-import { createStyles, makeStyles, Card, Container, Typography, Link } from '@material-ui/core';
+import { createStyles, makeStyles, Card, Typography, Link } from '@material-ui/core';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
+import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    main: { padding: '90px 0 0' },
-    overviewCtn: {
-      display: 'flex',
-      marginTop: 40,
-      padding: 0,
-      justifyContent: 'space-between',
-    },
-
     overviewCard: {
       width: '22%',
+      minWidth: 220,
+      margin: '25px 10px 20px 10px',
       height: 90,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
@@ -106,7 +101,7 @@ export default function DashboardOverview() {
   ];
 
   const renderOverviewItems = overviewItemData.map((item) => (
-    <Card className={classes.overviewCard}>
+    <Card key={item.title} className={classes.overviewCard}>
       <Link className={classes.overviewAnchor} href={item.href}>
         {item.icon}
         <Typography className={classes.overviewTitle} component="h6" variant="h6">
@@ -117,9 +112,8 @@ export default function DashboardOverview() {
   ));
 
   return (
-    <Container className={classes.main}>
-      <Typography variant="h4">Overview</Typography>
-      <Container className={classes.overviewCtn}>{renderOverviewItems}</Container>
-    </Container>
+    <SectionCtn title="Overview" id="overview">
+      {renderOverviewItems}
+    </SectionCtn>
   );
 }

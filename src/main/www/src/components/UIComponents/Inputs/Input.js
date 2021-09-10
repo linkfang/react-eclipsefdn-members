@@ -45,12 +45,13 @@ export default function Input(props) {
     <TextField
       type={type || 'text'}
       name={name}
+      type={type || 'text'}
       required={requiredMark}
       disabled={disableInput}
       value={value}
       onChange={onChange}
       error={error}
-      helperText={helperText}
+      helperText={error && helperText}
       size="small"
       variant="outlined"
       className={classes.root}
@@ -63,6 +64,7 @@ export default function Input(props) {
         style: { backgroundColor: backgroundColor || 'white', height: height },
         inputProps: {
           'aria-labelledby': ariaLabel,
+          maxLength: 255,
         },
       }}
     />

@@ -1,8 +1,11 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { useContext, useEffect } from 'react';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import MembershipContext from '../../../Context/MembershipContext';
+import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
 
 /**
  * Have not added any API calls here,
@@ -11,12 +14,51 @@ import { scrollToTop } from '../../../Utils/formFunctionHelpers';
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik }) => {
+const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
+  const { setCurrentStepIndex } = useContext(MembershipContext);
   const { signingAuthorityRepresentative } = formField;
+  const name = 'signingAuthorityRepresentative';
+  const generateSingleContact = (el) => (
+    <div key={el.name} className="col-md-12">
+      <Input
+        name={`${name}.${el.name}`}
+        labelName={el.label}
+        placeholder={el.placeholder}
+        requiredMark={true}
+        disableInput={formik.values.signingAuthorityRepresentative.sameAsCompany}
+        ariaLabel={`${name}.${el.name}`}
+        onChange={formik.handleChange}
+        value={formik.values.signingAuthorityRepresentative[`${el.name}`]}
+        error={
+          formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
+          Boolean(formik.errors.signingAuthorityRepresentative?.[`${el.name}`])
+        }
+        helperText={
+          formik.touched.signingAuthorityRepresentative?.[`${el.name}`] &&
+          formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
+        }
+      />
+    </div>
+  );
+
+  const handleCheckboxChange = (isChecked) => {
+    const repInfo = isChecked ? formikOrgValue.representative.member : formik.values.signingAuthorityRepresentative;
+
+    const newValues = {
+      ...repInfo,
+      sameAsCompany: isChecked,
+      id: formik.values.signingAuthorityRepresentative.id,
+    };
+    formik.setFieldValue('signingAuthorityRepresentative', newValues);
+  };
 
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(4);
+  }, [setCurrentStepIndex]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -24,46 +66,33 @@ const SigningAuthority = ({ formik }) => {
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
         </h1>
-        <p>
-          Please Indicate the individual who has the signing authority for the
-          agreement
-        </p>
+        <p>Please indicate the individual who has the signing authority for the agreement.</p>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="signingAuthorityRepresentative.sameAsCompany"
+              color="primary"
+              checked={formik.values.signingAuthorityRepresentative.sameAsCompany}
+              onChange={(ev) => handleCheckboxChange(ev.target.checked)}
+            />
+          }
+          label="Same as Member Representative"
+        />
 
         <div className="row">
-          {signingAuthorityRepresentative.map((el, index) => (
-            <div key={index} className="col-md-12">
-              <Input
-                name={`signingAuthorityRepresentative.${el.name}`}
-                labelName={el.label}
-                placeholder={el.placeholder}
-                requiredMark={true}
-                onChange={formik.handleChange}
-                value={
-                  formik.values.signingAuthorityRepresentative[`${el.name}`]
-                }
-                error={
-                  formik.touched.signingAuthorityRepresentative?.[
-                    `${el.name}`
-                  ] &&
-                  Boolean(
-                    formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-                  )
-                }
-                helperText={
-                  formik.touched.signingAuthorityRepresentative?.[
-                    `${el.name}`
-                  ] &&
-                  formik.errors.signingAuthorityRepresentative?.[`${el.name}`]
-                }
-              />
-            </div>
-          ))}
+          {signingAuthorityRepresentative.map((el, index) => index < 2 && generateSingleContact(el))}
+        </div>
+        <div className="row">
+          {signingAuthorityRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}
         </div>
       </div>
       <CustomStepButton
-        previousPage="/working-groups"
-        nextPage="/review"
-        pageIndex={4}
+        previousPage={ROUTE_WGS}
+        nextPage={ROUTE_REVIEW}
+        checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
       />
     </form>
   );

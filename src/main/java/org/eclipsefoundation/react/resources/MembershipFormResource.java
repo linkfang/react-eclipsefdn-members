@@ -42,8 +42,11 @@ import org.eclipsefoundation.react.dto.Contact;
 import org.eclipsefoundation.react.dto.FormOrganization;
 import org.eclipsefoundation.react.dto.FormWorkingGroup;
 import org.eclipsefoundation.react.dto.MembershipForm;
+import org.eclipsefoundation.react.dto.ValidationGroups.Completion;
+import org.eclipsefoundation.react.helper.TimeHelper;
 import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory;
 import org.eclipsefoundation.react.model.ConstraintViolationWrapFactory.ConstraintViolationWrap;
+import org.eclipsefoundation.react.model.MailerData;
 import org.eclipsefoundation.react.namespace.FormState;
 import org.eclipsefoundation.react.namespace.MembershipFormAPIParameterNames;
 import org.eclipsefoundation.react.service.MailerService;
@@ -115,7 +118,8 @@ public class MembershipFormResource extends AbstractRESTResource {
     @POST
     public List<MembershipForm> create(MembershipForm mem) {
         mem.setUserID(ident.getPrincipal().getName());
-        mem.setDateCreated(System.currentTimeMillis());
+        mem.setDateCreated(TimeHelper.getMillis());
+        mem.setDateUpdated(mem.getDateCreated());
         return dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mem));
     }
 
@@ -132,6 +136,7 @@ public class MembershipFormResource extends AbstractRESTResource {
             return r;
         }
         mem.setUserID(ident.getPrincipal().getName());
+        mem.setDateUpdated(TimeHelper.getMillis());
         // need to fetch ref to use attached entity
         MembershipForm ref = mem.cloneTo(dao.getReference(formID, MembershipForm.class));
         return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(ref)))
@@ -204,10 +209,13 @@ public class MembershipFormResource extends AbstractRESTResource {
         }
 
         // send the forms to the mailing service
-        mailer.sendToFormAuthor(mf);
-        mailer.sendToMembershipTeam(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
+        MailerData data = new MailerData(mf, !orgs.isEmpty() ? orgs.get(0) : null, wgs, contacts);
+        mailer.sendToFormAuthor(data);
+        mailer.sendToMembershipTeam(data);
 
         // update the state and push the update
+        mf.setDateSubmitted(TimeHelper.getMillis());
+        mf.setDateUpdated(mf.getDateSubmitted());
         mf.setState(FormState.SUBMITTED);
         return Response.ok(dao.add(new RDBMSQuery<>(wrap, filters.get(MembershipForm.class)), Arrays.asList(mf)))
                 .build();
@@ -215,7 +223,7 @@ public class MembershipFormResource extends AbstractRESTResource {
 
     private <T extends BareNode> Set<ConstraintViolationWrap> recordViolations(List<T> items) {
         ConstraintViolationWrapFactory factory = new ConstraintViolationWrapFactory();
-        return items.stream().flatMap(item -> factory.build(validator.validate(item)).stream())
+        return items.stream().flatMap(item -> factory.build(validator.validate(item, Completion.class)).stream())
                 .collect(Collectors.toSet());
     }
 }
