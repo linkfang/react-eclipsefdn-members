@@ -42,11 +42,11 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
       const currentAddressObj = countryAddressDetails.find((item) => item.name === value.value).fields;
       console.log(currentAddressObj);
       setOrgAddressObj({
-        street: currentAddressObj.addressLine1 || 'Address 1',
-        streetTwo: currentAddressObj.addressLine2 || 'Address 2',
-        city: currentAddressObj.locality || 'City',
-        provinceOrState: currentAddressObj.administrativeArea || 'Province',
-        postalCode: currentAddressObj.postalCode || 'Postal Code',
+        street: currentAddressObj.addressLine1,
+        streetTwo: currentAddressObj.addressLine2,
+        city: currentAddressObj.locality,
+        provinceOrState: currentAddressObj.administrativeArea,
+        postalCode: currentAddressObj.postalCode,
       });
     }
   };
@@ -137,7 +137,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         <div className="col-md-12">
           <Input
             name={organizationAddress.street.name}
-            labelName={orgAddressObj.street}
+            labelName={orgAddressObj.street || 'Address 1'}
             placeholder={organizationAddress.street.placeholder}
             requiredMark={true}
             value={formik.values.organization.address.street}
@@ -150,7 +150,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         <div className="col-md-12">
           <Input
             name={organizationAddress.streetTwo.name}
-            labelName={orgAddressObj.streetTwo}
+            labelName={orgAddressObj.streetTwo || 'Address 2'}
             placeholder={organizationAddress.streetTwo.placeholder}
             value={formik.values.organization.address.streetTwo}
             onChange={formik.handleChange}
@@ -207,9 +207,9 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         <div className="col-md-4">
           <Input
             name={organizationAddress.city.name}
-            labelName={orgAddressObj.city}
+            labelName={orgAddressObj.city || 'City'}
             placeholder={orgAddressObj.city}
-            requiredMark={true}
+            requiredMark={!!orgAddressObj.city}
             value={formik.values.organization.address.city}
             onChange={formik.handleChange}
             ariaLabel={`${organizationName.name}-address`}
@@ -221,7 +221,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         <div className="col-md-8">
           <Input
             name={organizationAddress.provinceOrState.name}
-            labelName={orgAddressObj.provinceOrState}
+            labelName={orgAddressObj.provinceOrState || 'Province'}
             placeholder={orgAddressObj.provinceOrState}
             requiredMark={false}
             value={formik.values.organization.address.provinceOrState}
@@ -233,7 +233,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         <div className="col-md-4">
           <Input
             name={organizationAddress.postalCode.name}
-            labelName={orgAddressObj.postalCode}
+            labelName={orgAddressObj.postalCode || 'Postal Code'}
             placeholder={orgAddressObj.postalCode}
             requiredMark={false}
             value={formik.values.organization.address.postalCode}

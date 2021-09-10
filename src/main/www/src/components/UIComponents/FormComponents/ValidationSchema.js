@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { requiredErrorMsg } from './formFieldModel';
+import countryAddressDetails from 'postal-address-field-names';
 
 /**
  * Validation schema passed to Formik
@@ -31,9 +32,7 @@ import { requiredErrorMsg } from './formFieldModel';
  * please refer to: https://formik.org/docs/api/formik#errors--field-string-string-
  */
 
-const countryList = require('country-list')
-  .getNames()
-  .map((item) => item);
+const countryList = countryAddressDetails.map((item) => item.name);
 
 export const validationSchema = [
   // First step - company Info
