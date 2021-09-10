@@ -30,15 +30,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
       position: 'relative',
-      height: theme.spacing(11),
+      height: 110,
       backgroundColor: '#fff',
       boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
       [theme.breakpoints.up('md')]: {
-        height: theme.spacing(7),
+        height: 70,
         position: 'fixed',
       },
       [theme.breakpoints.down('sm')]: {
-        // Has to use !important to overwrite the padding-right 17px added by MUI when humbergur menu is open
+        // Has to use !important to overwrite the padding-right 17px added by MUI when hamburger menu is open
         // This can avoid making user dropdown menu move left and right
         padding: '0 !important',
       },
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     efLogo: {
-      width: theme.spacing(12),
+      width: 120,
     },
     hamburgerIcon: {
       marginRight: theme.spacing(0.4),
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       top: theme.spacing(1),
       right: theme.spacing(1.2),
-      height: theme.spacing(3.8),
+      height: 38,
       alignItems: 'center',
       [theme.breakpoints.up('md')]: {
         top: theme.spacing(1.6),
@@ -84,8 +84,8 @@ const useStyles = makeStyles((theme: Theme) =>
     verticalDivider: {
       display: 'none',
       backgroundColor: '#EBEBF2',
-      height: theme.spacing(2.8),
-      width: theme.spacing(0.1),
+      height: 28,
+      width: 1,
       marginRight: theme.spacing(2.1),
       [theme.breakpoints.up('md')]: {
         display: 'block',
@@ -96,20 +96,20 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(0.7),
     },
     dropDownBtn: {
-      minWidth: theme.spacing(3.8),
-      height: theme.spacing(3),
+      minWidth: 38,
+      height: 30,
       padding: 0,
     },
     dropDownIcon: {
       color: '#A4AFB7',
     },
     dropDownItemIcon: {
-      minWidth: theme.spacing(3),
+      minWidth: 30,
     },
     avatarCtn: {
       display: 'none',
-      width: theme.spacing(3.8),
-      height: theme.spacing(3.8),
+      width: 38,
+      height: 38,
       marginLeft: theme.spacing(1.1),
       [theme.breakpoints.up('md')]: {
         display: 'flex',

@@ -16,8 +16,8 @@ import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     overviewCard: {
-      minWidth: theme.spacing(23),
-      height: theme.spacing(9),
+      minWidth: 230,
+      height: 90,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       transition: 'all 0.2s ease-out',
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     overviewIcon: {
       height: '100%',
-      width: theme.spacing(8.5),
+      width: 85,
       padding: theme.spacing(1.8),
       marginRight: theme.spacing(1.2),
       color: iconGray,

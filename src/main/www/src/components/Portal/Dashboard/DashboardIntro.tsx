@@ -44,12 +44,12 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     card: {
-      height: theme.spacing(26),
+      height: 260,
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      minWidth: theme.spacing(25.5),
+      minWidth: 255,
       width: '100%',
       margin: theme.spacing(2, 0),
       [theme.breakpoints.up(650)]: {
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     companyLogo: {
       width: '90%',
-      maxWidth: theme.spacing(25),
+      maxWidth: 250,
     },
     companyRepCard: {
       backgroundColor: '#D0D0D0',
@@ -98,8 +98,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0.8, 0),
     },
     contentAvatar: {
-      width: theme.spacing(3.5),
-      height: theme.spacing(3.5),
+      width: 35,
+      height: 35,
     },
     contentItemText: {
       display: 'flex',

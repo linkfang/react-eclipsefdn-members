@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
     resourcesCard: {
       padding: 0,
       position: 'relative',
-      minWidth: theme.spacing(23),
-      height: theme.spacing(20),
+      minWidth: 230,
+      height: 200,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       borderRadius: borderRadiusSize,
@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       top: theme.spacing(-2.7),
       left: theme.spacing(1.4),
-      width: theme.spacing(5.4),
-      height: theme.spacing(5.4),
+      width: 54,
+      height: 54,
       padding: 0,
       '& svg': {
         color: iconGray,
