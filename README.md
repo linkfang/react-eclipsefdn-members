@@ -79,6 +79,8 @@ quarkus.datasource.jdbc.url = jdbc:mariadb://<host><:port?>/<databaseName>
 
 Once this is set, set the `quarkus.datasource.username` and `quarkus.datasource.password` fields to the user with access to the given database in the `secret.properties` file.
 
+The above will need to be repeated for the database used to access the EclipseDB data. This data is a separately managed datasource that is connected to to read and update organization information. The base definitions of these tables as required for the connection of this API are defined under `./src/main/resources/sql/` in the files `rem_ddl.sql` and `eclipsedb_ddl.sql`.
+
 The other half of secret configuration is setting up the OIDC credentials for connecting to a keycloak server. This server will require a realm to be set up for access. Using the name `rem_realm` is easiest as it requires no changes to the configuration to work.
 
 The `quarkus.oidc.auth-server-url` property in the `secret.properties` file will need to be updated. The value set should be the public realm address for your server and realm. The rest of the endpoints will be taken care of by the wellknown endpoint available in Keycloak, and don't need to be configured. For the dockerized service, this should be set to your local IP address (note, not your public address). This can be retrieved from your IP configuration application and added in the format displayed in the `sample.secret.properties` file.
@@ -87,10 +89,11 @@ Inside that realm, create a client and update the `quarkus.oidc.client-id` prope
 
 With these properties updated, the server should be able to start and authenticate properly. If the 3 users mentioned within the OIDC configuration section were added, the data should be accessible in a way that is comparable to how it would be in production.
 
-As a side note, regeneration of the database on start along with the insertion of data into the database can be disabled for development environments by setting the following fields within `src/main/resources/application.properties`:
+To enable connections to the FoundationDB API, a second client will need to be created in the same realm as was created for the FoundationDB API service. This second client will be set up similarly to the first, but have service accounts enabled. Once enabled, roles will need to be set within the service account giving all org related roles, as well as sys read access. This should properly restrict service access to the API.
 
-1. Setting `%dev.eclipse.dataloader.enabled` to false. This property is what enables the Data bootstrap to load in mock data.
-2. Removing the `%dev.quarkus.hibernate-orm.database.generation` property or commenting it out. This is what resets the database to empty on start.
+As a side note, the insertion of data into the database can be enabled/disabled for development environments by setting the following fields within `src/main/resources/application.properties`:
+
+1. Setting `%dev.eclipse.dataloader.enabled` to true/false. This property is what enables the Data bootstrap to load in mock data.
 
 [^ Top](#react-eclipsefdn-members)
 ### Running
