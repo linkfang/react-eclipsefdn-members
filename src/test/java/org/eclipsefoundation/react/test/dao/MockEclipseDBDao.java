@@ -6,23 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
-import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
+import org.eclipsefoundation.eclipsedb.dao.EclipseDBPersistenceDAO;
+import org.eclipsefoundation.eclipsedb.dto.OrganizationInformation;
 import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
-import org.eclipsefoundation.react.dto.Contact;
-import org.eclipsefoundation.react.dto.FormOrganization;
-import org.eclipsefoundation.react.dto.FormWorkingGroup;
-import org.eclipsefoundation.react.dto.MembershipForm;
-import org.eclipsefoundation.react.namespace.ContactTypes;
-import org.eclipsefoundation.react.resources.FormOrganizationResourceTest;
-import org.eclipsefoundation.react.resources.FormWorkingGroupsResourceTest;
-import org.eclipsefoundation.react.test.helper.AuthHelper;
-import org.eclipsefoundation.react.test.helper.DtoHelper;
 
 import io.quarkus.test.Mock;
 
@@ -33,7 +24,7 @@ import io.quarkus.test.Mock;
  */
 @Mock
 @ApplicationScoped
-public class MockHibernateDao extends DefaultHibernateDao {
+public class MockEclipseDBDao extends EclipseDBPersistenceDAO {
     private Map<Class<?>, List<? extends BareNode>> mockData;
 
     // allow query to be captured and exposed for test validation
@@ -43,20 +34,7 @@ public class MockHibernateDao extends DefaultHibernateDao {
     @PostConstruct
     public void init() {
         this.mockData = new HashMap<>();
-        MembershipForm mf = DtoHelper.generateForm(Optional.of("form-uuid"));
-        mf.setUserID(AuthHelper.TEST_USER_NAME);
-        mockData.put(MembershipForm.class, Arrays.asList(mf));
-
-        FormOrganization formOrg = DtoHelper.generateOrg(mf);
-        formOrg.setId(FormOrganizationResourceTest.SAMPLE_ORGANIZATION_ID);
-        mockData.put(FormOrganization.class, Arrays.asList(formOrg));
-
-        Contact formContact = DtoHelper.generateContact(mf, Optional.of(ContactTypes.ACCOUNTING));
-        mockData.put(Contact.class, Arrays.asList(formContact));
-
-        FormWorkingGroup wg = DtoHelper.generateWorkingGroups(mf).get(0);
-        wg.setId(FormWorkingGroupsResourceTest.SAMPLE_WORKING_GROUPS_ID);
-        mockData.put(FormWorkingGroup.class, Arrays.asList(wg));
+        mockData.put(OrganizationInformation.class, Arrays.asList(new OrganizationInformation()));
     }
 
     @Override
