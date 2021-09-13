@@ -9,6 +9,8 @@ import {
   OPTIONS_FOR_EMPLOYEE_COUNT,
   HELPERTEXT_FOR_REVENUE,
 } from '../../../Constants/Constants';
+import countryAddressDetails from 'postal-address-field-names';
+import { useState } from 'react';
 
 /**
  * Render Oraganization selector (used React-Select)
@@ -21,7 +23,7 @@ import {
 
 const CompanyInformationCompany = ({ formik, useStyles }) => {
   const classes = useStyles();
-  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue } = formField;
+  const { organizationName, organizationTwitter, organizationAddress, organizationRevenue, organizationType } = formField;
   const [orgAddressObj, setOrgAddressObj] = useState({
     street: 'Address 1',
     streetTwo: 'Address 2',
@@ -60,7 +62,7 @@ const CompanyInformationCompany = ({ formik, useStyles }) => {
         Organization
       </h2>
       <div className="row">
-        <div className="col-md-16">
+        <div className="col-md-24">
           <Input
             name={organizationName.name}
             labelName={organizationName.label}
