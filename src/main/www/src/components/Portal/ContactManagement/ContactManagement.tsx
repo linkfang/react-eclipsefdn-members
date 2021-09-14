@@ -1,9 +1,12 @@
-import { Button, createStyles, makeStyles, Typography } from '@material-ui/core';
+import { Button, createStyles, FormControlLabel, makeStyles, Radio, RadioGroup, Typography } from '@material-ui/core';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
-import { borderRadiusSize, brightOrange, iconGray } from '../../../Constants/Constants';
+import { borderRadiusSize, brightOrange, iconGray, removeReasons } from '../../../Constants/Constants';
 import EditIcon from '@material-ui/icons/Edit';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { useState } from 'react';
+import Input from '../../UIComponents/Inputs/Input';
+import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -39,65 +42,65 @@ const useStyle = makeStyles(() =>
 
 const rows = [
   {
-    id: 1,
+    id: '1',
     email: 'lorem1@demo.com',
-    role: 'Developer',
+    role: 'Company Representative',
     name: 'Jon Snow',
     requestRemove: '',
   },
   {
-    id: 2,
+    id: '2',
     email: 'lorem2@demo.com',
-    role: 'Human Resource',
+    role: 'Marketing Representative',
     name: 'Cersei Lannister',
     requestRemove: '',
   },
   {
-    id: 3,
+    id: '3',
     email: 'lorem3@demo.com',
-    role: 'Marketing',
+    role: 'Account Representative',
     name: 'Jaime Lannister',
     requestRemove: '',
   },
   {
-    id: 4,
+    id: '4',
     email: 'lorem4@demo.com',
-    role: 'Manager',
+    role: 'Signing Authority',
     name: 'Arya Stark',
     requestRemove: '',
   },
   {
-    id: 5,
+    id: '5',
     email: 'lorem5@demo.com',
-    role: 'Sales',
+    role: 'WG A Representative',
     name: 'Daenerys Targaryen',
     requestRemove: '',
   },
   {
-    id: 6,
+    id: '6',
     email: 'lorem6@demo.com',
-    role: 'Customer Serivce',
+    role: 'WG B Representative',
     name: 'Hellen Melisandre',
     requestRemove: '',
   },
   {
-    id: 7,
+    id: '7',
     email: 'lorem7@demo.com',
-    role: 'Designer',
+    role: 'WG C Representative',
     name: 'Ferrara Clifford',
     requestRemove: '',
   },
   {
-    id: 8,
+    id: '8',
     email: 'lorem8@demo.com',
-    role: 'Tester',
+    role: 'WG D Representative',
     name: 'Rossini Frances',
     requestRemove: '',
   },
   {
-    id: 9,
+    id: '9',
     email: 'lorem9@demo.com',
-    role: 'Director',
+    role: 'WG E Representative',
     name: 'Harvey Roxie',
     requestRemove: '',
   },
@@ -137,12 +140,75 @@ export default function ContactManagement() {
       headerName: ' ',
       width: 220,
       renderCell: (params: GridRenderCellParams) => (
-        <Button style={{ backgroundColor: '#EBEBEB' }} onClick={() => console.log('requsting removing: ', params.row)}>
+        <Button
+          style={{ backgroundColor: '#EBEBEB' }}
+          onClick={() => {
+            const currentContact = params.row;
+            setSelectedContact({
+              id: currentContact.id,
+              email: currentContact.email,
+              role: currentContact.role,
+              name: currentContact.name,
+              requestRemove: currentContact.requestRemove,
+            });
+            setShouldOpen(true);
+            console.log('requsting removing: ', params.row);
+          }}
+        >
           Request Removal From Org
         </Button>
       ),
     },
   ];
+
+  const [contactList, setContactList] = useState(rows);
+  const [shouldOpen, setShouldOpen] = useState(false);
+  const [removeReason, setRemoveReason] = useState('');
+  const [removeComment, setRemoveComment] = useState('');
+  const [selectedContact, setSelectedContact] = useState({
+    id: '',
+    email: '',
+    role: '',
+    name: '',
+    requestRemove: '',
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRemoveReason((event.target as HTMLInputElement).value);
+  };
+
+  const handleRequestRemoval = () => {
+    setShouldOpen(false);
+    const newRows = contactList.filter((contact) => contact.id !== selectedContact.id);
+    console.log('Deleted ', selectedContact.name, '| Because of: ', removeReason, '| With comment: ', removeComment);
+    setContactList(newRows);
+    setRemoveReason('');
+    setRemoveComment('');
+  };
+
+  const renderRemoveReasonOptions = () => {
+    const radioOptions = removeReasons.map((option, index) => (
+      <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+    ));
+
+    return (
+      <RadioGroup aria-label="request remove reason" name="removeReason" value={removeReason} onChange={handleChange}>
+        {radioOptions}
+        <Input
+          name="description"
+          labelName="Or Add a Comment Here"
+          value={removeComment}
+          onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setRemoveComment(ev.target.value)}
+          multiline={true}
+          rows={8}
+          backgroundColor="#f9f9f9"
+          maxLength={700}
+          explanationHelperText={'700 characters limit'}
+        />
+      </RadioGroup>
+    );
+  };
+
   return (
     <>
       <RecentActorsIcon className={classes.headerIcon} />
@@ -155,15 +221,26 @@ export default function ContactManagement() {
         Contacts
       </Typography>
       <div className={classes.table}>
-        <DataGrid rows={rows} columns={columns} rowsPerPageOptions={[5, 10, 100]} disableSelectionOnClick />
+        <DataGrid rows={contactList} columns={columns} rowsPerPageOptions={[5, 10, 100]} disableSelectionOnClick />
       </div>
 
       <PersonAddIcon className={classes.addContactIcon} />
-      <p>
+      <Typography variant="body1">
         * If you believe a contact is missing from the list, please contact the individual directly and have them update
         their Eclipse.org account to indicate they are a contact of your company. <br /> Once done, their contact record
         will appear in the list.
-      </p>
+      </Typography>
+
+      <ModalWindow
+        title={'Request to Remove ' + selectedContact.name}
+        content={''}
+        customContent={renderRemoveReasonOptions()}
+        handleProceed={handleRequestRemoval}
+        shouldOpen={shouldOpen}
+        setShouldOpen={setShouldOpen}
+        cancelText={'Cancel'}
+        yesText={'Submit'}
+      />
     </>
   );
 }

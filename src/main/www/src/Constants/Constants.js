@@ -232,6 +232,15 @@ export const NAV_OPTIONS_DATA = [
   },
 ];
 
+// Reasons for requesting removal for a contact
+export const removeReasons = [
+  'No longer interested',
+  'It didn’t meet my need',
+  'Found a better alternative',
+  'Ease of use was lee than expected',
+  'Other',
+];
+
 // Constants for styles
 export const drawerWidth = 280;
 export const themeBlack = '#0B0B0B';
