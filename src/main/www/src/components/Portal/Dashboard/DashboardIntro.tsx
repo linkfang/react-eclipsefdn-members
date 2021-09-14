@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
     },
     contentItemCtn: {
-      padding: theme.spacing(0.8, 0),
+      padding: theme.spacing(1, 0),
     },
     contentAvatar: {
       width: 35,

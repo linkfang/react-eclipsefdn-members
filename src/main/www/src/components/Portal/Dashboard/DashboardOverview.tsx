@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
     overviewIcon: {
       height: '100%',
       width: 85,
-      padding: theme.spacing(1.8),
-      marginRight: theme.spacing(1.2),
+      padding: theme.spacing(2),
+      marginRight: theme.spacing(1),
       color: iconGray,
       borderRadius: borderRadiusSize,
     },

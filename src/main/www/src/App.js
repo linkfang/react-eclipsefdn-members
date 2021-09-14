@@ -17,6 +17,7 @@ const theme = createMuiTheme({
       contrastText: '#fff', // for button text color
     },
   },
+  spacing: 10,
 });
 
 const App = () => {
@@ -39,7 +40,7 @@ const App = () => {
     needLoadingSignIn,
     setNeedLoadingSignIn,
     currentStepIndex,
-    setCurrentStepIndex
+    setCurrentStepIndex,
   };
 
   return (

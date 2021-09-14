@@ -50,13 +50,13 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: borderRadiusSize,
       maxWidth: '100%',
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: theme.spacing(6.4),
+        paddingLeft: theme.spacing(6.5),
       },
     },
     faqIcon: {
       position: 'absolute',
       top: theme.spacing(-3),
-      left: theme.spacing(1.2),
+      left: theme.spacing(1),
       color: iconGray,
       backgroundColor: mainContentBGColor,
       fontSize: 60,
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 200,
       opacity: 0.15,
       color: iconGray,
-      marginTop: theme.spacing(4.2),
+      marginTop: theme.spacing(4),
       display: 'none',
       [theme.breakpoints.up('lg')]: {
         display: 'block',
@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row-reverse',
     },
     faqAnswer: {
-      padding: theme.spacing(1.6, 3.2),
+      padding: theme.spacing(1.5, 3),
     },
   })
 );

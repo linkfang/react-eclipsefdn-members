@@ -23,7 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import efGRYLogo from '../../../assets/logos/ef-gry.svg';
-import { api_prefix, darkOrange, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
+import { api_prefix, darkOrange, END_POINT, FETCH_HEADER, themeBlack } from '../../../Constants/Constants';
 import { logout } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,36 +67,38 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 120,
     },
     hamburgerIcon: {
-      marginRight: theme.spacing(0.4),
+      marginRight: theme.spacing(0.5),
+      color: themeBlack,
     },
     userInfoCtn: {
       display: 'flex',
       position: 'absolute',
       top: theme.spacing(1),
-      right: theme.spacing(1.2),
-      height: 38,
+      right: theme.spacing(1),
+      height: 40,
       alignItems: 'center',
       [theme.breakpoints.up('md')]: {
-        top: theme.spacing(1.6),
+        top: theme.spacing(1.5),
         right: theme.spacing(2),
       },
     },
     verticalDivider: {
       display: 'none',
       backgroundColor: '#EBEBF2',
-      height: 28,
+      height: 30,
       width: 1,
-      marginRight: theme.spacing(2.1),
+      marginRight: theme.spacing(2),
       [theme.breakpoints.up('md')]: {
         display: 'block',
       },
     },
     username: {
+      color: themeBlack,
       marginBottom: 0,
-      marginRight: theme.spacing(0.7),
+      marginRight: theme.spacing(1),
     },
     dropDownBtn: {
-      minWidth: 38,
+      minWidth: 40,
       height: 30,
       padding: 0,
     },
@@ -108,9 +110,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     avatarCtn: {
       display: 'none',
-      width: 38,
-      height: 38,
-      marginLeft: theme.spacing(1.1),
+      width: 40,
+      height: 40,
+      marginLeft: theme.spacing(1),
       [theme.breakpoints.up('md')]: {
         display: 'flex',
       },
@@ -264,7 +266,7 @@ const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
 
         <div className={classes.userInfoCtn}>
           <div className={classes.verticalDivider}></div>
-          <Typography paragraph className={classes.username}>
+          <Typography component="p" className={classes.username}>
             {userInfo?.full_name || 'Anonymous'}
           </Typography>
 

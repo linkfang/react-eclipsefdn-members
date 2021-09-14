@@ -1,10 +1,10 @@
 import 'eclipsefdn-solstice-assets/js/ga';
 import 'eclipsefdn-solstice-assets/js/privacy';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Theme, ThemeProvider } from '@material-ui/core';
-import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import LeftNavBar from './NavBar/LeftNavBar';
-import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
+import { mainContentBGColor } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
 // import Home from './Home/Home';
@@ -16,16 +16,6 @@ import OrgProfile from './OrgProfile/OrgProfiles';
 import ContactManagement from './ContactManagement/ContactManagement';
 import { useState } from 'react';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#f7941e',
-      contrastText: themeBlack, // for button text color
-    },
-  },
-  spacing: 10,
-});
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -33,15 +23,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3, 1.75),
+      padding: theme.spacing(2.5, 1.5),
       backgroundColor: mainContentBGColor,
       [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(3),
+        padding: theme.spacing(2.5),
       },
       [theme.breakpoints.up('md')]: {
-        marginLeft: theme.spacing(35),
-        padding: theme.spacing(8),
-        marginTop: theme.spacing(8),
+        marginLeft: theme.spacing(28),
+        padding: theme.spacing(6.5),
+        marginTop: theme.spacing(6.5),
       },
     },
   })
@@ -55,7 +45,7 @@ export default function MainPortal() {
     setMobileOpen(!mobileOpen);
   };
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <AppTopBar handleDrawerToggle={handleDrawerToggle} />
 
       <LeftNavBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
@@ -91,6 +81,6 @@ export default function MainPortal() {
           </Route>
         </Switch>
       </main>
-    </ThemeProvider>
+    </>
   );
 }
