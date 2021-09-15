@@ -233,7 +233,7 @@ export const NAV_OPTIONS_DATA = [
 ];
 
 // Reasons for requesting removal for a contact
-export const removeReasons = [
+export const REMOVE_REASONS = [
   'No longer interested',
   'It didn’t meet my need',
   'Found a better alternative',

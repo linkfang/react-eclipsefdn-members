@@ -20,7 +20,7 @@ export default function ModalWindow({
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
-        {customContent && customContent}
+        {customContent && customContent()}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setShouldOpen(false)}>{cancelText || 'Cancel'}</Button>
