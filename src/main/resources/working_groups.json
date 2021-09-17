@@ -672,6 +672,29 @@
 				"membership": "https://www.openhwgroup.org/membership"
 			},
 			"levels": []
+		},
+		"openhw-europe":{
+			"alias": "openhw-europe",
+			"title": "OpenHW Europe Working Group",
+			"status": "active",
+			"logo": "",
+			"description": "This working group is a joint initiative of the Eclipse Foundation AISBL and its partner the OpenHW Group. The overarching goal of this working group is to engage in initiatives complementing the general work program of the OpenHW Group that are of strategic interest to the joint members of Eclipse Foundation and OpenHW Group that relate to the European marketplace, including strategic market analysis, development of technical requirements, and digital sovereignty.",
+			"resources": {
+				"charter": "https://www.eclipse.org/org/workinggroups/openhw-europe-charter.php",
+				"participation_agreements": {
+					"individual": null,
+					"organization": {
+						"document_id": "",
+						"pdf": "https://www.eclipse.org/org/workinggroups/wgpa/openhw-europe-working-group-participation-agreement.pdf"
+					}
+				},
+				"website": "https://www.openhwgroup.org/europe",
+				"members": "",
+				"sponsorship": "",
+				"contact_form": "https://accounts.eclipse.org/contact/membership",
+				"membership": ""
+			},
+			"levels": []
 		}
 	}
 }
