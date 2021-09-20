@@ -33,6 +33,7 @@ export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
 export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters';
+export const MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED = 'The value exceeds max length 700 characters';
 
 export const ROUTE_SIGN_IN = '/sign-in';
 export const ROUTE_COMPANY = '/company-info';

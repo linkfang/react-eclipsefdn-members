@@ -312,3 +312,20 @@ export const formField = {
     },
   ],
 };
+
+export const INITIAL_ORG_PROFILE_VALUE = {
+  orgProfile: {
+    description: '',
+    companyURL: '',
+  },
+  logos: {
+    logoForWeb: [],
+    logoForPrint: [],
+  },
+};
+
+export const INITIAL_ORG_NEW_LINK = {
+  title: '',
+  description: '',
+  url: '',
+};
