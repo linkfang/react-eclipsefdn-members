@@ -4,6 +4,7 @@ import {
   CardContent,
   CardMedia,
   CircularProgress,
+  Container,
   createStyles,
   Divider,
   Link,
@@ -13,7 +14,6 @@ import {
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
-import { Container } from '@material-ui/core';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { getCurrentMode, MODE_REACT_ONLY } from '../../../Constants/Constants';
