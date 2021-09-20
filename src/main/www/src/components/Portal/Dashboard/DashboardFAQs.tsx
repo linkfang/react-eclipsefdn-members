@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   List,
   Typography,
+  Theme,
 } from '@material-ui/core';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -38,42 +39,55 @@ const faqItems = [
   },
 ];
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     faqContainer: {
       position: 'relative',
       display: 'flex',
-      marginTop: 40,
-      paddingLeft: 64,
-      paddingRight: 0,
+      marginTop: theme.spacing(4),
+      padding: theme.spacing(0, 1),
       border: '2px #DCDFE5 solid',
       borderRadius: borderRadiusSize,
       maxWidth: '100%',
+      [theme.breakpoints.up('lg')]: {
+        paddingLeft: theme.spacing(6.5),
+      },
     },
     faqIcon: {
       position: 'absolute',
-      top: -30,
-      left: 12,
+      top: theme.spacing(-3),
+      left: theme.spacing(1),
       color: iconGray,
       backgroundColor: mainContentBGColor,
       fontSize: 60,
+    },
+    faqTitle: {
+      textAlign: 'center',
+      paddingTop: theme.spacing(9),
+      [theme.breakpoints.up('sm')]: {
+        textAlign: 'left',
+      },
     },
     faqIconForBG: {
       fontSize: 200,
       opacity: 0.15,
       color: iconGray,
-      marginTop: 42,
+      marginTop: theme.spacing(4),
+      display: 'none',
+      [theme.breakpoints.up('lg')]: {
+        display: 'block',
+      },
     },
     faqList: {
-      marginTop: 30,
-      marginBottom: 25,
-      padding: 10,
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(2.5),
+      padding: theme.spacing(1),
     },
     faqItemCtn: {
       padding: 0,
       border: '2px #EDEDED solid',
       borderRadius: borderRadiusSize,
-      marginBottom: 5,
+      marginBottom: theme.spacing(0.5),
     },
     faqQuestion: {
       backgroundColor: '#EDEDED',
@@ -83,7 +97,7 @@ const useStyles = makeStyles(() =>
       flexDirection: 'row-reverse',
     },
     faqAnswer: {
-      padding: '16px 32px',
+      padding: theme.spacing(1.5, 3),
     },
   })
 );
@@ -114,13 +128,10 @@ export default function DashboardFAQs() {
     </List>
   ));
   return (
-    <div
-      style={{
-        paddingTop: 90,
-      }}
-      id="faqs"
-    >
-      <Typography variant="h4">FAQs</Typography>
+    <div id="faqs">
+      <Typography className={classes.faqTitle} variant="h4">
+        FAQs
+      </Typography>
       <Container className={classes.faqContainer}>
         <ContactSupportIcon className={classes.faqIcon} />
         <Container className={classes.faqList}>{renderFAQs}</Container>

@@ -202,27 +202,30 @@ export const NAV_OPTIONS_DATA = [
   {
     name: 'Your Organization Profile',
     path: '/portal/org-profile',
-    // don't find an icon match the design
     icon: <BusinessIcon />,
   },
   {
     name: 'Projects and Working Groups',
     path: '/portal/dashboard#projects-wg',
+    type: 'submenu',
     icon: <BusinessCenterIcon />,
   },
   {
     name: 'Committers and Contributors',
     path: '/portal/dashboard#committers-contributors',
+    type: 'submenu',
     icon: <PeopleAltIcon />,
   },
   {
     name: 'Resources',
     path: '/portal/dashboard#resources',
+    type: 'submenu',
     icon: <DescriptionIcon />,
   },
   {
     name: 'FAQs',
     path: '/portal/dashboard#faqs',
+    type: 'submenu',
     icon: <HelpIcon />,
   },
   {

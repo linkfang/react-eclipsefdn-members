@@ -1,26 +1,40 @@
-import { createStyles, makeStyles, Card, Typography, Link } from '@material-ui/core';
+import { createStyles, makeStyles, Card, Typography, Link, Theme } from '@material-ui/core';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import { brightBlue, brightOrange, darkGray, darkOrange, iconGray } from '../../../Constants/Constants';
+import {
+  borderRadiusSize,
+  brightBlue,
+  brightOrange,
+  darkGray,
+  darkOrange,
+  iconGray,
+} from '../../../Constants/Constants';
 import SectionCtn from '../../UIComponents/CustomContainer/SectionCtn';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     overviewCard: {
-      width: '22%',
-      minWidth: 220,
-      margin: '25px 10px 20px 10px',
+      minWidth: 230,
       height: 90,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       transition: 'all 0.2s ease-out',
-
       '&:hover': {
         boxShadow: '2px 2px 15px rgba(0,0,0,0.15)',
         transform: 'scale(1.03)',
         transition: 'all 0.2s ease-out',
+      },
+      margin: theme.spacing(2, 0),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(2.5, 1, 2, 1),
+        width: '46%',
+      },
+      [theme.breakpoints.up(1200)]: {
+        margin: theme.spacing(2.5, 1, 2, 1),
+        width: '22%',
       },
     },
 
@@ -34,14 +48,14 @@ const useStyles = makeStyles(() =>
     overviewIcon: {
       height: '100%',
       width: 85,
-      padding: 18,
-      marginRight: 12,
+      padding: theme.spacing(2),
+      marginRight: theme.spacing(1),
       color: iconGray,
-      borderRadius: 4,
+      borderRadius: borderRadiusSize,
     },
     overviewTitle: {
       color: darkGray,
-      paddingRight: 10,
+      paddingRight: theme.spacing(1),
     },
   })
 );
