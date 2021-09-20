@@ -684,7 +684,7 @@
 				"participation_agreements": {
 					"individual": null,
 					"organization": {
-						"document_id": "",
+						"document_id": "d292143a3fad6b5e6ebe",
 						"pdf": "https://www.eclipse.org/org/workinggroups/wgpa/openhw-europe-working-group-participation-agreement.pdf"
 					}
 				},
@@ -694,7 +694,16 @@
 				"contact_form": "https://accounts.eclipse.org/contact/membership",
 				"membership": ""
 			},
-			"levels": []
+			"levels": [
+				{
+					"relation": "WGAPS",
+					"description": "Participant Member"
+				},
+				{
+					"relation": "WGSAP",
+					"description": "Guest Member"
+				}
+			]
 		}
 	}
 }
