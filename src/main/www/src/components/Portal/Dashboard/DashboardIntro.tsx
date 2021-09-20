@@ -105,7 +105,6 @@ interface OrgRep {
 
 export default function DashboardIntro() {
   const classes = useStyles();
-
   const [logoURL, setLogo] = useState('');
   const [orgRepData, setOrgRepData] = useState<Array<OrgRep> | null>(null);
 
