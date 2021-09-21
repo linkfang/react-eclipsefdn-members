@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Typography, Button, Grid, Link } from '@material-ui/core';
+import { createStyles, makeStyles, Typography, Button, Grid, Link, Theme } from '@material-ui/core';
 import Input from '../../UIComponents/Inputs/Input';
 import { DropzoneDialog } from 'material-ui-dropzone';
 import { useState } from 'react';
@@ -8,15 +8,25 @@ import {
   VALIDATION_SCHEMA_FOR_NEW_LINK,
   VALIDATION_SCHEMA_FOR_ORG_PROFILE,
 } from '../../UIComponents/FormComponents/ValidationSchema';
+import BusinessIcon from '@material-ui/icons/Business';
+import { brightOrange, iconGray } from '../../../Constants/Constants';
 
-const useStyle = makeStyles(() =>
+const useStyle = makeStyles((theme: Theme) =>
   createStyles({
+    headerIcon: {
+      fontSize: 80,
+      color: iconGray,
+      borderBottom: `6px ${brightOrange} solid`,
+    },
     pageHeader: {
-      marginBottom: 40,
+      margin: theme.spacing(0.5, 0, 4),
     },
     mainSectionHeader: {
       fontWeight: 600,
-      margin: '40px 0 15px 0',
+      margin: theme.spacing(4, 0, 1.5, 0),
+    },
+    uploadCtn: {
+      marginBottom: theme.spacing(2.5),
     },
     subHeader: {
       minWidth: 110,
@@ -30,23 +40,23 @@ const useStyle = makeStyles(() =>
       width: 160,
     },
     orgProfileBtnCtn: {
-      marginTop: 25,
+      marginTop: theme.spacing(2),
     },
     currentLinksCard: {
-      marginBottom: 20,
-      padding: 15,
+      marginBottom: theme.spacing(2),
+      padding: theme.spacing(1.5),
       borderRadius: 5,
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
     },
     currentLinksTitle: {
       fontWeight: 500,
-      marginBottom: 5,
+      marginBottom: theme.spacing(0.5),
     },
     linksDescription: {
-      marginBottom: 16,
+      marginBottom: theme.spacing(1.5),
     },
     btns: {
-      marginRight: 20,
+      marginRight: theme.spacing(2),
       width: '100%',
       minWidth: 90,
     },
@@ -112,6 +122,7 @@ export default function OrgProfile() {
 
   return (
     <>
+      <BusinessIcon className={classes.headerIcon} />
       <Typography variant="h4" className={classes.pageHeader}>
         Your Organizatino Profile
       </Typography>
@@ -145,7 +156,7 @@ export default function OrgProfile() {
           </Grid>
         </Grid>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={2} className={classes.uploadCtn}>
           <Grid item>
             <Typography className={classes.subHeader} variant="h6">
               Logo for Web
@@ -158,7 +169,7 @@ export default function OrgProfile() {
             </Button>
           </Grid>
 
-          <Grid item xs>
+          <Grid item>
             <Typography className={classes.helperText} variant="body2">
               The supported formats for uploading your logo include: PNG, JPG, or GIF file under 1 MB in size.
             </Typography>
@@ -168,7 +179,7 @@ export default function OrgProfile() {
           </Grid>
         </Grid>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item>
             <Typography className={classes.subHeader} variant="h6">
               Logo for Print
@@ -181,7 +192,7 @@ export default function OrgProfile() {
             </Button>
           </Grid>
 
-          <Grid item xs>
+          <Grid item>
             <Typography className={classes.helperText} variant="body2">
               If available please include the .eps file of your company logo.
             </Typography>
@@ -209,12 +220,12 @@ export default function OrgProfile() {
         />
 
         <Grid container spacing={2} className={classes.orgProfileBtnCtn}>
-          <Grid item sm={6} md={2}>
+          <Grid item xs={6} md={2}>
             <Button className={classes.btns} variant="contained" color="primary" type="submit">
               Save
             </Button>
           </Grid>
-          <Grid item sm={6} md={2}>
+          <Grid item xs={6} md={2}>
             <Button
               className={classes.btns}
               variant="contained"
@@ -262,6 +273,7 @@ export default function OrgProfile() {
               name="title"
               labelName="Title"
               backgroundColor="#f9f9f9"
+              requiredMark={true}
               value={formikNewLinks.values.title}
               onChange={formikNewLinks.handleChange}
               error={formikNewLinks.touched.title && Boolean(formikNewLinks.errors.title)}
@@ -284,6 +296,7 @@ export default function OrgProfile() {
               name="url"
               labelName="URL"
               backgroundColor="#f9f9f9"
+              requiredMark={true}
               value={formikNewLinks.values.url}
               onChange={formikNewLinks.handleChange}
               error={formikNewLinks.touched.url && Boolean(formikNewLinks.errors.url)}

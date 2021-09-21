@@ -6,6 +6,7 @@ import {
   makeStyles,
   Radio,
   RadioGroup,
+  Theme,
   Typography,
 } from '@material-ui/core';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
@@ -63,7 +64,7 @@ const rows = [
   },
 ];
 
-const useStyle = makeStyles(() =>
+const useStyle = makeStyles((theme: Theme) =>
   createStyles({
     headerIcon: {
       fontSize: 80,
@@ -71,8 +72,7 @@ const useStyle = makeStyles(() =>
       borderBottom: `6px ${brightOrange} solid`,
     },
     pageTitle: {
-      marginBottom: 40,
-      marginTop: 5,
+      margin: theme.spacing(0.5, 0, 4),
     },
     tableIcon: {
       fontSize: 50,
@@ -81,13 +81,12 @@ const useStyle = makeStyles(() =>
     contactFilterText: {
       backgroundColor: brightOrange,
       color: 'white',
-      padding: '10px',
+      padding: theme.spacing(1),
       borderRadius: borderRadiusSize,
     },
     table: { height: 420, width: '100%' },
     addContactIcon: {
-      marginTop: 40,
-      marginBottom: 10,
+      margin: theme.spacing(4, 0, 1),
       fontSize: 50,
       color: iconGray,
       borderBottom: `3px ${brightOrange} solid`,
