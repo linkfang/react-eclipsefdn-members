@@ -281,6 +281,21 @@ html {
     transition: all 0.35s ease-out;
   }
 
+  .submittingCtn {
+    & {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    p {
+      font-size: 20px;
+      margin-top: 60px;
+    }
+    .loadingIcon {
+      margin: 20px 0 60px;
+    }
+  }
+
   // Mobile First
   @media (min-width: 992px) {
     .step {

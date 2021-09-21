@@ -339,7 +339,7 @@ export function matchWGFieldsToBackend(eachWorkingGroupData, formId) {
  * @param formId - Form Id fetched from the server, sotored in membership context, used for calling APIs
  * @param userId - User Id fetched from the server when sign in, sotored in membership context, used for calling APIs
  */
-export async function executeSendDataByStep(step, formData, formId, userId, setFieldValueObj) {
+export async function executeSendDataByStep(step, formData, formId, userId, setFieldValueObj, callbackFunc) {
   switch (step) {
     case 1:
       callSendData(
@@ -435,7 +435,7 @@ export async function executeSendDataByStep(step, formData, formId, userId, setF
       break;
 
     case 5:
-      callSendData(formId, END_POINT.complete, false, step, setFieldValueObj);
+      callSendData(formId, END_POINT.complete, false, step, setFieldValueObj, '', callbackFunc);
       break;
 
     default:
@@ -451,14 +451,7 @@ export async function executeSendDataByStep(step, formData, formId, userId, setF
  * If empty, is creating a new entity, use POST method;
  * If has value, is fetched from server, use PUT or DELETE;
  */
-function callSendData(
-  formId,
-  endpoint = '',
-  dataBody,
-  stepNum,
-  setFieldValueObj,
-  index
-) {
+function callSendData(formId, endpoint = '', dataBody, stepNum, setFieldValueObj, index, callbackFunc) {
   const entityId = dataBody.id ? dataBody.id : '';
   const method = dataBody.id ? FETCH_METHOD.PUT : FETCH_METHOD.POST;
 
@@ -486,12 +479,13 @@ function callSendData(
       body: JSON.stringify(dataBody),
     })
       .then((res) => {
-        if (stepNum === 5) {
-          if (res.ok) return res;
-        } else {
-          if (res.ok) return res.json();
+        if (res.ok) {
+          if (stepNum === 5) {
+            callbackFunc(false);
+            return res;
+          }
+          return res.json();
         }
-
         requestErrorHandler(res.status);
         throw res.status;
       })
@@ -500,57 +494,30 @@ function callSendData(
           // update the field id after a successful post
           switch (setFieldValueObj.fieldName) {
             case 'organization':
-              setFieldValueObj.method(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
-              setFieldValueObj.method(
-                'organization.address.id',
-                data[0]?.address?.id
-              );
+              setFieldValueObj.method(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
+              setFieldValueObj.method('organization.address.id', data[0]?.address?.id);
               break;
 
             case 'representative.member':
-              setFieldValueObj.method(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
+              setFieldValueObj.method(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
               break;
 
             case 'representative.marketing':
-              setFieldValueObj.method(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
+              setFieldValueObj.method(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
               break;
 
             case 'representative.accounting':
-              setFieldValueObj.method(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
+              setFieldValueObj.method(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
               break;
 
             case 'workingGroups':
-              setFieldValueObj.method(
-                `workingGroups[${index}].id`,
-                data[0]?.id
-              );
-              setFieldValueObj.method(
-                `workingGroups[${index}].workingGroupRepresentative.id`,
-                data[0]?.contact?.id
-              );
+              setFieldValueObj.method(`workingGroups[${index}].id`, data[0]?.id);
+              setFieldValueObj.method(`workingGroups[${index}].workingGroupRepresentative.id`, data[0]?.contact?.id);
               break;
 
             case 'signingAuthorityRepresentative':
-              setFieldValueObj.method.signingAuthority(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
-              setFieldValueObj.method.companyInfo(
-                `${setFieldValueObj.fieldName}.id`,
-                data[0]?.id
-              );
+              setFieldValueObj.method.signingAuthority(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
+              setFieldValueObj.method.companyInfo(`${setFieldValueObj.fieldName}.id`, data[0]?.id);
               break;
 
             default:

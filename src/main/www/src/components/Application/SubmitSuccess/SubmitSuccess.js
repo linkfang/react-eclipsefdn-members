@@ -1,15 +1,29 @@
-import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { useEffect, useContext, useState } from 'react';
+import { executeSendDataByStep, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import MembershipContext from '../../../Context/MembershipContext';
+import Loading from '../../UIComponents/Loading/Loading';
 
-/**
- * This is just a pure html component to
- * display after all steps finished and
- * final submitted after preview
- */
 const SubmitSuccess = () => {
+  const { currentFormId } = useContext(MembershipContext);
+  const [submitting, setSubmitting] = useState(true);
+
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    executeSendDataByStep(5, '', currentFormId, '', '', setSubmitting);
+  }, [currentFormId]);
+
+  if (submitting) {
+    return (
+      <div className="submittingCtn">
+        <p>Submitting...</p>
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <>
       <h1 className="fw-600 h2">Thank you for completing the Eclipse Foundation membership application process!</h1>
