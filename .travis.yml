@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - stable
-install:
-  - yarn --cwd src/main/www --frozen-lockfile
-  - yarn --cwd src/main/www build
-script:
-  - yarn --cwd src/main/www test
-  - yarn --cwd src/main/www test-spec

@@ -276,6 +276,8 @@ public class MembershipForm extends BareNode implements TargetedClone<Membership
             if (dateCreated != null && StringUtils.isNumeric(dateCreated)) {
                 stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".dateUpdated < ?",
                         new Object[] { Long.parseLong(dateCreated) }));
+                stmt.addClause(new ParameterizedSQLStatement.Clause(TABLE.getAlias() + ".dateUpdated IS NOT NULL",
+                        new Object[] {}));
             }
             return stmt;
         }

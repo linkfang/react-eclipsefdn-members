@@ -1,6 +1,6 @@
 # react-eclipsefdn-members
 
-[![Build Status](https://travis-ci.org/EclipseFdn/react-eclipsefdn-members.svg?branch=master)](https://travis-ci.org/EclipseFdn/react-eclipsefdn-members) [![Netlify Status](https://api.netlify.com/api/v1/badges/b0087dce-17ae-46f6-bbea-b3813d35be3f/deploy-status)](https://app.netlify.com/sites/eclipsefdn-react-members/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b0087dce-17ae-46f6-bbea-b3813d35be3f/deploy-status)](https://app.netlify.com/sites/eclipsefdn-react-members/deploys)
 
 Supported by our member organizations, the Eclipse Foundation provides our community with Intellectual Property, Mentorship, Marketing, Event and IT Services.
 

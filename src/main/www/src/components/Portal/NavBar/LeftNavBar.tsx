@@ -1,19 +1,31 @@
 import { NavLink } from 'react-router-dom';
-import { ListItem, ListItemText, ListItemIcon, Container, Drawer, List } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Container,
+  Drawer,
+  List,
+  Theme,
+  Hidden,
+  Button,
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import efWhiteLogo from '../../../assets/logos/ef-registered-wht.svg';
+import CloseIcon from '@material-ui/icons/Close';
 import { NAV_OPTIONS_DATA, drawerWidth, themeBlack, darkOrange } from '../../../Constants/Constants';
 import { useRouteMatch } from 'react-router-dom';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
+      [theme.breakpoints.up('md')]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
     },
     drawerPaper: {
-      width: drawerWidth,
       backgroundColor: themeBlack,
     },
     navOptions: {
@@ -22,11 +34,11 @@ const useStyles = makeStyles(() =>
       },
     },
     navItems: {
-      height: 53,
+      height: 55,
       borderLeft: `rgba(0,0,0,0) 5px solid`,
     },
     navItemsActive: {
-      height: 53,
+      height: 55,
       borderLeft: `${darkOrange} 5px solid`,
     },
     navIcons: {
@@ -44,7 +56,16 @@ const useStyles = makeStyles(() =>
       justifyContent: 'center',
     },
     efLogo: {
-      width: 174,
+      width: 175,
+    },
+    closeBtn: {
+      position: 'fixed',
+      top: theme.spacing(1.5),
+      right: theme.spacing(2),
+    },
+    closeIcon: {
+      color: 'white',
+      fontSize: 30,
     },
   })
 );
@@ -52,17 +73,29 @@ const useStyles = makeStyles(() =>
 interface NavOptionProps {
   path: string;
   icon: JSX.Element;
+  type: string | undefined;
   name: string;
+  handleDrawerToggle: (() => void) | null;
 }
 
-const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
+interface LeftNavBarProps {
+  mobileOpen: boolean;
+  handleDrawerToggle: () => void;
+}
+
+const NavOption: React.FC<NavOptionProps> = ({ path, icon, type, name, handleDrawerToggle }) => {
   const classes = useStyles();
   const isActive = useRouteMatch(path);
 
-  if (path.includes('#')) {
+  if (type === 'submenu') {
     // This means it is a sub nav of /dashboard
     return (
-      <a className={classes.navOptions} href={path} key={path}>
+      <a
+        className={classes.navOptions}
+        href={path}
+        onClick={() => handleDrawerToggle && handleDrawerToggle()}
+        key={path}
+      >
         <ListItem className={classes.navItems} button>
           <ListItemIcon className={classes.navIcons}>{icon}</ListItemIcon>
           <ListItemText className={classes.navText} primary={name} />
@@ -71,7 +104,15 @@ const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
     );
   } else {
     return (
-      <NavLink className={classes.navOptions} to={path} key={path} onClick={scrollToTop}>
+      <NavLink
+        className={classes.navOptions}
+        to={path}
+        key={path}
+        onClick={() => {
+          handleDrawerToggle && handleDrawerToggle();
+          scrollToTop();
+        }}
+      >
         <ListItem className={isActive ? classes.navItemsActive : classes.navItems} button>
           <ListItemIcon className={isActive ? classes.navIconsActive : classes.navIcons}>{icon}</ListItemIcon>
           <ListItemText className={classes.navText} primary={name} />
@@ -81,26 +122,64 @@ const NavOption: React.FC<NavOptionProps> = ({ path, icon, name }) => {
   }
 };
 
-export default function LeftNavBar() {
+const LeftNavBar: React.FC<LeftNavBarProps> = ({ mobileOpen, handleDrawerToggle }) => {
   const classes = useStyles();
 
-  const navOptions = NAV_OPTIONS_DATA.map((item) => (
-    <NavOption path={item.path} name={item.name} icon={item.icon} key={item.path} />
-  ));
+  const renderNavOptions = (isHambergerMenu: boolean) =>
+    NAV_OPTIONS_DATA.map((item) => (
+      <NavOption
+        path={item.path}
+        name={item.name}
+        type={item.type}
+        icon={item.icon}
+        handleDrawerToggle={isHambergerMenu ? handleDrawerToggle : null}
+        key={item.path}
+      />
+    ));
 
   return (
-    <Drawer
-      className={classes.drawer}
-      variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      anchor="left"
-    >
-      <Container className={classes.efLogoCtn}>
-        <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
-      </Container>
-      <List>{navOptions}</List>
-    </Drawer>
+    <>
+      <Hidden mdUp implementation="css">
+        <Drawer
+          className={classes.drawer}
+          variant="temporary"
+          open={mobileOpen}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          anchor="top"
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          <Container className={classes.efLogoCtn}>
+            <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
+            <Button onClick={handleDrawerToggle} className={classes.closeBtn}>
+              <CloseIcon className={classes.closeIcon} />
+            </Button>
+          </Container>
+          <List>{renderNavOptions(true)}</List>
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="css">
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          open
+          anchor="left"
+        >
+          <Container className={classes.efLogoCtn}>
+            <img src={efWhiteLogo} alt="Eclipse Foundation logo" className={classes.efLogo} />
+          </Container>
+          <List>{renderNavOptions(false)}</List>
+        </Drawer>
+      </Hidden>
+    </>
   );
-}
+};
+
+export default LeftNavBar;
