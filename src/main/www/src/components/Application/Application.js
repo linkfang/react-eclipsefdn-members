@@ -51,7 +51,6 @@ export default function Application() {
   };
 
   const submitForm = () => {
-    executeSendDataByStep(5, '', currentFormId, currentUser.name, '');
     goToNextStep(5, '/submitted');
   };
 
@@ -111,13 +110,7 @@ export default function Application() {
     // Only make the API call when signingAuthorityRepresentative has an id
     // If not, it means there is nothing in the db, so no need to update.
     values.signingAuthorityRepresentative.id &&
-      executeSendDataByStep(
-        4,
-        values,
-        currentFormId,
-        currentUser.name,
-        setFieldValueObj
-      );
+      executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj);
     // Only need to call goToNextStep when is not using stepper
     !isUsingStepper && goToNextStep(1, '/membership-level');
   };
