@@ -80,7 +80,7 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
   }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
           <Dialog
@@ -136,7 +136,11 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
             </>
           )}
         </div>
-        <CustomStepButton previousPage="/membership-level" nextPage="/signing-authority" />
+        <CustomStepButton
+          previousPage="/membership-level"
+          nextPage="/signing-authority"
+          handleSubmit={formik.handleSubmit}
+        />
       </FormikProvider>
     </form>
   );

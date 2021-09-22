@@ -39,9 +39,7 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
   );
 
   const handleCheckboxChange = (isChecked) => {
-    const repInfo = isChecked
-      ? formikOrgValue.representative.member
-      : formik.values.signingAuthorityRepresentative;
+    const repInfo = isChecked ? formikOrgValue.representative.member : formik.values.signingAuthorityRepresentative;
 
     const newValues = {
       ...repInfo,
@@ -56,7 +54,7 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
   }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
       <div className="align-center">
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
@@ -82,7 +80,7 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
           {signingAuthorityRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}
         </div>
       </div>
-      <CustomStepButton previousPage="/working-groups" nextPage="/review" />
+      <CustomStepButton previousPage="/working-groups" nextPage="/review" handleSubmit={formik.handleSubmit} />
     </form>
   );
 };

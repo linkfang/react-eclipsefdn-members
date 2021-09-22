@@ -22,7 +22,7 @@ const MembershipLevel = ({ formik }) => {
   }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
@@ -49,7 +49,7 @@ const MembershipLevel = ({ formik }) => {
         <MembershipLevelFeeTable />
       </div>
 
-      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" />
+      <CustomStepButton previousPage="/company-info" nextPage="/working-groups" handleSubmit={formik.handleSubmit} />
     </form>
   );
 };

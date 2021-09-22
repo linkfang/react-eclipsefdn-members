@@ -1,5 +1,4 @@
 import { Button } from '@material-ui/core';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import MembershipContext from '../../../Context/MembershipContext';
 
@@ -12,7 +11,7 @@ import MembershipContext from '../../../Context/MembershipContext';
  *   - isSubmitting: boolean, wehther the form is performing submit action; When the form is submitting, you can disable the button or show a spinning, so that the user won't click several times to submit repeatedly
  *   - isLastStep: boolean, whether it's the final step (preview step) or not
  */
-const CustomStepButton = ({ previousPage, nextPage, disableSubmit }) => {
+const CustomStepButton = ({ previousPage, nextPage, disableSubmit, handleSubmit }) => {
   return (
     <div className="button-container margin-top-20 margin-bottom-20">
       {previousPage ? (
@@ -25,7 +24,21 @@ const CustomStepButton = ({ previousPage, nextPage, disableSubmit }) => {
 
       <MembershipContext.Consumer>
         {() => (
-          <Button variant="contained" color="primary" size="large" type="submit" disabled={disableSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={disableSubmit}
+            onClick={() => {
+              handleSubmit();
+              // Use setTimeout to make sure the codes inside won't be excuted before handleSubmit() finishes.
+              // handleSubmit() is formik.handleSubmit, which will run validation first and won't submit anything if validation fails.
+              setTimeout(() => {
+                const firstInvalidField = document.querySelector('input[aria-invalid="true"]');
+                firstInvalidField && firstInvalidField.focus();
+              }, 0);
+            }}
+          >
             {nextPage === '/submitted' ? 'Submit' : 'Next'}
           </Button>
         )}

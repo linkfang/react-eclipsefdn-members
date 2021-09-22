@@ -238,7 +238,7 @@ const CompanyInformation = ({
   }
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
       <div className="align-center">
         <h1 className="fw-600 h2">Company Information</h1>
         <p>
@@ -258,7 +258,7 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage="/membership-level" />
+      <CustomStepButton previousPage="" nextPage="/membership-level" handleSubmit={formik.handleSubmit} />
     </form>
   );
 };

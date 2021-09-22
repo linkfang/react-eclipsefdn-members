@@ -24,12 +24,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
   }, []);
 
   return (
-    <form
-      onSubmit={(ev) => {
-        ev.preventDefault();
-        submitForm();
-      }}
-    >
+    <form>
       <h1 className="fw-600 h2">Review and Submit Your Completed Application</h1>
       <p>
         Please review your completed Membership Application Form. If you would like to make changes to the information,
@@ -388,7 +383,14 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         }
       />
 
-      <CustomStepButton previousPage="/signing-authority" nextPage="/submitted" disableSubmit={!isTermChecked} />
+      <CustomStepButton
+        previousPage="/signing-authority"
+        nextPage="/submitted"
+        disableSubmit={!isTermChecked}
+        handleSubmit={() => {
+          submitForm();
+        }}
+      />
     </form>
   );
 };
