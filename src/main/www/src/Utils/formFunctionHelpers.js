@@ -481,7 +481,7 @@ function callSendData(formId, endpoint = '', dataBody, stepNum, setFieldValueObj
       .then((res) => {
         if (res.ok) {
           if (stepNum === 5) {
-            callbackFunc();
+            callbackFunc && callbackFunc();
             return res;
           }
           return res.json();
