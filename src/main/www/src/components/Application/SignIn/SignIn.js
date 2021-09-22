@@ -11,6 +11,7 @@ import {
 } from '../../../Constants/Constants';
 import { NavLink } from 'react-router-dom';
 import Loading from '../../UIComponents/Loading/Loading';
+import { Button, createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 /**
  * - When it is only running React App without server, uses fake user in public/fake_user.json
@@ -38,6 +39,19 @@ import Loading from '../../UIComponents/Loading/Loading';
 
 const IS_SIGN_IN_CLICKED_KEY = 'isSignInClicked';
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#f7941e',
+      contrastText: '#fff',
+    },
+    secondary: {
+      main: '#404040',
+      contrastText: '#fff',
+    },
+  },
+});
+
 class SignIn extends React.Component {
   static contextType = MembershipContext;
 
@@ -52,6 +66,7 @@ class SignIn extends React.Component {
   };
 
   handleSignIn = () => {
+    window.location.assign('/api/login');
     localStorage.setItem(IS_SIGN_IN_CLICKED_KEY, 'true');
     this.context.setNeedLoadingSignIn(true);
   };
@@ -66,20 +81,30 @@ class SignIn extends React.Component {
         </p>
         {getCurrentMode() === MODE_REACT_ONLY && (
           <NavLink to="/company-info">
-            <button type="button" onClick={() => this.getFakeUser(setFurthestPage)} className="btn btn-secondary">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              onClick={() => this.getFakeUser(setFurthestPage)}
+            >
               React Only Login
-            </button>
+            </Button>
           </NavLink>
         )}
 
         {getCurrentMode() === MODE_REACT_API && (
-          <a href="/api/login" className="btn btn-secondary" onClick={this.handleSignIn}>
+          <Button variant="contained" color="secondary" size="large" onClick={this.handleSignIn}>
             Log in
-          </a>
+          </Button>
         )}
-        <a href="https://accounts.eclipse.org/" className="btn btn-secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={() => window.location.assign('https://accounts.eclipse.org/')}
+        >
           Create an account
-        </a>
+        </Button>
       </div>
     );
 
@@ -122,21 +147,23 @@ class SignIn extends React.Component {
 
   render() {
     return (
-      <>
-        {this.context.currentUser ? (
-          <FormChooser
-            setFurthestPage={this.props.setFurthestPage}
-            history={this.props.history}
-            setIsStartNewForm={this.props.setIsStartNewForm}
-            resetCompanyInfoForm={this.props.resetCompanyInfoForm}
-            resetMembershipLevelForm={this.props.resetMembershipLevelForm}
-            resetWorkingGroupForm={this.props.resetWorkingGroupForm}
-            resetSigningAuthorityForm={this.props.resetSigningAuthorityForm}
-          />
-        ) : (
-          this.renderButtons(this.props.setFurthestPage)
-        )}
-      </>
+      <ThemeProvider theme={theme}>
+        <div className="sign-in-btn-ctn">
+          {this.context.currentUser ? (
+            <FormChooser
+              setFurthestPage={this.props.setFurthestPage}
+              history={this.props.history}
+              setIsStartNewForm={this.props.setIsStartNewForm}
+              resetCompanyInfoForm={this.props.resetCompanyInfoForm}
+              resetMembershipLevelForm={this.props.resetMembershipLevelForm}
+              resetWorkingGroupForm={this.props.resetWorkingGroupForm}
+              resetSigningAuthorityForm={this.props.resetSigningAuthorityForm}
+            />
+          ) : (
+            this.renderButtons(this.props.setFurthestPage)
+          )}
+        </div>
+      </ThemeProvider>
     );
   }
 }

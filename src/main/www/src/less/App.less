@@ -123,9 +123,22 @@ html {
   }
 
   .button-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    & {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    a {
+      text-decoration: none;
+    }
+    button {
+      width: 80px;
+      margin: 0 15px;
+    }
+  }
+
+  .sign-in-btn-ctn button {
+    margin: 15px;
   }
 
   label#effective-date-label {
@@ -237,16 +250,6 @@ html {
     // &:extend(.step-title-container);
     background: @brand-secondary 50% no-repeat;
     color: @white;
-  }
-
-  .button-container {
-    a {
-      text-decoration: none;
-    }
-    button {
-      width: 80px;
-      margin: 0 14px;
-    }
   }
 
   .msg-popup {

@@ -66,6 +66,16 @@ html {
   align-items: center;
   justify-content: center;
 }
+.eclipsefdn-membership-webform .button-container a {
+  text-decoration: none;
+}
+.eclipsefdn-membership-webform .button-container button {
+  width: 80px;
+  margin: 0 15px;
+}
+.eclipsefdn-membership-webform .sign-in-btn-ctn button {
+  margin: 15px;
+}
 .eclipsefdn-membership-webform label#effective-date-label {
   display: none;
 }
@@ -157,13 +167,6 @@ html {
 .eclipsefdn-membership-webform .step-title-container-active {
   background: #404040 50% no-repeat;
   color: #fff;
-}
-.eclipsefdn-membership-webform .button-container a {
-  text-decoration: none;
-}
-.eclipsefdn-membership-webform .button-container button {
-  width: 80px;
-  margin: 0 14px;
 }
 .eclipsefdn-membership-webform .msg-popup {
   z-index: 1000;
