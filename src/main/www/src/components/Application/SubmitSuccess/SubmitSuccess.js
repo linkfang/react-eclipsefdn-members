@@ -17,7 +17,7 @@ const SubmitSuccess = () => {
 
   if (submitting) {
     return (
-      <div className="submittingCtn">
+      <div className="submitting-ctn">
         <p>Submitting...</p>
         <Loading />
       </div>

@@ -190,16 +190,16 @@ html {
   top: 25px;
   transition: all 0.35s ease-out;
 }
-.eclipsefdn-membership-webform .submittingCtn {
+.eclipsefdn-membership-webform .submitting-ctn {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.eclipsefdn-membership-webform .submittingCtn p {
+.eclipsefdn-membership-webform .submitting-ctn p {
   font-size: 20px;
   margin-top: 60px;
 }
-.eclipsefdn-membership-webform .submittingCtn .loadingIcon {
+.eclipsefdn-membership-webform .submitting-ctn .loadingIcon {
   margin: 20px 0 60px;
 }
 @media (min-width: 992px) {
