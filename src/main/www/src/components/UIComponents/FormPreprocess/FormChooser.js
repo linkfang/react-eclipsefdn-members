@@ -7,12 +7,11 @@ import {
   MODE_REACT_API,
   API_FORM_PARAM,
 } from '../../../Constants/Constants';
-import {
-  handleNewForm,
-  requestErrorHandler,
-} from '../../../Utils/formFunctionHelpers';
+import { handleNewForm, requestErrorHandler } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
+import { Button } from '@material-ui/core';
+
 const styles = {
   marginBottom: '30px',
   textAlign: 'center',
@@ -101,26 +100,17 @@ const FormChooser = ({
         ) : (
           <div style={styles}>
             <h1 className="h4">
-              Welcome back! You can continue the application you previously
-              started or start a new application.
+              Welcome back! You can continue the application you previously started or start a new application.
             </h1>
             {!!hasExistingForm && (
-              <button
-                type="button"
-                onClick={handleContinueExistingForm}
-                className="btn btn-primary"
-              >
+              <Button variant="contained" color="primary" size="large" onClick={handleContinueExistingForm}>
                 Continue Existing Application
-              </button>
+              </Button>
             )}
 
-            <button
-              type="button"
-              onClick={handleStartNewForm}
-              className="btn btn-primary"
-            >
+            <Button variant="contained" color="primary" size="large" onClick={handleStartNewForm}>
               Start New Application
-            </button>
+            </Button>
           </div>
         )
       }
