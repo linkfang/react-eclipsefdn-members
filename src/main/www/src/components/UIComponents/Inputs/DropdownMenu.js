@@ -14,7 +14,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function DropdownMenu({ inputLabel, inputName, inputValue, optionsArray, handleChange, explanationHelperText, error, helperText }) {
+export default function DropdownMenu({
+  inputLabel,
+  inputName,
+  inputValue,
+  optionsArray,
+  handleChange,
+  explanationHelperText,
+  error,
+  helperText,
+}) {
   const classes = useStyles();
 
   return (

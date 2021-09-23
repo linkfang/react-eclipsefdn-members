@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
+  checkValidityWithoutSubmitting,
   deleteData,
   matchWorkingGroupFields,
   requestErrorHandler,
@@ -80,7 +81,7 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
   }, []);
 
   return (
-    <form>
+    <form onSubmit={checkValidityWithoutSubmitting}>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
           <Dialog

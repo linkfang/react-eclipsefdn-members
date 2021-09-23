@@ -2,7 +2,7 @@ import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { checkValidityWithoutSubmitting, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { MEMBERSHIP_LEVELS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 
@@ -22,7 +22,7 @@ const MembershipLevel = ({ formik }) => {
   }, []);
 
   return (
-    <form>
+    <form onSubmit={checkValidityWithoutSubmitting}>
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>

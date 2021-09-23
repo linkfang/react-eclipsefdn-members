@@ -28,6 +28,7 @@ const CustomStepButton = ({ previousPage, nextPage, disableSubmit, handleSubmit 
             variant="contained"
             color="primary"
             size="large"
+            type="submit"
             disabled={disableSubmit}
             onClick={() => {
               handleSubmit();

@@ -670,3 +670,9 @@ export const logout = () => {
       window.location.assign('/');
     });
 };
+
+export const checkValidityWithoutSubmitting = (ev) => {
+  // Do checkValidity without submitting will make Select component in Material-UI get focused if it's invalid without refreshing the page
+  ev.preventDefault();
+  ev.currentTarget.checkValidity();
+};

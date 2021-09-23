@@ -2,7 +2,7 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useEffect } from 'react';
-import { scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { checkValidityWithoutSubmitting, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 /**
@@ -54,7 +54,7 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
   }, []);
 
   return (
-    <form>
+    <form onSubmit={checkValidityWithoutSubmitting}>
       <div className="align-center">
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority

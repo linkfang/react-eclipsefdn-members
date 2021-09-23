@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
+  checkValidityWithoutSubmitting,
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
@@ -238,7 +239,7 @@ const CompanyInformation = ({
   }
 
   return (
-    <form>
+    <form onSubmit={checkValidityWithoutSubmitting}>
       <div className="align-center">
         <h1 className="fw-600 h2">Company Information</h1>
         <p>
