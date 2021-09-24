@@ -17,6 +17,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  ROUTE_MEMBERSHIP,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -52,7 +53,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 let hasOrgData = false;
-let hasMembershipLevelData = false;
 
 const CompanyInformation = ({
   formik,
@@ -61,8 +61,10 @@ const CompanyInformation = ({
   fullWorkingGroupList,
   setFullWorkingGroupList,
   setWorkingGroupsUserJoined,
+  updatedFormValues,
+  setUpdatedFormValues,
 }) => {
-  const { currentFormId } = useContext(MembershipContext); // current chosen form id
+  const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
   const setWGFieldValue = formikWG.setFieldValue;
@@ -71,6 +73,10 @@ const CompanyInformation = ({
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(1);
+  }, [setCurrentStepIndex]);
 
   useEffect(() => {
     const detectModeAndFetch = () => {
@@ -105,6 +111,9 @@ const CompanyInformation = ({
         fetch(url_prefix_local + `/${currentFormId}/` + END_POINT.contacts + url_suffix_local, {
           headers: FETCH_HEADER,
         }),
+        fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
+          headers: FETCH_HEADER,
+        }),
       ];
       Promise.all(pool)
         .then((res) =>
@@ -117,7 +126,8 @@ const CompanyInformation = ({
             })
           )
         )
-        .then(([organizations, contacts]) => {
+        .then(([organizations, contacts, membershipLevel]) => {
+          let newFormData = { ...updatedFormValues };
           // Matching the field data
           if (organizations[0]) {
             // the organization data returned is always an
@@ -130,7 +140,7 @@ const CompanyInformation = ({
             // if nested, it will automatically map the
             // properties and values
             setFieldValue('organization', tempOrg);
-            hasOrgData = true;
+            newFormData = { ...newFormData, organization: tempOrg };
           }
 
           if (contacts.length) {
@@ -142,52 +152,25 @@ const CompanyInformation = ({
             // to set representative field with the mapped data,
             // if nested, it will automatically map the properties and values
             setFieldValue('representative', tempContacts.organizationContacts);
-
             setFieldValue('signingAuthorityRepresentative', tempContacts.signingAuthorityRepresentative);
-            hasOrgData = true;
+            newFormData = { ...newFormData, representative: tempContacts.organizationContacts };
           }
+
+          if (membershipLevel) {
+            // setFieldValue(): Prefill Data --> Call the setFieldValue of
+            // Formik, to set membershipLevel field with the mapped data
+            setFieldValue('membershipLevel', membershipLevel.membership_level);
+
+            const tempPurchasingAndVAT = mapPurchasingAndVAT(membershipLevel);
+            setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
+
+            newFormData = { ...newFormData, purchasingAndVAT: tempPurchasingAndVAT };
+            setUpdatedFormValues(newFormData);
+          }
+          hasOrgData = true;
           setLoading(false);
         })
         .catch((err) => console.log(err));
-    };
-
-    const detectModeAndFetchMembershipLevel = () => {
-      let url_prefix_local;
-      let url_suffix_local = '';
-      if (getCurrentMode() === MODE_REACT_ONLY) {
-        url_prefix_local = 'membership_data';
-        url_suffix_local = '/form.json';
-      }
-
-      if (getCurrentMode() === MODE_REACT_API) {
-        url_prefix_local = API_PREFIX_FORM;
-      }
-
-      fetch(url_prefix_local + `/${currentFormId}` + url_suffix_local, {
-        headers: FETCH_HEADER,
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-
-          requestErrorHandler(res.status);
-          throw res.status;
-        })
-        .then((data) => {
-          if (data) {
-            // setFieldValue(): Prefill Data --> Call the setFieldValue of
-            // Formik, to set membershipLevel field with the mapped data
-            setFieldValue('membershipLevel', data.membership_level);
-
-            const tempPurchasingAndVAT = mapPurchasingAndVAT(data);
-            setFieldValue('purchasingAndVAT', tempPurchasingAndVAT);
-            hasMembershipLevelData = true;
-          }
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          requestErrorHandler(err);
-        });
     };
 
     if (isStartNewForm) {
@@ -196,11 +179,14 @@ const CompanyInformation = ({
       // continue with an existing one, if there is no data saved locally
       // then it means this is the 1st time the user see this page
       // need to GET the data
-      if (!hasOrgData) detectModeAndFetch();
-      if (!hasMembershipLevelData) detectModeAndFetchMembershipLevel();
-      if (hasOrgData && hasMembershipLevelData) setLoading(false);
+      if (!hasOrgData) {
+        detectModeAndFetch();
+      }
+      if (hasOrgData) {
+        setLoading(false);
+      }
     }
-  }, [isStartNewForm, setFieldValue, currentFormId]);
+  }, [isStartNewForm, setFieldValue, currentFormId, setUpdatedFormValues, updatedFormValues]);
 
   useEffect(() => {
     fetchAvailableFullWorkingGroupList(setFullWorkingGroupList);
@@ -258,7 +244,7 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage="/membership-level" />
+      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} />
     </form>
   );
 };

@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFormValues, setUpdatedFormValues }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
   const [sortedWGList, setSortedWGList] = useState([]);
@@ -43,6 +43,8 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue }) => {
     // Call API to remove
     console.log('you called DELETE method with id: ', id);
     deleteData(currentFormId, END_POINT.working_groups, id, arrayHelpersRemove, index);
+    const newWGs = updatedFormValues.workingGroups.filter((wg, theIndex) => theIndex !== index);
+    setUpdatedFormValues({ ...updatedFormValues, workingGroups: newWGs });
   };
 
   const updateValidationSchema = (workingGroupsLabel, index) => {
