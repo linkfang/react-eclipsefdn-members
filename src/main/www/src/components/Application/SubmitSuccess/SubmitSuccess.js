@@ -12,7 +12,7 @@ const SubmitSuccess = () => {
   }, []);
 
   useEffect(() => {
-    executeSendDataByStep(5, '', currentFormId, '', '', () => setSubmitting(false));
+    executeSendDataByStep(5, '', currentFormId, '', '', '', () => setSubmitting(false));
   }, [currentFormId]);
 
   if (submitting) {

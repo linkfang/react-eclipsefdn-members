@@ -1,10 +1,10 @@
 import 'eclipsefdn-solstice-assets/js/ga';
 import 'eclipsefdn-solstice-assets/js/privacy';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Theme, ThemeProvider } from '@material-ui/core';
-import { makeStyles, createStyles, createMuiTheme } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import LeftNavBar from './NavBar/LeftNavBar';
-import { mainContentBGColor, themeBlack } from '../../Constants/Constants';
+import { mainContentBGColor } from '../../Constants/Constants';
 import Dashboard from './Dashboard/Dashboard';
 import AppTopBar from './NavBar/AppTopBar';
 // import Home from './Home/Home';
@@ -14,15 +14,7 @@ import AppTopBar from './NavBar/AppTopBar';
 // import FAQs from './FAQs/FAQs';
 import OrgProfile from './OrgProfile/OrgProfiles';
 import ContactManagement from './ContactManagement/ContactManagement';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#f7941e',
-      contrastText: themeBlack, // for button text color
-    },
-  },
-});
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,24 +22,33 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     content: {
-      marginTop: 64,
-      marginLeft: 280,
-      padding: 64,
-      minHeight: 'calc(100vh - 64px)',
       flexGrow: 1,
+      padding: theme.spacing(2.5, 1.5),
       backgroundColor: mainContentBGColor,
+      [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(2.5),
+      },
+      [theme.breakpoints.up('md')]: {
+        marginLeft: theme.spacing(28),
+        padding: theme.spacing(6.5),
+        marginTop: theme.spacing(6.5),
+      },
     },
   })
 );
 
 export default function MainPortal() {
   const classes = useStyles();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   return (
-    <ThemeProvider theme={theme}>
-      <AppTopBar />
+    <>
+      <AppTopBar handleDrawerToggle={handleDrawerToggle} />
 
-      <LeftNavBar />
+      <LeftNavBar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 
       <main className={classes.content}>
         <Switch>
@@ -80,6 +81,6 @@ export default function MainPortal() {
           </Route>
         </Switch>
       </main>
-    </ThemeProvider>
+    </>
   );
 }

@@ -1,11 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_PURCHASING_PROCESS } from '../../../Constants/Constants';
+import {
+  OPTIONS_FOR_ORG_TYPE,
+  OPTIONS_FOR_PURCHASING_PROCESS,
+  ROUTE_SIGNING,
+  ROUTE_SUBMITTED,
+} from '../../../Constants/Constants';
 import ReadOnlyInput from '../../UIComponents/Inputs/ReadOnlyInput';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
+import MembershipContext from '../../../Context/MembershipContext';
 
 interface ReviewProps {
   values: FormValue;
@@ -15,6 +21,8 @@ interface ReviewProps {
 }
 
 const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setIsTermChecked }) => {
+  const { setCurrentStepIndex } = useContext(MembershipContext);
+
   const handleIsTermChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsTermChecked(event.target.checked);
   };
@@ -22,6 +30,10 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setCurrentStepIndex(5);
+  }, [setCurrentStepIndex]);
 
   return (
     <form>
@@ -384,9 +396,12 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
       />
 
       <CustomStepButton
-        previousPage="/signing-authority"
-        nextPage="/submitted"
+        previousPage={ROUTE_SIGNING}
+        nextPage={ROUTE_SUBMITTED}
         disableSubmit={!isTermChecked}
+        checkIsEmpty={() => false}
+        formik={false}
+        updatedFormValues={values}
         handleSubmit={() => {
           submitForm();
         }}

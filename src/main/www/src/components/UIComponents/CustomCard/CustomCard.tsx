@@ -7,50 +7,58 @@ import {
   ListItemProps,
   ListItem,
   ListItemText,
+  Theme,
 } from '@material-ui/core';
-import { darkGray, iconGray } from '../../../Constants/Constants';
+import { borderRadiusSize, darkGray, iconGray } from '../../../Constants/Constants';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    resourcesCard: {
-      margin: '25px 10px 20px 10px',
+    customCard: {
       padding: 0,
       position: 'relative',
-      width: '22%',
-      minWidth: 220,
+      minWidth: 230,
       height: 200,
       backgroundColor: '#fff',
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
-      borderRadius: 4,
+      borderRadius: borderRadiusSize,
+      margin: theme.spacing(2, 0),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        margin: theme.spacing(2.5, 1, 2, 1),
+        width: '46%',
+      },
+      [theme.breakpoints.up(1200)]: {
+        margin: theme.spacing(2.5, 1, 2, 1),
+        width: '22%',
+      },
     },
 
-    resourcesIconCtn: {
+    customIconCtn: {
       position: 'absolute',
-      top: -27,
-      left: 14,
-      width: 54,
-      height: 54,
+      top: theme.spacing(-2.5),
+      left: theme.spacing(1.5),
+      width: 55,
+      height: 55,
       padding: 0,
       '& svg': {
         color: iconGray,
         width: '100%',
         height: '100%',
-        paddingBottom: 2,
-        // borderBottom: `4px solid ${brightOrange}`,
+        paddingBottom: theme.spacing(0.5),
       },
     },
 
-    resourcesContent: {
-      margin: '30px 15px 25px 60px',
+    customContent: {
+      margin: theme.spacing(3, 1.5, 2.5, 6),
       width: 'calc(100% - 60px)',
     },
 
-    resourcesSubtitle: {
+    customSubtitle: {
       fontWeight: 600,
       color: darkGray,
     },
 
-    resourcesItem: {
+    customItem: {
       padding: 0,
     },
   })
@@ -73,18 +81,18 @@ interface CustomCardProps {
 export default function CustomCard(props: CustomCardProps) {
   const classes = useStyles();
   return (
-    <Container className={classes.resourcesCard}>
-      <Container className={classes.resourcesIconCtn} style={{ borderBottom: `4px solid ${props.color}` }}>
+    <Container className={classes.customCard}>
+      <Container className={classes.customIconCtn} style={{ borderBottom: `4px solid ${props.color}` }}>
         {props.icon}
       </Container>
-      <Container className={classes.resourcesContent}>
-        <Typography variant="subtitle1" className={classes.resourcesSubtitle}>
+      <Container className={classes.customContent}>
+        <Typography variant="subtitle1" className={classes.customSubtitle}>
           {props.subtitle}
         </Typography>
 
-        <List aria-label="resources list">
+        <List aria-label="custom list">
           {props.listItems.map((listItem, index) => (
-            <ListItemLink key={listItem.name + index} className={classes.resourcesItem} href={listItem.url}>
+            <ListItemLink key={listItem.name + index} className={classes.customItem} href={listItem.url}>
               <ListItemText primary={listItem.name} />
             </ListItemLink>
           ))}

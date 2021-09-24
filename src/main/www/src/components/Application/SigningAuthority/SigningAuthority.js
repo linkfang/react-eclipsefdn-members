@@ -1,9 +1,11 @@
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
-import { useEffect } from 'react';
-import { checkValidityWithoutSubmitting, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { useContext, useEffect } from 'react';
+import { checkValidityWithoutSubmitting, isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import MembershipContext from '../../../Context/MembershipContext';
+import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
 
 /**
  * Have not added any API calls here,
@@ -12,7 +14,8 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik, formikOrgValue }) => {
+const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
+  const { setCurrentStepIndex } = useContext(MembershipContext);
   const { signingAuthorityRepresentative } = formField;
   const name = 'signingAuthorityRepresentative';
   const generateSingleContact = (el) => (
@@ -53,6 +56,10 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
     scrollToTop();
   }, []);
 
+  useEffect(() => {
+    setCurrentStepIndex(4);
+  }, [setCurrentStepIndex]);
+
   return (
     <form onSubmit={checkValidityWithoutSubmitting}>
       <div className="align-center">
@@ -80,7 +87,14 @@ const SigningAuthority = ({ formik, formikOrgValue }) => {
           {signingAuthorityRepresentative.map((el, index) => index > 1 && generateSingleContact(el))}
         </div>
       </div>
-      <CustomStepButton previousPage="/working-groups" nextPage="/review" handleSubmit={formik.handleSubmit} />
+      <CustomStepButton
+        previousPage={ROUTE_WGS}
+        nextPage={ROUTE_REVIEW}
+        checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
+        formik={formik}
+        updatedFormValues={updatedFormValues}
+        handleSubmit={formik.handleSubmit}
+      />
     </form>
   );
 };

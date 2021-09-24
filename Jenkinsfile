@@ -80,11 +80,7 @@ pipeline {
     CONTAINER_NAME = 'api'
     ENVIRONMENT = sh(
       script: """
-        if [ "${env.BRANCH_NAME}" = "master" ]; then
-          printf "staging"
-        else
-          printf "${env.BRANCH_NAME}"
-        fi
+        printf "${env.BRANCH_NAME}"
       """,
       returnStdout: true
     )

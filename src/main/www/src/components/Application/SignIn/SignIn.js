@@ -8,6 +8,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  ROUTE_COMPANY,
 } from '../../../Constants/Constants';
 import Loading from '../../UIComponents/Loading/Loading';
 import { Button, createMuiTheme, ThemeProvider } from '@material-ui/core';
@@ -55,8 +56,8 @@ class SignIn extends React.Component {
   static contextType = MembershipContext;
 
   getFakeUser = (setFurthestPage) => {
-    this.props.history.push('/company-info');
-    setFurthestPage({ index: 1, pathName: '/company-info' });
+    this.props.history.push(ROUTE_COMPANY);
+    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
     this.context.setCurrentFormId('reactOnly');
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())

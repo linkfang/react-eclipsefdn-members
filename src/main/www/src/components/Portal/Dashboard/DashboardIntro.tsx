@@ -11,6 +11,7 @@ import {
   ListItemAvatar,
   ListItemText,
   makeStyles,
+  Theme,
   Typography,
 } from '@material-ui/core';
 import { Container } from '@material-ui/core';
@@ -34,20 +35,31 @@ const orgRepDataTest = [
   },
 ];
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     introCtn: {
       padding: 0,
       display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: 'space-between',
     },
     card: {
-      width: '30%',
       height: 260,
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      minWidth: 255,
+      width: '100%',
+      margin: theme.spacing(2, 0),
+      [theme.breakpoints.up(650)]: {
+        width: '45%',
+        margin: theme.spacing(2.5, 0.5, 0, 0.5),
+      },
+      [theme.breakpoints.up(1280)]: {
+        width: '30%',
+        margin: theme.spacing(2.5, 1, 0, 1),
+      },
     },
     companyLogoCard: {
       backgroundColor: '#8A94A8',
@@ -69,21 +81,21 @@ const useStyles = makeStyles(() =>
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      padding: '20px 30px',
+      padding: theme.spacing(2, 3),
       backgroundColor: '#fff',
     },
     contentTitle: {
-      marginBottom: 5,
+      marginBottom: theme.spacing(0.5),
     },
     divider: {
       width: '100%',
-      margin: '5px 0',
+      margin: theme.spacing(0.5, 0),
     },
     contentList: {
       width: '100%',
     },
     contentItemCtn: {
-      padding: '8px 0',
+      padding: theme.spacing(1, 0),
     },
     contentAvatar: {
       width: 35,
@@ -113,7 +125,7 @@ export default function DashboardIntro() {
   const [orgRepData, setOrgRepData] = useState<Array<OrgRep> | null>(null);
 
   const renderOrgRep = orgRepData?.map((rep) => (
-    <ListItem>
+    <ListItem key={rep.name}>
       <ListItemText
         classes={{
           primary: classes.repPrimary,
@@ -130,6 +142,8 @@ export default function DashboardIntro() {
       setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
       setOrgRepData(orgRepDataTest);
     } else {
+      setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
+      setOrgRepData(orgRepDataTest);
       // TO DO:
       // fetch the logo and set state
       // fetch the organization rep and set state

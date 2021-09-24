@@ -4,6 +4,7 @@ import WorkingGroup from './WorkingGroup';
 import {
   checkValidityWithoutSubmitting,
   deleteData,
+  isObjectEmpty,
   matchWorkingGroupFields,
   requestErrorHandler,
   scrollToTop,
@@ -17,20 +18,14 @@ import {
   MODE_REACT_API,
   FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY,
   api_prefix,
+  ROUTE_MEMBERSHIP,
+  ROUTE_SIGNING,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { initialValues } from '../../UIComponents/FormComponents/formFieldModel';
+import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
 
 /**
  * Wrapper for FieldArray of WorkingGroup component,
@@ -48,21 +43,25 @@ import { initialValues } from '../../UIComponents/FormComponents/formFieldModel'
  *    - formField: the form field in formModels/formFieldModel.js
  */
 
-const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, workingGroupsUserJoined }) => {
-  const { currentFormId } = useContext(MembershipContext);
+const WorkingGroupsWrapper = ({
+  formik,
+  formikOrgValue,
+  fullWorkingGroupList,
+  workingGroupsUserJoined,
+  updatedFormValues,
+  setUpdatedFormValues,
+}) => {
+  const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext);
   const [shouldOpen, setShouldOpen] = useState(false);
 
   const handleSkipJoiningWG = () => {
     const skipJoiningWG = formik.values.skipJoiningWG;
     if (skipJoiningWG) {
       formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
+      setUpdatedFormValues({ ...updatedFormValues, skipJoiningWG: false });
     } else {
       setShouldOpen(true);
     }
-  };
-
-  const closeModal = () => {
-    setShouldOpen(false);
   };
 
   const handleClearData = () => {
@@ -73,36 +72,39 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
     });
     formik.setFieldValue('skipJoiningWG', true);
     formik.setFieldValue('workingGroups', initialValues.workingGroups);
-    closeModal();
+    setUpdatedFormValues({ ...updatedFormValues, workingGroups: initialValues.workingGroups, skipJoiningWG: true });
+    setShouldOpen(false);
+  };
+
+  const checkIsEmpty = () => {
+    const workingGroups = formik.values.workingGroups;
+    for (let i = 0; i < workingGroups.length; i++) {
+      if (!isObjectEmpty(workingGroups[i])) {
+        return false;
+      }
+    }
+    return true;
   };
 
   useEffect(() => {
     scrollToTop();
   }, []);
 
+  useEffect(() => {
+    setCurrentStepIndex(3);
+  }, [setCurrentStepIndex]);
+
   return (
     <form onSubmit={checkValidityWithoutSubmitting}>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
-          <Dialog
-            open={shouldOpen}
-            onClose={closeModal}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{'Skip Joining a Working Group'}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                This will clear all saved data in this step. Proceed to uncheck?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeModal}>Cancel</Button>
-              <Button onClick={handleClearData} color="primary" autoFocus>
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <ModalWindow
+            title={'Skip Joining a Working Group'}
+            content={'This will clear all saved data in this step. Proceed to uncheck?'}
+            handleProceed={handleClearData}
+            shouldOpen={shouldOpen}
+            setShouldOpen={setShouldOpen}
+          />
 
           <h1 className="fw-600 h2">Working Group</h1>
           <p>
@@ -133,13 +135,18 @@ const WorkingGroupsWrapper = ({ formik, formikOrgValue, fullWorkingGroupList, wo
                 formikOrgValue={formikOrgValue}
                 workingGroupsUserJoined={workingGroupsUserJoined}
                 fullWorkingGroupList={fullWorkingGroupList}
+                updatedFormValues={updatedFormValues}
+                setUpdatedFormValues={setUpdatedFormValues}
               />
             </>
           )}
         </div>
         <CustomStepButton
-          previousPage="/membership-level"
-          nextPage="/signing-authority"
+          previousPage={ROUTE_MEMBERSHIP}
+          nextPage={ROUTE_SIGNING}
+          formik={formik}
+          checkIsEmpty={checkIsEmpty}
+          updatedFormValues={updatedFormValues}
           handleSubmit={formik.handleSubmit}
         />
       </FormikProvider>
