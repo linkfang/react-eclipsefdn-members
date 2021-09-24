@@ -18,6 +18,8 @@ const MembershipContext = React.createContext({
   setFurthestPage: () => {},
   needLoadingSignIn: '',
   setNeedLoadingSignIn: () => {},
+  currentStepIndex: 0,
+  setCurrentStepIndex: (stepIndex) => {},
 });
 
 export default MembershipContext;
