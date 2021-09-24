@@ -23,6 +23,7 @@ export const api_prefix = () => {
 export const API_PREFIX_FORM = api_prefix() + '/form';
 export const API_FORM_PARAM = '?sort=dateCreated&order=desc';
 
+export const SIGN_IN = 'Sign In';
 export const COMPANY_INFORMATION = 'Company Information';
 export const MEMBERSHIP_LEVEL = 'Membership Level';
 export const WORKING_GROUPS = 'Working Groups';
@@ -31,16 +32,15 @@ export const REVIEW = 'Review';
 export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
-export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters'
+export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters';
 
-export const PATH_NAME_ARRAY = [
-  '/company-info',
-  '/membership-level',
-  '/working-groups',
-  '/signing-authority',
-  '/review',
-  '/submitted',
-];
+export const ROUTE_SIGN_IN = '/sign-in';
+export const ROUTE_COMPANY = '/company-info';
+export const ROUTE_MEMBERSHIP = '/membership-level';
+export const ROUTE_WGS = '/working-groups';
+export const ROUTE_SIGNING = '/signing-authority';
+export const ROUTE_REVIEW = '/review';
+export const ROUTE_SUBMITTED = '/submitted';
 
 export const FETCH_METHOD = {
   POST: 'POST',
@@ -65,11 +65,12 @@ export const MEMBERSHIP_LEVELS = [
 ];
 
 export const PAGE_STEP = [
-  { label: COMPANY_INFORMATION, pathName: '/company-info' },
-  { label: MEMBERSHIP_LEVEL, pathName: '/membership-level' },
-  { label: WORKING_GROUPS, pathName: '/working-groups' },
-  { label: SIGNING_AUTHORITY, pathName: '/signing-authority' },
-  { label: REVIEW, pathName: '/review' },
+  { label: SIGN_IN, pathName: ROUTE_SIGN_IN },
+  { label: COMPANY_INFORMATION, pathName: ROUTE_COMPANY },
+  { label: MEMBERSHIP_LEVEL, pathName: ROUTE_MEMBERSHIP },
+  { label: WORKING_GROUPS, pathName: ROUTE_WGS },
+  { label: SIGNING_AUTHORITY, pathName: ROUTE_SIGNING },
+  { label: REVIEW, pathName: ROUTE_REVIEW },
 ];
 
 export const CONTACT_TYPE = {
@@ -201,27 +202,30 @@ export const NAV_OPTIONS_DATA = [
   {
     name: 'Your Organization Profile',
     path: '/portal/org-profile',
-    // don't find an icon match the design
     icon: <BusinessIcon />,
   },
   {
     name: 'Projects and Working Groups',
     path: '/portal/dashboard#projects-wg',
+    type: 'submenu',
     icon: <BusinessCenterIcon />,
   },
   {
     name: 'Committers and Contributors',
     path: '/portal/dashboard#committers-contributors',
+    type: 'submenu',
     icon: <PeopleAltIcon />,
   },
   {
     name: 'Resources',
     path: '/portal/dashboard#resources',
+    type: 'submenu',
     icon: <DescriptionIcon />,
   },
   {
     name: 'FAQs',
     path: '/portal/dashboard#faqs',
+    type: 'submenu',
     icon: <HelpIcon />,
   },
   {
