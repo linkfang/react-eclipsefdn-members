@@ -2,7 +2,12 @@ import { useContext, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { ROUTE_MEMBERSHIP, ROUTE_REVIEW, ROUTE_SIGNING, ROUTE_WGS } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
-import { checkIsNotFurthestPage, isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
+import {
+  checkIsNotFurthestPage,
+  focusOnInvalidField,
+  isObjectEmpty,
+  validateGoBack,
+} from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
 
 /**
@@ -52,6 +57,7 @@ const Step = ({
     // If validation result is NOT empty, it means something fail to pass validation
     if (Object.keys(result).length > 0) {
       formik.setTouched(result);
+      focusOnInvalidField();
       return;
     }
 
@@ -83,7 +89,9 @@ const Step = ({
     history.push(pathName);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (ev) => {
+    // document.querySelector('form').checkValidity();
+    // console.log(document.querySelector('form').checkValidity());
     let isEmpty = true;
     switch (window.location.hash) {
       case '#company-info':
@@ -135,21 +143,23 @@ const Step = ({
     <>
       <ModalWindow
         title={'Go Back to Previous Step'}
-        content={'The form submission for this step is incomplete or has errors. Are you sure you want to leave without saving?'}
+        content={
+          'The form submission for this step is incomplete or has errors. Are you sure you want to leave without saving?'
+        }
         handleProceed={handleGoBack}
         shouldOpen={shouldOpen}
         setShouldOpen={setShouldOpen}
         yesText={'Leave'}
         cancelText={'Keep Editing'}
       />
-      <div className="step" onClick={handleSubmit}>
+      <button className="step" type="submit" onClick={handleSubmit}>
         <span className="step-span-index">{index + 1}</span>
         <div className="step-span">
           <div className={isActive ? 'step-title-container-active' : 'step-title-container'}>
             <span className="step-title">{title}</span>
           </div>
         </div>
-      </div>
+      </button>
     </>
   );
 };

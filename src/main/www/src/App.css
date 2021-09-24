@@ -122,6 +122,8 @@ html {
   position: relative;
   padding-top: 30px;
   cursor: pointer;
+  background-color: #f9f9f9;
+  border: none;
 }
 .eclipsefdn-membership-webform .step a {
   text-decoration: none;

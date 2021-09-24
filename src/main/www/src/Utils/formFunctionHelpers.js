@@ -721,3 +721,8 @@ export const checkValidityWithoutSubmitting = (ev) => {
   ev.preventDefault();
   ev.currentTarget.checkValidity();
 };
+
+export const focusOnInvalidField = () => {
+  const firstInvalidField = document.querySelector('input[aria-invalid="true"]');
+  firstInvalidField && firstInvalidField.focus();
+};

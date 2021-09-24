@@ -1,10 +1,9 @@
 import { Button } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_SUBMITTED } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
-import { checkIsNotFurthestPage, validateGoBack } from '../../../Utils/formFunctionHelpers';
+import { checkIsNotFurthestPage, focusOnInvalidField, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
 
 /**
@@ -84,8 +83,7 @@ const CustomStepButton = ({
               // Use setTimeout to make sure the codes inside won't be excuted before handleSubmit() finishes.
               // handleSubmit() is formik.handleSubmit, which will run validation first and won't submit anything if validation fails.
               setTimeout(() => {
-                const firstInvalidField = document.querySelector('input[aria-invalid="true"]');
-                firstInvalidField && firstInvalidField.focus();
+                focusOnInvalidField();
               }, 0);
             }}
           >
