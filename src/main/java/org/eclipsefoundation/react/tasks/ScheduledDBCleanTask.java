@@ -72,15 +72,17 @@ public class ScheduledDBCleanTask {
             initialQuery.setRoot(false);
             // get the expired form objects
             long size = dao.count(initialQuery);
+            LOGGER.info("Getting {} forms to remove dependant records", size);
             List<MembershipForm> forms = new ArrayList<>();
             int count = 0;
-            while (forms.size() <= size) {
+            while (forms.size() < size) {
                 // update the query to get the next page
                 params.add(DefaultUrlParameterNames.PAGE.getName(), Integer.toString(++count));
                 RDBMSQuery<MembershipForm> q = new RDBMSQuery<>(new RequestWrapper(), filters.get(MembershipForm.class),
                         params);
                 q.setRoot(false);
                 forms.addAll(dao.get(q));
+                LOGGER.info("Retrieved {} out of {} records",forms.size(),size);
             }
 
             // build batch parameters to delete old documents

@@ -13,6 +13,7 @@ import {
   ListItemAvatar,
   ListItemText,
   makeStyles,
+  Theme,
 } from '@material-ui/core';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
@@ -36,20 +37,31 @@ const orgRepDataTest = [
   },
 ];
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     introCtn: {
       padding: 0,
       display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: 'space-between',
     },
     card: {
-      width: '30%',
       height: 260,
       boxShadow: '1px 1px 15px rgba(0,0,0,0.1)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      minWidth: 255,
+      width: '100%',
+      margin: theme.spacing(2, 0),
+      [theme.breakpoints.up(650)]: {
+        width: '45%',
+        margin: theme.spacing(2.5, 0.5, 0, 0.5),
+      },
+      [theme.breakpoints.up(1280)]: {
+        width: '30%',
+        margin: theme.spacing(2.5, 1, 0, 1),
+      },
     },
     companyLogoCard: {
       backgroundColor: '#8A94A8',
@@ -68,18 +80,25 @@ const useStyles = makeStyles(() =>
       fontSize: 14,
     },
     companyContentCard: {
-      padding: '20px 30px',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      alignItems: 'start',
+      padding: theme.spacing(2, 3),
       backgroundColor: '#fff',
+    },
+    contentTitle: {
+      marginBottom: theme.spacing(0.5),
     },
     divider: {
       width: '100%',
+      // margin: theme.spacing(0.5, 0),
       margin: 0,
     },
     contentList: {
       width: '100%',
     },
     contentItemCtn: {
-      padding: '20px 0',
+      padding: theme.spacing(2, 0),
     },
     contentAvatar: {
       width: 35,
@@ -126,6 +145,8 @@ export default function DashboardIntro() {
       setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
       setOrgRepData(orgRepDataTest);
     } else {
+      setLogo(require('../../../assets/logos/ef-registered-wht.svg').default);
+      setOrgRepData(orgRepDataTest);
       // TO DO:
       // fetch the logo and set state
       // fetch the organization rep and set state
@@ -150,46 +171,42 @@ export default function DashboardIntro() {
 
       <Card className={classNames(classes.card, classes.companyContentCard)}>
         <List className={classes.contentList}>
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <NoteIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Link href="https://www.eclipse.org/community/newsletter/" rel="noreferrer" target="_blank">
-                Member Newsletter
-              </Link>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/community/newsletter/" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <NoteIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Member Newsletter</Container>
+            </ListItem>
+          </Link>
+
           <Divider className={classes.divider} />
 
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <GroupIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Link href="https://www.eclipse.org/membership/exploreMembership.php" rel="noreferrer" target="_blank">
-                Explore our Members
-              </Link>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/membership/exploreMembership.php" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <GroupIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Explore our Members</Container>
+            </ListItem>
+          </Link>
+
           <Divider className={classes.divider} />
 
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <EmailIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Link href="https://www.eclipse.org/org/foundation/contact.php" rel="noreferrer" target="_blank">
-                Contact Us
-              </Link>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/org/foundation/contact.php" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <EmailIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Contact Us</Container>
+            </ListItem>
+          </Link>
         </List>
       </Card>
     </Container>

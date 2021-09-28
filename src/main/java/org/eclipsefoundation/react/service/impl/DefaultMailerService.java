@@ -50,6 +50,10 @@ public class DefaultMailerService implements MailerService {
     Optional<List<String>> authorMessageMailboxBcc;
     @ConfigProperty(name = "eclipse.mailer.membership.membership-message.bcc")
     Optional<List<String>> membershipMessageMailboxBcc;
+    @ConfigProperty(name = "eclipse.mailer.membership.author-message.reply-to")
+    Optional<String> authorMessageReplyTo;
+    @ConfigProperty(name = "eclipse.mailer.membership.membership-message.reply-to")
+    Optional<String> membershipMessageReplyTo;
     @ConfigProperty(name = "eclipse.mailer.membership.doc-storage-root", defaultValue = "/tmp")
     String temporaryDocumentStorage;
 
@@ -83,6 +87,9 @@ public class DefaultMailerService implements MailerService {
         if (!authorMessageMailboxBcc.isEmpty()) {
             m.setBcc(authorMessageMailboxBcc.get());
         }
+        if (authorMessageReplyTo.isPresent()) {
+            m.setReplyTo(authorMessageReplyTo.get());
+        }
         mailer.send(m);
     }
 
@@ -100,6 +107,9 @@ public class DefaultMailerService implements MailerService {
         // add BCC if set
         if (!membershipMessageMailboxBcc.isEmpty()) {
             m.setBcc(membershipMessageMailboxBcc.get());
+        }
+        if (membershipMessageReplyTo.isPresent()) {
+            m.setReplyTo(membershipMessageReplyTo.get());
         }
         // add the PDF attachment
         m.addAttachment("membership-enrollment-" + generateName(defaultPrin).toLowerCase().replace(" ", "-") + ".pdf",
