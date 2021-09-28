@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
-  checkValidityWithoutSubmitting,
   deleteData,
   isObjectEmpty,
   matchWorkingGroupFields,
@@ -95,7 +94,7 @@ const WorkingGroupsWrapper = ({
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={checkValidityWithoutSubmitting}>
+    <>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
           <ModalWindow
@@ -150,7 +149,7 @@ const WorkingGroupsWrapper = ({
           handleSubmit={formik.handleSubmit}
         />
       </FormikProvider>
-    </form>
+    </>
   );
 };
 

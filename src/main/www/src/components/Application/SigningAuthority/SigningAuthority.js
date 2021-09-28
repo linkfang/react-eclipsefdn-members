@@ -2,7 +2,7 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import Input from '../../UIComponents/Inputs/Input';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useContext, useEffect } from 'react';
-import { checkValidityWithoutSubmitting, isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import MembershipContext from '../../../Context/MembershipContext';
 import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
@@ -61,7 +61,7 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={checkValidityWithoutSubmitting}>
+    <>
       <div className="align-center">
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
@@ -95,7 +95,7 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
         updatedFormValues={updatedFormValues}
         handleSubmit={formik.handleSubmit}
       />
-    </form>
+    </>
   );
 };
 

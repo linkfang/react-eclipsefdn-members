@@ -90,8 +90,6 @@ const Step = ({
   };
 
   const handleSubmit = (ev) => {
-    // document.querySelector('form').checkValidity();
-    // console.log(document.querySelector('form').checkValidity());
     let isEmpty = true;
     switch (window.location.hash) {
       case '#company-info':

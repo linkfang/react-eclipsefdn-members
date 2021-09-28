@@ -2,7 +2,7 @@ import MembershipLevelFeeTable from './MembershipLevelFeeTable';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useContext, useEffect } from 'react';
-import { checkValidityWithoutSubmitting, isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
+import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { MEMBERSHIP_LEVELS, ROUTE_COMPANY, ROUTE_WGS } from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 import MembershipContext from '../../../Context/MembershipContext';
@@ -28,7 +28,7 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={checkValidityWithoutSubmitting}>
+    <>
       <div className="align-center">
         <h1 className="fw-600 h2">Membership Level</h1>
         <p>
@@ -63,7 +63,7 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
         updatedFormValues={updatedFormValues}
         handleSubmit={formik.handleSubmit}
       />
-    </form>
+    </>
   );
 };
 
