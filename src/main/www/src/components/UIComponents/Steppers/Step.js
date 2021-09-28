@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { ROUTE_MEMBERSHIP, ROUTE_REVIEW, ROUTE_SIGNING, ROUTE_WGS } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
 import { checkIsNotFurthestPage, isObjectEmpty, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
@@ -93,14 +94,14 @@ const Step = ({
 
         formikCompanyInfo
           .validateForm()
-          .then((result) => navigateTo(result, '/membership-level', formikCompanyInfo, isEmpty));
+          .then((result) => navigateTo(result, ROUTE_MEMBERSHIP, formikCompanyInfo, isEmpty));
         break;
 
       case '#membership-level':
         isEmpty = isObjectEmpty(formikMembershipLevel.values.membershipLevel);
         formikMembershipLevel
           .validateForm()
-          .then((result) => navigateTo(result, '/working-groups', formikMembershipLevel, isEmpty));
+          .then((result) => navigateTo(result, ROUTE_WGS, formikMembershipLevel, isEmpty));
         break;
 
       case '#working-groups':
@@ -114,14 +115,14 @@ const Step = ({
         }
         formikWorkingGroups
           .validateForm()
-          .then((result) => navigateTo(result, '/signing-authority', formikWorkingGroups, isEmpty));
+          .then((result) => navigateTo(result, ROUTE_SIGNING, formikWorkingGroups, isEmpty));
         break;
 
       case '#signing-authority':
         isEmpty = isObjectEmpty(formikSigningAuthority.values.signingAuthorityRepresentative);
         formikSigningAuthority
           .validateForm()
-          .then((result) => navigateTo(result, '/review', formikSigningAuthority, isEmpty));
+          .then((result) => navigateTo(result, ROUTE_REVIEW, formikSigningAuthority, isEmpty));
         break;
       case '#review':
         history.push(pathName);

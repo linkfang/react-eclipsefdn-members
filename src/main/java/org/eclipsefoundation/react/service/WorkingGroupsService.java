@@ -11,6 +11,8 @@
  */
 package org.eclipsefoundation.react.service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipsefoundation.react.model.WorkingGroup;
@@ -26,4 +28,6 @@ public interface WorkingGroupsService {
     public Set<WorkingGroup> get();
 
     public WorkingGroup getByName(String name);
+    
+    public Map<String, List<String>> getWGPADocumentIDs();
 }

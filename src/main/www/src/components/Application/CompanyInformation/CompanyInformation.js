@@ -18,6 +18,7 @@ import {
   getCurrentMode,
   MODE_REACT_ONLY,
   MODE_REACT_API,
+  ROUTE_MEMBERSHIP,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -247,7 +248,7 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage="/membership-level" />
+      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} />
     </form>
   );
 };

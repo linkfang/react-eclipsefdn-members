@@ -9,6 +9,8 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  IconButton,
+  Theme,
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
@@ -16,37 +18,86 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MenuIcon from '@material-ui/icons/Menu';
 import { useState, useEffect } from 'react';
+import efGRYLogo from '../../../assets/logos/ef-gry.svg';
+import { api_prefix, darkOrange, END_POINT, FETCH_HEADER, themeBlack } from '../../../Constants/Constants';
 import { isProd, logout } from '../../../Utils/formFunctionHelpers';
-import { api_prefix, darkOrange, drawerWidth, END_POINT, FETCH_HEADER } from '../../../Constants/Constants';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      height: 70,
-      marginLeft: drawerWidth,
+      position: 'relative',
+      height: 110,
       backgroundColor: '#fff',
       boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.05)',
+      [theme.breakpoints.up('md')]: {
+        height: 70,
+        position: 'fixed',
+      },
+      [theme.breakpoints.down('sm')]: {
+        // Has to use !important to overwrite the padding-right 17px added by MUI when hamburger menu is open
+        // This can avoid making user dropdown menu move left and right
+        padding: '0 !important',
+      },
+      transition: theme.transitions.create('height', {
+        easing: theme.transitions.easing.easeInOut,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
     toolbarCtn: {
+      height: '100%',
+    },
+    iconCtn: {
+      width: '100%',
       display: 'flex',
-      justifyContent: 'flex-end',
-      padding: '0 32px',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
+    },
+    efLogo: {
+      width: 120,
+    },
+    hamburgerIcon: {
+      marginRight: theme.spacing(0.5),
+      color: themeBlack,
+    },
+    userInfoCtn: {
+      display: 'flex',
+      position: 'absolute',
+      top: theme.spacing(1),
+      right: theme.spacing(1),
+      height: 40,
+      alignItems: 'center',
+      [theme.breakpoints.up('md')]: {
+        top: theme.spacing(1.5),
+        right: theme.spacing(2),
+      },
     },
     verticalDivider: {
+      display: 'none',
       backgroundColor: '#EBEBF2',
-      height: 28,
+      height: 30,
       width: 1,
-      marginRight: 21,
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        display: 'block',
+      },
     },
     username: {
+      color: themeBlack,
       marginBottom: 0,
-      marginRight: 7,
+      marginRight: theme.spacing(1),
     },
     dropDownBtn: {
-      minWidth: 38,
+      minWidth: 40,
       height: 30,
       padding: 0,
     },
@@ -57,9 +108,13 @@ const useStyles = makeStyles(() =>
       minWidth: 30,
     },
     avatarCtn: {
-      width: 38,
-      height: 38,
-      marginLeft: 11,
+      display: 'none',
+      width: 40,
+      height: 40,
+      marginLeft: theme.spacing(1),
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+      },
       backgroundColor: darkOrange,
     },
     anchorTag: {
@@ -80,7 +135,11 @@ interface UserInfo {
   picture: string;
 }
 
-export default function AppTopBar() {
+interface AppTopBarProps {
+  handleDrawerToggle: () => void;
+}
+
+const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
   const classes = useStyles();
   const [userInfo, setUserInfo] = useState<UserInfo>({
     first_name: '',
@@ -191,22 +250,39 @@ export default function AppTopBar() {
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbarCtn}>
-        <div className={classes.verticalDivider}></div>
-        <Typography paragraph className={classes.username}>
-          {userInfo?.full_name || 'Anonymous'}
-        </Typography>
+        <div className={classes.iconCtn}>
+          <img src={efGRYLogo} alt="Eclipse Foundation logo" className={classes.efLogo}></img>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            className={classes.hamburgerIcon}
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon />
+          </IconButton>
+        </div>
 
-        <Button className={classes.dropDownBtn} onClick={handleDropdownBtnClicked}>
-          <ExpandMoreIcon className={classes.dropDownIcon} />
-        </Button>
+        <div className={classes.userInfoCtn}>
+          <div className={classes.verticalDivider}></div>
+          <Typography component="p" className={classes.username}>
+            {userInfo?.full_name || 'Anonymous'}
+          </Typography>
 
-        {renderDropdownMenu()}
-        {userInfo?.picture ? (
-          <Avatar className={classes.avatarCtn} alt="user avatar" src={userInfo.picture} />
-        ) : (
-          <Avatar className={classes.avatarCtn}>{getInitials(userInfo.first_name, userInfo.last_name) || 'A'}</Avatar>
-        )}
+          <Button className={classes.dropDownBtn} onClick={handleDropdownBtnClicked}>
+            <ExpandMoreIcon className={classes.dropDownIcon} />
+          </Button>
+
+          {renderDropdownMenu()}
+          {userInfo?.picture ? (
+            <Avatar className={classes.avatarCtn} alt="user avatar" src={userInfo.picture} />
+          ) : (
+            <Avatar className={classes.avatarCtn}>{getInitials(userInfo.first_name, userInfo.last_name) || 'A'}</Avatar>
+          )}
+        </div>
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+export default AppTopBar;

@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ROUTE_SUBMITTED } from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
 import { checkIsNotFurthestPage, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
@@ -20,7 +21,7 @@ const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit,
   const { furthestPage, currentStepIndex } = useContext(MembershipContext);
 
   const handleBackBtnClicked = () => {
-    if (nextPage === '/submitted') {
+    if (nextPage === ROUTE_SUBMITTED) {
       history.push(previousPage);
       return;
     }
@@ -62,7 +63,7 @@ const CustomStepButton = ({ previousPage, nextPage, checkIsEmpty, disableSubmit,
       <MembershipContext.Consumer>
         {() => (
           <Button variant="contained" color="primary" size="large" type="submit" disabled={disableSubmit}>
-            {nextPage === '/submitted' ? 'Submit' : 'Next'}
+            {nextPage === ROUTE_SUBMITTED ? 'Submit' : 'Next'}
           </Button>
         )}
       </MembershipContext.Consumer>

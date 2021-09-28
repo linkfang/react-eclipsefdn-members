@@ -6,14 +6,12 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   API_FORM_PARAM,
+  ROUTE_COMPANY,
 } from '../../../Constants/Constants';
-import {
-  handleNewForm,
-  isProd,
-  requestErrorHandler,
-} from '../../../Utils/formFunctionHelpers';
+import { handleNewForm, isProd, requestErrorHandler } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
+import { Button } from '@material-ui/core';
 import { initialValues } from '../FormComponents/formFieldModel';
 const styles = {
   marginBottom: '30px',
@@ -28,14 +26,14 @@ const FormChooser = ({
   resetWorkingGroupForm,
   resetMembershipLevelForm,
   resetCompanyInfoForm,
-  setUpdatedFormValues
+  setUpdatedFormValues,
 }) => {
   const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
   const [hasExistingForm, setHasExistingForm] = useState('');
 
   const goToCompanyInfoStep = useCallback(() => {
-    setFurthestPage({ index: 1, pathName: '/company-info' });
-    history.push('/company-info');
+    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
+    history.push(ROUTE_COMPANY);
   }, [history, setFurthestPage]);
 
   const handleContinueExistingForm = () => {
@@ -107,26 +105,17 @@ const FormChooser = ({
         ) : (
           <div style={styles}>
             <h1 className="h4">
-              Welcome back! You can continue the application you previously
-              started or start a new application.
+              Welcome back! You can continue the application you previously started or start a new application.
             </h1>
             {!!hasExistingForm && (
-              <button
-                type="button"
-                onClick={handleContinueExistingForm}
-                className="btn btn-primary"
-              >
+              <Button variant="contained" color="primary" size="large" onClick={handleContinueExistingForm}>
                 Continue Existing Application
-              </button>
+              </Button>
             )}
 
-            <button
-              type="button"
-              onClick={handleStartNewForm}
-              className="btn btn-primary"
-            >
+            <Button variant="contained" color="primary" size="large" onClick={handleStartNewForm}>
               Start New Application
-            </button>
+            </Button>
           </div>
         )
       }

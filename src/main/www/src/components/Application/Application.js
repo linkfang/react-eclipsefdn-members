@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import { HAS_TOKEN_EXPIRED, LOGIN_EXPIRED_MSG, PAGE_STEP } from '../../Constants/Constants';
+import { HAS_TOKEN_EXPIRED, LOGIN_EXPIRED_MSG, PAGE_STEP, ROUTE_COMPANY, ROUTE_MEMBERSHIP, ROUTE_REVIEW, ROUTE_SIGNING, ROUTE_SUBMITTED, ROUTE_WGS } from '../../Constants/Constants';
 import { initialValues } from '../UIComponents/FormComponents/formFieldModel';
 import CompanyInformation from './CompanyInformation/CompanyInformation';
 import MembershipLevel from './MembershipLevel/MembershipLevel';
@@ -51,8 +51,7 @@ export default function Application() {
   };
 
   const submitForm = () => {
-    executeSendDataByStep(5, '', currentFormId, currentUser.name, '');
-    goToNextStep(5, '/submitted');
+    goToNextStep(5, ROUTE_SUBMITTED);
   };
 
   const submitCompanyInfo = () => {
@@ -124,7 +123,7 @@ export default function Application() {
     validationSchema: validationSchema[0],
     onSubmit: () => {
       submitCompanyInfo();
-      goToNextStep(1, '/membership-level');
+      goToNextStep(1, ROUTE_MEMBERSHIP);
     },
   });
 
@@ -153,7 +152,7 @@ export default function Application() {
     validationSchema: validationSchema[1],
     onSubmit: () => {
       submitMembershipLevel();
-      goToNextStep(2, '/working-groups');
+      goToNextStep(2, ROUTE_WGS);
     },
   });
 
@@ -186,7 +185,7 @@ export default function Application() {
     validationSchema: validationSchema[2],
     onSubmit: () => {
       submitWorkingGroups();
-      goToNextStep(3, '/signing-authority');
+      goToNextStep(3, ROUTE_SIGNING);
     },
   });
 
@@ -227,7 +226,7 @@ export default function Application() {
     validationSchema: validationSchema[3],
     onSubmit: () => {
       submitSigningAuthority();
-      goToNextStep(4, '/review');
+      goToNextStep(4, ROUTE_REVIEW);
     },
   });
 
@@ -303,7 +302,7 @@ export default function Application() {
           />
         </Route>
 
-        <Route path="/company-info">
+        <Route path={ROUTE_COMPANY}>
           {renderStepper()}
           {
             // stop users visiting steps/pages that are not able to edit yet
@@ -326,7 +325,7 @@ export default function Application() {
           }
         </Route>
 
-        <Route path="/membership-level">
+        <Route path={ROUTE_MEMBERSHIP}>
           {renderStepper()}
           {furthestPage.index >= 2 ? (
             <MembershipLevel
@@ -338,7 +337,7 @@ export default function Application() {
           )}
         </Route>
 
-        <Route path="/working-groups">
+        <Route path={ROUTE_WGS}>
           {renderStepper()}
           {furthestPage.index >= 3 ? (
             <WorkingGroupsWrapper
@@ -355,7 +354,7 @@ export default function Application() {
           )}
         </Route>
 
-        <Route path="/signing-authority">
+        <Route path={ROUTE_SIGNING}>
           {renderStepper()}
           {furthestPage.index >= 4 ? (
             <SigningAuthority
@@ -368,7 +367,7 @@ export default function Application() {
           )}
         </Route>
 
-        <Route path="/review">
+        <Route path={ROUTE_REVIEW}>
           {renderStepper()}
           {furthestPage.index >= 5 ? (
             <Review
@@ -382,7 +381,7 @@ export default function Application() {
           )}
         </Route>
 
-        <Route path="/submitted">
+        <Route path={ROUTE_SUBMITTED}>
           {furthestPage.index >= 6 ? <SubmitSuccess /> : <Redirect to={furthestPage.pathName} />}
         </Route>
 

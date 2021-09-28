@@ -18,6 +18,8 @@ import {
   MODE_REACT_API,
   FULL_WORKING_GROUP_LIST_FOR_REACT_ONLY,
   api_prefix,
+  ROUTE_MEMBERSHIP,
+  ROUTE_SIGNING,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
@@ -140,8 +142,8 @@ const WorkingGroupsWrapper = ({
           )}
         </div>
         <CustomStepButton
-          previousPage="/membership-level"
-          nextPage="/signing-authority"
+          previousPage={ROUTE_MEMBERSHIP}
+          nextPage={ROUTE_SIGNING}
           formik={formik}
           checkIsEmpty={checkIsEmpty}
           updatedFormValues={updatedFormValues}
