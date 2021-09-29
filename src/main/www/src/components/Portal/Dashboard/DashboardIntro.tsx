@@ -4,21 +4,23 @@ import {
   CardContent,
   CardMedia,
   CircularProgress,
+  Container,
   createStyles,
   Divider,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   makeStyles,
   Theme,
-  Typography,
 } from '@material-ui/core';
-import { Container } from '@material-ui/core';
 import classNames from 'classnames';
-import ImageIcon from '@material-ui/icons/Image';
 import { useEffect, useState } from 'react';
 import { getCurrentMode, MODE_REACT_ONLY } from '../../../Constants/Constants';
+import NoteIcon from '@material-ui/icons/Note';
+import GroupIcon from '@material-ui/icons/Group';
+import EmailIcon from '@material-ui/icons/Email';
 
 const orgRepDataTest = [
   {
@@ -89,19 +91,21 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     divider: {
       width: '100%',
-      margin: theme.spacing(0.5, 0),
+      // margin: theme.spacing(0.5, 0),
+      margin: 0,
     },
     contentList: {
       width: '100%',
     },
     contentItemCtn: {
-      padding: theme.spacing(1, 0),
+      padding: theme.spacing(2, 0),
     },
     contentAvatar: {
       width: 35,
       height: 35,
     },
     contentItemText: {
+      fontSize: 18,
       display: 'flex',
       padding: 0,
       alignItems: 'center',
@@ -120,12 +124,11 @@ interface OrgRep {
 
 export default function DashboardIntro() {
   const classes = useStyles();
-
   const [logoURL, setLogo] = useState('');
   const [orgRepData, setOrgRepData] = useState<Array<OrgRep> | null>(null);
 
-  const renderOrgRep = orgRepData?.map((rep) => (
-    <ListItem key={rep.name}>
+  const renderOrgRep = orgRepData?.map((rep, index) => (
+    <ListItem key={index}>
       <ListItemText
         classes={{
           primary: classes.repPrimary,
@@ -167,59 +170,43 @@ export default function DashboardIntro() {
       </Card>
 
       <Card className={classNames(classes.card, classes.companyContentCard)}>
-        <Typography component="h5" variant="h5" className={classes.contentTitle}>
-          Lorem Ipsum
-        </Typography>
         <List className={classes.contentList}>
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <ImageIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Typography component="p" variant="body1">
-                Lorem Ipsum
-              </Typography>
-              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
-                Last 24 hours
-              </Typography>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/community/newsletter/" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <NoteIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Member Newsletter</Container>
+            </ListItem>
+          </Link>
+
           <Divider className={classes.divider} />
 
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <ImageIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Typography component="p" variant="body1">
-                Lorem Ipsum
-              </Typography>
-              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
-                Processing
-              </Typography>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/membership/exploreMembership.php" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <GroupIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Explore our Members</Container>
+            </ListItem>
+          </Link>
+
           <Divider className={classes.divider} />
 
-          <ListItem className={classes.contentItemCtn}>
-            <ListItemAvatar>
-              <Avatar className={classes.contentAvatar}>
-                <ImageIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <Container className={classes.contentItemText}>
-              <Typography component="p" variant="body1">
-                Lorem Ipsum
-              </Typography>
-              <Typography component="span" variant="body2" className={classes.contentItemTextSub}>
-                On hold
-              </Typography>
-            </Container>
-          </ListItem>
+          <Link href="https://www.eclipse.org/org/foundation/contact.php" rel="noreferrer" target="_blank">
+            <ListItem className={classes.contentItemCtn}>
+              <ListItemAvatar>
+                <Avatar className={classes.contentAvatar}>
+                  <EmailIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <Container className={classes.contentItemText}>Contact Us</Container>
+            </ListItem>
+          </Link>
         </List>
       </Card>
     </Container>
