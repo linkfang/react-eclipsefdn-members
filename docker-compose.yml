@@ -11,7 +11,7 @@ services:
       - VIRTUAL_HOST=nginx.rem.docker
       - VIRTUAL_PORT=8080
     volumes:
-       - ./volumes/imagestore:/usr/share/nginx/html/images/organization
+      - ./volumes/imagestore:/usr/share/nginx/html/images/organization
   nodejs:
     build: ./src/main/www
     image: eclipsefdn/membership-www:latest
@@ -48,12 +48,12 @@ services:
       - foundationdb
   foundationdb:
     image: eclipsefdn/foundationdb-api
-    ports: 
-       - '8095:8095'
+    ports:
+      - '8095:8095'
     environment:
       - CONFIG_SECRET_PATH=/var/run/secrets/secret.properties
     volumes:
-       - ./config/foundationdb/secret.properties:/var/run/secrets/secret.properties
+      - ./config/foundationdb:/var/run/secrets
     deploy:
       restart_policy:
         condition: on-failure
