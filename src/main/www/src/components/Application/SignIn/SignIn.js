@@ -112,7 +112,7 @@ class SignIn extends React.Component {
         this.context.setNeedLoadingSignIn(false);
       })
       .catch((err) => {
-        !isProd && console.log(err);
+        console.log(err);
         this.context.setNeedLoadingSignIn(false);
       });
   };

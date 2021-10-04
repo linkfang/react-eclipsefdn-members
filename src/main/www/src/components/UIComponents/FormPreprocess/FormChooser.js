@@ -87,7 +87,7 @@ const FormChooser = ({
         })
         .catch((err) => {
           requestErrorHandler(err);
-          !isProd && console.log(err);
+          console.log(err);
         });
     };
 

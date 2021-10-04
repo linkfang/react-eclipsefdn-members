@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import {
-  isProd,
   mapPurchasingAndVAT,
   matchCompanyFields,
   matchContactFields,
@@ -172,7 +171,7 @@ const CompanyInformation = ({
           setLoading(false);
         })
         .catch((err) => {
-          !isProd && console.log(err);
+          console.log(err);
           requestErrorHandler(err);
         });
     };

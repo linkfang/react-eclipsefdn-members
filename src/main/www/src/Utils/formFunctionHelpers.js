@@ -528,7 +528,7 @@ function callSendData(
         }
       })
       .catch((err) => {
-        !isProd && console.log(err);
+        console.log(err);
         // This will make sure when "then" is skipped, we could still handle the error
         // And because this "err" is just an error message without error/status code, so we use 0 here.
         requestErrorHandler(err);
@@ -584,7 +584,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
         throw res.status;
       })
       .catch((err) => {
-        !isProd && console.log(err);
+        console.log(err);
         requestErrorHandler(err);
       });
   }
@@ -629,7 +629,7 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
         setCurrentFormId(data[0]?.id);
       })
       .catch((err) => {
-        !isProd && console.log(err);
+        console.log(err);
         requestErrorHandler(err);
       });
   }
@@ -716,7 +716,7 @@ export const logout = () => {
       window.location.assign('/');
     })
     .catch((err) => {
-      !isProd && console.log(err);
+      console.log(err);
       window.location.assign('/');
     });
 };

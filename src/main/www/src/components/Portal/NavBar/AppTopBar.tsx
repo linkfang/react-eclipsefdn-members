@@ -228,7 +228,7 @@ const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
           });
         })
         .catch((err) => {
-          !isProd && console.log(err);
+          console.log(err);
         });
     };
 
@@ -240,7 +240,7 @@ const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
           getUserFullInfo(data.name);
         })
         .catch((err) => {
-          !isProd && console.log(err);
+          console.log(err);
         });
     };
 

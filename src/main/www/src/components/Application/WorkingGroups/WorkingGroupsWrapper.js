@@ -3,7 +3,6 @@ import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroup from './WorkingGroup';
 import {
   deleteData,
-  isProd,
   isObjectEmpty,
   matchWorkingGroupFields,
   requestErrorHandler,
@@ -201,7 +200,7 @@ export const fetchWorkingGroupsUserJoined = (
     })
     .catch((err) => {
       requestErrorHandler(err);
-      !isProd && console.log(err);
+      console.log(err);
     });
 };
 
@@ -238,6 +237,6 @@ export const fetchAvailableFullWorkingGroupList = (setFullWorkingGroupList) => {
     })
     .catch((err) => {
       requestErrorHandler(err);
-      !isProd && console.log(err);
+      console.log(err);
     });
 };
