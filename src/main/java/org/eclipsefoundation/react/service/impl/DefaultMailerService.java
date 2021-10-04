@@ -43,6 +43,7 @@ public class DefaultMailerService implements MailerService {
     private static final String EMAIL_DATA_VAR = "data";
     private static final String EMAIL_NOW_VAR = "now";
     private static final String EMAIL_NAME_VAR = "name";
+    private static final String IS_PDF_VAR = "isPDF";
 
     @ConfigProperty(name = "eclipse.mailer.membership.inbox")
     String membershipMailbox;
@@ -116,7 +117,7 @@ public class DefaultMailerService implements MailerService {
                 renderHTMLPDF(
                         membershipTemplateWeb
                                 .data(EMAIL_DATA_VAR, data, EMAIL_NAME_VAR, generateName(defaultPrin), EMAIL_NOW_VAR,
-                                        LocalDateTime.now(), EMAIL_INCLUDE_PREAMBLE_VAR, false, "isPDF", true)
+                                        LocalDateTime.now(), EMAIL_INCLUDE_PREAMBLE_VAR, false, IS_PDF_VAR, true)
                                 .render()),
                 "application/pdf");
         mailer.send(m);
@@ -136,7 +137,7 @@ public class DefaultMailerService implements MailerService {
         String name = generateName((DefaultJWTCallerPrincipal) ident.getPrincipal());
         // generate the mail message, sending the messsage to the membershipMailbox
         Mail m = Mail.withHtml(recipient, subject, membershipTemplateWeb.data(EMAIL_DATA_VAR, data, EMAIL_NAME_VAR,
-                name, EMAIL_NOW_VAR, LocalDateTime.now(), EMAIL_INCLUDE_PREAMBLE_VAR, includePreamble).render());
+                name, EMAIL_NOW_VAR, LocalDateTime.now(), EMAIL_INCLUDE_PREAMBLE_VAR, includePreamble, IS_PDF_VAR, false).render());
         m.setText(membershipTemplate.data(EMAIL_DATA_VAR, data, EMAIL_NAME_VAR, name, EMAIL_NOW_VAR,
                 LocalDateTime.now(), EMAIL_INCLUDE_PREAMBLE_VAR, includePreamble).render());
         return m;
