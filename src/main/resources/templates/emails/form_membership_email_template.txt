@@ -23,7 +23,7 @@ Organization Type: {data.org.organizationType}
  
 Address
 {data.org.address.street}
-{data.org.address.city}, {org.address.provinceState}
+{data.org.address.city}, {data.org.address.provinceState}
 {data.org.address.country}
 {data.org.address.postalCode}
   
