@@ -48,6 +48,8 @@ spec:
         - name: secret-properties
           mountPath: "/run/secrets/react-membership-app"
           readOnly: true
+        - mountPath: "/app/organization/imagestore"
+          name: eclipsefdn-react-membership-uploads-volume
       - name: nginx
         image: eclipsefdn/eclipsefdn-react-membership-www:latest
         imagePullPolicy: Always
@@ -64,6 +66,9 @@ spec:
       - name: secret-properties
         secret:
           secretName: react-membership-app-staging
+      - name: eclipsefdn-react-membership-uploads-volume
+        persistentVolumeClaim:
+          claimName: eclipsefdn-react-membership-uploads
 ---
 apiVersion: "v1"
 kind: "Service"
