@@ -16,26 +16,58 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { borderRadiusSize, iconGray, mainContentBGColor } from '../../../Constants/Constants';
 
-const faqItems = [
+const FAQ_ITEMS = [
   {
-    question: 'Question-1',
-    answer:
-      "Lorem Ipsum 1 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Lorem Ipsum 1 is simply dummy text of the printing and typesetting industry.",
+    question: 'How do I update our address and/or member representative and other contact information?',
+    answer: (
+      <p>
+        Please send an e-mail to <a href="mailto:membership@eclipse.org">membership@eclipse.org</a> with your updated
+        address and contact information.
+      </p>
+    ),
   },
   {
-    question: 'Question-2',
-    answer:
-      "Lorem Ipsum 2 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    question: 'How do I edit our Membership Pages?',
+    answer: (
+      <p>
+        Member Representative or their delegate(s) may make edits to the information publicly displayed on your Eclipse
+        Foundation membership page can be updated on your organization profile. If you believe you should have this
+        authority but do not have access, please contact{' '}
+        <a href="mailto:membership.coordination@eclipse-foundation.org">
+          membership.coordination@eclipse-foundation.org
+        </a>
+        .
+      </p>
+    ),
   },
   {
-    question: 'Question-3',
-    answer:
-      "Lorem Ipsum 3 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    question: `How do I promote my organization's products and services?`,
+    answer: (
+      <p>
+        The Eclipse Foundation offers members a number of different ways to promote their products and services ranging
+        from ad space on eclipse.org and related properties, highlighting of member products on Eclipse Plugin Central,
+        and personalized membership pages that automatically integrate your contributions to the Eclipse ecosystem. Full
+        details on the many ways you can promote your products and services can be found by contacting{' '}
+        <a href="mailto:membership@eclipse.org">membership@eclipse.org</a>.
+      </p>
+    ),
   },
   {
-    question: 'Question-4',
-    answer:
-      "Lorem Ipsum 4 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    question: 'How do I get involved in Eclipse Projects?',
+    answer: (
+      <p>
+        Engaging in existing Eclipse projects and the process for bringing new projects to Eclipse can be found on our{' '}
+        <a href="https://www.eclipse.org/projects/" target="_blank" rel="noreferrer">
+          Discover our Projects
+        </a>{' '}
+        page. The{' '}
+        <a href="https://www.eclipse.org/projects/dev_process/index.php" target="_blank" rel="noreferrer">
+          Eclipse Foundation Development Process
+        </a>{' '}
+        describes how Membership at Large, the Board of Directors, other constituents of the Ecosystem, and the Eclipse
+        Management Organization (EMO) lead, influence, and collaborate with existing Eclipse Projects.
+      </p>
+    ),
   },
 ];
 
@@ -98,6 +130,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     faqAnswer: {
       padding: theme.spacing(1.5, 3),
+      '& p': {
+        margin: 0,
+      },
     },
   })
 );
@@ -112,7 +147,7 @@ export default function DashboardFAQs() {
     setShouldCollapse(newShouldCollapse);
   };
 
-  const renderFAQs = faqItems.map((item, index) => (
+  const renderFAQs = FAQ_ITEMS.map((item, index) => (
     <List className={classes.faqItemCtn} key={index}>
       <ListItem className={classes.faqQuestion} onClick={() => handleClick(index)}>
         <ListItemText primary={item.question} />
@@ -122,7 +157,7 @@ export default function DashboardFAQs() {
       </ListItem>
       <Collapse in={shouldCollapse[index]} timeout="auto" unmountOnExit>
         <ListItem className={classes.faqAnswer}>
-          <ListItemText primary={item.answer} />
+          {item.answer}
         </ListItem>
       </Collapse>
     </List>
