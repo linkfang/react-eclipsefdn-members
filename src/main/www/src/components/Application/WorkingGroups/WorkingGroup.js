@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
-import { deleteData } from '../../../Utils/formFunctionHelpers';
+import { deleteData, isProd } from '../../../Utils/formFunctionHelpers';
 import { END_POINT, WORKING_GROUPS, workingGroups as workingGroupsLabel } from '../../../Constants/Constants';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
@@ -41,7 +41,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
 
   const removeWorkingGroupCall = (arrayHelpersRemove, index, id) => {
     // Call API to remove
-    console.log('you called DELETE method with id: ', id);
+    !isProd && console.log('you called DELETE method with id: ', id);
     deleteData(currentFormId, END_POINT.working_groups, id, arrayHelpersRemove, index);
     const newWGs = updatedFormValues.workingGroups.filter((wg, theIndex) => theIndex !== index);
     setUpdatedFormValues({ ...updatedFormValues, workingGroups: newWGs });

@@ -11,6 +11,8 @@ import {
   HAS_TOKEN_EXPIRED,
 } from '../Constants/Constants';
 
+export const isProd = window.location.href.includes('//membership.eclipse.org/');
+
 /**
  * checkSameContact
  *
@@ -451,8 +453,8 @@ function callSendData(
   delete dataBody.id;
 
   if (getCurrentMode() === MODE_REACT_ONLY) {
-    console.log(`You called ${url} with Method ${method} and data body is:`);
-    console.log(JSON.stringify(dataBody));
+    !isProd && console.log(`You called ${url} with Method ${method} and data body is:`);
+    !isProd && console.log(JSON.stringify(dataBody));
   }
 
   if (getCurrentMode() === MODE_REACT_API) {
@@ -550,12 +552,12 @@ function callSendData(
 export function deleteData(formId, endpoint, entityId, callback, index) {
   // If the added field array is not in the server, just remove it from frontend
   if (!entityId) {
-    callback(index);
+    callback && callback(index);
   }
 
   // If the not using java server, just remove it from frontend
   if (getCurrentMode() === MODE_REACT_ONLY && index) {
-    callback(index);
+    callback && callback(index);
   }
 
   // If removing existing working_group
@@ -574,7 +576,7 @@ export function deleteData(formId, endpoint, entityId, callback, index) {
       .then((res) => {
         if (res.ok) {
           // Remove from frontend
-          callback(index);
+          callback && callback(index);
           return Promise.resolve(res);
         }
 
@@ -623,10 +625,13 @@ export function handleNewForm(setCurrentFormId, goToCompanyInfoStep) {
         throw res.status;
       })
       .then((data) => {
-        console.log('Start with a new form:', data);
+        !isProd && console.log('Start with a new form:', data);
         setCurrentFormId(data[0]?.id);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        requestErrorHandler(err);
+      });
   }
 
   // Probably Also need to delete the old form Id, or keep in the db for 30 days

@@ -11,6 +11,7 @@ import {
   ROUTE_COMPANY,
 } from '../../../Constants/Constants';
 import Loading from '../../UIComponents/Loading/Loading';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 import { Button, createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 /**
@@ -106,7 +107,7 @@ class SignIn extends React.Component {
     fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
       .then((res) => res.json())
       .then((data) => {
-        console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
+        !isProd && console.log('user info: ', data); // {family_name: "User1", given_name: "User1", name: "user1"}
         this.context.setCurrentUser(data);
         this.context.setNeedLoadingSignIn(false);
       })
