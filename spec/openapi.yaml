@@ -601,15 +601,18 @@ components:
             address:
                type: object
                properties:
-                  street:
+                  address_line_1:
                      type: string
                      description: Street address of the organization
-                  city:
+                  address_line_2:
                      type: string
-                     description: The ciy in which the organization is based
-                  province_state:
+                     description: Additional information about the street address of the organization
+                  locality:
                      type: string
-                     description: The province/state in which the organization is based
+                     description: The city/township in which the organization is based
+                  administrative_area:
+                     type: string
+                     description: The province/state/area in which the organization is based
                   country:
                      type: string
                      description: The country in which the organization is based
@@ -638,15 +641,18 @@ components:
             address:
                type: object
                properties:
-                  street:
+                  address_line_1:
                      type: string
                      description: Street address of the organization
-                  city:
+                  address_line_2:
                      type: string
-                     description: The ciy in which the organization is based
-                  province_state:
+                     description: Additional information about the street address of the organization
+                  locality:
                      type: string
-                     description: The province/state in which the organization is based
+                     description: The city/township in which the organization is based
+                  administrative_area:
+                     type: string
+                     description: The province/state/area in which the organization is based
                   country:
                      type: string
                      description: The country in which the organization is based

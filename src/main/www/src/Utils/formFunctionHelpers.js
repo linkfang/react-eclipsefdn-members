@@ -79,9 +79,10 @@ export function matchCompanyFields(existingOrganizationData) {
     type: existingOrganizationData?.organization_type || '',
     address: {
       id: existingOrganizationData?.address?.id || '',
-      street: existingOrganizationData?.address?.street || '',
-      city: existingOrganizationData?.address?.city || '',
-      provinceOrState: existingOrganizationData?.address?.province_state || '',
+      street: existingOrganizationData?.address?.address_line_1 || '',
+      streetTwo: existingOrganizationData?.address?.address_line_2 || '',
+      city: existingOrganizationData?.address?.locality || '',
+      provinceOrState: existingOrganizationData?.address?.administrative_area || '',
       country: existingOrganizationData?.address?.country || '',
       'country-label': {
         label: existingOrganizationData?.address?.country || '',
@@ -233,11 +234,12 @@ export function matchWorkingGroupFields(
 export function matchCompanyFieldsToBackend(organizationData, formId) {
   var org = {
     address: {
-      city: organizationData.address.city,
+      locality: organizationData.address.city,
       country: organizationData.address.country,
-      postal_code: organizationData.address.postalCode  || '',
-      province_state: organizationData.address.provinceOrState  || '',
-      street: organizationData.address.street,
+      postal_code: organizationData.address.postalCode || '',
+      administrative_area: organizationData.address.provinceOrState || '',
+      address_line_1: organizationData.address.street,
+      address_line_2: organizationData.address.streetTwo,
     },
     form_id: formId,
     id: organizationData.id,
@@ -245,7 +247,7 @@ export function matchCompanyFieldsToBackend(organizationData, formId) {
     twitter: organizationData.twitterHandle || '',
     aggregate_revenue: organizationData.revenue,
     employee_count: organizationData.employeeCount,
-    organization_type: organizationData.type
+    organization_type: organizationData.type,
   };
 
   if (organizationData.address.id) {
