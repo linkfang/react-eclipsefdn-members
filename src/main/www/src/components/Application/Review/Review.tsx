@@ -3,7 +3,12 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormValue } from '../../../Interfaces/form_interface';
 import { scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { OPTIONS_FOR_ORG_TYPE, OPTIONS_FOR_PURCHASING_PROCESS, ROUTE_SIGNING, ROUTE_SUBMITTED } from '../../../Constants/Constants';
+import {
+  OPTIONS_FOR_ORG_TYPE,
+  OPTIONS_FOR_PURCHASING_PROCESS,
+  ROUTE_SIGNING,
+  ROUTE_SUBMITTED,
+} from '../../../Constants/Constants';
 import ReadOnlyInput from '../../UIComponents/Inputs/ReadOnlyInput';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import MembershipContext from '../../../Context/MembershipContext';
@@ -31,12 +36,7 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
   }, [setCurrentStepIndex]);
 
   return (
-    <form
-      onSubmit={(ev) => {
-        ev.preventDefault();
-        submitForm();
-      }}
-    >
+    <form>
       <h1 className="fw-600 h2">Review and Submit Your Completed Application</h1>
       <p>
         Please review your completed Membership Application Form. If you would like to make changes to the information,
@@ -402,6 +402,9 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         checkIsEmpty={() => false}
         formik={false}
         updatedFormValues={values}
+        handleSubmit={() => {
+          submitForm();
+        }}
       />
     </form>
   );

@@ -94,7 +94,7 @@ const WorkingGroupsWrapper = ({
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
           <ModalWindow
@@ -146,9 +146,10 @@ const WorkingGroupsWrapper = ({
           formik={formik}
           checkIsEmpty={checkIsEmpty}
           updatedFormValues={updatedFormValues}
+          handleSubmit={formik.handleSubmit}
         />
       </FormikProvider>
-    </form>
+    </>
   );
 };
 

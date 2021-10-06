@@ -720,3 +720,14 @@ export const logout = () => {
       window.location.assign('/');
     });
 };
+
+export const checkValidityWithoutSubmitting = (ev) => {
+  // Do checkValidity without submitting will make Select component in Material-UI get focused if it's invalid without refreshing the page
+  ev.preventDefault();
+  ev.currentTarget.checkValidity();
+};
+
+export const focusOnInvalidField = () => {
+  const firstInvalidField = document.querySelector('input[aria-invalid="true"]');
+  firstInvalidField && firstInvalidField.focus();
+};

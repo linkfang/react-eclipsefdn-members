@@ -2,7 +2,17 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import SignIn from './SignIn/SignIn';
-import { HAS_TOKEN_EXPIRED, LOGIN_EXPIRED_MSG, PAGE_STEP, ROUTE_COMPANY, ROUTE_MEMBERSHIP, ROUTE_REVIEW, ROUTE_SIGNING, ROUTE_SUBMITTED, ROUTE_WGS } from '../../Constants/Constants';
+import {
+  HAS_TOKEN_EXPIRED,
+  LOGIN_EXPIRED_MSG,
+  PAGE_STEP,
+  ROUTE_COMPANY,
+  ROUTE_MEMBERSHIP,
+  ROUTE_REVIEW,
+  ROUTE_SIGNING,
+  ROUTE_SUBMITTED,
+  ROUTE_WGS,
+} from '../../Constants/Constants';
 import { initialValues } from '../UIComponents/FormComponents/formFieldModel';
 import CompanyInformation from './CompanyInformation/CompanyInformation';
 import MembershipLevel from './MembershipLevel/MembershipLevel';
@@ -13,7 +23,7 @@ import Step from '../UIComponents/Steppers/Step';
 import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
-import { executeSendDataByStep, isProd } from '../../Utils/formFunctionHelpers';
+import { checkValidityWithoutSubmitting, executeSendDataByStep, isProd } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
 import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
@@ -303,68 +313,76 @@ export default function Application() {
         </Route>
 
         <Route path={ROUTE_COMPANY}>
-          {renderStepper()}
-          {
-            // stop users visiting steps/pages that are not able to edit yet
-            furthestPage.index >= 1 ? (
-              <CompanyInformation
-                formik={formikCompanyInfo}
+          <form onSubmit={checkValidityWithoutSubmitting}>
+            {renderStepper()}
+            {
+              // stop users visiting steps/pages that are not able to edit yet
+              furthestPage.index >= 1 ? (
+                <CompanyInformation
+                  formik={formikCompanyInfo}
+                  isStartNewForm={isStartNewForm}
+                  formikWG={formikWorkingGroups}
+                  fullWorkingGroupList={fullWorkingGroupList}
+                  setFullWorkingGroupList={setFullWorkingGroupList}
+                  setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
+                  updatedFormValues={updatedFormValues}
+                  setUpdatedFormValues={setUpdatedFormValues}
+                />
+              ) : (
+                // if uses are not allowed to visit this page,
+                // then will be brought back to the furthest they can visit
+                <Redirect to={furthestPage.pathName} />
+              )
+            }
+          </form>
+        </Route>
+
+        <Route path={ROUTE_MEMBERSHIP}>
+          <form onSubmit={checkValidityWithoutSubmitting}>
+            {renderStepper()}
+            {furthestPage.index >= 2 ? (
+              <MembershipLevel
+                formik={{ ...formikMembershipLevel, submitForm: submitMembershipLevel }}
+                updatedFormValues={updatedFormValues}
+              />
+            ) : (
+              <Redirect to={furthestPage.pathName} />
+            )}
+          </form>
+        </Route>
+
+        <Route path={ROUTE_WGS}>
+          <form onSubmit={checkValidityWithoutSubmitting}>
+            {renderStepper()}
+            {furthestPage.index >= 3 ? (
+              <WorkingGroupsWrapper
+                formik={{ ...formikWorkingGroups, submitForm: submitWorkingGroups }}
+                formikOrgValue={formikCompanyInfo.values}
                 isStartNewForm={isStartNewForm}
-                formikWG={formikWorkingGroups}
                 fullWorkingGroupList={fullWorkingGroupList}
-                setFullWorkingGroupList={setFullWorkingGroupList}
-                setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
+                workingGroupsUserJoined={workingGroupsUserJoined}
                 updatedFormValues={updatedFormValues}
                 setUpdatedFormValues={setUpdatedFormValues}
               />
             ) : (
-              // if uses are not allowed to visit this page,
-              // then will be brought back to the furthest they can visit
               <Redirect to={furthestPage.pathName} />
-            )
-          }
-        </Route>
-
-        <Route path={ROUTE_MEMBERSHIP}>
-          {renderStepper()}
-          {furthestPage.index >= 2 ? (
-            <MembershipLevel
-              formik={{ ...formikMembershipLevel, submitForm: submitMembershipLevel }}
-              updatedFormValues={updatedFormValues}
-            />
-          ) : (
-            <Redirect to={furthestPage.pathName} />
-          )}
-        </Route>
-
-        <Route path={ROUTE_WGS}>
-          {renderStepper()}
-          {furthestPage.index >= 3 ? (
-            <WorkingGroupsWrapper
-              formik={{ ...formikWorkingGroups, submitForm: submitWorkingGroups }}
-              formikOrgValue={formikCompanyInfo.values}
-              isStartNewForm={isStartNewForm}
-              fullWorkingGroupList={fullWorkingGroupList}
-              workingGroupsUserJoined={workingGroupsUserJoined}
-              updatedFormValues={updatedFormValues}
-              setUpdatedFormValues={setUpdatedFormValues}
-            />
-          ) : (
-            <Redirect to={furthestPage.pathName} />
-          )}
+            )}
+          </form>
         </Route>
 
         <Route path={ROUTE_SIGNING}>
-          {renderStepper()}
-          {furthestPage.index >= 4 ? (
-            <SigningAuthority
-              formik={{ ...formikSigningAuthority, submitForm: submitSigningAuthority }}
-              formikOrgValue={formikCompanyInfo.values}
-              updatedFormValues={updatedFormValues}
-            />
-          ) : (
-            <Redirect to={furthestPage.pathName} />
-          )}
+          <form onSubmit={checkValidityWithoutSubmitting}>
+            {renderStepper()}
+            {furthestPage.index >= 4 ? (
+              <SigningAuthority
+                formik={{ ...formikSigningAuthority, submitForm: submitSigningAuthority }}
+                formikOrgValue={formikCompanyInfo.values}
+                updatedFormValues={updatedFormValues}
+              />
+            ) : (
+              <Redirect to={furthestPage.pathName} />
+            )}
+          </form>
         </Route>
 
         <Route path={ROUTE_REVIEW}>

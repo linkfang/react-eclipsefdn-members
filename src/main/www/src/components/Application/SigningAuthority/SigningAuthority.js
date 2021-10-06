@@ -61,7 +61,7 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <>
       <div className="align-center">
         <h1 className="fw-600 h2" id={sectionName}>
           Signing Authority
@@ -93,8 +93,9 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
         checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
         formik={formik}
         updatedFormValues={updatedFormValues}
+        handleSubmit={formik.handleSubmit}
       />
-    </form>
+    </>
   );
 };
 
