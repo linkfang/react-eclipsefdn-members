@@ -120,12 +120,12 @@ export default function DashboardCommittersAndContributors() {
                 <PeopleAltIcon />
               </Container>
               <Container className={classes.committersCardContent}>
-                <Typography variant="h6" className={classes.committersCardSubtitle}>
+                <Typography variant="h6" component="h3" className={classes.committersCardSubtitle}>
                   Common Build Infrastructure
                 </Typography>
                 <Container className={classes.cardCBIContent}>
                   <div className={classes.cbiItem}>
-                    <Typography variant="h4" className={classes.bigWhiteNumber}>
+                    <Typography variant="h4" component="h1" className={classes.bigWhiteNumber}>
                       6
                     </Typography>
                     <Typography variant="body1" className={classes.thickBodyText}>
@@ -133,7 +133,7 @@ export default function DashboardCommittersAndContributors() {
                     </Typography>
                   </div>
                   <div className={classes.cbiItem}>
-                    <Typography variant="h4" className={classes.bigWhiteNumber}>
+                    <Typography variant="h4" component="h1" className={classes.bigWhiteNumber}>
                       10
                     </Typography>
                     <Typography variant="body1" className={classes.thickBodyText}>

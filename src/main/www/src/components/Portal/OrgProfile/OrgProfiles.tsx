@@ -10,6 +10,7 @@ import {
 } from '../../UIComponents/FormComponents/ValidationSchema';
 import BusinessIcon from '@material-ui/icons/Business';
 import { brightOrange, iconGray } from '../../../Constants/Constants';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 
 const useStyle = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,23 +77,23 @@ export default function OrgProfile() {
   const [currentLinks, setCurrentLinks] = useState<Array<CurrentLink> | []>([]);
 
   const handleSaveWebLogo = (files: any) => {
-    console.log('Web Logo Saved!', files);
+    !isProd && console.log('Web Logo Saved!', files);
     formikOrg.setFieldValue('logos.logoForWeb', files);
     setOpenLogoForWeb(false);
   };
 
   const handleSavePrintLogo = (files: any) => {
-    console.log('Print Logo Saved!', files);
+    !isProd && console.log('Print Logo Saved!', files);
     formikOrg.setFieldValue('logos.logoForPrint', files);
     setOpenLogoForPrint(false);
   };
 
   const handleSaveOrgProfile = () => {
-    console.log('Org profile is saved! ', formikOrg.values);
+    !isProd && console.log('Org profile is saved! ', formikOrg.values);
   };
 
   const handleAddNewLink = () => {
-    console.log('New link is added! ', formikNewLinks.values);
+    !isProd && console.log('New link is added! ', formikNewLinks.values);
     setCurrentLinks([...currentLinks, formikNewLinks.values]);
     formikNewLinks.resetForm();
   };
@@ -123,8 +124,8 @@ export default function OrgProfile() {
   return (
     <>
       <BusinessIcon className={classes.headerIcon} />
-      <Typography variant="h4" className={classes.pageHeader}>
-        Your Organizatino Profile
+      <Typography variant="h4" component="h1" className={classes.pageHeader}>
+        Your Organization Profile
       </Typography>
       <form onSubmit={formikOrg.handleSubmit}>
         <Grid container spacing={4}>
@@ -132,6 +133,7 @@ export default function OrgProfile() {
             <Input
               name="orgProfile.description"
               labelName="Description"
+              theAriaLabel="Company Description"
               multiline={true}
               rows={8}
               backgroundColor="#f9f9f9"
@@ -147,6 +149,7 @@ export default function OrgProfile() {
             <Input
               name="orgProfile.companyURL"
               labelName="Company URL"
+              theAriaLabel="Company URL"
               backgroundColor="#f9f9f9"
               value={formikOrg.values.orgProfile.companyURL}
               onChange={formikOrg.handleChange}
@@ -158,7 +161,7 @@ export default function OrgProfile() {
 
         <Grid container spacing={2} className={classes.uploadCtn}>
           <Grid item>
-            <Typography className={classes.subHeader} variant="h6">
+            <Typography className={classes.subHeader} variant="h5" component="h2">
               Logo for Web
             </Typography>
           </Grid>
@@ -171,7 +174,7 @@ export default function OrgProfile() {
 
           <Grid item>
             <Typography className={classes.helperText} variant="body2">
-              The supported formats for uploading your logo include: PNG, JPG, or GIF file under 1 MB in size.
+              The supported formats for uploading your logo include: PNG, or JPG file under 1 MB in size.
             </Typography>
             <Typography className={classes.helperText} variant="body2">
               The logo dimension cannot exceed 500 by 500 pixels.
@@ -181,7 +184,7 @@ export default function OrgProfile() {
 
         <Grid container spacing={2}>
           <Grid item>
-            <Typography className={classes.subHeader} variant="h6">
+            <Typography className={classes.subHeader} variant="h5" component="h2">
               Logo for Print
             </Typography>
           </Grid>
@@ -203,7 +206,7 @@ export default function OrgProfile() {
           dialogTitle="Upload Logo for Web"
           open={openLogoForWeb}
           onSave={(file) => handleSaveWebLogo(file)}
-          acceptedFiles={['image/jpeg', 'image/png', 'image/gif']}
+          acceptedFiles={['image/jpeg', 'image/png']}
           showPreviews={true}
           maxFileSize={1048576}
           onClose={() => setOpenLogoForWeb(false)}
@@ -213,7 +216,7 @@ export default function OrgProfile() {
           dialogTitle="Upload Logo for Print"
           open={openLogoForPrint}
           onSave={(file) => handleSavePrintLogo(file)}
-          acceptedFiles={['image/jpeg', 'image/png', 'image/gif', '.eps']}
+          acceptedFiles={['image/jpeg', 'image/png', '.eps']}
           showPreviews={true}
           maxFileSize={1048576}
           onClose={() => setOpenLogoForPrint(false)}
@@ -239,7 +242,7 @@ export default function OrgProfile() {
       </form>
 
       <form onSubmit={formikNewLinks.handleSubmit}>
-        <Typography className={classes.mainSectionHeader} variant="h5">
+        <Typography className={classes.mainSectionHeader} variant="h5" component="h2">
           Links
         </Typography>
         <Typography className={classes.linksDescription} variant="body1">
@@ -260,18 +263,19 @@ export default function OrgProfile() {
 
         <Grid container spacing={4}>
           <Grid item xs>
-            <Typography className={classes.mainSectionHeader} variant="h5">
+            <Typography className={classes.mainSectionHeader} variant="h5" component="h2">
               Current Links
             </Typography>
             {renderCurrentLinks.length > 0 ? renderCurrentLinks : <Typography>No links yet</Typography>}
           </Grid>
           <Grid item xs>
-            <Typography className={classes.mainSectionHeader} variant="h5">
+            <Typography className={classes.mainSectionHeader} variant="h5" component="h2">
               Add a New Link
             </Typography>
             <Input
               name="title"
               labelName="Title"
+              theAriaLabel="Title"
               backgroundColor="#f9f9f9"
               requiredMark={true}
               value={formikNewLinks.values.title}
@@ -282,6 +286,7 @@ export default function OrgProfile() {
             <Input
               name="description"
               labelName="Description"
+              theAriaLabel="Description"
               multiline={true}
               rows={8}
               backgroundColor="#f9f9f9"
@@ -295,6 +300,7 @@ export default function OrgProfile() {
             <Input
               name="url"
               labelName="URL"
+              theAriaLabel="URL"
               backgroundColor="#f9f9f9"
               requiredMark={true}
               value={formikNewLinks.values.url}

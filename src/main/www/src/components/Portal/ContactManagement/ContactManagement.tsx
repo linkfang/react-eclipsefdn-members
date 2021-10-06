@@ -17,6 +17,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useState } from 'react';
 import Input from '../../UIComponents/Inputs/Input';
 import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
+import { isProd } from '../../../Utils/formFunctionHelpers';
 
 const allRoles = [
   'Marketing Representative',
@@ -85,6 +86,24 @@ const useStyle = makeStyles((theme: Theme) =>
       borderRadius: borderRadiusSize,
     },
     table: { height: 420, width: '100%' },
+    roleCell: {
+      display: 'flex',
+    },
+    roleText: {
+      whiteSpace: 'normal',
+    },
+    editIconCtn: {
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+    },
+    editIcon: {
+      color: iconGray,
+      marginLeft: 10,
+    },
+    removeBtn: {
+      backgroundColor: '#EBEBEB',
+    },
     addContactIcon: {
       margin: theme.spacing(4, 0, 1),
       fontSize: 50,
@@ -115,22 +134,16 @@ export default function ContactManagement() {
       flex: 2,
       minWidth: 320,
       renderCell: (params: GridRenderCellParams) => (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {Array.isArray(params.value) &&
-            params.value.map((role, index) => {
-              return index >= 1 ? (
-                <Typography key={index} variant="body2">
-                  {', ' + role}
-                </Typography>
-              ) : (
-                <Typography key={index} variant="body2">
-                  {role}
-                </Typography>
-              );
-            })}
+        <div className={classes.roleCell}>
+          <Typography variant="body2" className={classes.roleText}>
+            {Array.isArray(params.value) &&
+              params.value.map((role, index) => {
+                return index >= 1 ? ', ' + role : role;
+              })}
+          </Typography>
 
           <div
-            style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            className={classes.editIconCtn}
             onClick={() => {
               const currentContact = params.row;
               setSelectedContact({
@@ -149,7 +162,7 @@ export default function ContactManagement() {
               setOpenEditRoles(true);
             }}
           >
-            <EditIcon style={{ color: iconGray, marginLeft: 10 }} />
+            <EditIcon className={classes.editIcon} />
           </div>
         </div>
       ),
@@ -160,7 +173,7 @@ export default function ContactManagement() {
       width: 220,
       renderCell: (params: GridRenderCellParams) => (
         <Button
-          style={{ backgroundColor: '#EBEBEB' }}
+          className={classes.removeBtn}
           onClick={() => {
             const currentContact = params.row;
             setSelectedContact({
@@ -206,7 +219,8 @@ export default function ContactManagement() {
   const handleRequestRemoval = () => {
     setOpenRequestRemoval(false);
     const newRows = contactList.filter((contact) => contact.id !== selectedContact.id);
-    console.log('Deleted ', selectedContact.name, '| Because of: ', removeReason, '| With comment: ', removeComment);
+    !isProd &&
+      console.log('Deleted ', selectedContact.name, '| Because of: ', removeReason, '| With comment: ', removeComment);
     setContactList(newRows);
     setRemoveReason('');
     setRemoveComment('');
@@ -278,7 +292,7 @@ export default function ContactManagement() {
   return (
     <>
       <RecentActorsIcon className={classes.headerIcon} />
-      <Typography className={classes.pageTitle} variant="h4">
+      <Typography className={classes.pageTitle} variant="h4" component="h1">
         Contact Management
       </Typography>
 

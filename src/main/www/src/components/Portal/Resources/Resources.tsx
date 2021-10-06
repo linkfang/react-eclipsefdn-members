@@ -7,7 +7,7 @@ export default function Resources() {
         margin: '40px 0',
       }}
     >
-      <Typography variant="h4">Resources</Typography>
+      <Typography variant="h4" component="h1">Resources</Typography>
     </div>
   );
 }

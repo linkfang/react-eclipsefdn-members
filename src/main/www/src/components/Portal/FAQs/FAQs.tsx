@@ -7,7 +7,7 @@ export default function FAQs() {
         margin: '40px 0',
       }}
     >
-      <Typography variant="h4">FAQs</Typography>
+      <Typography variant="h4" component="h1">FAQs</Typography>
     </div>
   );
 }

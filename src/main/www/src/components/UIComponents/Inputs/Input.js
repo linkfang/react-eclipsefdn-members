@@ -40,6 +40,7 @@ export default function Input(props) {
     height,
     maxLength,
     explanationHelperText,
+    theAriaLabel,
   } = props;
   const classes = useStyles();
 
@@ -65,6 +66,7 @@ export default function Input(props) {
         style: { backgroundColor: backgroundColor || 'white', height: height },
         inputProps: {
           'aria-labelledby': ariaLabel,
+          'aria-label': theAriaLabel,
           maxLength: maxLength || 255,
         },
       }}
