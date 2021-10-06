@@ -22,6 +22,7 @@
     "formik": "^2.2.6",
     "less-watch-compiler": "^1.15.1",
     "material-ui-dropzone": "^3.5.0",
+    "postal-address-field-names": "^1.0.3",
     "react": "^17.0.0",
     "react-app-polyfill": "^2.0.0",
     "react-chartjs-2": "^3.0.4",

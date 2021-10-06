@@ -56,11 +56,12 @@ CREATE TABLE `FormWorkingGroup` (
 
 CREATE TABLE `Address` (
   `id` varchar(255) NOT NULL,
-  `city` varchar(255) DEFAULT NULL,
+  `locality` varchar(255) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `postalCode` varchar(255) DEFAULT NULL,
-  `provinceState` varchar(255) DEFAULT NULL,
-  `street` varchar(255) DEFAULT NULL,
+  `administrativeArea` varchar(255) DEFAULT NULL,
+  `addressLine1` varchar(255) DEFAULT NULL,
+  `addressLine2` varchar(255) DEFAULT NULL,
   `organization_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_i4vgutrsl3ve37hc8xx7vvslf` (`organization_id`),
