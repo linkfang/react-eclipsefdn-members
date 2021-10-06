@@ -19,7 +19,7 @@ import org.eclipsefoundation.core.helper.ResponseHelper;
 import org.eclipsefoundation.core.model.AdditionalUserData;
 import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.core.service.CachingService;
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.dto.MembershipForm;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public abstract class AbstractRESTResource {
     public static final String ALL_CACHE_PLACEHOLDER = "all";
 
     @Inject
-    PersistenceDao dao;
+    DefaultHibernateDao dao;
     @Inject
     FilterService filters;
     @Inject

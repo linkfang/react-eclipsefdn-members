@@ -1,13 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import MembershipContext from '../../../Context/MembershipContext';
 import WorkingGroupParticipationLevel from './WorkingGroupParticipationLevel';
 import WorkingGroupsRepresentative from './WorkingGroupRepresentative';
-import { deleteData } from '../../../Utils/formFunctionHelpers';
-import {
-  END_POINT,
-  WORKING_GROUPS,
-  workingGroups as workingGroupsLabel,
-} from '../../../Constants/Constants';
+import { deleteData, isProd } from '../../../Utils/formFunctionHelpers';
+import { END_POINT, WORKING_GROUPS, workingGroups as workingGroupsLabel } from '../../../Constants/Constants';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, TextField } from '@material-ui/core';
 import { FieldArray } from 'formik';
@@ -41,10 +37,11 @@ const useStyles = makeStyles(() => ({
 const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFormValues, setUpdatedFormValues }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
+  const [sortedWGList, setSortedWGList] = useState([]);
 
   const removeWorkingGroupCall = (arrayHelpersRemove, index, id) => {
     // Call API to remove
-    console.log('you called DELETE method with id: ', id);
+    !isProd && console.log('you called DELETE method with id: ', id);
     deleteData(currentFormId, END_POINT.working_groups, id, arrayHelpersRemove, index);
     const newWGs = updatedFormValues.workingGroups.filter((wg, theIndex) => theIndex !== index);
     setUpdatedFormValues({ ...updatedFormValues, workingGroups: newWGs });
@@ -52,23 +49,23 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
 
   const updateValidationSchema = (workingGroupsLabel, index) => {
     const allWorkingGroups = fullWorkingGroupList.map((item) => item.label);
-    const savedAllWorkingGroups =
-      formik.values.workingGroups?.[index]?.['allWorkingGroups'];
-    if (
-      (!savedAllWorkingGroups || savedAllWorkingGroups.length === 0) &&
-      allWorkingGroups.length > 0
-    ) {
+    const savedAllWorkingGroups = formik.values.workingGroups?.[index]?.['allWorkingGroups'];
+    if ((!savedAllWorkingGroups || savedAllWorkingGroups.length === 0) && allWorkingGroups.length > 0) {
       // using setTimeout here will avoid a React warning:
       // "Cannot update a component (`Application`) while rendering a different component (`FieldArrayInner`)"
       // with setTimeout, formik.setFieldValue will run after FieldArrayInner finishes rendering
       setTimeout(() => {
-        formik.setFieldValue(
-          `${workingGroupsLabel}.${index}.allWorkingGroups`,
-          allWorkingGroups
-        );
+        formik.setFieldValue(`${workingGroupsLabel}.${index}.allWorkingGroups`, allWorkingGroups);
       }, 0);
     }
   };
+
+  useEffect(() => {
+    const theSortededWGList = fullWorkingGroupList.sort((currentWG, nextWG) =>
+      currentWG.value.toUpperCase() >= nextWG.value.toUpperCase() ? 1 : -1
+    );
+    setSortedWGList(theSortededWGList);
+  }, [fullWorkingGroupList]);
 
   return (
     <FieldArray
@@ -79,29 +76,23 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
             formik.values.workingGroups.map((workingGroup, index) => (
               <div key={index}>
                 {updateValidationSchema(workingGroupsLabel, index)}
-                <h2
-                  className="h4 fw-600"
-                  id={`${formik.values.workingGroups}.${index}.workingGroup`}
-                >
+                <h2 className="h4 fw-600" id={`${formik.values.workingGroups}.${index}.workingGroup`}>
                   Which working group would you like to join?
                   <span className="orange-star">*</span>
                 </h2>
 
                 <Autocomplete
                   id={`${workingGroupsLabel}.${index}.workingGroup`}
-                  options={fullWorkingGroupList}
+                  options={sortedWGList}
                   getOptionLabel={(option) => option?.label || ''}
-                  getOptionSelected={(option, value) =>
-                    option.value === value.value
-                  }
+                  getOptionSelected={(option, value) => option.value === value.value}
                   getOptionDisabled={(option) => {
                     // getOptionDisabled needs a boolen,
                     // so here we use !! for the result of array.find
                     // selectedWG will be true if the WG is already selected
                     // In this way, all selected WGs will be disabled
                     const selectedWG = !!formik.values.workingGroups.find(
-                      (selectedWG) =>
-                        selectedWG?.workingGroup?.label === option?.label
+                      (selectedWG) => selectedWG?.workingGroup?.label === option?.label
                     );
                     return selectedWG;
                   }}
@@ -117,14 +108,9 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
                       'workingGroup-label': value?.label || null,
                       workingGroup: value || null,
                     };
-                    formik.setFieldValue(
-                      `workingGroups.${index}`,
-                      updatedValue
-                    );
+                    formik.setFieldValue(`workingGroups.${index}`, updatedValue);
                   }}
-                  value={
-                    formik.values.workingGroups[index]['workingGroup'] || null
-                  }
+                  value={formik.values.workingGroups[index]['workingGroup'] || null}
                   renderInput={(params) => {
                     params.inputProps = {
                       ...params.inputProps,
@@ -197,11 +183,7 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
                       className="btn btn-secondary padding-15"
                       type="button"
                       onClick={() =>
-                        removeWorkingGroupCall(
-                          arrayHelpers.remove,
-                          index,
-                          formik.values.workingGroups[index].id
-                        )
+                        removeWorkingGroupCall(arrayHelpers.remove, index, formik.values.workingGroups[index].id)
                       }
                     >
                       Remove this group

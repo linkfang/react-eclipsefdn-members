@@ -27,7 +27,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipsefoundation.core.model.RequestWrapper;
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.dto.Address;
@@ -61,7 +61,7 @@ public class DataLoader {
     DataLoaderConfig config;
 
     @Inject
-    PersistenceDao dao;
+    DefaultHibernateDao dao;
     @Inject
     FilterService filters;
 

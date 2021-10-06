@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.eclipsefoundation.core.model.RequestWrapper;
 import org.eclipsefoundation.core.namespace.DefaultUrlParameterNames;
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.persistence.service.FilterService;
 import org.eclipsefoundation.react.dto.MembershipForm;
@@ -39,7 +39,7 @@ public class FormStateFilter implements ContainerRequestFilter {
     private static final Pattern SPECIFIC_FORM_URI_PATTERN = Pattern.compile("^\\/form\\/([^\\/]+)\\/?.*");
 
     @Inject
-    PersistenceDao dao;
+    DefaultHibernateDao dao;
     @Inject
     FilterService filters;
 

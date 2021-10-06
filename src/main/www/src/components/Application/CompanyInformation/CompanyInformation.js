@@ -170,7 +170,10 @@ const CompanyInformation = ({
           hasOrgData = true;
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          requestErrorHandler(err);
+        });
     };
 
     if (isStartNewForm) {
@@ -224,7 +227,7 @@ const CompanyInformation = ({
   }
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <>
       <div className="align-center">
         <h1 className="fw-600 h2">Company Information</h1>
         <p>
@@ -244,8 +247,8 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} />
-    </form>
+      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} handleSubmit={formik.handleSubmit} />
+    </>
   );
 };
 

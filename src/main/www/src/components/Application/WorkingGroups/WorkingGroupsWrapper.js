@@ -66,7 +66,7 @@ const WorkingGroupsWrapper = ({
   const handleClearData = () => {
     // if user check it, we need to delete all wgs in formik and db
     formik.values.workingGroups.map((item) => {
-      deleteData(currentFormId, END_POINT.working_groups, item.id, console.log, `Deleted ${item?.workingGroup?.label}`);
+      deleteData(currentFormId, END_POINT.working_groups, item.id, '', `Deleted ${item?.workingGroup?.label}`);
       return null;
     });
     formik.setFieldValue('skipJoiningWG', true);
@@ -94,7 +94,7 @@ const WorkingGroupsWrapper = ({
   }, [setCurrentStepIndex]);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <>
       <FormikProvider value={formik}>
         <div id="working-groups-page" className="align-center margin-top-50 margin-bottom-30">
           <ModalWindow
@@ -146,9 +146,10 @@ const WorkingGroupsWrapper = ({
           formik={formik}
           checkIsEmpty={checkIsEmpty}
           updatedFormValues={updatedFormValues}
+          handleSubmit={formik.handleSubmit}
         />
       </FormikProvider>
-    </form>
+    </>
   );
 };
 

@@ -9,24 +9,36 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipsefoundation.react.api.model;
+package org.eclipsefoundation.react.model;
 
-public class OrganizationMembershipLevel {
+public class MembershipLevel {
     private String level;
     private String description;
 
+    /**
+     * @return the level
+     */
     public String getLevel() {
-        return this.level;
+        return level;
     }
 
+    /**
+     * @param level the level to set
+     */
     public void setLevel(String level) {
         this.level = level;
     }
 
+    /**
+     * @return the description
+     */
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
+    /**
+     * @param description the description to set
+     */
     public void setDescription(String description) {
         this.description = description;
     }

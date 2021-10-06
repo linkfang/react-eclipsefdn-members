@@ -11,8 +11,7 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
-import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipsefoundation.persistence.dao.PersistenceDao;
+import org.eclipsefoundation.persistence.dao.impl.DefaultHibernateDao;
 import org.eclipsefoundation.persistence.dto.BareNode;
 import org.eclipsefoundation.persistence.model.RDBMSQuery;
 import org.eclipsefoundation.react.dto.Contact;
@@ -34,7 +33,7 @@ import io.quarkus.test.Mock;
  */
 @Mock
 @ApplicationScoped
-public class MockHibernateDao implements PersistenceDao {
+public class MockHibernateDao extends DefaultHibernateDao {
     private Map<Class<?>, List<? extends BareNode>> mockData;
 
     // allow query to be captured and exposed for test validation
@@ -89,11 +88,6 @@ public class MockHibernateDao implements PersistenceDao {
     @Override
     public <T extends BareNode> void delete(RDBMSQuery<T> q) {
         capturedQuery = q;
-    }
-
-    @Override
-    public HealthCheckResponse call() {
-        return null;
     }
 
     @Override
