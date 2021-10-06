@@ -170,7 +170,10 @@ const CompanyInformation = ({
           hasOrgData = true;
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          requestErrorHandler(err);
+        });
     };
 
     if (isStartNewForm) {

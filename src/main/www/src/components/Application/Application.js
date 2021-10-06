@@ -23,7 +23,7 @@ import Step from '../UIComponents/Steppers/Step';
 import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
 import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
-import { checkValidityWithoutSubmitting, executeSendDataByStep } from '../../Utils/formFunctionHelpers';
+import { checkValidityWithoutSubmitting, executeSendDataByStep, isProd } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
 import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
@@ -85,7 +85,7 @@ export default function Application() {
       signingAuthorityRepresentative: signingAuthorityRepresentative,
     };
     setUpdatedFormValues(theNewValue);
-    console.log('updated company info: ', values);
+    !isProd && console.log('updated company info: ', values);
 
     const valueForMembershipLevelFormik = [
       { field: 'purchasingAndVAT', value: purchasingAndVAT },
@@ -147,7 +147,7 @@ export default function Application() {
       membershipLevel,
       'membershipLevel-label': membershipLevelLabel,
     });
-    console.log('updated membership level: ', values);
+    !isProd && console.log('updated membership level: ', values);
 
     const valueToUpdateFormik = [
       { field: 'membershipLevel', value: membershipLevel },
@@ -175,7 +175,7 @@ export default function Application() {
       skipJoiningWG: values.skipJoiningWG,
     };
     setUpdatedFormValues(theNewValue);
-    console.log('updated working groups: ', values);
+    !isProd && console.log('updated working groups: ', values);
 
     if (!values.skipJoiningWG) {
       // If the user is joining at least 1 wg, then make related API call
@@ -208,7 +208,7 @@ export default function Application() {
       signingAuthorityRepresentative,
     };
     setUpdatedFormValues(theNewValue);
-    console.log('updated SigningAuthority: ', values);
+    !isProd && console.log('updated SigningAuthority: ', values);
 
     const valueToUpdateFormik = [
       {

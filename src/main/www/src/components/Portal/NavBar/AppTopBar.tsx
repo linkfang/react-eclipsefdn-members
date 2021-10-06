@@ -20,11 +20,10 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import efGRYLogo from '../../../assets/logos/ef-gry.svg';
 import { api_prefix, darkOrange, END_POINT, FETCH_HEADER, themeBlack } from '../../../Constants/Constants';
-import { logout } from '../../../Utils/formFunctionHelpers';
+import { isProd, logout } from '../../../Utils/formFunctionHelpers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -237,7 +236,7 @@ const AppTopBar: React.FC<AppTopBarProps> = ({ handleDrawerToggle }) => {
       fetch(api_prefix() + `/${END_POINT.userinfo}`, { headers: FETCH_HEADER })
         .then((res) => res.json())
         .then((data) => {
-          console.log('user info: ', data);
+          !isProd && console.log('user info: ', data);
           getUserFullInfo(data.name);
         })
         .catch((err) => {
