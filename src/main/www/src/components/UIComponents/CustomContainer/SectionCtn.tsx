@@ -1,4 +1,4 @@
-import { Typography, createStyles, makeStyles, Container, Theme } from '@material-ui/core';
+import { Typography, createStyles, makeStyles, Container, Grid, Theme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      marginTop: theme.spacing(4),
+      margin: theme.spacing(4, 0, 0),
       padding: 0,
       justifyContent: 'center',
       [theme.breakpoints.up('sm')]: {
@@ -38,7 +38,9 @@ export default function SectionCtn(props: SectionCtnProps) {
         {props.title}
       </Typography>
 
-      <Container className={classes.projectAndWGCtn}>{props.children}</Container>
+      <Grid container spacing={4} className={classes.projectAndWGCtn}>
+        {props.children}
+      </Grid>
     </Container>
   );
 }

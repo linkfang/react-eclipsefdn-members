@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2, 0),
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        margin: theme.spacing(2.5, 1, 2, 1),
+        margin: theme.spacing(2.5, 2, 2, 0),
         width: '46%',
       },
       [theme.breakpoints.up(1200)]: {
-        margin: theme.spacing(2.5, 1, 2, 1),
+        margin: theme.spacing(2.5, 2, 2, 0),
         width: '22%',
       },
     },
