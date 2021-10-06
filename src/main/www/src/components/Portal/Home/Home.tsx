@@ -7,7 +7,7 @@ export default function Home() {
         margin: '40px 0',
       }}
     >
-      <Typography variant="h4">Home</Typography>
+      <Typography variant="h4" component="h1">Home</Typography>
     </div>
   );
 }

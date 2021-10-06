@@ -120,7 +120,7 @@ export default function DashboardCommittersAndContributors() {
                 <PeopleAltIcon />
               </Container>
               <Container className={classes.committersCardContent}>
-                <Typography variant="h6" className={classes.committersCardSubtitle}>
+                <Typography variant="h6" component="h3" className={classes.committersCardSubtitle}>
                   Common Build Infrastructure
                 </Typography>
                 <Container className={classes.cardCBIContent}>

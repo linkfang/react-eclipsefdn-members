@@ -34,7 +34,7 @@ export default function SectionCtn(props: SectionCtnProps) {
 
   return (
     <Container className={classes.main} id={props.id}>
-      <Typography className={classes.sectionTitle} variant="h4">
+      <Typography className={classes.sectionTitle} variant="h4" component="h1">
         {props.title}
       </Typography>
 

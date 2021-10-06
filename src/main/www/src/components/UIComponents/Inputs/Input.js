@@ -19,9 +19,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: 14,
     marginTop: 6,
   },
-  input: {
-    backgroundColor: 'white',
-  },
 }));
 
 export default function Input(props) {
@@ -36,31 +33,41 @@ export default function Input(props) {
     onChange,
     error,
     helperText,
+    multiline,
+    rows,
+    backgroundColor,
     type,
+    height,
+    maxLength,
+    explanationHelperText,
+    theAriaLabel,
   } = props;
   const classes = useStyles();
 
   return (
     <TextField
-      name={name}
       type={type || 'text'}
+      name={name}
       required={requiredMark}
       disabled={disableInput}
       value={value}
       onChange={onChange}
       error={error}
-      helperText={error && helperText}
+      helperText={(error && helperText) || explanationHelperText}
       size="small"
       variant="outlined"
       className={classes.root}
       label={labelName}
       fullWidth={true}
+      multiline={multiline}
+      rows={rows}
       placeholder={placeholder}
       InputProps={{
-        className: classes.input,
+        style: { backgroundColor: backgroundColor || 'white', height: height },
         inputProps: {
           'aria-labelledby': ariaLabel,
-          maxLength: 255,
+          'aria-label': theAriaLabel,
+          maxLength: maxLength || 255,
         },
       }}
     />
