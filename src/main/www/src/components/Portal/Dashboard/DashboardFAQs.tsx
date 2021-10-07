@@ -31,8 +31,8 @@ const FAQ_ITEMS = [
     answer: (
       <p>
         Member Representative or their delegate(s) may make edits to the information publicly displayed on your Eclipse
-        Foundation membership page can be updated on your organization profile. If you believe you should have this
-        authority but do not have access, please contact{' '}
+        Foundation membership page on <a href="/portal/org-profile">your organization profile</a>. If you believe you
+        should have this authority but do not have access, please contact{' '}
         <a href="mailto:membership.coordination@eclipse-foundation.org">
           membership.coordination@eclipse-foundation.org
         </a>
@@ -156,9 +156,7 @@ export default function DashboardFAQs() {
         </ListItemIcon>
       </ListItem>
       <Collapse in={shouldCollapse[index]} timeout="auto" unmountOnExit>
-        <ListItem className={classes.faqAnswer}>
-          {item.answer}
-        </ListItem>
+        <ListItem className={classes.faqAnswer}>{item.answer}</ListItem>
       </Collapse>
     </List>
   ));
