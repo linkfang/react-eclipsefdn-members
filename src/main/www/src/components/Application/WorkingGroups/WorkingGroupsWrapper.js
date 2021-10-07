@@ -19,6 +19,8 @@ import {
   api_prefix,
   ROUTE_MEMBERSHIP,
   ROUTE_SIGNING,
+  CURRENT_STEP,
+  WORKING_GROUP_STEP,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { FormikProvider } from 'formik';
@@ -51,12 +53,13 @@ const WorkingGroupsWrapper = ({
   setUpdatedFormValues,
 }) => {
   const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext);
+  const { setFieldValue } = formik;
   const [shouldOpen, setShouldOpen] = useState(false);
 
   const handleSkipJoiningWG = () => {
     const skipJoiningWG = formik.values.skipJoiningWG;
     if (skipJoiningWG) {
-      formik.setFieldValue('skipJoiningWG', !skipJoiningWG);
+      setFieldValue('skipJoiningWG', !skipJoiningWG);
       setUpdatedFormValues({ ...updatedFormValues, skipJoiningWG: false });
     } else {
       setShouldOpen(true);
@@ -69,8 +72,8 @@ const WorkingGroupsWrapper = ({
       deleteData(currentFormId, END_POINT.working_groups, item.id, '', `Deleted ${item?.workingGroup?.label}`);
       return null;
     });
-    formik.setFieldValue('skipJoiningWG', true);
-    formik.setFieldValue('workingGroups', initialValues.workingGroups);
+    setFieldValue('skipJoiningWG', true);
+    setFieldValue('workingGroups', initialValues.workingGroups);
     setUpdatedFormValues({ ...updatedFormValues, workingGroups: initialValues.workingGroups, skipJoiningWG: true });
     setShouldOpen(false);
   };
@@ -92,6 +95,10 @@ const WorkingGroupsWrapper = ({
   useEffect(() => {
     setCurrentStepIndex(3);
   }, [setCurrentStepIndex]);
+
+  useEffect(() => {
+    setFieldValue(CURRENT_STEP, WORKING_GROUP_STEP);
+  }, [setFieldValue]);
 
   return (
     <>

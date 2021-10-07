@@ -22,7 +22,7 @@ import Review from './Review/Review';
 import Step from '../UIComponents/Steppers/Step';
 import SignInIntroduction from './SignIn/SignInIntroduction';
 import SubmitSuccess from './SubmitSuccess/SubmitSuccess';
-import { validationSchema } from '../UIComponents/FormComponents/ValidationSchema';
+import { VALIDATION_SCHEMA_FOR_ENROLMENT_FORM } from '../UIComponents/FormComponents/ValidationSchema';
 import { checkValidityWithoutSubmitting, executeSendDataByStep, isProd } from '../../Utils/formFunctionHelpers';
 import MembershipContext from '../../Context/MembershipContext';
 import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
@@ -130,7 +130,7 @@ export default function Application() {
   };
   const formikCompanyInfo = useFormik({
     initialValues: initialValues,
-    validationSchema: validationSchema[0],
+    validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
     onSubmit: () => {
       submitCompanyInfo();
       goToNextStep(1, ROUTE_MEMBERSHIP);
@@ -159,7 +159,7 @@ export default function Application() {
   };
   const formikMembershipLevel = useFormik({
     initialValues: initialValues,
-    validationSchema: validationSchema[1],
+    validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
     onSubmit: () => {
       submitMembershipLevel();
       goToNextStep(2, ROUTE_WGS);
@@ -192,7 +192,7 @@ export default function Application() {
   };
   const formikWorkingGroups = useFormik({
     initialValues: initialValues,
-    validationSchema: validationSchema[2],
+    validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
     onSubmit: () => {
       submitWorkingGroups();
       goToNextStep(3, ROUTE_SIGNING);
@@ -233,7 +233,7 @@ export default function Application() {
   };
   const formikSigningAuthority = useFormik({
     initialValues: initialValues,
-    validationSchema: validationSchema[3],
+    validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
     onSubmit: () => {
       submitSigningAuthority();
       goToNextStep(4, ROUTE_REVIEW);

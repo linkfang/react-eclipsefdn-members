@@ -5,7 +5,7 @@ import { useContext, useEffect } from 'react';
 import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import MembershipContext from '../../../Context/MembershipContext';
-import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
+import { CURRENT_STEP, ROUTE_REVIEW, ROUTE_WGS, SIGNING_AUTHORITY_STEP } from '../../../Constants/Constants';
 
 /**
  * Have not added any API calls here,
@@ -16,6 +16,7 @@ import { ROUTE_REVIEW, ROUTE_WGS } from '../../../Constants/Constants';
 const sectionName = 'signing-authority';
 const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
   const { setCurrentStepIndex } = useContext(MembershipContext);
+  const { setFieldValue } = formik;
   const { signingAuthorityRepresentative } = formField;
   const name = 'signingAuthorityRepresentative';
   const generateSingleContact = (el) => (
@@ -59,6 +60,10 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
   useEffect(() => {
     setCurrentStepIndex(4);
   }, [setCurrentStepIndex]);
+
+  useEffect(() => {
+    setFieldValue(CURRENT_STEP, SIGNING_AUTHORITY_STEP);
+  }, [setFieldValue]);
 
   return (
     <>

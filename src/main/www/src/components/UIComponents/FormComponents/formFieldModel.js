@@ -31,6 +31,9 @@ export const requiredErrorMsg = 'Required field';
 // Initial values passed to Formik, this defines
 // the form fields, names, and nesting relations of the whole form
 export const initialValues = {
+  // condition for validation
+  currentStep: '',
+
   // Step1: Orgnaization Info
   organization: {
     id: '',
@@ -92,6 +95,7 @@ export const initialValues = {
   membershipLevel: '',
 
   // Step 3: working groups
+  skipJoiningWG: false,
   workingGroups: [
     {
       id: '',
@@ -109,8 +113,7 @@ export const initialValues = {
     },
   ],
 
-  skipJoiningWG: false,
-
+  // Step 4: signing authority
   signingAuthorityRepresentative: {
     firstName: '',
     lastName: '',

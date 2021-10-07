@@ -1,5 +1,13 @@
 import * as yup from 'yup';
-import { MAX_LENGTH_HELPER_TEXT, MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED } from '../../../Constants/Constants';
+import {
+  COMPANY_INFO_STEP,
+  CURRENT_STEP,
+  MAX_LENGTH_HELPER_TEXT,
+  MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED,
+  MEMBERSHIP_LEVEL_STEP,
+  SIGNING_AUTHORITY_STEP,
+  WORKING_GROUP_STEP,
+} from '../../../Constants/Constants';
 import { requiredErrorMsg } from './formFieldModel';
 import countryAddressDetails from 'postal-address-field-names';
 
@@ -45,11 +53,11 @@ const CONTACT_YUP = yup.object().shape({
   jobtitle: REQUIRED_MAX_YUP,
 });
 
-export const validationSchema = [
-  // First step - company Info
-  yup.object().shape({
-    // First step - representative contacts
-    organization: yup.object().shape({
+export const VALIDATION_SCHEMA_FOR_ENROLMENT_FORM = yup.object().shape({
+  // First step - company Info and representative contacts
+  organization: yup.object().when(CURRENT_STEP, {
+    is: COMPANY_INFO_STEP,
+    then: yup.object().shape({
       address: yup.object().shape({
         country: yup
           .mixed()
@@ -70,12 +78,18 @@ export const validationSchema = [
         .max(16, 'Twitter handle is too long')
         .matches(/^@([A-Za-z0-9_])*$/, 'Please enter a valid Twitter handle'),
     }),
-    representative: yup.object().shape({
+  }),
+  representative: yup.object().when(CURRENT_STEP, {
+    is: COMPANY_INFO_STEP,
+    then: yup.object().shape({
       member: CONTACT_YUP,
       marketing: CONTACT_YUP,
       accounting: CONTACT_YUP,
     }),
-    purchasingAndVAT: yup.object().shape({
+  }),
+  purchasingAndVAT: yup.object().when(CURRENT_STEP, {
+    is: COMPANY_INFO_STEP,
+    then: yup.object().shape({
       purchasingProcess: REQUIRED_MAX_YUP,
       vatNumber: MAX_YUP,
       countryOfRegistration: MAX_YUP,
@@ -83,38 +97,38 @@ export const validationSchema = [
   }),
 
   // Second step - membership level
-  yup.object().shape({
-    membershipLevel: REQUIRED_MAX_YUP,
+  membershipLevel: yup.string().when(CURRENT_STEP, {
+    is: MEMBERSHIP_LEVEL_STEP,
+    then: REQUIRED_MAX_YUP,
   }),
 
   // Third step - working groups
-  yup.object().shape({
-    workingGroups: yup.array().when('skipJoiningWG', {
-      is: false,
-      then: yup.array().of(
-        yup.object().shape({
-          workingGroup: yup
-            .object()
-            .nullable()
-            .required('Please enter/select a valid working group')
-            .test('workingGroup', 'Please enter/select a valid working group', function (selectedWG) {
-              const allWorkingGroups = this.options.parent?.allWorkingGroups;
-              const typedWG = this.options.parent?.['workingGroup-label'];
-              const isValid = allWorkingGroups?.includes(typedWG) && selectedWG?.label ? true : false;
-              return typedWG ? isValid : true;
-            }),
-          participationLevel: REQUIRED_MAX_YUP,
-          workingGroupRepresentative: CONTACT_YUP,
-        })
-      ),
-    }),
+  workingGroups: yup.array().when(['skipJoiningWG', CURRENT_STEP], {
+    is: (skipJoiningWG, currentStep) => !skipJoiningWG && currentStep === WORKING_GROUP_STEP,
+    then: yup.array().of(
+      yup.object().shape({
+        workingGroup: yup
+          .object()
+          .nullable()
+          .required('Please enter/select a valid working group')
+          .test('workingGroup', 'Please enter/select a valid working group', function (selectedWG) {
+            const allWorkingGroups = this.options.parent?.allWorkingGroups;
+            const typedWG = this.options.parent?.['workingGroup-label'];
+            const isValid = allWorkingGroups?.includes(typedWG) && selectedWG?.label ? true : false;
+            return typedWG ? isValid : true;
+          }),
+        participationLevel: REQUIRED_MAX_YUP,
+        workingGroupRepresentative: CONTACT_YUP,
+      })
+    ),
   }),
 
   // Forth, signing Authority
-  yup.object().shape({
-    signingAuthorityRepresentative: CONTACT_YUP,
+  signingAuthorityRepresentative: yup.object().when(CURRENT_STEP, {
+    is: SIGNING_AUTHORITY_STEP,
+    then: CONTACT_YUP,
   }),
-];
+});
 
 export const VALIDATION_SCHEMA_FOR_ORG_PROFILE = yup.object().shape({
   orgProfile: yup.object().shape({

@@ -43,6 +43,12 @@ export const ROUTE_SIGNING = '/signing-authority';
 export const ROUTE_REVIEW = '/review';
 export const ROUTE_SUBMITTED = '/submitted';
 
+export const CURRENT_STEP = 'currentStep';
+export const COMPANY_INFO_STEP = 'company info step';
+export const MEMBERSHIP_LEVEL_STEP = 'membership level step';
+export const WORKING_GROUP_STEP = 'working group step';
+export const SIGNING_AUTHORITY_STEP = 'signing authority step';
+
 export const FETCH_METHOD = {
   POST: 'POST',
   GET: 'GET',

@@ -18,6 +18,8 @@ import {
   MODE_REACT_ONLY,
   MODE_REACT_API,
   ROUTE_MEMBERSHIP,
+  COMPANY_INFO_STEP,
+  CURRENT_STEP,
 } from '../../../Constants/Constants';
 import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import CompanyInformationVAT from './CompanyInformationVAT';
@@ -77,6 +79,10 @@ const CompanyInformation = ({
   useEffect(() => {
     setCurrentStepIndex(1);
   }, [setCurrentStepIndex]);
+
+  useEffect(() => {
+    setFieldValue(CURRENT_STEP, COMPANY_INFO_STEP);
+  }, [setFieldValue]);
 
   useEffect(() => {
     const detectModeAndFetch = () => {

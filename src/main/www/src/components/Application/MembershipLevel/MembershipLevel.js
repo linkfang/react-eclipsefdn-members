@@ -3,7 +3,13 @@ import CustomStepButton from '../../UIComponents/Button/CustomStepButton';
 import { formField } from '../../UIComponents/FormComponents/formFieldModel';
 import { useContext, useEffect } from 'react';
 import { isObjectEmpty, scrollToTop } from '../../../Utils/formFunctionHelpers';
-import { MEMBERSHIP_LEVELS, ROUTE_COMPANY, ROUTE_WGS } from '../../../Constants/Constants';
+import {
+  CURRENT_STEP,
+  MEMBERSHIP_LEVELS,
+  MEMBERSHIP_LEVEL_STEP,
+  ROUTE_COMPANY,
+  ROUTE_WGS,
+} from '../../../Constants/Constants';
 import DropdownMenu from '../../UIComponents/Inputs/DropdownMenu';
 import MembershipContext from '../../../Context/MembershipContext';
 
@@ -17,6 +23,7 @@ import MembershipContext from '../../../Context/MembershipContext';
 
 const MembershipLevel = ({ formik, updatedFormValues }) => {
   const { membershipLevel } = formField;
+  const { setFieldValue } = formik;
   const { setCurrentStepIndex } = useContext(MembershipContext);
 
   useEffect(() => {
@@ -26,6 +33,10 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
   useEffect(() => {
     setCurrentStepIndex(2);
   }, [setCurrentStepIndex]);
+
+  useEffect(() => {
+    setFieldValue(CURRENT_STEP, MEMBERSHIP_LEVEL_STEP);
+  }, [setFieldValue]);
 
   return (
     <>
