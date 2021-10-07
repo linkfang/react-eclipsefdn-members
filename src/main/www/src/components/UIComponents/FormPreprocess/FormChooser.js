@@ -8,7 +8,7 @@ import {
   API_FORM_PARAM,
   ROUTE_COMPANY,
 } from '../../../Constants/Constants';
-import { handleNewForm, requestErrorHandler } from '../../../Utils/formFunctionHelpers';
+import { handleNewForm, isProd, requestErrorHandler } from '../../../Utils/formFunctionHelpers';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
 import { Button } from '@material-ui/core';
@@ -76,7 +76,7 @@ const FormChooser = ({
           throw res.status;
         })
         .then((data) => {
-          console.log('existing forms:  ', data);
+          !isProd && console.log('existing forms:  ', data);
           if (data.length > 0 && data[0].state !== 'SUBMITTED') {
             setHasExistingForm(data[0]?.id);
             setCurrentFormId(data[0]?.id);

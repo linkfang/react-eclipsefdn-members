@@ -5,7 +5,10 @@ const email = 'Email Address';
 const orgName = 'Organization Name';
 const twitterLabel = 'Twitter Handle';
 const twitter = '@username';
-const street = 'Street';
+const street = 'Address 1';
+const streetPlaceholder = 'Street address of the organization';
+const streetTwo = 'Address 2';
+const streetTwoPlaceholder = 'Additional information about the street address';
 const city = 'City';
 const provinceOrState = 'Province or State';
 const postalCode = 'Postal Code';
@@ -39,6 +42,7 @@ export const initialValues = {
     address: {
       id: '',
       street: '',
+      streetTwo: '',
       city: '',
       provinceOrState: '',
       country: '',
@@ -165,7 +169,13 @@ export const formField = {
     street: {
       name: 'organization.address.street',
       label: street,
-      placeholder: street,
+      placeholder: streetPlaceholder,
+      requiredErrorMsg: requiredErrorMsg,
+    },
+    streetTwo: {
+      name: 'organization.address.streetTwo',
+      label: streetTwo,
+      placeholder: streetTwoPlaceholder,
       requiredErrorMsg: requiredErrorMsg,
     },
     city: {
@@ -311,4 +321,21 @@ export const formField = {
       placeholder: email,
     },
   ],
+};
+
+export const INITIAL_ORG_PROFILE_VALUE = {
+  orgProfile: {
+    description: '',
+    companyURL: '',
+  },
+  logos: {
+    logoForWeb: [],
+    logoForPrint: [],
+  },
+};
+
+export const INITIAL_ORG_NEW_LINK = {
+  title: '',
+  description: '',
+  url: '',
 };

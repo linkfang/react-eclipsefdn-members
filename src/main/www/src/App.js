@@ -8,13 +8,17 @@ import Application from './components/Application/Application';
 import Portal from './components/Portal/Portal';
 import NotFound404 from './components/ErrorPages/NotFound404';
 import InternalError50x from './components/ErrorPages/InternalError50x';
-import { ROUTE_SIGN_IN } from './Constants/Constants';
+import { darkGray, ROUTE_SIGN_IN } from './Constants/Constants';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#f7941e',
       contrastText: '#fff', // for button text color
+    },
+    secondary: {
+      main: darkGray,
+      contrastText: '#fff',
     },
   },
   spacing: 10,

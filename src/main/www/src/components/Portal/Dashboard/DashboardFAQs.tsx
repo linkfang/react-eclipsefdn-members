@@ -164,7 +164,7 @@ export default function DashboardFAQs() {
   ));
   return (
     <div id="faqs">
-      <Typography className={classes.faqTitle} variant="h4">
+      <Typography className={classes.faqTitle} variant="h4" component="h1">
         FAQs
       </Typography>
       <Container className={classes.faqContainer}>

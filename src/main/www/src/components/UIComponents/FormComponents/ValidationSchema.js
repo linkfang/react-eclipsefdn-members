@@ -1,6 +1,7 @@
 import * as yup from 'yup';
-import { MAX_LENGTH_HELPER_TEXT } from '../../../Constants/Constants';
+import { MAX_LENGTH_HELPER_TEXT, MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED } from '../../../Constants/Constants';
 import { requiredErrorMsg } from './formFieldModel';
+import countryAddressDetails from 'postal-address-field-names';
 
 /**
  * Validation schema passed to Formik
@@ -32,12 +33,11 @@ import { requiredErrorMsg } from './formFieldModel';
  * please refer to: https://formik.org/docs/api/formik#errors--field-string-string-
  */
 
-const countryList = require('country-list')
-  .getNames()
-  .map((item) => item);
+const countryList = countryAddressDetails.map((item) => item.name);
 
 const REQUIRED_MAX_YUP = yup.string().required(requiredErrorMsg).max(255, MAX_LENGTH_HELPER_TEXT);
 const MAX_YUP = yup.string().max(255, MAX_LENGTH_HELPER_TEXT);
+const MAX_YUP_SEVEN_HUNDRED = yup.string().max(700, MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED);
 const CONTACT_YUP = yup.object().shape({
   email: yup.string().required(requiredErrorMsg).email('Please enter a valid email'),
   firstName: REQUIRED_MAX_YUP,
@@ -115,3 +115,16 @@ export const validationSchema = [
     signingAuthorityRepresentative: CONTACT_YUP,
   }),
 ];
+
+export const VALIDATION_SCHEMA_FOR_ORG_PROFILE = yup.object().shape({
+  orgProfile: yup.object().shape({
+    description: MAX_YUP_SEVEN_HUNDRED,
+    companyURL: MAX_YUP,
+  }),
+});
+
+export const VALIDATION_SCHEMA_FOR_NEW_LINK = yup.object().shape({
+  title: REQUIRED_MAX_YUP,
+  description: MAX_YUP_SEVEN_HUNDRED,
+  url: REQUIRED_MAX_YUP,
+});

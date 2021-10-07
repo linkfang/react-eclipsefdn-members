@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       [theme.breakpoints.up(1280)]: {
         width: '30%',
-        margin: theme.spacing(2.5, 1, 0, 1),
+        margin: theme.spacing(2.5, 2, 0, 0),
       },
     },
     companyLogoCard: {

@@ -7,7 +7,7 @@ export default function ProjectsAndWG() {
         margin: '40px 0',
       }}
     >
-      <Typography variant="h4">Projects and Working Groups</Typography>
+      <Typography variant="h4" component="h1">Projects and Working Groups</Typography>
     </div>
   );
 }

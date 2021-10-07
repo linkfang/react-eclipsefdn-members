@@ -33,6 +33,7 @@ export const HAS_TOKEN_EXPIRED = 'HAS_TOKEN_EXPIRED';
 
 export const LOGIN_EXPIRED_MSG = 'Your session has expired, please sign in again.';
 export const MAX_LENGTH_HELPER_TEXT = 'The value exceeds max length 255 characters';
+export const MAX_LENGTH_HELPER_TEXT_SEVEN_HUNDRED = 'The value exceeds max length 700 characters';
 
 export const ROUTE_SIGN_IN = '/sign-in';
 export const ROUTE_COMPANY = '/company-info';
@@ -233,6 +234,15 @@ export const NAV_OPTIONS_DATA = [
     path: '/portal/contact-management',
     icon: <RecentActorsIcon />,
   },
+];
+
+// Reasons for requesting removal for a contact
+export const REMOVE_REASONS = [
+  'No longer interested',
+  'It didn’t meet my need',
+  'Found a better alternative',
+  'Ease of use was lee than expected',
+  'Other',
 ];
 
 // Constants for styles
