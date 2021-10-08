@@ -143,13 +143,6 @@ export default function Application() {
     setUpdatedFormValues(theNewValue);
     !isProd && console.log('updated SigningAuthority: ', values);
 
-    const valueToUpdateFormik = [
-      {
-        field: 'signingAuthorityRepresentative',
-        value: signingAuthorityRepresentative,
-      },
-    ];
-
     const setFieldValueObj = {
       fieldName: 'signingAuthorityRepresentative',
       method: {
@@ -168,7 +161,6 @@ export default function Application() {
     initialValues: initialValues,
     validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
     onSubmit: () => {
-      console.log(window.location.hash === '#company-info');
       switch (window.location.hash) {
         case '#company-info':
           submitCompanyInfo();
@@ -220,21 +212,12 @@ export default function Application() {
             index={index}
             pathName={pageStep.pathName}
             updatedFormValues={updatedFormValues}
-            formikCompanyInfo={{
+            formik={{
               ...formik,
-              submitForm: submitCompanyInfo,
-            }}
-            formikMembershipLevel={{
-              ...formik,
-              submitForm: submitMembershipLevel,
-            }}
-            formikWorkingGroups={{
-              ...formik,
-              submitForm: submitWorkingGroups,
-            }}
-            formikSigningAuthority={{
-              ...formik,
-              submitForm: submitSigningAuthority,
+              submitCompanyInfo: submitCompanyInfo,
+              submitMembershipLevel: submitMembershipLevel,
+              submitWorkingGroups: submitWorkingGroups,
+              submitSigningAuthority: submitSigningAuthority,
             }}
           />
         );

@@ -687,16 +687,16 @@ export function isObjectEmpty(obj) {
   return true;
 }
 
-export function validateGoBack(isEmpty, result, formik, setShouldOpen, navigate, isNotFurthestPage) {
+export function validateGoBack(isEmpty, result, submitForm, setTouched, setShouldOpen, navigate, isNotFurthestPage) {
   // Save values on current step if it's NOT empty and passes validation
   if (!isEmpty && Object.keys(result).length <= 0) {
-    formik.submitForm();
+    submitForm();
   }
 
   // Open modal window if it's NOT empty and fails to pass validation
   // OR open it if it's emtpy and NOT the furthest page
   if ((!isEmpty && Object.keys(result).length > 0) || (isEmpty && isNotFurthestPage)) {
-    formik.setTouched(result);
+    setTouched(result);
     setShouldOpen(true);
     return;
   }
