@@ -149,10 +149,7 @@ class SignIn extends React.Component {
               setFurthestPage={this.props.setFurthestPage}
               history={this.props.history}
               setIsStartNewForm={this.props.setIsStartNewForm}
-              resetCompanyInfoForm={this.props.resetCompanyInfoForm}
-              resetMembershipLevelForm={this.props.resetMembershipLevelForm}
-              resetWorkingGroupForm={this.props.resetWorkingGroupForm}
-              resetSigningAuthorityForm={this.props.resetSigningAuthorityForm}
+              resetForm={this.props.resetForm}
               setUpdatedFormValues={this.props.setUpdatedFormValues}
             />
           ) : (

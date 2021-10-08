@@ -46,7 +46,6 @@ import ModalWindow from '../../UIComponents/Notifications/ModalWindow';
 
 const WorkingGroupsWrapper = ({
   formik,
-  formikOrgValue,
   fullWorkingGroupList,
   workingGroupsUserJoined,
   updatedFormValues,
@@ -138,7 +137,6 @@ const WorkingGroupsWrapper = ({
 
               <WorkingGroup
                 formik={formik}
-                formikOrgValue={formikOrgValue}
                 workingGroupsUserJoined={workingGroupsUserJoined}
                 fullWorkingGroupList={fullWorkingGroupList}
                 updatedFormValues={updatedFormValues}

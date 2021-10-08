@@ -239,10 +239,7 @@ export default function Application() {
             setFurthestPage={setFurthestPage}
             history={history}
             setIsStartNewForm={setIsStartNewForm}
-            resetCompanyInfoForm={formik.resetForm}
-            resetMembershipLevelForm={formik.resetForm}
-            resetWorkingGroupForm={formik.resetForm}
-            resetSigningAuthorityForm={formik.resetForm}
+            resetForm={formik.resetForm}
             setUpdatedFormValues={setUpdatedFormValues}
           />
         </Route>
@@ -256,7 +253,6 @@ export default function Application() {
                 <CompanyInformation
                   formik={formik}
                   isStartNewForm={isStartNewForm}
-                  formikWG={formik}
                   fullWorkingGroupList={fullWorkingGroupList}
                   setFullWorkingGroupList={setFullWorkingGroupList}
                   setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
@@ -292,7 +288,6 @@ export default function Application() {
             {furthestPage.index >= 3 ? (
               <WorkingGroupsWrapper
                 formik={{ ...formik, submitForm: submitWorkingGroups }}
-                formikOrgValue={formik.values}
                 isStartNewForm={isStartNewForm}
                 fullWorkingGroupList={fullWorkingGroupList}
                 workingGroupsUserJoined={workingGroupsUserJoined}
@@ -311,7 +306,6 @@ export default function Application() {
             {furthestPage.index >= 4 ? (
               <SigningAuthority
                 formik={{ ...formik, submitForm: submitSigningAuthority }}
-                formikOrgValue={formik.values}
                 updatedFormValues={updatedFormValues}
               />
             ) : (

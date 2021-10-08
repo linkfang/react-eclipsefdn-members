@@ -14,7 +14,7 @@ import { CURRENT_STEP, ROUTE_REVIEW, ROUTE_WGS, SIGNING_AUTHORITY_STEP } from '.
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
+const SigningAuthority = ({ formik, updatedFormValues }) => {
   const { setCurrentStepIndex } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const { signingAuthorityRepresentative } = formField;
@@ -43,7 +43,7 @@ const SigningAuthority = ({ formik, formikOrgValue, updatedFormValues }) => {
   );
 
   const handleCheckboxChange = (isChecked) => {
-    const repInfo = isChecked ? formikOrgValue.representative.member : formik.values.signingAuthorityRepresentative;
+    const repInfo = isChecked ? formik.values.representative.member : formik.values.signingAuthorityRepresentative;
 
     const newValues = {
       ...repInfo,

@@ -17,14 +17,12 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  *
  * @returns
  */
-const Contacts = ({ formik, formikWG }) => {
+const Contacts = ({ formik }) => {
   // the boolean form value of "is marketing Rep. the same as company Rep.?"
-  const isMarketingSameAsCompany =
-    formik.values.representative.marketing.sameAsCompany;
+  const isMarketingSameAsCompany = formik.values.representative.marketing.sameAsCompany;
 
   // the boolean form value of "is accounting Rep. the same as company Rep.?"
-  const isAccountingSameAsCompany =
-    formik.values.representative.accounting.sameAsCompany;
+  const isAccountingSameAsCompany = formik.values.representative.accounting.sameAsCompany;
   const { companyRep } = formField;
 
   /**
@@ -37,14 +35,12 @@ const Contacts = ({ formik, formikWG }) => {
    */
 
   const handleCheckboxChange = (isChecked, fieldName) => {
-    const repInfo = isChecked
-      ? formik.values.representative.member
-      : formik.values.representative[fieldName];
+    const repInfo = isChecked ? formik.values.representative.member : formik.values.representative[fieldName];
 
     const newValues = {
       ...repInfo,
       sameAsCompany: isChecked,
-      id: formik.values.representative[fieldName].id
+      id: formik.values.representative[fieldName].id,
     };
     formik.setFieldValue(`representative.${fieldName}`, newValues);
   };
@@ -90,7 +86,7 @@ const Contacts = ({ formik, formikWG }) => {
     formik.setFieldValue('representative', newRepresentativeValue);
 
     let isWGRepSameAsCompany = false;
-    const newWG = formikWG.values.workingGroups.map((wg) => {
+    const newWG = formik.values.workingGroups.map((wg) => {
       isWGRepSameAsCompany = wg.workingGroupRepresentative?.sameAsCompany || isWGRepSameAsCompany;
       return wg.workingGroupRepresentative?.sameAsCompany
         ? {
@@ -104,9 +100,8 @@ const Contacts = ({ formik, formikWG }) => {
         : wg;
     });
     // only call setFieldValue when there is at least 1 wg rep has sameAsCompany: true
-    isWGRepSameAsCompany && formikWG.setFieldValue('workingGroups', newWG);
+    isWGRepSameAsCompany && formik.setFieldValue('workingGroups', newWG);
     const isSigningAuthoritySameAsCompany = formik.values.signingAuthorityRepresentative.sameAsCompany;
-    
     if (isSigningAuthoritySameAsCompany) {
       const newSigningAuthorityRepValues = {
         ...memberRepInfo,
@@ -161,11 +156,9 @@ const Contacts = ({ formik, formikWG }) => {
         <span className="orange-star margin-left-5">*</span>
       </h2>
       <p>
-        Please indicate the primary point of contact between your organization
-        and the Eclipse Foundation. As per the Eclipse Bylaws, the Member
-        Representative shall represent your organization in the General
-        Assembly, have the right to cast any votes on behalf of your
-        organization, and shall have the authority to update information
+        Please indicate the primary point of contact between your organization and the Eclipse Foundation. As per the
+        Eclipse Bylaws, the Member Representative shall represent your organization in the General Assembly, have the
+        right to cast any votes on behalf of your organization, and shall have the authority to update information
         provided to Eclipse Foundation.
       </p>
       <p>All formal communications from the Eclipse Foundation will be sent to the Member Representative.</p>
@@ -181,9 +174,7 @@ const Contacts = ({ formik, formikWG }) => {
             name="representative.marketing.sameAsCompany"
             color="primary"
             checked={formik.values.representative.marketing.sameAsCompany}
-            onChange={(ev) =>
-              handleCheckboxChange(ev.target.checked, 'marketing')
-            }
+            onChange={(ev) => handleCheckboxChange(ev.target.checked, 'marketing')}
           />
         }
         label="Same as Member Representative"
@@ -201,9 +192,7 @@ const Contacts = ({ formik, formikWG }) => {
             name="representative.accounting.sameAsCompany"
             color="primary"
             checked={isAccountingSameAsCompany}
-            onChange={(ev) =>
-              handleCheckboxChange(ev.target.checked, 'accounting')
-            }
+            onChange={(ev) => handleCheckboxChange(ev.target.checked, 'accounting')}
           />
         }
         label="Same as Member Representative"

@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFormValues, setUpdatedFormValues }) => {
+const WorkingGroup = ({ formik, fullWorkingGroupList, updatedFormValues, setUpdatedFormValues }) => {
   const classes = useStyles();
   const { currentFormId } = useContext(MembershipContext);
   const [sortedWGList, setSortedWGList] = useState([]);
@@ -168,7 +168,6 @@ const WorkingGroup = ({ formik, fullWorkingGroupList, formikOrgValue, updatedFor
                       formik={formik}
                     />
                     <WorkingGroupsRepresentative
-                      formikOrgValue={formikOrgValue}
                       name={`${workingGroupsLabel}.${index}.workingGroupRepresentative`}
                       index={index}
                       label="Working Group Representative"

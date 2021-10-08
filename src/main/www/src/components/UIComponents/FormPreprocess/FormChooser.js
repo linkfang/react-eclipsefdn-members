@@ -22,10 +22,7 @@ const FormChooser = ({
   setFurthestPage,
   history,
   setIsStartNewForm,
-  resetSigningAuthorityForm,
-  resetWorkingGroupForm,
-  resetMembershipLevelForm,
-  resetCompanyInfoForm,
+  resetForm,
   setUpdatedFormValues,
 }) => {
   const { setCurrentFormId, furthestPage } = useContext(MembershipContext);
@@ -49,10 +46,7 @@ const FormChooser = ({
     }
     // reset the form if user has gone to a further page/step
     if (furthestPage.index > 0) {
-      resetCompanyInfoForm();
-      resetMembershipLevelForm();
-      resetWorkingGroupForm();
-      resetSigningAuthorityForm();
+      resetForm();
     }
     handleNewForm(setCurrentFormId, goToCompanyInfoStep);
   };

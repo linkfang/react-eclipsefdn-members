@@ -10,13 +10,13 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
  *
  *   - formField: the form field in formModels/formFieldModel.js
  */
-const WorkingGroupRepresentative = ({ name, index, formik, formikOrgValue }) => {
+const WorkingGroupRepresentative = ({ name, index, formik }) => {
   const { workingGroupRepresentative } = formField;
   const theIndex = index;
 
   const handleCheckboxChange = (isChecked) => {
     const repInfo = isChecked
-      ? formikOrgValue.representative.member
+      ? formik.values.representative.member
       : formik.values.workingGroups[theIndex].workingGroupRepresentative;
 
     const newValues = {

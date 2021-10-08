@@ -59,7 +59,6 @@ let hasOrgData = false;
 const CompanyInformation = ({
   formik,
   isStartNewForm,
-  formikWG,
   fullWorkingGroupList,
   setFullWorkingGroupList,
   setWorkingGroupsUserJoined,
@@ -69,7 +68,6 @@ const CompanyInformation = ({
   const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
   const { setFieldValue } = formik;
-  const setWGFieldValue = formikWG.setFieldValue;
   const companyRep = formik.values.representative.member;
 
   useEffect(() => {
@@ -208,7 +206,7 @@ const CompanyInformation = ({
         currentFormId,
         fullWorkingGroupList,
         setWorkingGroupsUserJoined,
-        setWGFieldValue,
+        setFieldValue,
         companyRep,
         setLoading
       );
@@ -216,15 +214,7 @@ const CompanyInformation = ({
     } else {
       setLoading(false);
     }
-  }, [
-    isStartNewForm,
-    currentFormId,
-    fullWorkingGroupList,
-    setFieldValue,
-    companyRep,
-    setWGFieldValue,
-    setWorkingGroupsUserJoined,
-  ]);
+  }, [isStartNewForm, currentFormId, fullWorkingGroupList, setFieldValue, companyRep, setWorkingGroupsUserJoined]);
 
   // If it is in loading status or hasn't gotten the form id,
   // only return a loading spinning
@@ -249,7 +239,7 @@ const CompanyInformation = ({
           .
         </p>
         <CompanyInformationCompany formik={formik} useStyles={useStyles} />
-        <CompanyInformationContacts formik={formik} formikWG={formikWG} />
+        <CompanyInformationContacts formik={formik} />
         <CompanyInformationVAT formik={formik} />
       </div>
 
