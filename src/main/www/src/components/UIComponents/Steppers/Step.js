@@ -61,23 +61,8 @@ const Step = ({ index, title, pathName, formik, updatedFormValues }) => {
 
   const handleGoBack = () => {
     setShouldOpen(false);
-    // Reset/roll back different formik based on current route
-    switch (window.location.hash) {
-      case '#company-info':
-        formik.setValues(updatedFormValues);
-        break;
-      case '#membership-level':
-        formik.setValues(updatedFormValues);
-        break;
-      case '#working-groups':
-        formik.setValues(updatedFormValues);
-        break;
-      case '#signing-authority':
-        formik.setValues(updatedFormValues);
-        break;
-      default:
-        break;
-    }
+    // Reset/roll back formik values
+    formik.setValues(updatedFormValues);
     history.push(pathName);
   };
 
