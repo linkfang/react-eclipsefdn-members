@@ -204,7 +204,7 @@ export default function Application() {
             {renderStepper()}
             {furthestPage.index >= 2 ? (
               <MembershipLevel
-                formik={{ ...formik, submitForm: submitMembershipLevel }}
+                formik={formik}
                 updatedFormValues={updatedFormValues}
                 submitForm={submitMembershipLevel}
               />
@@ -219,7 +219,7 @@ export default function Application() {
             {renderStepper()}
             {furthestPage.index >= 3 ? (
               <WorkingGroupsWrapper
-                formik={{ ...formik, submitForm: submitWorkingGroups }}
+                formik={formik}
                 isStartNewForm={isStartNewForm}
                 fullWorkingGroupList={fullWorkingGroupList}
                 workingGroupsUserJoined={workingGroupsUserJoined}
@@ -238,7 +238,7 @@ export default function Application() {
             {renderStepper()}
             {furthestPage.index >= 4 ? (
               <SigningAuthority
-                formik={{ ...formik, submitForm: submitSigningAuthority }}
+                formik={formik}
                 updatedFormValues={updatedFormValues}
                 submitForm={submitSigningAuthority}
               />
