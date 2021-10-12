@@ -48,25 +48,7 @@ export default function Application() {
 
   const submitCompanyInfo = () => {
     const values = formik.values;
-    // update the organization values
-    const organization = values.organization;
-    const representative = values.representative;
-    const purchasingAndVAT = values.purchasingAndVAT;
-    const membershipLevel = values.membershipLevel;
-    const membershipLevelLabel = values['membershipLevel-label'];
-    const signingAuthorityRepresentative = values.signingAuthorityRepresentative;
-
-    const theNewValue = {
-      ...updatedFormValues,
-      organization,
-      representative,
-      purchasingAndVAT,
-      membershipLevel,
-      'membershipLevel-label': membershipLevelLabel,
-      workingGroups: formik.values.workingGroups,
-      signingAuthorityRepresentative: signingAuthorityRepresentative,
-    };
-    setUpdatedFormValues(theNewValue);
+    setUpdatedFormValues(values);
     !isProd && console.log('updated company info: ', values);
 
     const setFieldValueObj = {
@@ -80,28 +62,20 @@ export default function Application() {
     };
 
     const updateFormValuesObj = {
-      theNewValue,
+      theNewValue: values,
       setUpdatedFormValues,
     };
 
-    executeSendDataByStep(1, theNewValue, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
+    executeSendDataByStep(1, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
     // Only make the API call when signingAuthorityRepresentative has an id
     // If not, it means there is nothing in the db, so no need to update.
     values.signingAuthorityRepresentative.id &&
       executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, updateFormValuesObj);
-    // Only need to call goToNextStep when is not using stepper
   };
 
   const submitMembershipLevel = () => {
     const values = formik.values;
-    // update the membershipLevel values
-    const membershipLevel = values.membershipLevel;
-    const membershipLevelLabel = values['membershipLevel-label'];
-    setUpdatedFormValues({
-      ...updatedFormValues,
-      membershipLevel,
-      'membershipLevel-label': membershipLevelLabel,
-    });
+    setUpdatedFormValues(values);
     !isProd && console.log('updated membership level: ', values);
 
     executeSendDataByStep(2, values, currentFormId, currentUser.name);
@@ -109,13 +83,7 @@ export default function Application() {
 
   const submitWorkingGroups = () => {
     const values = formik.values;
-    // update the workingGroups values
-    const theNewValue = {
-      ...updatedFormValues,
-      workingGroups: values.workingGroups,
-      skipJoiningWG: values.skipJoiningWG,
-    };
-    setUpdatedFormValues(theNewValue);
+    setUpdatedFormValues(values);
     !isProd && console.log('updated working groups: ', values);
 
     if (!values.skipJoiningWG) {
@@ -126,7 +94,7 @@ export default function Application() {
       };
 
       executeSendDataByStep(3, values, currentFormId, currentUser.name, setFieldValueObj, {
-        theNewValue,
+        theNewValue: values,
         setUpdatedFormValues,
       });
     }
@@ -134,13 +102,7 @@ export default function Application() {
 
   const submitSigningAuthority = () => {
     const values = formik.values;
-    // update the signingAuthorityRepresentative values
-    const signingAuthorityRepresentative = values.signingAuthorityRepresentative;
-    const theNewValue = {
-      ...updatedFormValues,
-      signingAuthorityRepresentative,
-    };
-    setUpdatedFormValues(theNewValue);
+    setUpdatedFormValues(values);
     !isProd && console.log('updated SigningAuthority: ', values);
 
     const setFieldValueObj = {
@@ -152,7 +114,7 @@ export default function Application() {
     };
 
     executeSendDataByStep(4, values, currentFormId, currentUser.name, setFieldValueObj, {
-      theNewValue,
+      theNewValue: values,
       setUpdatedFormValues,
     });
   };
