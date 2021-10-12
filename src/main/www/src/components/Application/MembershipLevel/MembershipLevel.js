@@ -21,7 +21,7 @@ import MembershipContext from '../../../Context/MembershipContext';
  *    - formField: the form field in formModels/formFieldModel.js;
  */
 
-const MembershipLevel = ({ formik, updatedFormValues }) => {
+const MembershipLevel = ({ formik, updatedFormValues, submitForm }) => {
   const { membershipLevel } = formField;
   const { setFieldValue } = formik;
   const { setCurrentStepIndex } = useContext(MembershipContext);
@@ -72,7 +72,7 @@ const MembershipLevel = ({ formik, updatedFormValues }) => {
         checkIsEmpty={() => isObjectEmpty(formik.values.membershipLevel)}
         formik={formik}
         updatedFormValues={updatedFormValues}
-        handleSubmit={formik.handleSubmit}
+        submitForm={submitForm}
       />
     </>
   );

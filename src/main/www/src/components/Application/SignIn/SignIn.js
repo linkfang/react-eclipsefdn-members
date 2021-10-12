@@ -56,9 +56,9 @@ const theme = createMuiTheme({
 class SignIn extends React.Component {
   static contextType = MembershipContext;
 
-  getFakeUser = (setFurthestPage) => {
+  getFakeUser = () => {
     this.props.history.push(ROUTE_COMPANY);
-    setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
+    this.context.setFurthestPage({ index: 1, pathName: ROUTE_COMPANY });
     this.context.setCurrentFormId('reactOnly');
     fetch('membership_data/fake_user.json', { headers: FETCH_HEADER })
       .then((resp) => resp.json())
@@ -82,7 +82,7 @@ class SignIn extends React.Component {
           Get started by logging in with your Eclipse Foundation account:
         </p>
         {getCurrentMode() === MODE_REACT_ONLY && (
-          <Button variant="contained" color="secondary" size="large" onClick={() => this.getFakeUser(setFurthestPage)}>
+          <Button variant="contained" color="secondary" size="large" onClick={() => this.getFakeUser()}>
             React Only Login
           </Button>
         )}
@@ -146,7 +146,7 @@ class SignIn extends React.Component {
         <div className="sign-in-btn-ctn">
           {this.context.currentUser ? (
             <FormChooser
-              setFurthestPage={this.props.setFurthestPage}
+              setFurthestPage={this.context.setFurthestPage}
               history={this.props.history}
               setIsStartNewForm={this.props.setIsStartNewForm}
               resetForm={this.props.resetForm}

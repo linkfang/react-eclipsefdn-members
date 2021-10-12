@@ -29,22 +29,13 @@ import TopSlideMsg from '../UIComponents/Notifications/TopSlideMsg';
 
 export default function Application() {
   const history = useHistory();
-  const { currentFormId, furthestPage, setFurthestPage, currentUser } = useContext(MembershipContext);
+  const { currentFormId, furthestPage, currentUser } = useContext(MembershipContext);
   const [updatedFormValues, setUpdatedFormValues] = useState(initialValues);
   const [isStartNewForm, setIsStartNewForm] = useState(true);
   const [isLoginExpired, setIsLoginExpired] = useState(false);
   const [isTermChecked, setIsTermChecked] = useState(false);
   const [fullWorkingGroupList, setFullWorkingGroupList] = useState([]);
   const [workingGroupsUserJoined, setWorkingGroupsUserJoined] = useState([]);
-
-  const goToNextStep = (pageIndex, nextPage) => {
-    if (furthestPage.index <= pageIndex) setFurthestPage({ index: pageIndex + 1, pathName: nextPage });
-    history.push(nextPage);
-  };
-
-  const submitForm = () => {
-    goToNextStep(5, ROUTE_SUBMITTED);
-  };
 
   const submitCompanyInfo = () => {
     const values = formik.values;
@@ -122,28 +113,6 @@ export default function Application() {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: VALIDATION_SCHEMA_FOR_ENROLMENT_FORM,
-    onSubmit: () => {
-      switch (window.location.hash) {
-        case '#company-info':
-          submitCompanyInfo();
-          goToNextStep(1, ROUTE_MEMBERSHIP);
-          break;
-        case '#membership-level':
-          submitMembershipLevel();
-          goToNextStep(2, ROUTE_WGS);
-          break;
-        case '#working-groups':
-          submitWorkingGroups();
-          goToNextStep(3, ROUTE_SIGNING);
-          break;
-        case '#signing-authority':
-          submitSigningAuthority();
-          goToNextStep(4, ROUTE_REVIEW);
-          break;
-        default:
-          break;
-      }
-    },
   });
 
   const handleLoginExpired = useCallback(() => {
@@ -198,7 +167,6 @@ export default function Application() {
           <SignInIntroduction />
           {renderStepper()}
           <SignIn
-            setFurthestPage={setFurthestPage}
             history={history}
             setIsStartNewForm={setIsStartNewForm}
             resetForm={formik.resetForm}
@@ -220,6 +188,7 @@ export default function Application() {
                   setWorkingGroupsUserJoined={setWorkingGroupsUserJoined}
                   updatedFormValues={updatedFormValues}
                   setUpdatedFormValues={setUpdatedFormValues}
+                  submitForm={submitCompanyInfo}
                 />
               ) : (
                 // if uses are not allowed to visit this page,
@@ -237,6 +206,7 @@ export default function Application() {
               <MembershipLevel
                 formik={{ ...formik, submitForm: submitMembershipLevel }}
                 updatedFormValues={updatedFormValues}
+                submitForm={submitMembershipLevel}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -255,6 +225,7 @@ export default function Application() {
                 workingGroupsUserJoined={workingGroupsUserJoined}
                 updatedFormValues={updatedFormValues}
                 setUpdatedFormValues={setUpdatedFormValues}
+                submitForm={submitWorkingGroups}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -269,6 +240,7 @@ export default function Application() {
               <SigningAuthority
                 formik={{ ...formik, submitForm: submitSigningAuthority }}
                 updatedFormValues={updatedFormValues}
+                submitForm={submitSigningAuthority}
               />
             ) : (
               <Redirect to={furthestPage.pathName} />
@@ -279,12 +251,7 @@ export default function Application() {
         <Route path={ROUTE_REVIEW}>
           {renderStepper()}
           {furthestPage.index >= 5 ? (
-            <Review
-              values={updatedFormValues}
-              submitForm={submitForm}
-              isTermChecked={isTermChecked}
-              setIsTermChecked={setIsTermChecked}
-            />
+            <Review values={updatedFormValues} isTermChecked={isTermChecked} setIsTermChecked={setIsTermChecked} />
           ) : (
             <Redirect to={furthestPage.pathName} />
           )}

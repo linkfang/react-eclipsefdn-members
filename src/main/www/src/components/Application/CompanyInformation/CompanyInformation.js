@@ -64,6 +64,7 @@ const CompanyInformation = ({
   setWorkingGroupsUserJoined,
   updatedFormValues,
   setUpdatedFormValues,
+  submitForm,
 }) => {
   const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext); // current chosen form id
   const [loading, setLoading] = useState(true);
@@ -243,7 +244,7 @@ const CompanyInformation = ({
         <CompanyInformationVAT formik={formik} />
       </div>
 
-      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} handleSubmit={formik.handleSubmit} />
+      <CustomStepButton previousPage="" nextPage={ROUTE_MEMBERSHIP} formik={formik} submitForm={submitForm} />
     </>
   );
 };

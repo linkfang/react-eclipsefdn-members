@@ -1,7 +1,13 @@
 import { Button } from '@material-ui/core';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ROUTE_SUBMITTED } from '../../../Constants/Constants';
+import {
+  ROUTE_MEMBERSHIP,
+  ROUTE_REVIEW,
+  ROUTE_SIGNING,
+  ROUTE_SUBMITTED,
+  ROUTE_WGS,
+} from '../../../Constants/Constants';
 import MembershipContext from '../../../Context/MembershipContext';
 import { checkIsNotFurthestPage, focusOnInvalidField, validateGoBack } from '../../../Utils/formFunctionHelpers';
 import ModalWindow from '../Notifications/ModalWindow';
@@ -22,11 +28,18 @@ const CustomStepButton = ({
   disableSubmit,
   formik,
   updatedFormValues,
-  handleSubmit,
+  submitForm,
 }) => {
   const history = useHistory();
   const [shouldOpen, setShouldOpen] = useState(false);
-  const { furthestPage, currentStepIndex } = useContext(MembershipContext);
+  const { furthestPage, setFurthestPage, currentStepIndex } = useContext(MembershipContext);
+
+  const goToNextStep = (pageIndex, nextPage) => {
+    if (furthestPage.index <= pageIndex) {
+      setFurthestPage({ index: pageIndex + 1, pathName: nextPage });
+    }
+    history.push(nextPage);
+  };
 
   const handleBackBtnClicked = () => {
     if (nextPage === ROUTE_SUBMITTED) {
@@ -38,7 +51,8 @@ const CustomStepButton = ({
       validateGoBack(
         isEmpty,
         result,
-        formik,
+        submitForm,
+        formik.setTouched,
         setShouldOpen,
         () => history.push(previousPage),
         checkIsNotFurthestPage(currentStepIndex, furthestPage.index)
@@ -50,6 +64,45 @@ const CustomStepButton = ({
     setShouldOpen(false);
     formik.setValues(updatedFormValues);
     history.push(previousPage);
+  };
+
+  const navigate = () => {
+    switch (window.location.hash) {
+      case '#company-info':
+        goToNextStep(1, ROUTE_MEMBERSHIP);
+        break;
+      case '#membership-level':
+        goToNextStep(2, ROUTE_WGS);
+        break;
+      case '#working-groups':
+        goToNextStep(3, ROUTE_SIGNING);
+        break;
+      case '#signing-authority':
+        goToNextStep(4, ROUTE_REVIEW);
+        break;
+      case '#review':
+        goToNextStep(5, ROUTE_SUBMITTED);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleFormSubmit = async () => {
+    if (!formik) {
+      // Formik is false when it's review page. Should go to next page directly without validation
+      navigate();
+      return;
+    }
+
+    const result = await formik.validateForm();
+    if (Object.keys(result).length > 0) {
+      formik.setTouched(result);
+      focusOnInvalidField();
+      return;
+    }
+    submitForm();
+    navigate();
   };
   return (
     <div className="button-container margin-top-20 margin-bottom-20">
@@ -78,14 +131,7 @@ const CustomStepButton = ({
             size="large"
             type="submit"
             disabled={disableSubmit}
-            onClick={() => {
-              handleSubmit();
-              // Use setTimeout to make sure the codes inside won't be excuted before handleSubmit() finishes.
-              // handleSubmit() is formik.handleSubmit, which will run validation first and won't submit anything if validation fails.
-              setTimeout(() => {
-                focusOnInvalidField();
-              }, 0);
-            }}
+            onClick={handleFormSubmit}
           >
             {nextPage === ROUTE_SUBMITTED ? 'Submit' : 'Next'}
           </Button>

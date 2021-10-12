@@ -14,7 +14,7 @@ import { CURRENT_STEP, ROUTE_REVIEW, ROUTE_WGS, SIGNING_AUTHORITY_STEP } from '.
  */
 
 const sectionName = 'signing-authority';
-const SigningAuthority = ({ formik, updatedFormValues }) => {
+const SigningAuthority = ({ formik, updatedFormValues, submitForm }) => {
   const { setCurrentStepIndex } = useContext(MembershipContext);
   const { setFieldValue } = formik;
   const { signingAuthorityRepresentative } = formField;
@@ -98,7 +98,7 @@ const SigningAuthority = ({ formik, updatedFormValues }) => {
         checkIsEmpty={() => isObjectEmpty(formik.values.signingAuthorityRepresentative)}
         formik={formik}
         updatedFormValues={updatedFormValues}
-        handleSubmit={formik.handleSubmit}
+        submitForm={submitForm}
       />
     </>
   );

@@ -50,6 +50,7 @@ const WorkingGroupsWrapper = ({
   workingGroupsUserJoined,
   updatedFormValues,
   setUpdatedFormValues,
+  submitForm,
 }) => {
   const { currentFormId, setCurrentStepIndex } = useContext(MembershipContext);
   const { setFieldValue } = formik;
@@ -151,7 +152,7 @@ const WorkingGroupsWrapper = ({
           formik={formik}
           checkIsEmpty={checkIsEmpty}
           updatedFormValues={updatedFormValues}
-          handleSubmit={formik.handleSubmit}
+          submitForm={submitForm}
         />
       </FormikProvider>
     </>

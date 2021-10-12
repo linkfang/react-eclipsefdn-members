@@ -15,12 +15,11 @@ import MembershipContext from '../../../Context/MembershipContext';
 
 interface ReviewProps {
   values: FormValue;
-  submitForm: () => void;
   isTermChecked: boolean;
   setIsTermChecked: (param: boolean) => void;
 }
 
-const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setIsTermChecked }) => {
+const Review: React.FC<ReviewProps> = ({ values, isTermChecked, setIsTermChecked }) => {
   const { setCurrentStepIndex } = useContext(MembershipContext);
 
   const handleIsTermChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -402,9 +401,8 @@ const Review: React.FC<ReviewProps> = ({ values, submitForm, isTermChecked, setI
         checkIsEmpty={() => false}
         formik={false}
         updatedFormValues={values}
-        handleSubmit={() => {
-          submitForm();
-        }}
+        // submitForm will not be used on this page, so use an empty function to pass ts validation
+        submitForm={() => {}}
       />
     </form>
   );
